@@ -708,6 +708,241 @@
     .pause-btn.primary:hover {
       background: #0369a1;
     }
+    /* Victorian Parchment Cartography Modal */
+    .map-modal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: min(920px, 95vw);
+      height: min(640px, 88vh);
+      background: #1c1917;
+      background-image: radial-gradient(#292524 1.5px, transparent 1.5px);
+      background-size: 18px 18px;
+      border: 2px solid #d4af37;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(212, 175, 55, 0.2);
+      padding: 20px 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 235;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+    .map-modal.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .map-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .map-title {
+      font-family: 'Cinzel', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 1.2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .map-discovery-badge {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: #fde047;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    .map-layout {
+      flex: 1;
+      display: flex;
+      gap: 16px;
+      min-height: 0;
+    }
+    .map-canvas-container {
+      flex: 1.6;
+      background: rgba(12, 10, 9, 0.85);
+      border: 1px solid rgba(120, 53, 15, 0.5);
+      border-radius: 8px;
+      padding: 14px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      align-content: start;
+    }
+    .map-room-card {
+      background: rgba(28, 25, 23, 0.9);
+      border: 1px solid rgba(78, 62, 45, 0.7);
+      border-radius: 6px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .map-room-card:hover {
+      border-color: #d4af37;
+      background: rgba(41, 37, 36, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    }
+    .map-room-card.active {
+      border-color: #f59e0b;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+      background: rgba(41, 37, 36, 1);
+    }
+    .map-room-card.current-player {
+      border-color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+    }
+    .map-room-card.undiscovered {
+      opacity: 0.45;
+      background: rgba(18, 16, 15, 0.7);
+      border-style: dashed;
+      cursor: default;
+    }
+    .map-room-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .map-room-code {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .map-room-name {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #f5f5f4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .map-room-status {
+      font-size: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .status-current { color: #38bdf8; }
+    .status-cleansed { color: #10b981; }
+    .status-hazardous { color: #f59e0b; }
+    .status-unknown { color: #78716c; }
+
+    .map-dossier {
+      flex: 1.1;
+      background: rgba(12, 10, 9, 0.9);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .dossier-header {
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .dossier-tag {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #f59e0b;
+      font-weight: 700;
+    }
+    .dossier-title {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-top: 2px;
+    }
+    .dossier-body {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #d6d3d1;
+      font-style: italic;
+      padding-right: 4px;
+    }
+    .dossier-intel-row {
+      margin-top: 12px;
+      border-top: 1px solid rgba(68, 64, 60, 0.5);
+      padding-top: 10px;
+      font-style: normal;
+    }
+    .dossier-intel-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .map-travel-btn {
+      margin-top: 14px;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border: 1px solid #38bdf8;
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .map-travel-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0369a1, #0284c7);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
+    }
+    .map-travel-btn:disabled {
+      background: rgba(41, 37, 36, 0.8);
+      border-color: rgba(68, 64, 60, 0.6);
+      color: #78716c;
+      cursor: not-allowed;
+    }
+    .map-footer-legend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(120, 53, 15, 0.4);
+      padding-top: 10px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #a8a29e;
+    }
+    .map-legend-items {
+      display: flex;
+      gap: 14px;
+    }
   </style>
 </head>
 <body>
@@ -788,6 +1023,46 @@
     </div>
   </div>
 
+  <!-- Victorian Cartography Map Modal -->
+  <div id="hud-map-modal" class="map-modal">
+    <div class="map-header">
+      <div class="map-title-wrap">
+        <div class="map-title">🧭 Cartography of Veilkeep</div>
+        <div class="map-discovery-badge" id="map-discovery-badge">1 / 10 Explored</div>
+      </div>
+      <button class="inv-close-btn" id="map-close-btn">&times;</button>
+    </div>
+    <div class="map-layout">
+      <div class="map-canvas-container" id="map-nodes-container">
+        <!-- Room Cards generated dynamically -->
+      </div>
+      <div class="map-dossier">
+        <div class="dossier-header">
+          <div class="dossier-tag" id="map-dossier-tag">Zone Briefing</div>
+          <div class="dossier-title" id="map-dossier-title">Sunken Courtyard</div>
+        </div>
+        <div class="dossier-body" id="map-dossier-desc">
+          Select a discovered room to inspect architectural intel, relic locks, and active threats.
+        </div>
+        <div class="dossier-intel-row">
+          <div class="dossier-intel-label">Status & Hazards</div>
+          <div id="map-dossier-status" style="font-size: 12px; color: #f59e0b;">No active anomalies detected.</div>
+        </div>
+        <button class="map-travel-btn" id="btn-fast-travel" disabled>⚡ Fast Travel to Threshold</button>
+      </div>
+    </div>
+    <div class="map-footer-legend">
+      <div class="map-legend-items">
+        <span><span style="color:#38bdf8">🧭</span> Current Location</span>
+        <span><span style="color:#10b981">✓</span> Cleansed</span>
+        <span><span style="color:#f59e0b">⚔️</span> Hazardous</span>
+        <span><span style="color:#78716c">🌫️</span> Terra Incognita</span>
+        <span><span style="color:#a855f7">🌌</span> Starlight Portal</span>
+      </div>
+      <div>Press <kbd>M</kbd> or <kbd>Esc</kbd> to return</div>
+    </div>
+  </div>
+
   <div class="hud-layer">
     <div class="hud-top">
       <div class="hud-card">
@@ -809,10 +1084,18 @@
         </div>
       </div>
 
-      <div class="hud-card hud-quest" id="hud-quest-card" style="cursor: pointer; pointer-events: auto;">
-        <div class="quest-tag">Active Contract [J]</div>
-        <div class="quest-title" id="hud-active-quest">Q0 — The Commission</div>
-        <div class="hud-subtitle">Objective: Infiltrate south ramparts</div>
+      <div style="display: flex; gap: 12px;">
+        <div class="hud-card hud-map-card" id="hud-map-card" style="cursor: pointer; pointer-events: auto; text-align: right;">
+          <div class="quest-tag">Expedition Map [M]</div>
+          <div class="quest-title" style="font-size: 13px;">🧭 Citadel Chart</div>
+          <div class="hud-subtitle" id="hud-map-subtitle">1 / 10 Explored</div>
+        </div>
+
+        <div class="hud-card hud-quest" id="hud-quest-card" style="cursor: pointer; pointer-events: auto;">
+          <div class="quest-tag">Active Contract [J]</div>
+          <div class="quest-title" id="hud-active-quest">Q0 — The Commission</div>
+          <div class="hud-subtitle">Objective: Infiltrate south ramparts</div>
+        </div>
       </div>
     </div>
 
@@ -830,6 +1113,7 @@
         Echo Bell: <kbd>F</kbd> &nbsp;|&nbsp; 
         Satchel: <kbd>I</kbd> &nbsp;|&nbsp; 
         Journal: <kbd>J</kbd> &nbsp;|&nbsp; 
+        Map: <kbd>M</kbd> &nbsp;|&nbsp; 
         Menu: <kbd>Esc</kbd>
       </div>
       <div class="hud-card" style="font-size: 12px; color: #d4af37">

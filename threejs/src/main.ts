@@ -66,6 +66,19 @@ const volMusic = document.getElementById('vol-music') as HTMLInputElement | null
 const btnResume = document.getElementById('btn-resume');
 const btnRestartCp = document.getElementById('btn-restart-cp');
 
+// Cartography Map UI Elements
+const mapModal = document.getElementById('hud-map-modal');
+const mapCloseBtn = document.getElementById('map-close-btn');
+const hudMapCard = document.getElementById('hud-map-card');
+const hudMapSubtitle = document.getElementById('hud-map-subtitle');
+const mapDiscoveryBadge = document.getElementById('map-discovery-badge');
+const mapNodesContainer = document.getElementById('map-nodes-container');
+const mapDossierTitle = document.getElementById('map-dossier-title');
+const mapDossierTag = document.getElementById('map-dossier-tag');
+const mapDossierDesc = document.getElementById('map-dossier-desc');
+const mapDossierStatus = document.getElementById('map-dossier-status');
+const btnFastTravel = document.getElementById('btn-fast-travel') as HTMLButtonElement | null;
+
 let toastTimer: number | null = null;
 function showToast(message: string, duration = 2400): void {
   if (!hudToast) return;
@@ -163,6 +176,9 @@ let currentSceneId: SceneId = 'S00';
 const inventory = new Set<string>();
 const solvedPuzzles = new Set<string>();
 const abilities = new Set<string>();
+const discoveredScenes = new Set<SceneId>(['S00']);
+let isMapOpen = false;
+let selectedMapSceneId: SceneId = 'S00';
 let playerHP = 100;
 let exitCooldown = 0;
 let lockedMessageCooldown = 0;
@@ -260,6 +276,204 @@ questCloseBtn?.addEventListener('click', () => {
 });
 hudQuestCard?.addEventListener('click', () => {
   toggleQuestLog();
+});
+
+// Victorian Parchment Cartography Map Modal
+interface SceneDossierEntry {
+  chapter: string;
+  subtitle: string;
+  desc: string;
+  hazards: string;
+  isCleansed: () => boolean;
+}
+
+const SCENE_DOSSIER: Record<SceneId, SceneDossierEntry> = {
+  S00: {
+    chapter: 'Prologue: The Arrival',
+    subtitle: 'Sunken Courtyard',
+    desc: 'A submerged flagstone courtyard choked with photophobic purple briars. Guildmaster Sable\'s starlight raven roosts upon the south balustrade overlooking the mountain mist.',
+    hazards: 'Photophobic veil brambles (retreat under light). Safe threshold.',
+    isCleansed: () => true,
+  },
+  OW1: {
+    chapter: 'Chapter 1: The Threshold',
+    subtitle: 'Outer Barbican',
+    desc: 'Outer watchtower ramparts guarded by automaton sentries. Gatekeeper Orin stands at the threshold with a trembling halberd, whispering of forgotten dawn.',
+    hazards: 'Clockwork sentry patrols. Grounding required.',
+    isCleansed: () => inventory.has('ITEM_IRON_NAIL'),
+  },
+  GH1: {
+    chapter: 'Chapter 1: The Ascent',
+    subtitle: 'Guardhouse Vestibule',
+    desc: 'A cold-vaulted antechamber echoing with water drips. The iron portcullis bars passage to the upper gatehouse without cold-iron anchoring.',
+    hazards: 'Heavy portcullis. Requires Cold-Iron Nail grounding.',
+    isCleansed: () => inventory.has('ITEM_IRON_NAIL'),
+  },
+  GH2: {
+    chapter: 'Chapter 1: The Reflection',
+    subtitle: 'Gatehouse Upper Tier',
+    desc: 'A silver-paned corridor sealed by Duke Vaelor\'s enchanted mirror lock. The silver silhouettes of forgotten guardsmen watch your reflection.',
+    hazards: 'Enchanted Mirror Lock mechanism.',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_MIRROR_LOCK'),
+  },
+  GH3: {
+    chapter: 'Chapter 1: The Parapet',
+    subtitle: 'Barbican Parapet',
+    desc: 'Wind-whipped parapet battlements where the heavily armored Gatehouse Captain patrols with a lethal halberd.',
+    hazards: 'Gatehouse Captain encounter (Heavy strikes).',
+    isCleansed: () => abilities.has('ABILITY_WALL_LEAP'),
+  },
+  HM1: {
+    chapter: 'Chapter 2: Hall of Mirrors',
+    subtitle: 'The Glass Gallery',
+    desc: 'A kaleidoscopic labyrinth of silver mirrors inhabited by a phasing Mirror Wraith. The True Mirror conceals a hidden portal.',
+    hazards: 'Phasing Mirror Wraith & reflective mirror bolts.',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_TRUE_MIRROR'),
+  },
+  BQ1: {
+    chapter: 'Chapter 3: The Cenacle',
+    subtitle: 'The Cenacle of Eternal Satiety',
+    desc: 'A grand banquet hall hosting an unending Victorian feast. Aristocrats chew cold fireplace ash under Nozick\'s phantom satiety glamour.',
+    hazards: 'Gastronomic phantom glamour. Requires Truth Lens or Tantalus Goblet.',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_FEAST_SATIETY'),
+  },
+  AG1: {
+    chapter: 'Chapter 4: The Arboreal Bough',
+    subtitle: 'The Weeping Heartwood',
+    desc: 'A moss-carpeted primordial glade housing Yggdra the Ancient Bough. Thorny root brambles choke the mountain passage.',
+    hazards: 'Thorny root wall & Ancient Tree Guardian.',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_ARBOREAL_WEAVE'),
+  },
+  MH1: {
+    chapter: 'Chapter 5: The Dollhouse',
+    subtitle: 'Mother Hazel\'s Hearth',
+    desc: 'A quaint gingerbread cottage with a boiling confectionery hearth and shelves of petrified porcelain dolls.',
+    hazards: 'Drugged chamomile tea & boiling phantasmic kettle.',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_HOSPITALITY_GAMBIT'),
+  },
+  SAN1: {
+    chapter: 'Finale: The Apex Spire',
+    subtitle: 'Sanctum of the Glass Heart',
+    desc: 'The crystalline throne room of Archillusionist Vaelor. Cynthia\'s spirit is imprisoned within the spinning dodecahedron Glass Heart.',
+    hazards: 'Archillusionist Vaelor (Phase 2 Inversion, Levitation, Starlight Beams).',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_HOLLOW_GLASS'),
+  },
+};
+
+const ORDERED_SCENES: SceneId[] = ['S00', 'OW1', 'GH1', 'GH2', 'GH3', 'HM1', 'BQ1', 'AG1', 'MH1', 'SAN1'];
+
+function toggleMap(): void {
+  isMapOpen = !isMapOpen;
+  if (!mapModal) return;
+  if (isMapOpen) {
+    selectedMapSceneId = currentSceneId;
+    mapModal.classList.add('visible');
+    SoundFX.playMapToggle(true);
+    renderMap();
+  } else {
+    mapModal.classList.remove('visible');
+    SoundFX.playMapToggle(false);
+  }
+}
+
+function renderMap(): void {
+  if (!mapNodesContainer || !mapDiscoveryBadge || !hudMapSubtitle) return;
+  const exploredCount = discoveredScenes.size;
+  mapDiscoveryBadge.textContent = `${exploredCount} / 10 Explored`;
+  hudMapSubtitle.textContent = `${exploredCount} / 10 Explored`;
+
+  mapNodesContainer.innerHTML = '';
+  ORDERED_SCENES.forEach((sId) => {
+    const isDiscovered = discoveredScenes.has(sId);
+    const sceneInfo = sceneById.get(sId);
+    const dossier = SCENE_DOSSIER[sId];
+    const isCurrent = sId === currentSceneId;
+    const isSelected = sId === selectedMapSceneId;
+    const isCleansed = dossier ? dossier.isCleansed() : false;
+
+    const card = document.createElement('div');
+    card.className = `map-room-card ${isCurrent ? 'current-player' : ''} ${isSelected ? 'active' : ''} ${!isDiscovered ? 'undiscovered' : ''}`;
+
+    if (isDiscovered && sceneInfo && dossier) {
+      card.innerHTML = `
+        <div class="map-room-top">
+          <span class="map-room-code">${sId}</span>
+          ${isCurrent ? '<span class="status-current" style="font-size:11px; font-weight:700">🧭 HERE</span>' : isCleansed ? '<span class="status-cleansed" style="font-size:11px; font-weight:700">✓ CLEANSED</span>' : '<span class="status-hazardous" style="font-size:11px; font-weight:700">⚔️ UNCLEANSED</span>'}
+        </div>
+        <div class="map-room-name">${sceneInfo.name}</div>
+        <div class="map-room-status ${isCurrent ? 'status-current' : isCleansed ? 'status-cleansed' : 'status-hazardous'}">
+          ${isCurrent ? '<span>● Active Infiltration Post</span>' : isCleansed ? '<span>● Citadel Ward Restored</span>' : '<span>● Hostile Phantasms</span>'}
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        selectedMapSceneId = sId;
+        renderMap();
+      });
+    } else {
+      card.innerHTML = `
+        <div class="map-room-top">
+          <span class="map-room-code">${sId}</span>
+          <span class="status-unknown" style="font-size:11px; font-weight:700">🌫️ FOG</span>
+        </div>
+        <div class="map-room-name" style="color: #78716c">??? [Terra Incognita]</div>
+        <div class="map-room-status status-unknown">
+          <span>● Undiscovered Chamber</span>
+        </div>
+      `;
+    }
+    mapNodesContainer.appendChild(card);
+  });
+
+  renderMapDossier(selectedMapSceneId);
+}
+
+function renderMapDossier(sId: SceneId): void {
+  if (!mapDossierTitle || !mapDossierTag || !mapDossierDesc || !mapDossierStatus || !btnFastTravel) return;
+  const isDiscovered = discoveredScenes.has(sId);
+  const sceneInfo = sceneById.get(sId);
+  const dossier = SCENE_DOSSIER[sId];
+
+  if (!isDiscovered || !sceneInfo || !dossier) {
+    mapDossierTag.textContent = 'Uncharted Sector';
+    mapDossierTitle.textContent = 'Terra Incognita';
+    mapDossierDesc.textContent = 'This sector has not yet been surveyed. Advance through the fortress corridors to ink this chamber onto your map.';
+    mapDossierStatus.textContent = 'Veil mists obscure all topological details.';
+    mapDossierStatus.style.color = '#78716c';
+    btnFastTravel.disabled = true;
+    btnFastTravel.textContent = '⚡ Fast Travel Unavailable';
+    return;
+  }
+
+  const isCurrent = sId === currentSceneId;
+  const isCleansed = dossier.isCleansed();
+
+  mapDossierTag.textContent = dossier.chapter;
+  mapDossierTitle.textContent = `${sceneInfo.name} (${sId})`;
+  mapDossierDesc.textContent = dossier.desc;
+  mapDossierStatus.textContent = dossier.hazards;
+  mapDossierStatus.style.color = isCleansed ? '#10b981' : '#f59e0b';
+
+  if (isCurrent) {
+    btnFastTravel.disabled = true;
+    btnFastTravel.textContent = '🧭 Currently Present';
+  } else {
+    btnFastTravel.disabled = false;
+    btnFastTravel.textContent = `⚡ Fast Travel to ${sceneInfo.name}`;
+    btnFastTravel.onclick = () => {
+      loadScene(sId);
+      toggleMap();
+      SoundFX.playShadowStep();
+      SoundFX.playEchoBell();
+      showToast(`Fast Traveled to: ${sceneInfo.name}`);
+    };
+  }
+}
+
+mapCloseBtn?.addEventListener('click', () => {
+  if (isMapOpen) toggleMap();
+});
+hudMapCard?.addEventListener('click', () => {
+  toggleMap();
 });
 
 // Spell 1: Mirror Decoy ([R])
@@ -731,7 +945,7 @@ const engine = new GameEngine({
     // Pause movement during dialogue, inventory, quest log, lore archival, or pause menu
     let moveX = 0;
     let moveZ = 0;
-    if (!activeDialogue && !isInventoryOpen && !isQuestLogOpen && !isLoreOpen && !isPaused) {
+    if (!activeDialogue && !isInventoryOpen && !isQuestLogOpen && !isLoreOpen && !isPaused && !isMapOpen) {
       if (playerState.keys.w) { moveX -= 1; moveZ -= 1; }
       if (playerState.keys.s) { moveX += 1; moveZ += 1; }
       if (playerState.keys.a) { moveX -= 1; moveZ -= 1; }
@@ -761,7 +975,7 @@ const engine = new GameEngine({
 
     // Sprinting & Stamina Regeneration Loop
     const isMoving = moveX !== 0 || moveZ !== 0;
-    if (playerState.keys.shift && isMoving && playerState.stamina > 2 && !playerState.isSneaking && !activeDialogue && !isInventoryOpen && !isQuestLogOpen && !isLoreOpen && !isPaused) {
+    if (playerState.keys.shift && isMoving && playerState.stamina > 2 && !playerState.isSneaking && !activeDialogue && !isInventoryOpen && !isQuestLogOpen && !isLoreOpen && !isPaused && !isMapOpen) {
       playerState.isSprinting = true;
       playerState.speed = 8.4;
       playerState.stamina = Math.max(0, playerState.stamina - 28 * dt);
@@ -773,7 +987,7 @@ const engine = new GameEngine({
     if (staFill) staFill.style.width = `${Math.round((playerState.stamina / playerState.maxStamina) * 100)}%`;
 
     // Footstep Sound Synthesis Cadence (Silent while sneaking)
-    if (isMoving && !playerState.isSneaking && !activeDialogue && !isInventoryOpen && !isQuestLogOpen && !isLoreOpen && !isPaused) {
+    if (isMoving && !playerState.isSneaking && !activeDialogue && !isInventoryOpen && !isQuestLogOpen && !isLoreOpen && !isPaused && !isMapOpen) {
       footstepTimer -= dt;
       if (footstepTimer <= 0) {
         SoundFX.playFootstep(playerState.isSprinting);
@@ -1752,6 +1966,8 @@ function updateHUD(): void {
     else hudQuest.textContent = 'Q0 — Infiltrate Fortress Barbican';
   }
   if (hpFill) hpFill.style.width = `${Math.max(0, playerHP)}%`;
+  if (hudMapSubtitle) hudMapSubtitle.textContent = `${discoveredScenes.size} / 10 Explored`;
+  if (mapDiscoveryBadge) mapDiscoveryBadge.textContent = `${discoveredScenes.size} / 10 Explored`;
 }
 
 function saveCheckpoint(): void {
@@ -1761,6 +1977,7 @@ function saveCheckpoint(): void {
     inventory: [...inventory],
     puzzles: [...solvedPuzzles],
     abilities: [...abilities],
+    discovered: [...discoveredScenes],
   };
   localStorage.setItem('veilkeep.save.v1', JSON.stringify(data));
   updateHUD();
@@ -1774,12 +1991,15 @@ function loadScene(id: SceneId, spawn = sceneSpawn(id)): void {
   engine.scene.add(activeGroup);
   if (id === 'S00') addS00Colliders(); else addGenericColliders();
   currentSceneId = id;
+  discoveredScenes.add(id);
+  selectedMapSceneId = id;
   physics.teleportPlayer(spawn);
   playerState.x = spawn.x;
   playerState.z = spawn.z;
   playerMesh.position.set(spawn.x, spawn.y, spawn.z);
   engine.cameraRig.setTarget(spawn.x, 0, spawn.z);
   updateHUD();
+  if (isMapOpen) renderMap();
   saveCheckpoint();
 }
 
@@ -2276,6 +2496,10 @@ window.addEventListener('keydown', (e) => {
       closeLore();
       return;
     }
+    if (isMapOpen) {
+      toggleMap();
+      return;
+    }
     if (isInventoryOpen) {
       toggleInventory();
       return;
@@ -2292,6 +2516,12 @@ window.addEventListener('keydown', (e) => {
   if (k === 'i' || k === 'tab') {
     e.preventDefault();
     toggleInventory();
+    return;
+  }
+
+  // Cartography Map toggle ([M])
+  if (k === 'm') {
+    toggleMap();
     return;
   }
 
@@ -2374,10 +2604,11 @@ const saved = localStorage.getItem('veilkeep.save.v1');
 let resumed = false;
 if (saved) {
   try {
-    const data = JSON.parse(saved) as { scene: SceneId; pos: number[]; inventory: string[]; puzzles: string[]; abilities: string[] };
+    const data = JSON.parse(saved) as { scene: SceneId; pos: number[]; inventory: string[]; puzzles: string[]; abilities: string[]; discovered?: SceneId[] };
     data.inventory.forEach((i) => inventory.add(i));
     data.puzzles.forEach((p) => solvedPuzzles.add(p));
     data.abilities.forEach((a) => abilities.add(a));
+    if (data.discovered) data.discovered.forEach((d) => discoveredScenes.add(d));
     if (sceneById.has(data.scene)) {
       loadScene(data.scene, { x: data.pos[0], y: data.pos[1], z: data.pos[2] });
       resumed = true;
@@ -2389,7 +2620,7 @@ if (saved) {
 if (!resumed) loadScene('S00', initialSpawn);
 
 engine.start();
-console.log('🚀 VEILKEEP slice running: WASD move, Space attack, E interact. Progress autosaves on transitions.');
+console.log('🚀 VEILKEEP slice running: WASD move, Space attack, E interact, M cartography map. Progress autosaves on transitions.');
 
 // Lightweight debug hook for smoke tests and future MCP inspection.
 (window as unknown as { __veilkeep: unknown }).__veilkeep = {
@@ -2397,6 +2628,8 @@ console.log('🚀 VEILKEEP slice running: WASD move, Space attack, E interact. P
   inventory,
   solvedPuzzles,
   abilities,
+  discoveredScenes,
   get sceneId() { return currentSceneId; },
   loadScene,
+  toggleMap,
 };
