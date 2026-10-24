@@ -739,6 +739,9 @@ Every possible loot item within VEILKEEP is documented below with its category, 
 | **Throwing Knife (x10)** | Common | +6 Dmg, Silent Thrown (12m Range) | Silent distraction or dispatch; can pin paper notes/ciphers to wooden notice boards; reusable if retrieved from corpses. | Vendors, Brigand Cutpurses, Smuggler Caches |
 | **Phosphor Flash-Dart (x3)** | Uncommon | +4 Dmg, 6m Blind Radius | Detonates on impact with blinding magnesium flare; permanently disables camera eyes and optical sensors on Clockwork Sentinels for 8s. | Alchemist Vex (AL1), Clockwork Trapeze Phantasms |
 | **Mother Hazel's Bone-Sugar Spoon** | Unique (Boss/Puzzle) | +14 Dagger Dmg, +10 Ethereal Dmg | Carved from fossilized whalebone and crystallized amber sugar. Sneak attack strikes inflict *Sugar-Laced Stupefaction*, causing humanoids to sink into a 4-second blissful stupor; ignores 30% armor. | The Gilded Dollhouse MH1 (Outsmarting Mother Hazel) |
+| **The Tantalus Goblet** | Unique Tactical Relic | Converts 20% Magic Dmg to FP, +100% Food Duration | Forged of sterling silver lined with matte obsidian stone from the Cenacle of Eternal Satiety. Absorbs ethereal resonance and grants complete immunity to phantom scents, drunken stupor, and false satiety hexes. | The Cenacle of Eternal Satiety BQ1 (Puzzle 37) |
+| **Archival Menu of the Eve of Betrothal (1886)** | Unique Inspectable Lore | Lore Parchment / Quest Document | An opulent embossed menu detailing a 14-course imperial feast for Cynthia's betrothal that never happened. Frantic pencil annotations trace 30 years of psychological decay. | Lord Morvath's Place Setting (BQ1) |
+| **Soot-Stained Silverware of the Cenacle** | Masterwork Crafting Curio | High Alchemical Conductivity | Masterwork Victorian silverware coated in ancient fireplace ash. Can be sold for 350 gold moons or melted down to forge Cold-Iron throwing darts. | Sideboard in BQ1 |
 
 ### 2. Armor, Coats, Headwear & Shields
 
@@ -1555,6 +1558,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 | Knife-Wheel Cadence | Playhouse (PH2) | Rotating target wheel timing game | Throw daggers into moving target windows without hitting dummy |
 | Titan's High-Striker | Playhouse (PH3) | Feat of strength / timing gauge | Strike anvil at peak of power meter (or STR 12) to ring sky bell |
 | High-Wire Balance | Playhouse (PH5) | Tightrope balance timing | Counteract wind gusts with timed directional balance inputs |
+| The Satiety of Tantalus | The Cenacle of Eternal Satiety (BQ1) | Sensory deconstruction, Nozick's philosophical refutation, mass restoration | Dispel olfactory incense with bitter salt, jam waltz governor, refute Lord Morvath's solipsism, balance Themis scale |
 | Anamorphic Chronos Mirrors | Halls of Mirrors (HM6) | Mirrors reflect distinct non-player objects; slide along grooved rails to order timeline | Sequence: Cradle → Swallow → Hourglass → Rose; triggers causal cascade across mirror glass |
 | Pneumatic Steam-Condenser Circuit | Foundry (BF4) | Balance 3 wheel valves to 120 PSI; steam fogs cold mirrors to reveal ciphers and focus beam | Regulate Low/Mid/High valves to 120 PSI; wipe condensation on mirrors B and C |
 | Differential Escapement Governor | Foundry (BF5) / Spire (CS2) | Slot 3 brass cog tooth-ratios into differential gearbox to synchronize flywheel | Ratio sequence: 12T Pinion → 24T Reduction → 36T Idler; slows crushing pistons |
@@ -1879,6 +1883,19 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
     - In Kaelen's satchel, the six miniature porcelain figurines warm and glow: their ceramic glaze shatters in golden flashes, and the six trapped souls materialize at full human scale on the conservatory floor, showering Kaelen with gratitude, rare relics, and Guild reputation!
   - **Loot & Reward:** Solves Puzzle 36; advances Quest `S37`; awards *Mother Hazel's Bone-Sugar Spoon* (Unique Stiletto/Focus), *Pendant of the Porcelain Doll* (Rare Amulet: Complete immunity to Sleep, Drowsy, and Petrification), *Key to the Dollhouse Cupola*, *Shattered Glaze Figurine* (Legendary Curio: +40 Guild Rep), and +700 XP.
 
+- **The Satiety of Tantalus (The Phantom Feast & The Weight of Truth — BQ1):**
+  - **Concept & Narrative Context:** Deep within the household wing, behind heavy pneumatic blast-doors, lies *The Cenacle of Eternal Satiety* (`BQ1`). A monumental mahogany banquet table stretches fifty meters, laden with an obscene, glistening feast: roasted boars in spiced honey, towers of sugared fruits, and crystal decanters of sparkling vintage. Seated along the table in frozen Victorian finery are twenty-four aristocratic guests who have been dining continuously since 1886. The feast is an illusion of total sensory immersion; in reality, the platters hold mounds of cold chimney ash, gravel, and dead moths. The guests are skeletally emaciated husks in rotting silk, yet they smile in euphoric delusion, trapped by an aether-steam door counterbalanced to the mass of twenty-four living, sated bodies.
+  - **The Diegetic "Satiety Languor" Hazard:**
+    - Every 45 seconds spent in the hall without a filter or cold-iron grounding adds a stack of *Satiety Languor* (-5% move speed, -10% focus regen). The sweet aroma of roast rosemary and cinnamon induces a tranquilizing psychological compulsion to sit down and dine.
+  - **The Four-Stage Deconstruction & Philosophical Solution:**
+    1. *Stage 1: The Olfactory Anchor & The Bitter Sea-Salt (`[Acrobatics / DEX 12]` & `[Alchemy]`):* The hypnotic illusion of taste and smell is maintained by four brass censers suspended above the table burning *Aether-Lotus Oil*. Kaelen scales the carved sideboard, grapples across the velvet drapery to the rafters, and replaces the burning oil with *Apothecary Bitter Sea-Salt* from the kitchen flues. The aroma instantly shifts from savory roast to suffocating, acrid burning bone and chimney soot. The guests cough, blink, and scrape dust from their tongues—the first crack in the illusion.
+    2. *Stage 2: The Acoustic Governor & The Waltz of Lethe (`[Lockpick / DEX 13]`):* A monumental grandfather-clock music box in the corner drives the guests' synchronized chewing rhythm with an enchanted brass cylinder playing the *Lydian Satiety Waltz*. Kaelen uses his tension wrench to jam the brass escapement gear. The waltz screeches to a violent halt, breaking the guests' hypnotic cadence and freezing their cutlery in mid-air.
+    3. *Stage 3: The Socratic Refutation & Nozick's Experience Machine (`[Philosophy / INT 13]` or `[Truth Lens Q]`):* Kaelen takes the vacant seat opposite Lord Morvath. Morvath defends the illusion with Robert Nozick's classic philosophical dilemma: *"My estate burned. My sons died in war. Here, the pheasant is warm and my wife smiles. What moral virtue is there in gnawing cold stones of reality when a phantom roast gives peace?"* Kaelen must counter him:
+       - *The Empirical Proof:* Present the polished silver cloche or activate the *Truth Lens* (<kbd>Q</kbd>) before Lady Vivienne. The reflection reveals her sunken skeletal skull and cobwebbed pearls, proving that the dream does not preserve life—it merely embalms starvation.
+       - *The Authenticity Proof:* Argue that love and grief are inseparable; by embalming his sons' memory in fake sugar, Morvath has erased their real sacrifices. To choose the machine over reality is spiritual suicide.
+    4. *Stage 4: The Restoration of Mass & The Great Steam Release:* Conviction shattered, Lord Morvath weeps and drops his silver fork onto the porcelain. The sound echoes like a funeral bell. Across the table, the illusion violently dissolves: the glistening hams turn to piles of grey furnace ash, the sparkling wine turns to stagnant pond-water, and the guests stand up in trembling revelation. The true physical gravity and mortal reality of twenty-four living beings collapses onto the floorboards, depressing the floor pressure-plates. The central *Balance of Themis* swings into alignment, the pneumatic relief valve vents a deafening plume of steam, and the monumental blast-doors unlock!
+  - **Loot & Reward:** Solves Puzzle 37; advances Quest `S38`; awards the *Tantalus Goblet* (Unique Relic: converts 20% magic damage to FP; doubles food buff durations), *Archival Menu of the Eve of Betrothal (1886)* (Inspectable Lore), *Soot-Stained Silverware of the Cenacle* (Rare Crafting Curio / 350 Moons), and +750 XP.
+
 ## 12. Quests
 
 <div class="tabs" id="questTabs">
@@ -1933,7 +1950,8 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 <div class="quest"><div class="title">S34 — The Thawing of the Winter Solarium</div><div class="meta">Giver: Environmental Discovery · Winter Solarium WS1</div><p>Infiltrate the blizzard-choked Victorian conservatory, navigate deep snowdrifts using thief senses, disarm concealed cryo-mines and monofilament tripwires, pick the four radiator hearth lockboxes, and vent the ceiling flues to permanently melt the winter curse and shatter the Permafrost Ward Wall blocking the Spire. Reward: Frost-Tension Lockpick Kit, Sigil of the Thawed Rose, Heart of Glacial Mourning (Dormant Core), +650 XP, access to DG3.</p></div>
 <div class="quest"><div class="title">S35 — The House That Refused to Die</div><div class="meta">Giver: Memory Resonance · Haunted Manor HA6</div><p>Step through an antique daguerreotype into an idyllic, sunlit Victorian parlor from fourteen years ago. Confront the uncanny psychological horror anomalies hidden beneath the docile domestic routine—a 13th-hour clock, a porcelain cat that breathes like a child, a shifting portrait with porcelain teeth, and a false painted sun—to manifest the exit door handle and reclaim Cynthia's silver locket. Reward: Cynthia's Silver Locket, Memory Shard IV, +650 XP, access to HA4.</p></div>
 <div class="quest"><div class="title">S36 — The Whispers of the Ancient Bough</div><div class="meta">Giver: Yggdra the Star-Weeper · Dreamer's Grove DG3</div><p>Confront the ancient sentient starlight willow Yggdra in the sunken grove. Answer its three philosophical riddles of the forest, the thief, and the veil. Choose your path to unseal the Clockwork Spire staircase: conquer the primordial tree in combat or solve the Root-Harmonic Weave puzzle to disarm Vaelor's sap-siphons. Reward: Bough of the Arbiter / Heartwood Staff, Sap of the World Tree, +700 XP, access to CS1.</p></div>
-<div class="quest"><div class="title">S37 — A Cup of Sweet Oblivion</div><div class="meta">Giver: Mother Hazel ("Auntie Hazel") · Miniature Parlor MH1</div><p>Step through an antique Victorian dollhouse into a suffocatingly quaint pocket cottage. Survive the confectioner witch's lethal hospitality without consuming her drugged tea. Sabotage her baking hearth with volatile sulfur reagents, pickpocket the Spun-Bone Skeleton Key from her apron, rescue six captive porcelain souls, and scale the chimney flue to reverse the miniaturization hex and lock the witch inside her own miniature hearth. Reward: Mother Hazel's Bone-Sugar Spoon, Pendant of the Porcelain Doll, Shattered Glaze Figurine, +700 XP.</p></div>
+<div class="quest"><div class="title">S37 — A Cup of Sweet Oblivion</div><div class="meta">Giver: Mother Hazel ("Auntie Hazel") · Miniature Parlor MH1</div><p>Step through an antique Victorian dollhouse into a suffocatingly quaint pocket cottage. Survive the confectioner witch's lethal hospitality without consuming her drugged tea. Sabotage her baking hearth with volatile sulfur reagents, pickpocket the Spun-Bone Skeleton Key from her apron, rescue six captive porcelain souls, and scale the chimney flue to reverse the miniaturization hex and lock the witch inside her own miniature hearth. Reward: Mother Hazel's Bone-Sugar Spoon, Pendant of the Porcelain Doll, Shattered Glaze Figurine, +700 XP.</p><div class="quest"><div class="title">S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes)</div><div class="meta">Giver: Lord Morvath / Lady Vivienne · The Cenacle of Eternal Satiety BQ1</div><p>Infiltrate the sealed Grand Refectory where twenty-four aristocrats have feasted on illusory delicacies for thirty years while starving to the bone. Dispel the olfactory incense with bitter salt, silence the hypnotic waltz governor, engage Lord Morvath in a high-stakes philosophical confrontation regarding Nozick's Experience Machine, and restore physical truth to balance the door's hydraulic mass scale.</p><div class="rewards">Rewards: Tantalus Goblet, Archival Menu of the Eve of Betrothal, Soot-Stained Silverware, +750 XP</div></div>
+</div>
 </div>
 <div id="hidden" class="tabpane">
 <div class="quest"><div class="title">H1 — The Smuggler's Cache</div><div class="meta">Hidden · Outer Wards</div><p>Lockpick 2 cache. Reward: Grappling Hook, gold.</p></div>
@@ -2004,6 +2022,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
   Rewards: *Bough of the Arbiter* OR *Heartwood Staff of the Ancient Grove*, *Sap of the World Tree*, +700 XP, unseals the grand staircase leading up to **CS1 Clockwork Spire Base**. *Yggdra (its branches gently whispering in the mountain breeze):* "You carry cold steel in your belt, Master Voss, but your mind understands the rhythm of growing things. Go then... ascend into the tower of iron and gears. Remind the man of glass that the roots of the mountain were here before him, and they will drink from the rain long after his mirrors have turned to dust."
 - **S37 — A Cup of Sweet Oblivion:** Giver: Mother Hazel / Captive Porcelain Souls (The Gilded Dollhouse MH1). Objectives: 1) Inspect the glowing 1:12 scale dollhouse in the Dreaming Gardens and trigger the transmutation aperture. 2) Enter the dollhouse parlor at miniature scale and navigate Mother Hazel's hospitality without raising her Suspicion Gauge to 100%. 3) Use Sleight of Hand to pour the drugged *Sweet Oblivion Tea* into the potted begonia and fake drowsiness. 4) Sabotage her boiling sugar cauldron by swapping star-cinnamon with volatile sulfur saltpeter to create a blinding smoke screen. 5) Pickpocket the *Spun-Bone Skeleton Key* from her apron string. 6) (Optional) Unlock the curio cabinet to rescue the 6 glazed porcelain figurines. 7) Ascend the brick chimney flue, unlock the rooftop cupola hatch, burst back to full scale, and lock Mother Hazel inside her own miniature home.
   Rewards: *Mother Hazel's Bone-Sugar Spoon* (Unique Stiletto/Focus), *Pendant of the Porcelain Doll* (Rare Amulet), *Shattered Glaze Figurine* (Legendary Curio), +700 XP. *Mother Hazel (screeching at 4-inch scale behind the dollhouse window):* "You deceitful, insolent little scamp! I knit you a silk blanket! I heated the oven for you! Unlock this latch this instant, or I'll turn your heart into sugar-candy!" *Lord Commander Gregory (thawing from porcelain):* "By the Light... twenty years I stood on that mantelpiece, watching her bake. You have given us back our lives, Master Voss. Take this pendant—may no illusion or witch ever snare your senses again."
+- **S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes):** Giver: Lord Morvath / The Starved Courtiers (The Cenacle of Eternal Satiety BQ1). Objectives: 1) Infiltrate the sealed Grand Refectory and resist the Satiety Languor. 2) Climb to the ceiling rafters and substitute the Lotus censers with bitter sea-salt. 3) Jam the clockwork waltz governor. 4) Engage Lord Morvath in Socratic debate, using the Truth Lens to reveal his wife's skeletal reflection and refuting the validity of the Experience Machine. 5) Restore physical mass to the Themis scale to vent the steam doors. Rewards: *Tantalus Goblet*, *Archival Menu of the Eve of Betrothal (1886)*, *Soot-Stained Silverware*, +750 XP.
 - **H1 — The Smuggler's Cache:** Location: Outer Wards. Lockpick 2 cache. Rewards: Grappling Hook, 100 moons.
 - **H2 — The True Name:** Location: Library footnote. Find Vaelor's true name. Rewards: Boss Phase 1 (Mirage) skipped, +1 INT.
 - **H3 — Starlight Grove:** Location: Dreaming Gardens. Believe hidden path. Rewards: Shadowweave Cloak (Legendary).
@@ -2068,6 +2087,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 | Liber Cutis (The Sentient Lexicon) | Arcane Library (L5) | Flesh-bound sentient grimoire, whispers forbidden power and madness | S33 |
 | Yggdra the Star-Weeper | Dreamer's Grove (DG3) | Ancient sentient weeping starlight tree, primordial arboreal arbiter | S36 |
 | Mother Hazel ("Auntie Hazel") | The Gilded Dollhouse (MH1) | The Sugar-Spun Weaver / Confectioner Witch; tries to trap Kaelen forever | S37 |
+| Lord Morvath & Lady Vivienne | The Cenacle of Eternal Satiety (BQ1) | Aristocratic guests trapped in Vaelor's 30-year phantom banquet; defend false satiety | S38 |
 
 **NPC Profiles:**
 - **Mother Hazel ("Auntie Hazel the Sugar-Spun Weaver"):** An ancient, deceptively matronly confectioner witch residing inside the miniature dollhouse of the dreaming gardens. She embodies the nightmare of smothering domestic comfort: offering warm blackberry crumbles, drowsy nightshade tea, and endless velvet cradle-rest to weary wanderers. Her hearth mantelpiece displays thirty living adventurers and thieves petrified into glazed porcelain figurines. Direct attacks trigger an instant lethal petrification counter; she must be defeated purely through thief cunning, chemical misdirection, and sleight-of-hand.
@@ -2177,6 +2197,9 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
   - **Archetype & Visuals:** A brutal, sadistic seven-foot prison commander clad in blackened iron plate armor reinforced with hydraulic steam tubes. Wears a welded iron executioner's visor with a single glowing amber slit, and wields a colossal pneumatic trench hammer that discharges electric starlight arcs across metal floors.
   - **Role & Mechanics:** Oversees the day-to-day extraction of prisoner memories and lifeforce in the subterranean oubliette. Arrogant, cruel, and completely loyal to Vaelor's orders. If provoked or challenged in `PB2`, he deploys explosive arc mines and charges with sweeping unparryable hammer swings, requiring Kaelen to flank during hammer recovery or backstab him while dodging his shockwaves.
   - **Dialogue Sample:** *"Another rat sniffing around the bilge! The Archillusionist weaves the sky above, but down here in the mud, iron and blood are the only truths that matter! Throw him into the siphon crucible—let's see what color his memories bleed!"*
+
+- **Lord Morvath of the Silver Flagon:** A weary, once-noble patriarch seated at the head of the eternal banquet table in the Cenacle of Eternal Satiety. He is fully aware on some subconscious level that his plate is ash, but clings to the illusion to escape the agony of his burned homeland and dead sons. He embodies the intellectual defense of Robert Nozick's "Experience Machine," arguing with eloquent tragedy that happiness derived from a phantom is morally superior to authentic despair.
+- **Lady Vivienne the Emaciated:** Morvath's wife, seated beside him in tattered silk lace and loose pearls. Her fingers have thinned so severely that her gold wedding band rests in the soot on her plate. She is terrified of reality because she fears she has grown too old, weak, and ugly to survive outside the flattering candlelight of the banquet.
 
 ## 14. Enemies
 
@@ -3403,8 +3426,91 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 - **[Quest Completed: S37 — A Cup of Sweet Oblivion]**  
   *[Rewards: Mother Hazel's Bone-Sugar Spoon, Pendant of the Porcelain Doll, Shattered Glaze Figurine, Key to the Dollhouse Cupola, +700 XP]*
 
+#### Scene 19: The Cenacle of Eternal Satiety — The Feast of Dust & Nozick's Gambit
 
+- **Location:** The Grand Refectory of Phantoms (`BQ1`).
+- **Participants:** Kaelen Voss, Lord Morvath of the Silver Flagon, Lady Vivienne the Emaciated, Twenty-Two Starved Aristocrats.
+- **Atmosphere:** An overwhelming sensory contradiction. Thousands of beeswax candles shed warm, amber light across fifty meters of polished mahogany. Glistening roast pheasants, sugared figs, and carafes of bubbling vintage claret look and smell intoxicatingly real. But looking through the *Truth Lens* (<kbd>Q</kbd>) reveals twenty-four translucent, skeletal husks in rotting Victorian evening wear, chewing mounds of grey fireplace ash and dry pebbles from silver platters. The air carries the faint, mechanical hum of an antique music box playing the *Lydian Satiety Waltz*.
+- **The Core Philosophical Dilemma:** Robert Nozick's "Experience Machine" vs. Authentic Mortality. Can an illusion that brings peace and pleasure justify thirty years of physical starvation? Does truth possess moral value when truth is only ashes and grief?
 
+---
+
+##### Part I: The Hospitality of the Starved
+
+*(Kaelen steps onto the velvet banquet carpet. The monumental brass doors slam shut behind him with an airtight hydraulic seal. A hundred vacant, smiling eyes turn toward him.)*
+
+- **Lord Morvath (raising a crystal goblet brimming with what looks like deep ruby wine, his voice hollow as wind through a ribcage):**  
+  *"Ah! A tardy guest for the Lady Cynthia's betrothal feast! Sit, young gentleman, sit! Toastmaster, bring a chair of crimson damask for our friend! You look parched from the mountain winds. Drink of the Duke's private cellar—a vintage pressed from the autumn before the frost began."*
+
+- **Player Dialogue Choices:**
+  - **Choice A [Expose the Delusion / Blunt]:** "Look at your goblet, old man. It isn't wine. It's stagnant mineral water and crushed chalk. You're chewing on fireplace soot."
+    - **Lord Morvath (chuckles indulgently, shaking his head with courtly amusement):**  
+      *"Soot? Hear how the common boys jest! Lady Vivienne, my dear, did you hear our young traveler? He mistakes aged Bordeaux for chimney soot! Tell me, boy... if this is soot, why does it warm my belly like summer sun? If this roast pheasant is gravel, why does its crackling skin melt upon my tongue? You have marched too long in the salt-fog. Sit, take up your silver fork, and allow your senses to be cured."*
+  - **Choice B [Investigate the Guests / Diplomatic]:** "Who are all these people, my Lord? The Duke's daughter has been in a glass coma for decades. How long have you been sitting at this table?"
+    - **Lady Vivienne (her smile trembling, her paper-thin hand nervously clutching a strand of loose pearls):**  
+      *"Decades? What an absurd, frightening word... It was only six in the evening when the bells rang. The Duke told us the dessert would be served as soon as the physician finished his examination. We are simply waiting for the toast... It would be dreadfully rude to leave before the bride cuts the cake."*  
+      *(Journal Note: Their minds have locked the passage of time; they believe it is still the first evening of the banquet!)*
+  - **Choice C [Philosophical Infiltration]:** "If this feast is so magnificent, why are your doors sealed with hydraulic blast-valves? Why is this hall locked like a tomb?"
+    - **Lord Morvath (his smile faltering, his eyes growing dark and ancient):**  
+      *"Because outside those doors, the wind is cold. Outside those doors, my sons are dead. You think you are the first thief to stumble in here with iron boots and harsh words? Sit, Kaelen Voss. Let me tell you about the world you are so eager to drag us back to."*
+
+---
+
+##### Part II: Nozick's Gambit — The Socratic Duel
+
+*(Kaelen takes the vacant seat of crimson damask opposite Morvath. The roast boar between them radiates the rich, buttery scent of rosemary, fighting against Kaelen's willpower.)*
+
+- **Lord Morvath (leaning forward, his diamond cufflinks rattling against his hollow wristbones):**  
+  *"Let us speak plainly, shadow-thief. You have sharp eyes. You have the look of an orphan who has starved in gutters. You think we are fools who cannot tell bread from ash? Thirty years ago, when the doors first sealed, I knew. I tasted the chalk. I smelled the cold iron.*  
+  *And then I remembered what awaited me outside. In the southern province, my ancestral manor was put to the torch during the Grand Cleansing. My three sons were buried in winter mud without coffins. My lands are barren shale. If I stand from this chair, I am a penniless, broken widower whose life was ruined by kings.*  
+  *In this hall, the fire never dies. In this hall, the music plays my favorite waltz. My wife sits beside me, young and laughing, untouched by rot. Answer me this, philosopher of the gutter:*  
+  ***If a dream delivers sixty years of warmth, laughter, and sated appetite—and reality offers only frost, starvation, and a lonely grave—by what right do you call the truth superior? What moral cowardice is there in choosing joy over pain?***"*
+
+- **Player Socratic Counter-Arguments:**
+  - **Option 1 [The Existentialist Refutation — Authentic Agency `[INT 13 / Philosophy]`]:**  
+    - "Joy built on a lie is not joy, Morvath—it is an embalmed corpse in a velvet dress. You haven't chosen happiness; you've chosen cowardice. A man who dreams he is an emperor achieves nothing, creates nothing, loves nothing. Your sons did not die in the mud so their father could spend thirty years chewing dust in a coward's parlor. They would weep to see you like this."
+    - **Lord Morvath (recoils as if struck by a blade; his eyes widen with agonizing grief):**  
+      *"My sons... Alexander... Julian... They were so brave in their uniforms... Would they... would they despise me for hiding here?"*  
+      *(Cognitive Resistance drops to 30%! The roast boar flickers into grey soot.)*
+  - **Option 2 [The Empirical Test — The Mirror of Vanity `[Truth Lens Q / Item: Silver Cloche]`]:**  
+    - Kaelen raises the polished silver cloche, angling its reflective curvature directly into Lady Vivienne's face, while activating the *Truth Lens* (<kbd>Q</kbd>).
+    - "Look at your wife, Morvath. Look at her reflection. You say she is young and laughing? Look at her cheekbones. Look at her fingers!"
+    - *(Lady Vivienne looks into the silver curve. She gasps in mortal terror. She sees a sunken, skeletal skull, eyes sunken into black pits, yellowing teeth, and her golden wedding band fallen into the ash on her platter.)*
+    - **Lady Vivienne (screaming in horrified realization, dropping her fork):**  
+      *"Merciful heavens! Morvath! My hands! Where is my flesh?! What have we eaten?! What have you done to us?!"*
+    - **Lord Morvath (horrified, clutching his wife's trembling skeletal hands):**  
+      *"Vivienne... Vivienne, no! Look away! Look at the candles!"*  
+      *(The illusion violently stutters; the waltz skips and groans.)*
+  - **Option 3 [The Stoic Cold-Iron Libation `[Item: Cold-Iron Nail / Alpine Water]`]:**  
+    - Kaelen reaches into his satchel, withdraws the *Cold-Iron Nail*, and plunges it straight through the golden roast pheasant at the center of the table. In the same motion, he uncorks his alpine waterskin and douses Morvath's crystal goblet.
+    - The golden glamour shatters with the sound of cracking glass! The roasted pheasant collapses into a steaming pile of soot, charcoal chunks, and owl pellets. Morvath's wine turns into grey puddle-water crawling with mold.
+    - "Taste it now, Morvath. Taste your sixty years of peace."
+    - *(Morvath stares at the smoking soot on his silver platter. He slowly raises a trembling pinch of ash to his tongue. He gags, coughing up grey powder.)*
+    - **Lord Morvath (whispering in broken agony):**  
+      *"Ashes... It is all... ashes in my mouth..."*
+
+---
+
+##### Part III: The Awakening & The Hydraulic Relief
+
+*(The waltz music box in the corner grinds to a halt. One by one, the twenty-four aristocrats look at their plates. The hall falls into absolute, suffocating silence, broken only by the sound of muffled weeping.)*
+
+- **Lord Morvath (standing from his chair, his tall frame trembling as the illusion falls away, his voice breaking):**  
+  *"God forgive us... We have starved in heaven. We traded our souls for the smell of sugar..."*
+
+- **The Environmental Resolution:**
+  - As the twenty-four guests stand and step away from the table, **their physical reality and mortal weight crash back into the world**.
+  - The heavy brass floor pressure-plates beneath their chairs sink with massive mechanical thuds: *CLUNK... CLUNK... CLUNK...*
+  - Above the center of the room, the great *Balance of Themis* scale shifts: the phantom swan pan rises, and the real physical mass of twenty-four living beings pulls the truth-counterweight down to zero!
+  - A titanic steam-release siren shrieks along the ceiling pipes: **PSHHHHHHHHHHHHHHHH!**
+  - High-pressure starlight steam vents from the bronze archway cylinders. The monumental oak blast-doors grind open, flooding the room with the cool, crisp mountain air of reality.
+  - The guests stagger toward the corridor, coughing and weeping, supporting one another like survivors crawling from an open tomb.
+
+- **Lord Morvath (turning to Kaelen at the threshold, handing him an ornate silver chalice lined with black volcanic glass):**  
+  *"Take this, shadow-thief. It is the Tantalus Goblet—Vaelor's gift to me on the night he stole our lives. Let it remind you that a bitter truth is worth a thousand gilded lies. Go... and break his mirrors."*
+
+- **[Quest Completed: S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes)]**  
+  *[Rewards: The Tantalus Goblet, Archival Menu of the Eve of Betrothal (1886), Soot-Stained Silverware of the Cenacle, +750 XP]*
 
 ---
 
@@ -3515,6 +3621,7 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 - **Alchemist's Lab:** AL1 Lab (bench, reagents), AL2 Storage (explosives), AL3 Vex's Office (recipes).
 - **The Abyssal Prison Block & Penitent's Oubliette:** PB1 Upper Cell Tier (rusted iron cells, Korr's cell, abyssal drop), PB2 Warden's Iron Watch (Malakor's command post, key cabinet, extraction registers), PB3 Hydraulic Cell Matrix (Puzzle 30, shifting cell grid, pressure valves, starlight arc hazards), PB4 Cognitive Extraction Chambers (vacuum tubes, memory bulbs, extraction chairs), PB5 Siphon Crucibles (Eldrin's cell, starlight siphon ring, ozone mist), PB6 Abyssal Trench Vestibule (blast doors, overload reactor, sacrifice crucible, starlight amulet ascension).
 - **Rooftop Gardens:** RG1 Terrace, RG2 Wind Maze, RG3 Glider Launch, RG4 Vista Point.
+- **The Grand Refectory & The Cenacle of Eternal Satiety:** BQ1 The Banquet Hall of Dust (50m black oak banquet table, 24 living skeletal guests, Themis mass scale, ceiling censer rafters), BQ2 The Butler's Butlering Scullery (dumbwaiter connection to kitchens KQ1, silver polishing bench, censer salt reserves, waltz music box escapement), BQ3 The Wine Cellar of Lethe (racks of dust-coated vintage bottles filled with crushed starlight-chalk, cellar egress to Haunted Manor HQ2).
 - **The Grand Columbarium & Starlight Aviary:** AV1 The Lower Perches (Corvo's desk, seed bins, roost dispatch registry), AV2 The High Coops (hundreds of stone nesting cubbies, pigeon whistle testing platform), AV3 Aerial Flyway (wind-swept launch catwalk, long-distance courier cages), AV4 Decryption Roost (Imperial cipher decoding bench, brass telescope overlooking sky battlements).
 - **The Chronomantic Scriptorium & Hall of Inverted Hours:** CR1 The Threshold of Backward Rain (reversed precipitation, clock-face turnstile), CR2 The Scriptorium of Inverted Inks (Lady Aurelia's study, un-spilling inkwells, backward dialogue), CR3 The Chasm of Un-Fallen Stone (Puzzle 23, bottomless void, reverse-entropy guide rails), CR4 The Vault of Retrocausality (Puzzle 24, reverse portcullis, cold-ash braziers), CR5 The Frozen Second (Vaelor's Sorrow, starlight crystalline stasis chamber, Cynthia's un-broken memory).
 - **The Gilded Music Salon & Harmonic Conservatory:** MS1 The Vestibule of Chimes (acoustic baffling, velvet drapery, brass tuning bell array), MS2 The Salon Rotunda (Maestro Niccolò's stage, Madame Clara's fortepiano, steam-orchestrion organ), MS3 The Parquet of Resonant Harmonies (Puzzle 25, 3-lane rhythm floorboards, Resonator Glass-Armonica console), MS4 The Acoustic Baffle Loft (high catwalks, copper resonance horns, secret ventilation bypass), MS5 The Maestro's Archive (unsealed vault, Cynthia's music box fifth track, master scores).
@@ -3867,6 +3974,41 @@ Generated with the dungeon-cartography skill conventions.
                                      |
                          [Hex-Sealed Front Door]
                          (No Interior Door Handle)
+```
+
+### The Cenacle of Eternal Satiety (BQ1 — The Phantom Banquet)
+
+```
+       ================ [HYDRAULIC BLAST-DOOR EXIT] ================
+                                     ^
+                                     |  (Pneumatic Balance Relief Valve)
+                           +---------+---------+
+                           |  [Themis Balance] |
+                           |  (Mass Counter-   |
+                           |   weight Scale)   |
+                           +---------+---------+
+                                     |
+   +---------------------------------+-----------------------------------+
+   |                                                                     |
+   |   [Music Box Governor]                   [Grand Oak Sideboard]      |
+   |   (Lydian Waltz Escapement)              (Bitter Sea-Salt Reserves) |
+   |                                                                     |
+   |   [Censer 1]                                             [Censer 2] |
+   |                                                                     |
+   |   +-------------------------------------------------------------+   |
+   |   | [Lord Morvath]   (22 Skeletal Aristocrats)   [Lady Vivienne]|   |
+   |   | [Seat of Honor]  (50m Mahogany Banquet Table) [Platters of  |   |
+   |   | (Empty Damask)   (Phantom Roast Boar / Ash)   Furnace Ash]  |   |
+   |   +-------------------------------------------------------------+   |
+   |                                                                     |
+   |   [Censer 3]                                             [Censer 4] |
+   |                                                                     |
+   |   [Floor Pressure Plate]                     [Floor Pressure Plate] |
+   |   (Hydraulic Mass Sensor)                    (Hydraulic Mass Sensor)|
+   |                                                                     |
+   +---------------------------------+-----------------------------------+
+                                     |
+       ================== [ENTRANCE FROM SCULLERY KQ1] ==================
 ```
 
 ## 33. Systems Balancing Sheets
