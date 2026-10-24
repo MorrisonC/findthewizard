@@ -1,0 +1,1441 @@
+[
+  {
+    "id": "Q0",
+    "title": "The Commission",
+    "type": "Main",
+    "act": 1,
+    "giver": "Guildmaster Sable",
+    "giverZoneId": "outer",
+    "summary": "Receive the contract. Enter the keep via air-skiff. Reach Servants' Quarters without alarm.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Infiltrate the outer ramparts via grappling hook",
+        "targetZoneId": "outer",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Bypass the 2-guard patrol and enter the Servants' Quarters",
+        "targetZoneId": "servants",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 150,
+      "moons": 100,
+      "itemIds": [
+        "consumable_lockpick"
+      ]
+    },
+    "dialogueQuote": "Steal what he stole, Shadowhand. Leave nothing but mirrors behind.",
+    "prerequisiteQuestIds": [],
+    "softlockSafeguardRule": "Entry door remains unlocked once accessed."
+  },
+  {
+    "id": "Q1",
+    "title": "The Gatekeeper's Doubt",
+    "type": "Main",
+    "act": 1,
+    "giver": "Gatekeeper Orin",
+    "giverZoneId": "gate",
+    "summary": "Orin questions his reality. Help him find proof he is real (Iron Nail grounding).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Speak with Orin at the Gatehouse checkpoint",
+        "targetZoneId": "gate",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Retrieve Iron Nails from the Outer Wards smithy",
+        "targetZoneId": "outer",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Anchor Orin's post with an Iron Nail",
+        "targetZoneId": "gate",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 250,
+      "moons": 150,
+      "itemIds": [
+        "relic_iron_nails"
+      ],
+      "unlockedZoneId": "servants"
+    },
+    "dialogueQuote": "If I bleed oil instead of red, do not tell my mother.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Iron Nails are reusable and cannot be lost."
+  },
+  {
+    "id": "Q2",
+    "title": "Index of Lies",
+    "type": "Main",
+    "act": 2,
+    "giver": "Librarian Maren",
+    "giverZoneId": "library",
+    "summary": "Reorder the library index; discover Vaelor's true history.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Find the 6 misplaced historical annals across the stacks",
+        "targetZoneId": "library",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Solve Puzzle 5 (Library Index) by ordering books by publication year",
+        "targetZoneId": "library",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 350,
+      "moons": 200,
+      "itemIds": [
+        "relic_memory_thread"
+      ]
+    },
+    "dialogueQuote": "History is the only illusion that pretends to have dates.",
+    "prerequisiteQuestIds": [
+      "Q1"
+    ],
+    "softlockSafeguardRule": "Books return to catalog shelf if dropped."
+  },
+  {
+    "id": "Q3",
+    "title": "The Beast That Dreams",
+    "type": "Main",
+    "act": 2,
+    "giver": "Menagerie Keeper",
+    "giverZoneId": "menagerie",
+    "summary": "A caged chimera beast is a dreaming prisoner. Free or kill? Choice affects ending.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Examine the slumbering beast in cage 4",
+        "targetZoneId": "menagerie",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Sever the dream-leash with Memory Thread or slay the beast",
+        "targetZoneId": "menagerie",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 450,
+      "moons": 300,
+      "itemIds": [
+        "weapon_whisper"
+      ],
+      "unlockedSummonId": "dream_chimera"
+    },
+    "dialogueQuote": "Even in nightmares, it dreams of green grass.",
+    "prerequisiteQuestIds": [
+      "Q2"
+    ],
+    "softlockSafeguardRule": "Both choices yield required progression token."
+  },
+  {
+    "id": "Q4",
+    "title": "The Missing Heir",
+    "type": "Main",
+    "act": 3,
+    "giver": "Servant Lira",
+    "giverZoneId": "servants",
+    "summary": "Find evidence of Vaelor's daughter. Leads to Undercrypt revelation.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Search the nursery floorboards in the Haunted Chambers",
+        "targetZoneId": "haunted",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Deliver Cynthia's diary to Lira",
+        "targetZoneId": "servants",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 500,
+      "moons": 350,
+      "itemIds": []
+    },
+    "dialogueQuote": "She was never sick of illness. She was sick of this glass cage.",
+    "prerequisiteQuestIds": [
+      "Q3"
+    ],
+    "softlockSafeguardRule": "Diary is an untradable quest key item."
+  },
+  {
+    "id": "Q5",
+    "title": "The Ascent",
+    "type": "Main",
+    "act": 3,
+    "giver": "Kaelen (Self)",
+    "giverZoneId": "clock",
+    "summary": "Climb Clockwork Spire, defeat Warden, reach Sanctum antechamber.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Solve Puzzle 4 (Clockwork Sequence)",
+        "targetZoneId": "clock",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Ascend the exterior pendulum catwalks",
+        "targetZoneId": "clock",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Defeat the Clockwork Warden automaton",
+        "targetZoneId": "clock",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 600,
+      "moons": 400,
+      "itemIds": [],
+      "unlockedZoneId": "sanctum"
+    },
+    "dialogueQuote": "Every gear that turns brings me closer to the man who made me.",
+    "prerequisiteQuestIds": [
+      "Q4"
+    ],
+    "softlockSafeguardRule": "Elevator lever locks permanently in down position once pulled."
+  },
+  {
+    "id": "Q6",
+    "title": "The Veil Falls",
+    "type": "Main",
+    "act": 4,
+    "giver": "Kaelen (Self)",
+    "giverZoneId": "sanctum",
+    "summary": "Confront Vaelor. Multi-phase boss. Ending based on choices (free daughter, destroy keep, claim power).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Break through Vaelor's 4-phase illusion trials",
+        "targetZoneId": "sanctum",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Expose the Heart of Mirrors and make the final choice",
+        "targetZoneId": "sanctum",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 1000,
+      "moons": 1000,
+      "itemIds": []
+    },
+    "dialogueQuote": "The show is over, Vaelor. Lower the curtain.",
+    "prerequisiteQuestIds": [
+      "Q5"
+    ],
+    "softlockSafeguardRule": "Game autosaves before entering final arena."
+  },
+  {
+    "id": "S1",
+    "title": "The Missing Spice",
+    "type": "Side",
+    "act": 1,
+    "giver": "Cook Hesta",
+    "giverZoneId": "veilkeep",
+    "summary": "Find starlight pepper in Dreaming Gardens (belief puzzle).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Find starlight pepper in Dreaming Gardens (belief puzzle).",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S2",
+    "title": "Confession",
+    "type": "Side",
+    "act": 1,
+    "giver": "Blind Priest",
+    "giverZoneId": "veilkeep",
+    "summary": "Confess a truth (player selects from journal).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Confess a truth (player selects from journal).",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S3",
+    "title": "Rest for the Weary",
+    "type": "Side",
+    "act": 1,
+    "giver": "Ghost Monk",
+    "giverZoneId": "veilkeep",
+    "summary": "Lay 3 monk spirits to rest (find relics).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Lay 3 monk spirits to rest (find relics).",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S4",
+    "title": "The Dreamer's Prophecy",
+    "type": "Side",
+    "act": 1,
+    "giver": "Dreamer",
+    "giverZoneId": "veilkeep",
+    "summary": "Interpret a dream (dialogue puzzle).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Interpret a dream (dialogue puzzle).",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S5",
+    "title": "Pickpocket Patrol",
+    "type": "Side",
+    "act": 1,
+    "giver": "Guild contact",
+    "giverZoneId": "letter",
+    "summary": "Steal 5 guard keyrings undetected.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Steal 5 guard keyrings undetected.",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S6",
+    "title": "The Stair That Remembers",
+    "type": "Side",
+    "act": 1,
+    "giver": "The Diner",
+    "giverZoneId": "bulb-headed_",
+    "summary": "1) Enter Relativity Cloister. 2) Set three stairway landings as floors to rotate gravity and reach the central dining table. 3) Anchor one perspective with an Iron Nail to reveal the hidden window-exi...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Enter Relativity Cloister",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Set three stairway landings as floors to rotate gravity and reach the central dining table",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Anchor one perspective with an Iron Nail to reveal the hidden window-exit",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 4,
+        "description": "Interact (dine) with The Diner",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S7",
+    "title": "Trial of the Veil",
+    "type": "Side",
+    "act": 1,
+    "giver": "Arena Master",
+    "giverZoneId": "illusionary",
+    "summary": "1) Enter Colosseum. 2) Survive Wave 1 (guards). 3) Solve a mid-wave puzzle (mirror alignment under pressure). 4) Defeat Wave 3 (Phantasmal Beast).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Enter Colosseum",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Solve a mid-wave puzzle (mirror alignment under pressure)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S8",
+    "title": "The Hunter's Lie",
+    "type": "Side",
+    "act": 1,
+    "giver": "Curator",
+    "giverZoneId": "illusion_of_",
+    "summary": "1) Examine 5 trophies; identify which are illusions (Veil Sight). 2) Find the hidden passage behind the \"slain\" beast (lockpick 2). 3) Confront the Curator with the truth.",
+    "objectives": [
+      {
+        "stepIndex": 2,
+        "description": "Find the hidden passage behind the \"slain\" beast (lockpick",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Confront the Curator with the truth",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S9",
+    "title": "The Star That Lies",
+    "type": "Side",
+    "act": 2,
+    "giver": "Stargazer",
+    "giverZoneId": "veilkeep",
+    "summary": "1) Enter Astronomy Tower at night. 2) Align telescope to 3 constellations. 3) Open hidden room.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Enter Astronomy Tower at night",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Open hidden room",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S10",
+    "title": "The Unstable Formula",
+    "type": "Side",
+    "act": 2,
+    "giver": "Alchemist Vex",
+    "giverZoneId": "veilkeep",
+    "summary": "1) Gather 4 reagents. 2) Brew without failure (timing mini-game). 3) Deliver potion.",
+    "objectives": [
+      {
+        "stepIndex": 2,
+        "description": "Brew without failure (timing mini-game)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Deliver potion",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S11",
+    "title": "Free the Forgotten",
+    "type": "Side",
+    "act": 2,
+    "giver": "Prisoner Korr",
+    "giverZoneId": "veilkeep",
+    "summary": "1) Find 3 cell keys (stealth). 2) Free prisoners. 3) Escort to Servants' Quarters.",
+    "objectives": [
+      {
+        "stepIndex": 2,
+        "description": "Free prisoners",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Escort to Servants' Quarters",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S12",
+    "title": "The Wind's Secret",
+    "type": "Side",
+    "act": 2,
+    "giver": "Windkeeper",
+    "giverZoneId": "veilkeep",
+    "summary": "1) Solve 3 wind puzzles (redirect gusts). 2) Unlock glider.",
+    "objectives": [
+      {
+        "stepIndex": 2,
+        "description": "Unlock glider",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S13",
+    "title": "The Dreamer's Descent",
+    "type": "Side",
+    "act": 2,
+    "giver": "The Dreamer",
+    "giverZoneId": "void",
+    "summary": "1) Enter Void Realm at midnight. 2) Survive 3 dream-logic rooms. 3) Return sane.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Enter Void Realm at midnight",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Return sane",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S14",
+    "title": "The Genie's Bargains",
+    "type": "Side",
+    "act": 2,
+    "giver": "The Genie",
+    "giverZoneId": "bottled",
+    "summary": "1) Find Genie Bottle (hidden). 2) Open it. 3) Accept 3 bargains. Each bargain grants a bonus (e.g., +5 STR, extra skill point, rare item) at a cost (e.g., -10 max HP, lose a random item, advance time ...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Find Genie Bottle (hidden)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Open it",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S15",
+    "title": "The Final Wish",
+    "type": "Side",
+    "act": 2,
+    "giver": "The Genie",
+    "giverZoneId": "veilkeep",
+    "summary": "1) Complete S14. 2) Choose final wish: free the Genie (becomes an ally in final boss, grants +1 to all stats) or claim the last wish (gain a legendary item but Genie is destroyed).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "1) Complete S14. 2) Choose final wish: free the Genie (becomes an ally in final boss, grants +1 to all stats) or claim the last wish (gain a legendary item but Genie is destroyed).",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S16",
+    "title": "The Equine's Dignity",
+    "type": "Side",
+    "act": 2,
+    "giver": "Barnaby the Astrological Talking Horse",
+    "giverZoneId": "veilkeep",
+    "summary": "1) Speak to Barnaby in the stables. 2) Pickpocket the Dressing Room Key from Ringmaster Valenti (or win it via the Knife-Wheel). 3) Recover the House of Ambercrest Signet Ring from the prop chest (loc...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Speak to Barnaby in the stables",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Pickpocket the Dressing Room Key from Ringmaster Valenti (or win it via the Knife-Wheel)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Recover the House of Ambercrest Signet Ring from the prop chest (lockpick",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 4,
+        "description": "Return it to Barnaby",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Do not gawk, Shadowhand. Yes, I am an equine. Yes, I speak fluent High Court Gothic, which is considerably more than I can say for Boris over there. Vaelor found my critique of his early draft illusions 'pedantic', and thus decided four hooves would suit my station. Find my ring, and I will tell you where the charlatan hid his true ledger.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S17",
+    "title": "The Grand Performance",
+    "type": "Side",
+    "act": 3,
+    "giver": "Ringmaster Valenti",
+    "giverZoneId": "veilkeep",
+    "summary": "1) Talk to Valenti on the main stage. 2) Hit 3 moving targets on the spinning knife-wheel without striking the dummy. 3) Ring the Titan's High-Striker bell (STR check or precision swing).",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Talk to Valenti on the main stage",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Ring the Titan's High-Striker bell (STR check or precision swing)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Step right up, thief of shadows! The crowd hungers for spectacle! Are you an artist of the blade, or merely a clumsy cutpurse? Ring the bell, brave the wheel, and the applause of the dead shall be yours!",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S18",
+    "title": "The Steam-Heart Pressure",
+    "type": "Side",
+    "act": 3,
+    "giver": "Chief Mechanist Master Vane",
+    "giverZoneId": "foundry_bf2",
+    "summary": "1) Speak to Master Vane at the Grand Boiler Core. 2) Balance the 3 manifold valves in BF4 to exactly 120 PSI to prevent a catastrophic boiler blowout. 3) Repair the pneumatic dispatch line to the Libr...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Speak to Master Vane at the Grand Boiler Core",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Repair the pneumatic dispatch line to the Library",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "The wizard thinks magic holds this keep in the clouds! Bah! It's four hundred pounds of starlight steam pressure and my sweat! One burst copper elbow and the whole dream comes crashing into the rocks. Turn the valves, cutpurse, or we all fry!",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S19",
+    "title": "The Malicious Demon's Wax",
+    "type": "Side",
+    "act": 3,
+    "giver": "Philosopher Renatus",
+    "giverZoneId": "refectory_rd",
+    "summary": "1) Speak with Doctor Renatus in the Solipsist's Refectory. 2) Collect three invariant physical artifacts: unmelting monastery candle wax from Chapel C1, a calibrated brass relief cog from Steam Foundr...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Speak with Doctor Renatus in the Solipsist's Refectory",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Bring them to Renatus's crucible to conduct the Cartesian Wax Test",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S20",
+    "title": "The Five Senses of Deception",
+    "type": "Side",
+    "act": 3,
+    "giver": "Philosopher Renatus",
+    "giverZoneId": "refectory_rd",
+    "summary": "1) Receive 5 Doubter's Harmonic Tuning Forks from Renatus. 2) Strike the forks into the 5 sensory deception focal hubs: the Gatehouse optical prisms (GH2 - Sight), the Kitchen spiced censers (K1 - Sme...",
+    "objectives": [
+      {
+        "stepIndex": 3,
+        "description": "Return to Renatus as the harmonic shockwave purges Vaelor's sensory dampening fields across the keep",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S21",
+    "title": "Cogito, Ergo Sum (The Radical Proof)",
+    "type": "Side",
+    "act": 3,
+    "giver": "Philosopher Renatus",
+    "giverZoneId": "refectory_rd",
+    "summary": "1) Visit Renatus before entering the Sanctum. Find him paralyzed with existential despair before his draped mirror, convinced he is merely a hollow phantom conjured by Vaelor to comfort himself with d...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Visit Renatus before entering the Sanctum. Find him paralyzed with existential despair before his draped mirror, convinced he is merely a hollow phantom conjured by Vaelor to comfort himself with debate",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Provide definitive proof of his independent reality: present either Kaelen's restored *Thief's Field Journal* containing an unprompted observation about Renatus, or the *Servant's Diary* proving his presence before Vaelor's ascension",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S22",
+    "title": "The Thaumaturges' Crucible",
+    "type": "Side",
+    "act": 3,
+    "giver": "The Apostate Triumvirate",
+    "giverZoneId": "enclave_me2",
+    "summary": "1) Enter the Thaumaturges' Enclave and speak to the three exiled minor magicians (Vaelen, Sylas, Zephyra). 2) Agree to face their bound creature mini-bosses in the sunken Crucible arena (`ME3`). 3) Ro...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Enter the Thaumaturges' Enclave and speak to the three exiled minor magicians (Vaelen, Sylas, Zephyra)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S23",
+    "title": "The Sky-Courier's Cipher",
+    "type": "Side",
+    "act": 3,
+    "giver": "Pigeon Master Corvo",
+    "giverZoneId": "the_grand_co",
+    "summary": "1) Scale the high parapets above the Rooftop Gardens to find Pigeon Master Corvo in the Starlight Aviary. 2) Re-tune 3 jammed mechanical wind vanes and repair 3 damaged nesting coops in Outer Wards (O...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Scale the high parapets above the Rooftop Gardens to find Pigeon Master Corvo in the Starlight Aviary",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 1,
+        "description": ", Library Balcony (L",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 4,
+        "description": ", and Clockwork Spire (CS",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "using brass wire and clockwork gears",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Intercept an Imperial messenger pigeon carrying an encrypted cipher cylinder over the Clockwork Flyway using the Grappling Hook or a stealth sneak approach",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 4,
+        "description": "Bring the cipher back to Corvo's decryption desk to crack the Imperial courier route code",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 5,
+        "description": "Bond with Zephyr, the runt starlight columba, by feeding him Starlight Bird-Feed and mastering the high-frequency whistle calls",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S24",
+    "title": "The Hourglass Turned Backwards",
+    "type": "Side",
+    "act": 3,
+    "giver": "Lady Aurelia the Inverted",
+    "giverZoneId": "the_chronoma",
+    "summary": "1) Enter the Chronomantic Scriptorium by navigating the upper catwalks of the Clockwork Spire during the midnight bell toll. 2) Meet Lady Aurelia and converse through her reverse-chronology dialogue t...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Enter the Chronomantic Scriptorium by navigating the upper catwalks of the Clockwork Spire during the midnight bell toll",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Meet Lady Aurelia and converse through her reverse-chronology dialogue tree (answering her parting words first to learn her initial greeting)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 5,
+        "description": "Retrieve *Cynthia's Broken Music-Spring* from the un-locked vault before the loop snaps shut",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 6,
+        "description": "Return to Aurelia as she bids Kaelen her opening greeting",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S25",
+    "title": "The Maestro's Devilish Caprice",
+    "type": "Side",
+    "act": 3,
+    "giver": "Maestro Niccolò",
+    "giverZoneId": "the_gilded_m",
+    "summary": "1) Gain entry to the Gilded Music Salon through the acoustic ventilation ducts behind the Phantasmagoria Playhouse. 2) Speak with Maestro Niccolò, Madame Clara, and Bandmaster Gustav; discover their p...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Gain entry to the Gilded Music Salon through the acoustic ventilation ducts behind the Phantasmagoria Playhouse",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Speak with Maestro Niccolò, Madame Clara, and Bandmaster Gustav; discover their phantasmal spirits are bound by Vaelor's dissonant curse to endlessly repeat an incomplete masterwork",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 4,
+        "description": "Take your position at the central Resonator Glass-Armonica console",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 6,
+        "description": "Strike the final harmonious chord to break the temporal stasis binding the salon",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S26",
+    "title": "The Sunfall Crusade's Requiem",
+    "type": "Side",
+    "act": 3,
+    "giver": "Lady Eleanor the Sun-Scarred",
+    "giverZoneId": "chapel_vestr",
+    "summary": "1) Enter the Consecrated Solar Vestry behind the Chapel of Reflections. 2) Converse with Lady Eleanor; learn how the Order of the Radiant Aegis fell to Vaelor's mirror mirages and had their souls twis...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Enter the Consecrated Solar Vestry behind the Chapel of Reflections",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 2,
+        "description": "Converse with Lady Eleanor; learn how the Order of the Radiant Aegis fell to Vaelor's mirror mirages and had their souls twisted into Phantasmal Templars",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 5,
+        "description": "Use the focused beam of purified dawn light to shatter the petrification curse binding Sir Roderick the Penitent at the high solarium parapet",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S27",
+    "title": "The Seneschal's Silver Service",
+    "type": "Side",
+    "act": 3,
+    "giver": "Mister Bartholomew Sterling",
+    "giverZoneId": "servants'_ha",
+    "summary": "1) Speak with Grand Butler Mister Bartholomew Sterling while observing proper decorum (sheathing weapons upon entry; approaching with weapons drawn causes Bartholomew to refuse dialogue: *\"House regul...",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Speak with Grand Butler Mister Bartholomew Sterling while observing proper decorum (sheathing weapons upon entry; approaching with weapons drawn causes Bartholomew to refuse dialogue: *\"House regulations strictly prohibit cold steel at the breakfast table, sir\"*)",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 3,
+        "description": "Retrieve young Lady Cynthia's *Porcelain Music Cup* from the prop racks in the Phantasmagoria Playhouse Green Room (PH",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 4,
+        "description": "",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 5,
+        "description": "Return to the State Dining Salon to partake in high tea with Bartholomew",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S28",
+    "title": "The Séance of Broken Memories",
+    "type": "Side",
+    "act": 3,
+    "giver": "Madame Vivienne",
+    "giverZoneId": "the_pale_nur",
+    "summary": "1) Discover the secret passage behind the mounted chimera in Trophy Hall TR2 (lockpick 2 or phase shift). 2) Navigate the Vestibule of Whispers (`HA1`) using the *Truth Lens* to avoid phantom pit trap...",
+    "objectives": [
+      {
+        "stepIndex": 5,
+        "description": "Recover three authentic memory anchors: the un-altered physician's diagnosis in the secret desk drawer, the *Duchess's Sterling Teacup* from the sideboard, and *Cynthia's Porcelain Music Doll* hidden beneath the nursery floorboards",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S29",
+    "title": "The Sky-Sovereign's Restored Crown",
+    "type": "Side",
+    "act": 3,
+    "giver": "Lord Aurelius the Sky-Sovereign",
+    "giverZoneId": "the_high_eyr",
+    "summary": "1) Ascend to the Spire pinnacle (`EY1`) and bypass the gale winds. 2) Enter the Roost of Gilded Trophies (`EY2`) and converse with the ancient mythical talking Aether-Gryphon Lord Aurelius. 3) Solve P...",
+    "objectives": [
+      {
+        "stepIndex": 5,
+        "description": "Break the aether-tether shackles binding Aurelius's golden talons using the *Tuning Fork of Unmaking* or *Whisper*",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 6,
+        "description": "Return the Solar Heart to Aurelius to witness the storm-dispelling awakening cutscene",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S30",
+    "title": "The Clew of the Minotaur's Sorrow",
+    "type": "Side",
+    "act": 3,
+    "giver": "Ariadne the Clockwork Weaver",
+    "giverZoneId": "the_daedalia",
+    "summary": "1) Enter the subterranean labyrinth threshold through the Undercrypt descent (`U4`). 2) Speak with Ariadne the Clockwork Weaver; receive *Ariadne's Starlight Clew*. 3) Anchor the glowing starlight thr...",
+    "objectives": [
+      {
+        "stepIndex": 2,
+        "description": "Speak with Ariadne the Clockwork Weaver; receive *Ariadne's Starlight Clew*",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "S31",
+    "title": "The Martyr's Dying Ember",
+    "type": "Side",
+    "act": 3,
+    "giver": "Eldrin the Star-Carver",
+    "giverZoneId": "the_abyssal_",
+    "summary": "1) Infiltrate the subterranean extraction gaol (`PB1`–`PB2`) through the Barracks trapdoor or Undercrypt shaft. 2) Defeat or pickpocket Siphon Warden Malakor in `PB2` to acquire *The Warden's Abyssal ...",
+    "objectives": [
+      {
+        "stepIndex": 6,
+        "description": "When Warden Malakor triggers the emergency containment lockout, sealing the exit with lethal *Null-Matter Starlight Security Wards* and triggering reactor overload, speak with Eldrin",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 7,
+        "description": "Hand the *Mirror Shard Amulet* to Eldrin and witness his heroic self-sacrifice as he seals himself inside the blast crucible to pull the manual venting lever",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      },
+      {
+        "stepIndex": 8,
+        "description": "Retrieve the newly ascended *The Martyr's Starlight Amulet* from the molten pedestal",
+        "targetZoneId": "fortress",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 200,
+      "moons": 100,
+      "itemIds": []
+    },
+    "dialogueQuote": "Proceed with stealth, Master Voss.",
+    "prerequisiteQuestIds": [
+      "Q0"
+    ],
+    "softlockSafeguardRule": "Quest items cannot be dropped or sold."
+  },
+  {
+    "id": "H1",
+    "title": "The Smuggler's Cache",
+    "type": "Hidden",
+    "act": 1,
+    "giver": "Forgotten Smuggler Note",
+    "giverZoneId": "outer",
+    "summary": "Find the brick with the carved raven in Outer Wards wall. Pick the lock for early thief gear.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Locate hollow stone at [X:14, Y:3] in Outer Wards",
+        "targetZoneId": "outer",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 100,
+      "moons": 150,
+      "itemIds": [
+        "consumable_lockpick"
+      ]
+    },
+    "dialogueQuote": "Only fools pay the gate toll.",
+    "prerequisiteQuestIds": [],
+    "softlockSafeguardRule": "Cache is permanent and un-lockable anytime."
+  },
+  {
+    "id": "H2",
+    "title": "The True Name",
+    "type": "Hidden",
+    "act": 2,
+    "giver": "Caged Beast Footnote",
+    "giverZoneId": "library",
+    "summary": "Cross-reference the Menagerie ledger with the true taxonomy annals in the Arcane Library.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Discover the true mortal name of the caged chimera",
+        "targetZoneId": "library",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 250,
+      "moons": 200,
+      "itemIds": []
+    },
+    "dialogueQuote": "Names have weight. Speak it, and the cage will shatter.",
+    "prerequisiteQuestIds": [
+      "Q2"
+    ],
+    "softlockSafeguardRule": "Can be discovered before or after entering the Menagerie."
+  },
+  {
+    "id": "H3",
+    "title": "Starlight Grove",
+    "type": "Hidden",
+    "act": 2,
+    "giver": "Dream Inscription",
+    "giverZoneId": "gardens",
+    "summary": "Walk the stepping stone path backward under the full moon in the Dreaming Gardens.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Step only upon the midnight violet lilies at hour 0:00",
+        "targetZoneId": "gardens",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 300,
+      "moons": 250,
+      "itemIds": [
+        "consumable_sun_oil"
+      ]
+    },
+    "dialogueQuote": "When the moon sleeps, the starlight blossoms open.",
+    "prerequisiteQuestIds": [
+      "S4"
+    ],
+    "softlockSafeguardRule": "Event triggers every midnight cycle."
+  },
+  {
+    "id": "H4",
+    "title": "The Daughter's Room",
+    "type": "Hidden",
+    "act": 3,
+    "giver": "Madame Vivienne's Ghost Cameo",
+    "giverZoneId": "haunted",
+    "summary": "Locate Cynthia's true untouched bedroom hidden behind the three-way mirror illusion in Sanctum antechamber.",
+    "objectives": [
+      {
+        "stepIndex": 1,
+        "description": "Use Truth Lens on the gilded mirror frame to reveal the child's sanctuary",
+        "targetZoneId": "haunted",
+        "isOptional": false
+      }
+    ],
+    "rewards": {
+      "xp": 500,
+      "moons": 400,
+      "itemIds": []
+    },
+    "dialogueQuote": "She never left the house... she was only waiting for someone who remembered her song.",
+    "prerequisiteQuestIds": [
+      "S28"
+    ],
+    "softlockSafeguardRule": "Reveals Cynthia's Music Box master cylinder."
+  }
+]

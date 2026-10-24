@@ -1,0 +1,13 @@
+{
+  "mcp": {
+    "servers": {
+      "threejs-docs": {
+        "type": "local",
+        "command": [
+          "node",
+          "C:\\Development\\findthewizard\\tools\\ThreeJSMCP\\dist\\index.js"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,2061 @@
+[
+  {
+    "id": "outer",
+    "code": "A",
+    "name": "Outer Wards & Sunken Courtyard",
+    "act": 1,
+    "isPeripheral": false,
+    "description": "Terraced mountain crag approach and sunken barbican courtyard carved into the red-rock foundation beneath the imposing terracotta fortress. Features photophobic aether-bramble bushes with retracting starlight thorns, deceptive shadow sentry traps, and the dry moat waterwheel siphon winch to breach the barbican.",
+    "svgDataId": "outer",
+    "adjacentZoneIds": [
+      "gate",
+      "barracks",
+      "columbarium"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "gate",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "barracks",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "columbarium",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#fef08a",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_outer.ogg",
+      "combatMusicStem": "/assets/audio/combat_outer.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [
+      "Aether-Bramble Thorns",
+      "Acoustic Needle Trap"
+    ],
+    "puzzleIds": [
+      "P7"
+    ],
+    "questIds": [
+      "Q0",
+      "H1"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene00_approach.jpg"
+  },
+  {
+    "id": "gate",
+    "code": "B",
+    "name": "Gatehouse",
+    "act": 1,
+    "isPeripheral": false,
+    "description": "Portcullis checkpoint. Mirror beam alignment puzzle. Gatekeeper Orin questioning his identity.",
+    "svgDataId": "gate",
+    "adjacentZoneIds": [
+      "outer",
+      "servants",
+      "mirrors"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "outer",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "servants",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "mirrors",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_gate.ogg",
+      "combatMusicStem": "/assets/audio/combat_gate.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P1"
+    ],
+    "questIds": [
+      "Q1"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_gate.jpg"
+  },
+  {
+    "id": "servants",
+    "code": "C",
+    "name": "Servants' Quarters",
+    "act": 1,
+    "isPeripheral": false,
+    "description": "Domestic wing. Mister Bartholomew Sterling, dumbwaiter hub, pantry cellars, tea service decorum.",
+    "svgDataId": "servants",
+    "adjacentZoneIds": [
+      "gate",
+      "kitchen",
+      "library",
+      "refectory",
+      "conservatory"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "gate",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "kitchen",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "library",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "refectory",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "U",
+        "targetZoneId": "conservatory",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_servants.ogg",
+      "combatMusicStem": "/assets/audio/combat_servants.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [
+      "Q4",
+      "S27"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_servants.jpg"
+  },
+  {
+    "id": "kitchen",
+    "code": "D",
+    "name": "Kitchens",
+    "act": 1,
+    "isPeripheral": false,
+    "description": "Culinary sector. Cook Hesta, stove vents, dumbwaiter climb puzzle to Undercrypt.",
+    "svgDataId": "kitchen",
+    "adjacentZoneIds": [
+      "servants",
+      "crypt",
+      "prison",
+      "foundry"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "servants",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "crypt",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "prison",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": "passkey_bartholomew",
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "foundry",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_kitchen.ogg",
+      "combatMusicStem": "/assets/audio/combat_kitchen.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P8"
+    ],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_kitchen.jpg"
+  },
+  {
+    "id": "barracks",
+    "code": "E",
+    "name": "Barracks",
+    "act": 1,
+    "isPeripheral": false,
+    "description": "Guard station. Sleeping guards, equipment racks, captain office, rafter traversal.",
+    "svgDataId": "barracks",
+    "adjacentZoneIds": [
+      "outer",
+      "mirrors",
+      "trophy"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "outer",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "mirrors",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "trophy",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_barracks.ogg",
+      "combatMusicStem": "/assets/audio/combat_barracks.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_barracks.jpg"
+  },
+  {
+    "id": "prison",
+    "code": "PB",
+    "name": "Prison Block",
+    "act": 1,
+    "isPeripheral": false,
+    "description": "Gaol and interrogation cells. Warden Malakor, stealth escort, starlight siphon isolation oubliette.",
+    "svgDataId": "prison",
+    "adjacentZoneIds": [
+      "kitchen",
+      "crypt"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "kitchen",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "crypt",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_prison.ogg",
+      "combatMusicStem": "/assets/audio/combat_prison.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P12",
+      "P30"
+    ],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_prison.jpg"
+  },
+  {
+    "id": "mirrors",
+    "code": "F",
+    "name": "Halls of Mirrors",
+    "act": 2,
+    "isPeripheral": false,
+    "description": "Mirror maze labyrinth. Anamorphic mirrors, true reflection puzzle, phantasmal hounds.",
+    "svgDataId": "mirrors",
+    "adjacentZoneIds": [
+      "gate",
+      "barracks",
+      "menagerie",
+      "colosseum"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "gate",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "barracks",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "menagerie",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "colosseum",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_mirrors.ogg",
+      "combatMusicStem": "/assets/audio/combat_mirrors.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_mirrors.jpg"
+  },
+  {
+    "id": "menagerie",
+    "code": "H",
+    "name": "Menagerie",
+    "act": 2,
+    "isPeripheral": false,
+    "description": "Beast cages. Slumbering chimera, dream-leash dilemma, keeper lore.",
+    "svgDataId": "menagerie",
+    "adjacentZoneIds": [
+      "mirrors",
+      "library",
+      "gardens"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "mirrors",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "library",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "gardens",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_menagerie.ogg",
+      "combatMusicStem": "/assets/audio/combat_menagerie.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [
+      "Q3"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_menagerie.jpg"
+  },
+  {
+    "id": "gardens",
+    "code": "I",
+    "name": "Dreaming Gardens",
+    "act": 2,
+    "isPeripheral": false,
+    "description": "Bioluminescent botanical terrace. Belief flowers, starlight lilies, dream logic paths.",
+    "svgDataId": "gardens",
+    "adjacentZoneIds": [
+      "menagerie",
+      "clock",
+      "relativity",
+      "playhouse"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "menagerie",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "clock",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "relativity",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "playhouse",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_gardens.ogg",
+      "combatMusicStem": "/assets/audio/combat_gardens.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [
+      "H3"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_gardens.jpg"
+  },
+  {
+    "id": "library",
+    "code": "G",
+    "name": "Arcane Library",
+    "act": 2,
+    "isPeripheral": false,
+    "description": "Infinite book stacks. Librarian Maren, chronos catalog index puzzle, Vaelor true lineage.",
+    "svgDataId": "library",
+    "adjacentZoneIds": [
+      "servants",
+      "menagerie",
+      "chronomancy",
+      "enclave"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "servants",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "menagerie",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "chronomancy",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "enclave",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_library.ogg",
+      "combatMusicStem": "/assets/audio/combat_library.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [
+      "Q2",
+      "H2"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_library.jpg"
+  },
+  {
+    "id": "crypt",
+    "code": "K",
+    "name": "Undercrypt",
+    "act": 2,
+    "isPeripheral": false,
+    "description": "Catacombs and ancestral tombs. Ghost monks, echo chamber puzzle, descent to labyrinth.",
+    "svgDataId": "crypt",
+    "adjacentZoneIds": [
+      "kitchen",
+      "chapel",
+      "trophy",
+      "prison",
+      "labyrinth",
+      "enclave"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "kitchen",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "chapel",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "trophy",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "prison",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": "passkey_bartholomew",
+        "requiredQuestId": null
+      },
+      {
+        "direction": "U",
+        "targetZoneId": "labyrinth",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "D",
+        "targetZoneId": "enclave",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_crypt.ogg",
+      "combatMusicStem": "/assets/audio/combat_crypt.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P6"
+    ],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_crypt.jpg"
+  },
+  {
+    "id": "chapel",
+    "code": "L",
+    "name": "Chapel of Reflections",
+    "act": 2,
+    "isPeripheral": false,
+    "description": "Stained-glass sanctuary. Consecrated altars, blind priest, confession blessing.",
+    "svgDataId": "chapel",
+    "adjacentZoneIds": [
+      "crypt"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "crypt",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_chapel.ogg",
+      "combatMusicStem": "/assets/audio/combat_chapel.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P26"
+    ],
+    "questIds": [
+      "S26"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_chapel.jpg"
+  },
+  {
+    "id": "trophy",
+    "code": "M",
+    "name": "Trophy Hall",
+    "act": 3,
+    "isPeripheral": false,
+    "description": "Curator exhibition. Slain illusion beasts, secret door behind the chimera, hunter cloaks.",
+    "svgDataId": "trophy",
+    "adjacentZoneIds": [
+      "barracks",
+      "crypt",
+      "colosseum",
+      "haunted"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "barracks",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "crypt",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "colosseum",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "haunted",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_trophy.ogg",
+      "combatMusicStem": "/assets/audio/combat_trophy.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_trophy.jpg"
+  },
+  {
+    "id": "clock",
+    "code": "J",
+    "name": "Clockwork Spire",
+    "act": 3,
+    "isPeripheral": false,
+    "description": "Vertical gear tower. Levers, pendulum platforms, clock escapement governor, Warden boss.",
+    "svgDataId": "clock",
+    "adjacentZoneIds": [
+      "gardens",
+      "colosseum",
+      "eyrie",
+      "chronomancy",
+      "foundry",
+      "refectory",
+      "sanctum"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "gardens",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "colosseum",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "eyrie",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "chronomancy",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "U",
+        "targetZoneId": "foundry",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "D",
+        "targetZoneId": "refectory",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "N",
+        "targetZoneId": "sanctum",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": "passkey_bartholomew",
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_clock.ogg",
+      "combatMusicStem": "/assets/audio/combat_clock.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P4"
+    ],
+    "questIds": [
+      "Q5"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_clock.jpg"
+  },
+  {
+    "id": "colosseum",
+    "code": "O",
+    "name": "Colosseum",
+    "act": 3,
+    "isPeripheral": false,
+    "description": "Phantasmal gladiator arena. 3 combat waves, arena champion sigil, summon testing.",
+    "svgDataId": "colosseum",
+    "adjacentZoneIds": [
+      "clock",
+      "trophy",
+      "mirrors",
+      "crypt"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "clock",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "trophy",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "mirrors",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "W",
+        "targetZoneId": "crypt",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_colosseum.ogg",
+      "combatMusicStem": "/assets/audio/combat_colosseum.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_colosseum.jpg"
+  },
+  {
+    "id": "relativity",
+    "code": "N",
+    "name": "Relativity Cloister",
+    "act": 3,
+    "isPeripheral": false,
+    "description": "M.C. Escher impossible perspective cloister. Gravity-defying stairs, Iron Nail anchoring.",
+    "svgDataId": "relativity",
+    "adjacentZoneIds": [
+      "gardens",
+      "sanctum"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "gardens",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "sanctum",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": "passkey_bartholomew",
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_relativity.ogg",
+      "combatMusicStem": "/assets/audio/combat_relativity.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P9"
+    ],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_relativity.jpg"
+  },
+  {
+    "id": "sanctum",
+    "code": "P",
+    "name": "Sanctum of the Archillusionist",
+    "act": 4,
+    "isPeripheral": false,
+    "description": "Vaelor pinnacle throne. 4-phase climatic boss battle, Heart of Mirrors, 4 story endings.",
+    "svgDataId": "sanctum",
+    "adjacentZoneIds": [
+      "relativity",
+      "clock",
+      "haunted"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "relativity",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "clock",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "haunted",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_sanctum.ogg",
+      "combatMusicStem": "/assets/audio/combat_sanctum.ogg",
+      "reverbDecaySeconds": 1.5
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [
+      "Q6"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_sanctum.jpg"
+  },
+  {
+    "id": "playhouse",
+    "code": "PH",
+    "name": "Phantasmagoria Playhouse",
+    "act": 2,
+    "isPeripheral": true,
+    "description": "Carnival stage. Ringmaster Valenti, Barnaby the talking horse, knife-wheel cadence, high-wire balance.",
+    "svgDataId": "playhouse",
+    "adjacentZoneIds": [
+      "gardens",
+      "conservatory"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "gardens",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "conservatory",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_playhouse.ogg",
+      "combatMusicStem": "/assets/audio/combat_playhouse.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P15",
+      "P16",
+      "P17"
+    ],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_playhouse.jpg"
+  },
+  {
+    "id": "enclave",
+    "code": "EN",
+    "name": "Thaumaturges' Enclave",
+    "act": 2,
+    "isPeripheral": true,
+    "description": "Apostate mages, elemental pentagram alignment, 3 creature trials in the sunken pit.",
+    "svgDataId": "enclave",
+    "adjacentZoneIds": [
+      "library",
+      "crypt"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "library",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "crypt",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#fef08a",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_enclave.ogg",
+      "combatMusicStem": "/assets/audio/combat_enclave.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [
+      "S22"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_enclave.jpg"
+  },
+  {
+    "id": "foundry",
+    "code": "BF",
+    "name": "Great Boiler Foundry",
+    "act": 2,
+    "isPeripheral": true,
+    "description": "Industrial boiler core. Master Vane, pneumatic steam condensation, escapement governor gearbox.",
+    "svgDataId": "foundry",
+    "adjacentZoneIds": [
+      "kitchen",
+      "clock",
+      "labyrinth"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "kitchen",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "clock",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "S",
+        "targetZoneId": "labyrinth",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_foundry.ogg",
+      "combatMusicStem": "/assets/audio/combat_foundry.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [
+      "Steam Jets"
+    ],
+    "puzzleIds": [
+      "P19",
+      "P20"
+    ],
+    "questIds": [
+      "S18"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_foundry.jpg"
+  },
+  {
+    "id": "refectory",
+    "code": "RD",
+    "name": "Skeptic's Refectory",
+    "act": 3,
+    "isPeripheral": true,
+    "description": "Philosopher Doctor Renatus, armillary scale dialectic, Descartes wax argument proof.",
+    "svgDataId": "refectory",
+    "adjacentZoneIds": [
+      "servants",
+      "clock"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "servants",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "clock",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_refectory.ogg",
+      "combatMusicStem": "/assets/audio/combat_refectory.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [
+      "S19",
+      "S20",
+      "S21"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_refectory.jpg"
+  },
+  {
+    "id": "columbarium",
+    "code": "CO",
+    "name": "Sky-Courier Columbarium",
+    "act": 2,
+    "isPeripheral": true,
+    "description": "Falconry aviary. Pigeon Master Corvo, intercepted flight ciphers, Zephyr companion bird.",
+    "svgDataId": "columbarium",
+    "adjacentZoneIds": [
+      "outer",
+      "eyrie"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "outer",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "eyrie",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#1e293b",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_columbarium.ogg",
+      "combatMusicStem": "/assets/audio/combat_columbarium.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_columbarium.jpg"
+  },
+  {
+    "id": "chronomancy",
+    "code": "CR",
+    "name": "Chronomantic Atrium",
+    "act": 3,
+    "isPeripheral": true,
+    "description": "Temporal inversion wing. Lady Aurelia, backward-walking un-fallen chasm bridge, retrocausal portcullis.",
+    "svgDataId": "chronomancy",
+    "adjacentZoneIds": [
+      "clock",
+      "library"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "clock",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "library",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_chronomancy.ogg",
+      "combatMusicStem": "/assets/audio/combat_chronomancy.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_chronomancy.jpg"
+  },
+  {
+    "id": "conservatory",
+    "code": "MS",
+    "name": "Harmonic Conservatory",
+    "act": 3,
+    "isPeripheral": true,
+    "description": "Grand ballroom. Maestro Niccolo, 3-movement rhythm mini-game on glass-armonica, dissonance shockwaves.",
+    "svgDataId": "conservatory",
+    "adjacentZoneIds": [
+      "playhouse",
+      "servants"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "playhouse",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "servants",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_conservatory.ogg",
+      "combatMusicStem": "/assets/audio/combat_conservatory.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_conservatory.jpg"
+  },
+  {
+    "id": "haunted",
+    "code": "HA",
+    "name": "Haunted Chambers",
+    "act": 3,
+    "isPeripheral": true,
+    "description": "Victorian nursery & seance parlor. Madame Vivienne ghost, telekinetic poltergeist, false mirrors.",
+    "svgDataId": "haunted",
+    "adjacentZoneIds": [
+      "trophy",
+      "sanctum"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "trophy",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "sanctum",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": true,
+        "requiredKeyItemId": "passkey_bartholomew",
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_haunted.ogg",
+      "combatMusicStem": "/assets/audio/combat_haunted.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P27"
+    ],
+    "questIds": [
+      "H4"
+    ],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_haunted.jpg"
+  },
+  {
+    "id": "eyrie",
+    "code": "EY",
+    "name": "The High Eyrie",
+    "act": 3,
+    "isPeripheral": true,
+    "description": "Sky roost. Lord Aurelius talking gryphon, Aeolian wind-baffle harmony, storm clearing cutscene.",
+    "svgDataId": "eyrie",
+    "adjacentZoneIds": [
+      "clock",
+      "columbarium"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "clock",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "columbarium",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#fef08a",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_eyrie.ogg",
+      "combatMusicStem": "/assets/audio/combat_eyrie.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [
+      "P28"
+    ],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_eyrie.jpg"
+  },
+  {
+    "id": "labyrinth",
+    "code": "LB",
+    "name": "Daedalian Brass Labyrinth",
+    "act": 3,
+    "isPeripheral": true,
+    "description": "Subterranean hydraulic maze. Ariadne clockwork weaver, Asterion blind minotaur, starlight clew.",
+    "svgDataId": "labyrinth",
+    "adjacentZoneIds": [
+      "crypt",
+      "foundry"
+    ],
+    "exits": [
+      {
+        "direction": "N",
+        "targetZoneId": "crypt",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      },
+      {
+        "direction": "E",
+        "targetZoneId": "foundry",
+        "targetSpawnTile": [
+          6,
+          6
+        ],
+        "isLocked": false,
+        "requiredKeyItemId": null,
+        "requiredQuestId": null
+      }
+    ],
+    "lighting": {
+      "ambientColor": "#0b1120",
+      "ambientIntensity": 0.45,
+      "directionalColor": "#93c5fd",
+      "directionalIntensity": 1.25,
+      "directionalPosition": [
+        12,
+        24,
+        16
+      ],
+      "fogColor": "#090d16",
+      "fogNear": 15,
+      "fogFar": 45
+    },
+    "audio": {
+      "ambientMusicTrack": "/assets/audio/ambience_labyrinth.ogg",
+      "combatMusicStem": "/assets/audio/combat_labyrinth.ogg",
+      "reverbDecaySeconds": 2.2
+    },
+    "hazards": [],
+    "puzzleIds": [],
+    "questIds": [],
+    "npcIds": [],
+    "mockupImagePath": "/assets/art/concept/scene_labyrinth.jpg"
+  }
+]

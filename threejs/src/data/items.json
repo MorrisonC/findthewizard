@@ -1,0 +1,797 @@
+[
+  {
+    "id": "weapon_whisper",
+    "name": "Whisper (Starlight Dagger)",
+    "category": "Weapon",
+    "rarity": "Epic",
+    "description": "Kaelen's signature silent blade forged from folded meteoric starlight glass.",
+    "flavorText": "A blade that cuts not the skin, but the reflection of one's breath.",
+    "valueMoons": 450,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "weaponStats": {
+      "damageMin": 18,
+      "damageMax": 26,
+      "damageType": "starlight",
+      "attackSpeed": 2.2,
+      "range": 1.2,
+      "critMultiplier": 2.5,
+      "scalingStat": "DEX"
+    },
+    "effectDescription": "Silences footstep audio by 50%; backstabs deal 300% damage to unaware sentries.",
+    "tags": [
+      "dagger",
+      "finesse",
+      "stealth",
+      "starlight"
+    ]
+  },
+  {
+    "id": "weapon_daybreak",
+    "name": "Daybreak Solar Greatsword",
+    "category": "Weapon",
+    "rarity": "Legendary",
+    "description": "The massive consecrated blade of the Paladins of the Radiant Aegis, blessed with pure un-corrupted dawn light.",
+    "flavorText": "When the sun falls behind the glass, the righteous must carry dawn upon their shoulders.",
+    "valueMoons": 1200,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "weaponStats": {
+      "damageMin": 45,
+      "damageMax": 68,
+      "damageType": "radiant",
+      "attackSpeed": 0.85,
+      "range": 2.2,
+      "critMultiplier": 1.75,
+      "scalingStat": "STR"
+    },
+    "effectDescription": "Strikes instantly dispel phantom illusions in a 3-meter sweep; deals +50% bonus radiant damage against Phantasmal Templars.",
+    "tags": [
+      "greatsword",
+      "heavy",
+      "radiant",
+      "anti-illusion"
+    ]
+  },
+  {
+    "id": "weapon_minotaur_labrys",
+    "name": "The Minotaur's Brass Labrys",
+    "category": "Weapon",
+    "rarity": "Legendary",
+    "description": "A steam-powered double-headed battleaxe recovered from Asterion the Brass-Horned in the Daedalian Labyrinth.",
+    "flavorText": "Every swing vents scalding vapor, groaning with eighty years of subterranean sorrow.",
+    "valueMoons": 1100,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "weaponStats": {
+      "damageMin": 52,
+      "damageMax": 74,
+      "damageType": "kinetic",
+      "attackSpeed": 0.75,
+      "range": 2.0,
+      "critMultiplier": 1.9,
+      "scalingStat": "STR"
+    },
+    "effectDescription": "Charge attack creates a directional steam shockwave that knocks back heavy automaton guards and fractures brittle stone walls.",
+    "tags": [
+      "greataxe",
+      "heavy",
+      "steam",
+      "knockback"
+    ]
+  },
+  {
+    "id": "relic_iron_nails",
+    "name": "Iron Nails of Grounding",
+    "category": "Relic",
+    "rarity": "Uncommon",
+    "description": "Cold-forged iron nails that pin impossible optical staircases and non-Euclidean angles to terrestrial physics.",
+    "flavorText": "The mind may dream of sideways skies, but cold iron remembers the earth.",
+    "valueMoons": 150,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 4,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Permanent tool. Anchor impossible architecture in Relativity Cloister and reverse-entropy keystones.",
+    "tags": [
+      "tool",
+      "reusable",
+      "puzzle",
+      "anchor"
+    ]
+  },
+  {
+    "id": "relic_echo_bell",
+    "name": "Echo Bell of Vaelor",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "A bronze handbell tuned to the natural acoustic harmonic frequency of Veilkeep.",
+    "flavorText": "Sound cannot be lied to. False glass shivers when true metal rings.",
+    "valueMoons": 300,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Triggers acoustic resonance puzzles, reveals invisible hollow walls, and synchronizes with wind-baffle harps.",
+    "tags": [
+      "tool",
+      "reusable",
+      "acoustic",
+      "puzzle"
+    ]
+  },
+  {
+    "id": "relic_truth_lens",
+    "name": "Truth Lens Monocle",
+    "category": "Relic",
+    "rarity": "Epic",
+    "description": "A brass monocle ground from natural Icelandic spar crystal that strips magical illusion disguises.",
+    "flavorText": "Through this glass, gold turns to dross, walls turn to mist, and smiling faces reveal the clockwork beneath.",
+    "valueMoons": 600,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Hold [Space] to activate Veil Sight: dissolves false walls, reveals true pit traps, and exposes mimic chests.",
+    "tags": [
+      "tool",
+      "sight",
+      "puzzle",
+      "anti-illusion"
+    ]
+  },
+  {
+    "id": "relic_memory_thread",
+    "name": "Luminescent Memory Thread",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "A spool of un-decaying luminescent silk spun from condensed starlight fibers.",
+    "flavorText": "Tie it to the threshold, lest your footsteps forget the doorway that bore you.",
+    "valueMoons": 350,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Unspools behind Kaelen to prevent spatial displacement in shifting maze corridors.",
+    "tags": [
+      "tool",
+      "spatial",
+      "puzzle"
+    ]
+  },
+  {
+    "id": "relic_metronome",
+    "name": "The Maestro's Chrono-Metronome",
+    "category": "Accessory",
+    "rarity": "Legendary",
+    "description": "A precision clockwork rhythm regulator crafted by Maestro Niccolò in the Harmonic Conservatory.",
+    "flavorText": "When time itself falters, the pulse of the heart remains true.",
+    "valueMoons": 1400,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+50% combat parry window; completely silences footstep noise; 3-beat cadence charges a 360° sonic stun pulse.",
+    "tags": [
+      "accessory",
+      "rhythm",
+      "parry",
+      "stealth"
+    ]
+  },
+  {
+    "id": "relic_spectral_lantern",
+    "name": "Spectral Spirit-Lantern",
+    "category": "Relic",
+    "rarity": "Legendary",
+    "description": "An ornate silver gas lantern burning with pale violet ectoplasmic ghost-light.",
+    "flavorText": "Turn the wick, and the dead shall cast shadows once more.",
+    "valueMoons": 1350,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Projects a cone of ghost-light revealing invisible ethereal pathways and forcing poltergeists to manifest.",
+    "tags": [
+      "tool",
+      "offhand",
+      "ethereal",
+      "spirit"
+    ]
+  },
+  {
+    "id": "relic_gryphon_cloak",
+    "name": "Cloak of the Sky-Sovereign",
+    "category": "Armor",
+    "rarity": "Legendary",
+    "description": "A regal mantle woven from the shed golden plumes of Lord Aurelius the Aether-Gryphon.",
+    "flavorText": "The sky does not fall; it merely awaits those with the courage to claim its updrafts.",
+    "valueMoons": 1600,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "armorStats": {
+      "physicalDef": 24,
+      "etherealDef": 38,
+      "dodgeBonus": 0.2,
+      "stealthBonus": 0.4
+    },
+    "effectDescription": "Grants mid-air gliding on thermal updrafts, absolute fall damage immunity, and silent aerial landings.",
+    "tags": [
+      "armor",
+      "cloak",
+      "gliding",
+      "mobility"
+    ]
+  },
+  {
+    "id": "relic_starlight_clew",
+    "name": "Ariadne's Starlight Clew",
+    "category": "Relic",
+    "rarity": "Legendary",
+    "description": "An unbreakable luminescent silk cord provided by Ariadne the Clockwork Weaver.",
+    "flavorText": "The Minotaur roars in darkness, but the thread remembers dawn.",
+    "valueMoons": 1500,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Pins hydraulic shifting labyrinth walls to guide bollards, establishing a permanent safe thoroughfare.",
+    "tags": [
+      "tool",
+      "navigation",
+      "labyrinth"
+    ]
+  },
+  {
+    "id": "relic_martyr_amulet",
+    "name": "The Martyr's Starlight Amulet",
+    "category": "Accessory",
+    "rarity": "Legendary",
+    "description": "Infused with the sacrificial life-spark of Eldrin the Star-Carver in the Abyssal Prison Block.",
+    "flavorText": "A dying ember passed from caged hands to guide a free thief through the deepest dark.",
+    "valueMoons": 2000,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Permanent Starlight Veil: dispels pitch-black shadow mists, grants immunity to dark-drain environmental hazards, and allows entry to the Abyssal Core.",
+    "tags": [
+      "accessory",
+      "amulet",
+      "abyssal",
+      "vision"
+    ]
+  },
+  {
+    "id": "passkey_bartholomew",
+    "name": "The Grand Seneschal's Master Passkey",
+    "category": "Quest",
+    "rarity": "Legendary",
+    "description": "The master brass passkey entrusted to Grand Butler Mister Bartholomew Sterling.",
+    "flavorText": "Every cupboard, pantry, and linen dumbwaiter opens to the keeper of household decorum.",
+    "valueMoons": 800,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Unlocks all fortress dumbwaiter chutes, pantry cupboards, and cellar vaults across all 27 zones.",
+    "tags": [
+      "key",
+      "masterkey",
+      "fast-travel"
+    ]
+  },
+  {
+    "id": "consumable_earl_grey",
+    "name": "Bartholomew's Imperial Earl Grey",
+    "category": "Consumable",
+    "rarity": "Rare",
+    "description": "A steaming porcelain cup of masterfully brewed bergamot tea, served at precisely 85°C.",
+    "flavorText": "One does not conquer an archillusionist without proper hydration.",
+    "valueMoons": 75,
+    "isConsumable": true,
+    "isKeyItem": false,
+    "maxStack": 10,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Restores 50 HP and 30 FP; grants +15% parry and rhythm timing accuracy for 10 minutes.",
+    "tags": [
+      "consumable",
+      "buff",
+      "tea"
+    ]
+  },
+  {
+    "id": "consumable_sun_oil",
+    "name": "Sun-Blessed Consecration Oil",
+    "category": "Consumable",
+    "rarity": "Uncommon",
+    "description": "Golden aromatic oil pressed from the celestial sunflowers of the Dreaming Gardens and blessed by the Radiant Aegis.",
+    "flavorText": "Wipes away decades of mirror grime and cold deceit.",
+    "valueMoons": 90,
+    "isConsumable": true,
+    "isKeyItem": false,
+    "maxStack": 5,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Used to cleanse calcified prism mirrors; coats weapon in holy fire for 3 minutes (+20 radiant damage).",
+    "tags": [
+      "consumable",
+      "buff",
+      "cleaning",
+      "radiant"
+    ]
+  },
+  {
+    "id": "consumable_lockpick",
+    "name": "Clockwork Tension Lockpick",
+    "category": "Consumable",
+    "rarity": "Common",
+    "description": "A tempered steel pick and tension wrench set calibrated for Victorian tumbler locks.",
+    "flavorText": "Every closed door is merely a conversation waiting to be finished.",
+    "valueMoons": 20,
+    "isConsumable": true,
+    "isKeyItem": false,
+    "maxStack": 20,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Allows attempting lockpick mini-games on chest and door tumblers.",
+    "tags": [
+      "consumable",
+      "tool",
+      "thief"
+    ]
+  },
+  {
+    "id": "shard_gate",
+    "name": "I. The Shard of the Gate",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "A prismatic glass shard from Cynthia's music box. Unlocks the memory of young Cynthia slipping Kaelen his first lockpick set.",
+    "flavorText": "I won't tell father, Kaelen. Just promise you'll pick the lock when it's time to run away.",
+    "valueMoons": 200,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Permanently increases lockpicking speed by +15%.",
+    "tags": [
+      "memory_shard",
+      "cynthia",
+      "lore"
+    ]
+  },
+  {
+    "id": "shard_hearth",
+    "name": "II. The Shard of the Hearth",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "Unlocks the memory of Cook Hesta baking honey rolls while young Kaelen and Cynthia hide under the baker's table.",
+    "flavorText": "Warm bread and quiet laughter before the mirrors came.",
+    "valueMoons": 200,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Resting restores full health and grants +10 max stamina for 20 minutes.",
+    "tags": [
+      "memory_shard",
+      "cynthia",
+      "buff"
+    ]
+  },
+  {
+    "id": "shard_glass",
+    "name": "III. The Shard of the Glass",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "Unlocks the memory of Vaelor conjuring the very first phantasmal hound as a loyal guard dog to delight his bedridden child.",
+    "flavorText": "See, little bird? Glass does not bite unless I tell it to.",
+    "valueMoons": 200,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Phantasmal Hounds hesitate 1.5 seconds before attacking Kaelen.",
+    "tags": [
+      "memory_shard",
+      "cynthia",
+      "stealth"
+    ]
+  },
+  {
+    "id": "shard_garden",
+    "name": "IV. The Shard of the Garden",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "Unlocks the memory of Cynthia planting midnight lilies in the Dreaming Gardens.",
+    "flavorText": "If I believe they will grow without sunlight, will they listen to me?",
+    "valueMoons": 200,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Increases max FP by +15 and immunity to floral sleep spores.",
+    "tags": [
+      "memory_shard",
+      "cynthia",
+      "magic"
+    ]
+  },
+  {
+    "id": "shard_spire",
+    "name": "V. The Shard of the Spire",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "Unlocks the memory of Vaelor locking the Spire escapement to halt the fortress clock.",
+    "flavorText": "If the second hand does not advance, she cannot grow weaker.",
+    "valueMoons": 200,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+10% dodge invulnerability frames.",
+    "tags": [
+      "memory_shard",
+      "cynthia",
+      "time"
+    ]
+  },
+  {
+    "id": "shard_crypt",
+    "name": "VI. The Shard of the Crypt",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "Unlocks the memory of Cynthia's secret descent into the Undercrypt to lay flowers on the monks' tombs.",
+    "flavorText": "Even stone sleepers get lonely in the cold.",
+    "valueMoons": 200,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Reveals hidden crypt illusions without consuming Truth Lens charges.",
+    "tags": [
+      "memory_shard",
+      "cynthia",
+      "sight"
+    ]
+  },
+  {
+    "id": "shard_void",
+    "name": "VII. The Shard of the Labyrinth",
+    "category": "Relic",
+    "rarity": "Epic",
+    "description": "The final central cylinder of Cynthia's music box recovered from Asterion the Minotaur.",
+    "flavorText": "The lullaby is complete. The song can finally end.",
+    "valueMoons": 500,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Unlocks the True Dawn Ending when confronting Vaelor.",
+    "tags": [
+      "memory_shard",
+      "cynthia",
+      "ending"
+    ]
+  },
+  {
+    "id": "relic_ouroboros",
+    "name": "Retrograde Ouroboros",
+    "category": "Accessory",
+    "rarity": "Legendary",
+    "description": "An enchanted bronze serpent consuming its own tail in reverse.",
+    "flavorText": "What has happened will un-happen, if the coil is turned backwards.",
+    "valueMoons": 850,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Records 8 seconds of locomotion; activate to spawn a controllable Temporal Echo that distracts sentries.",
+    "tags": [
+      "accessory",
+      "temporal",
+      "stealth"
+    ]
+  },
+  {
+    "id": "relic_hourglass",
+    "name": "Hourglass of Inverted Sands",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "An hourglass filled with purple tachyon sand that falls upward toward the top bulb.",
+    "flavorText": "Gravity is merely an opinion held by the forward-facing.",
+    "valueMoons": 400,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Enables backward locomotion to rebuild fractured architectural bridges.",
+    "tags": [
+      "tool",
+      "chronomancy",
+      "puzzle"
+    ]
+  },
+  {
+    "id": "accessory_cogito_ring",
+    "name": "The Cogito Ring",
+    "category": "Accessory",
+    "rarity": "Rare",
+    "description": "A silver signet ring inscribed with Doctor Renatus's radical proof: 'Cogito, Ergo Sum'.",
+    "flavorText": "I doubt, therefore I think; I think, therefore I am.",
+    "valueMoons": 350,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+2 INT; reduces duration of Confused and Illusion debuffs by 50%.",
+    "tags": [
+      "accessory",
+      "intellect",
+      "resistance"
+    ]
+  },
+  {
+    "id": "tool_tuning_fork",
+    "name": "Tuning Fork of Unmaking",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "A heavy brass tuning fork calibrated to the dissonant frequency of Vaelor's sensory wards.",
+    "flavorText": "Strike true, and the phantom dissolves into vibration.",
+    "valueMoons": 300,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Strike near illusory sentries to instantly shatter their physical projection.",
+    "tags": [
+      "tool",
+      "acoustic",
+      "anti-illusion"
+    ]
+  },
+  {
+    "id": "accessory_renatus_meditations",
+    "name": "The Meditations of Doctor Renatus",
+    "category": "Accessory",
+    "rarity": "Legendary",
+    "description": "Bound vellum pages containing the philosopher's complete treatises on the Malicious Demon.",
+    "flavorText": "Even the most cunning deceiver cannot make me nothing while I think I am something.",
+    "valueMoons": 750,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+20% critical strike chance when attacking illusion clones and mirage bosses.",
+    "tags": [
+      "accessory",
+      "crit",
+      "anti-illusion"
+    ]
+  },
+  {
+    "id": "armor_spellweaver_bracers",
+    "name": "Spellweaver's Bracers",
+    "category": "Armor",
+    "rarity": "Rare",
+    "description": "Silk and brass vambraces awarded by the Apostate Mages of the Thaumaturges' Enclave.",
+    "flavorText": "Starlight channeled through fingertips rather than wands.",
+    "valueMoons": 450,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "armorStats": {
+      "physicalDef": 8,
+      "etherealDef": 24,
+      "dodgeBonus": 0.05,
+      "stealthBonus": 0.1
+    },
+    "effectDescription": "Reduces FP cost of Arcane Trickster spells by 25%.",
+    "tags": [
+      "armor",
+      "bracers",
+      "magic"
+    ]
+  },
+  {
+    "id": "relic_pigeon_whistle",
+    "name": "Aether-Pigeon Whistle",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "A carved bone whistle tuned to the ultrasonic flight calls of Imperial Aether-Pigeons.",
+    "flavorText": "The sky remembers the message even when the sender is forgotten.",
+    "valueMoons": 320,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Summons Zephyr the falcon to retrieve distant keys or drop smoke bombs on sentries.",
+    "tags": [
+      "tool",
+      "companion",
+      "scout"
+    ]
+  },
+  {
+    "id": "accessory_pocket_watch",
+    "name": "Sterling's Silver Pocket Watch",
+    "category": "Accessory",
+    "rarity": "Legendary",
+    "description": "An engraved silver half-hunter pocket watch kept by Grand Butler Mister Bartholomew Sterling.",
+    "flavorText": "A gentleman is never early, nor is he late. He strikes precisely when the kettle chimes.",
+    "valueMoons": 900,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+15% parry and rhythm timing window; displays HUD real-time day/night soft clock.",
+    "tags": [
+      "accessory",
+      "parry",
+      "rhythm"
+    ]
+  },
+  {
+    "id": "accessory_vivienne_cameo",
+    "name": "Madame Vivienne's Mourning Cameo",
+    "category": "Accessory",
+    "rarity": "Epic",
+    "description": "A jet-black carved onyx cameo brooch worn by the spectral governess of the Pale Nursery.",
+    "flavorText": "Sleep, little one. The storm outside cannot touch you here.",
+    "valueMoons": 600,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+15 Ethereal Def; upon taking fatal damage, triggers 2.5s of invulnerable spirit mist (5 min cooldown).",
+    "tags": [
+      "accessory",
+      "defense",
+      "survival"
+    ]
+  },
+  {
+    "id": "tool_harpoon_grapple",
+    "name": "Pneumatic Harpoon Grapple",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "A steam-actuated grapnel winch with high-tensile braided wire.",
+    "flavorText": "Piston-driven reaching for heights that honest ladders cannot touch.",
+    "valueMoons": 380,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Grapple to overhead steam pipes, parapet copings, and high ventilation grates.",
+    "tags": [
+      "tool",
+      "mobility",
+      "grapple"
+    ]
+  },
+  {
+    "id": "accessory_horseshoe",
+    "name": "Houyhnhnm's Horseshoe",
+    "category": "Accessory",
+    "rarity": "Rare",
+    "description": "A gilded horseshoe gifted by Lord Barnaby the Astrological Talking Horse.",
+    "flavorText": "A token from a nobleman who happens to have four legs and exceptional breeding.",
+    "valueMoons": 300,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+10% sprint speed, +1 Luck (increases rare loot drops).",
+    "tags": [
+      "accessory",
+      "speed",
+      "luck"
+    ]
+  },
+  {
+    "id": "tool_glider",
+    "name": "Aether-Silk Wing Glider",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "Collapsible silk wings designed by the rooftop Windkeeper.",
+    "flavorText": "Catch the thermal chimney, and the entire keep becomes a descending staircase.",
+    "valueMoons": 450,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Glide across exterior fortress chasms on thermal wind updrafts.",
+    "tags": [
+      "tool",
+      "flight",
+      "glider"
+    ]
+  },
+  {
+    "id": "armor_void_cloak",
+    "name": "Voidwoven Cloak",
+    "category": "Armor",
+    "rarity": "Epic",
+    "description": "A heavy velvet mantle soaked in the midnight mist of the Void Realm.",
+    "flavorText": "Darkness wraps you in its folds until even your thoughts cast no shadow.",
+    "valueMoons": 650,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "armorStats": {
+      "physicalDef": 14,
+      "etherealDef": 32,
+      "dodgeBonus": 0.12,
+      "stealthBonus": 0.3
+    },
+    "effectDescription": "Complete immunity to the Confused status effect; silent rolling.",
+    "tags": [
+      "armor",
+      "cloak",
+      "stealth"
+    ]
+  },
+  {
+    "id": "relic_champions_sigil",
+    "name": "The Champion's Sigil",
+    "category": "Relic",
+    "rarity": "Epic",
+    "description": "A heavy brass badge earned by triumphing in the Veil Colosseum.",
+    "flavorText": "Blood spilled on illusionary sand leaves an indelible mark.",
+    "valueMoons": 500,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+1 STR; unlocks the one-way Colosseum shortcut descending directly into the Undercrypt.",
+    "tags": [
+      "relic",
+      "strength",
+      "shortcut"
+    ]
+  },
+  {
+    "id": "key_gatehouse",
+    "name": "Gatehouse Portcullis Key",
+    "category": "Quest",
+    "rarity": "Uncommon",
+    "description": "Heavy iron key carried by Gatekeeper Orin.",
+    "flavorText": "Opens the inner barbican into the domestic quarters.",
+    "valueMoons": 50,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Unlocks the main Gatehouse portcullis.",
+    "tags": [
+      "key",
+      "quest"
+    ]
+  },
+  {
+    "id": "key_prison",
+    "name": "Warden's Abyssal Keyring",
+    "category": "Quest",
+    "rarity": "Rare",
+    "description": "Brass and cold-iron keyring taken from Siphon Warden Malakor.",
+    "flavorText": "Chirps like a bird of prey when brought near isolation cells.",
+    "valueMoons": 100,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Unlocks all cell gates in the Abyssal Prison Block.",
+    "tags": [
+      "key",
+      "prison"
+    ]
+  }
+]

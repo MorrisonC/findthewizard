@@ -1,0 +1,78 @@
+{
+  "room_shell.glb": {
+    "triangles": 11044,
+    "mesh_nodes": 10,
+    "vertices_before_gltf_shared_vertex_expansion": 24096,
+    "bounds_metres_blender_z_up": {
+      "min": [
+        -6.175000190734863,
+        -6.175000190734863,
+        -0.5600000023841858
+      ],
+      "max": [
+        6.175000190734863,
+        6.175000190734863,
+        1.1700000762939453
+      ],
+      "size": [
+        12.350000381469727,
+        12.350000381469727,
+        1.730000078678131
+      ]
+    },
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0,
+    "file_bytes": 832780
+  },
+  "gate_arch.glb": {
+    "triangles": 3148,
+    "mesh_nodes": 7,
+    "vertices_before_gltf_shared_vertex_expansion": 6677,
+    "bounds_metres_blender_z_up": {
+      "min": [
+        -2.4549999237060547,
+        -0.824999988079071,
+        0.0
+      ],
+      "max": [
+        2.4549999237060547,
+        0.8349999785423279,
+        5.079999923706055
+      ],
+      "size": [
+        4.909999847412109,
+        1.659999966621399,
+        5.079999923706055
+      ]
+    },
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0,
+    "file_bytes": 240564
+  },
+  "mirror_lock.glb": {
+    "triangles": 4380,
+    "mesh_nodes": 8,
+    "vertices_before_gltf_shared_vertex_expansion": 7178,
+    "bounds_metres_blender_z_up": {
+      "min": [
+        -0.8950000405311584,
+        -0.44999998807907104,
+        0.0
+      ],
+      "max": [
+        0.8950000405311584,
+        0.6410167813301086,
+        3.3000001907348633
+      ],
+      "size": [
+        1.790000081062317,
+        1.0910167694091797,
+        3.3000001907348633
+      ]
+    },
+    "nonmanifold_edges": 0,
+    "degenerate_faces": 0,
+    "file_bytes": 255964
+  },
+  "total_triangles": 18572
+}

@@ -1,0 +1,617 @@
+{
+  "sable": {
+    "npcId": "sable",
+    "rootNodeId": "SABLE_01",
+    "nodes": {
+      "SABLE_01": {
+        "id": "SABLE_01",
+        "speaker": "Guildmaster Sable [via Starlight Raven]",
+        "speakerTitle": "Shadow Syndicate Spymaster",
+        "text": "So. The skiff shattered on the crag reefs, just as I calculated. No matter, Voss. A thief who requires a return ticket is a thief with one foot in the grave. Look up at that mountain.",
+        "choices": [
+          {
+            "text": "The fortress looks dead, Sable. Not a sentry on the parapet.",
+            "nextDialogueNodeId": "SABLE_02A"
+          },
+          {
+            "text": "My contract was to steal the child's music box, not breach a fortified citadel on foot.",
+            "nextDialogueNodeId": "SABLE_02B"
+          },
+          {
+            "text": "[Examine the glowing purple brambles blocking the stairs]",
+            "nextDialogueNodeId": "SABLE_02C",
+            "requiredStat": {
+              "stat": "INT",
+              "minVal": 10
+            }
+          }
+        ]
+      },
+      "SABLE_02A": {
+        "id": "SABLE_02A",
+        "speaker": "Guildmaster Sable [via Starlight Raven]",
+        "speakerTitle": "Shadow Syndicate Spymaster",
+        "text": "Dead? Veilkeep hasn't died in eighty winters—it has merely forgotten how to rot. Vaelor's wards hold the entire crag in an eternal, breathing dream. Walk softly, Kaelen. Step on the wrong cobblestone and the house will wake.",
+        "choices": [
+          {
+            "text": "Where do I start?",
+            "nextDialogueNodeId": "SABLE_03"
+          }
+        ]
+      },
+      "SABLE_02B": {
+        "id": "SABLE_02B",
+        "speaker": "Guildmaster Sable [via Starlight Raven]",
+        "speakerTitle": "Shadow Syndicate Spymaster",
+        "text": "The music box IS the citadel, Voss. That broken cylinder holds the harmonic resonance frequency that pins Vaelor's entire illusion to the world. Retrieve Cynthia's seven shards, and the Master's palace folds like paper. Three thousand silver moons upon delivery.",
+        "choices": [
+          {
+            "text": "Understood. What of the courtyard obstacles?",
+            "nextDialogueNodeId": "SABLE_03"
+          }
+        ]
+      },
+      "SABLE_02C": {
+        "id": "SABLE_02C",
+        "speaker": "Guildmaster Sable [via Starlight Raven]",
+        "speakerTitle": "Shadow Syndicate Spymaster",
+        "text": "Sharp eye, Master Voss. Aether-bramble. Thrives in dark mists, chokes on starlight and fire. Un-shutter the terrace oil-reflectors. Flood the staircase with warm beam-light, and the vines will retreat like scalded serpents.",
+        "choices": [
+          {
+            "text": "I will clear the path.",
+            "nextDialogueNodeId": "SABLE_03"
+          }
+        ]
+      },
+      "SABLE_03": {
+        "id": "SABLE_03",
+        "speaker": "Guildmaster Sable [via Starlight Raven]",
+        "speakerTitle": "Shadow Syndicate Spymaster",
+        "text": "Infiltrate the sunken courtyard. Seek out Gatekeeper Orin at the portcullis; the guild has slipped a doubt into his mind. Strike hard, steal true, and never look into a mirror you did not bring yourself.",
+        "choices": [
+          {
+            "text": "[Dismiss the raven and draw Whisper]",
+            "actionTrigger": "ACCEPT_QUEST",
+            "actionPayload": "Q0"
+          }
+        ]
+      }
+    }
+  },
+  "orin": {
+    "npcId": "orin",
+    "rootNodeId": "ORIN_01",
+    "nodes": {
+      "ORIN_01": {
+        "id": "ORIN_01",
+        "speaker": "Gatekeeper Orin",
+        "speakerTitle": "The Awakening Sentry",
+        "text": "Hold! In the name of... who was the Duke again? Why can't I remember the color of my sister's hair? Stranger... stand back! My halberd is steel. It is steel, isn't it?",
+        "choices": [
+          {
+            "text": "Lower the blade, soldier. You are bleeding violet light.",
+            "nextDialogueNodeId": "ORIN_02A"
+          },
+          {
+            "text": "[Strike an Iron Nail into the gatehouse oak table]",
+            "nextDialogueNodeId": "ORIN_GROUNDED",
+            "requiredItemId": "relic_iron_nails"
+          },
+          {
+            "text": "You're an automaton, sentry. Step aside before I dismantle your spring.",
+            "nextDialogueNodeId": "ORIN_COMBAT",
+            "requiredStat": {
+              "stat": "STR",
+              "minVal": 11
+            }
+          }
+        ]
+      },
+      "ORIN_02A": {
+        "id": "ORIN_02A",
+        "speaker": "Gatekeeper Orin",
+        "speakerTitle": "The Awakening Sentry",
+        "text": "Light... cold starlight. For forty years I stood on this flagstone, believing my relief watch was arriving at dawn. But dawn never comes. If you cut me, will I leave an echo or a corpse?",
+        "choices": [
+          {
+            "text": "You are real enough to think, Orin. Let me anchor you with an Iron Nail.",
+            "nextDialogueNodeId": "ORIN_GROUNDED",
+            "requiredItemId": "relic_iron_nails"
+          },
+          {
+            "text": "Give me the Gatehouse Key. I will ascend the spire and make Vaelor answer.",
+            "nextDialogueNodeId": "ORIN_REWARD"
+          }
+        ]
+      },
+      "ORIN_GROUNDED": {
+        "id": "ORIN_GROUNDED",
+        "speaker": "Gatekeeper Orin",
+        "speakerTitle": "The Awakening Sentry",
+        "text": "Ah... cold iron. The weight... the gravity of it. My mother's stove was forged of iron. My name is Orin of the Lower Mill. The Master's spell... it shattered in my skull!",
+        "choices": [
+          {
+            "text": "Take this nail and hold the threshold, Orin. How do I enter the Servants' Hall?",
+            "nextDialogueNodeId": "ORIN_REWARD"
+          }
+        ]
+      },
+      "ORIN_REWARD": {
+        "id": "ORIN_REWARD",
+        "speaker": "Gatekeeper Orin",
+        "speakerTitle": "The Awakening Sentry",
+        "text": "Take the Gatehouse Key. But heed this: the main corridor is monitored by the Warden's mirrors. Take the scullery dumbwaiter behind Cook Hesta's ovens. And tell Cynthia... Orin remembered to lock the outer gate.",
+        "choices": [
+          {
+            "text": "[Take Gatehouse Key and enter Servants' Quarters]",
+            "actionTrigger": "GIVE_ITEM",
+            "actionPayload": "key_gatehouse"
+          }
+        ]
+      },
+      "ORIN_COMBAT": {
+        "id": "ORIN_COMBAT",
+        "speaker": "Gatekeeper Orin",
+        "speakerTitle": "The Corrupted Clockwork Sentry",
+        "text": "Alarm! Intruders in the outer gatehouse! By the Archillusionist's decree, none shall pass!",
+        "choices": [
+          {
+            "text": "[Draw weapon and defend yourself]",
+            "actionTrigger": "START_COMBAT",
+            "actionPayload": "enemy_orin"
+          }
+        ]
+      }
+    }
+  },
+  "bartholomew": {
+    "npcId": "bartholomew",
+    "rootNodeId": "BART_01",
+    "nodes": {
+      "BART_01": {
+        "id": "BART_01",
+        "speaker": "Mister Bartholomew Sterling",
+        "speakerTitle": "Grand Butler of Veilkeep",
+        "text": "Good evening, sir. If you intend to burgle the household silver, you will find the spoons to the left and the fish knives to the right. However, house regulations strictly prohibit cold steel at the breakfast table. Do kindly sheathe that dagger before the Duchess notices.",
+        "choices": [
+          {
+            "text": "[Sheathe Whisper and bow with formal decorum]",
+            "nextDialogueNodeId": "BART_02A"
+          },
+          {
+            "text": "The Duchess has been dead for eighty years, Sterling. There is no breakfast.",
+            "nextDialogueNodeId": "BART_02B"
+          },
+          {
+            "text": "Hand over the household master passkey, old man, or I'll take it.",
+            "nextDialogueNodeId": "BART_02C",
+            "requiredStat": {
+              "stat": "STR",
+              "minVal": 12
+            }
+          }
+        ]
+      },
+      "BART_02A": {
+        "id": "BART_02A",
+        "speaker": "Mister Bartholomew Sterling",
+        "speakerTitle": "Grand Butler of Veilkeep",
+        "text": "Exquisite deportment, Master Voss. A gentleman may find himself in the employ of shadows, but he never neglects his saucer. The late Duchess always maintained that good manners are the only barrier between civilization and the abyss.",
+        "choices": [
+          {
+            "text": "You know my name, Mister Sterling?",
+            "nextDialogueNodeId": "BART_CYNTHIA"
+          },
+          {
+            "text": "I came seeking Cynthia's memory shards.",
+            "nextDialogueNodeId": "BART_CYNTHIA"
+          }
+        ]
+      },
+      "BART_02B": {
+        "id": "BART_02B",
+        "speaker": "Mister Bartholomew Sterling",
+        "speakerTitle": "Grand Butler of Veilkeep",
+        "text": "A vulgar rumor spread by illiterate footmen, sir. The Duchess is merely delayed in the conservatory. And young Lady Cynthia is taking her afternoon rest. Until the Master rings the bronze bell, service continues.",
+        "choices": [
+          {
+            "text": "Forgive my bluntness. Let me assist with the household service.",
+            "nextDialogueNodeId": "BART_QUEST_OFFER"
+          }
+        ]
+      },
+      "BART_02C": {
+        "id": "BART_02C",
+        "speaker": "Mister Bartholomew Sterling",
+        "speakerTitle": "Grand Butler of Veilkeep",
+        "text": "Threats at the tea table? How dreadfully provincial. You may strike down this tired shade, Master Voss, but you will search forty thousand cupboards without the proper brass sequence.",
+        "choices": [
+          {
+            "text": "[Lower weapon] My apologies, Mister Sterling. How can I earn the key?",
+            "nextDialogueNodeId": "BART_QUEST_OFFER"
+          }
+        ]
+      },
+      "BART_CYNTHIA": {
+        "id": "BART_CYNTHIA",
+        "speaker": "Mister Bartholomew Sterling",
+        "speakerTitle": "Grand Butler of Veilkeep",
+        "text": "Young Lady Cynthia... she was fond of hiding beneath the linen baskets when you were a boy, Master Voss. She told me once: 'Kaelen will become the greatest thief in the world, and then he will come back and steal me away from father's clockwork.' It appears she was half-right. You returned.",
+        "choices": [
+          {
+            "text": "Help me reach her, Bartholomew.",
+            "nextDialogueNodeId": "BART_QUEST_OFFER"
+          }
+        ]
+      },
+      "BART_QUEST_OFFER": {
+        "id": "BART_QUEST_OFFER",
+        "speaker": "Mister Bartholomew Sterling",
+        "speakerTitle": "Grand Butler of Veilkeep",
+        "text": "The brigands who ransacked the south pantry made off with the Duchess's Sterling Teapot, and young Cynthia's porcelain cup was taken to the Playhouse green room. Recover them. Execute the three-point afternoon tea service for Doctor Renatus, Maestro Niccolò, and Lady Eleanor. Do this, and the Grand Seneschal's Master Passkey to all twenty-seven fortress zones is yours.",
+        "choices": [
+          {
+            "text": "I accept the service, Mister Sterling.",
+            "actionTrigger": "ACCEPT_QUEST",
+            "actionPayload": "S27"
+          }
+        ]
+      }
+    }
+  },
+  "eldrin": {
+    "npcId": "eldrin",
+    "rootNodeId": "ELDRIN_01",
+    "nodes": {
+      "ELDRIN_01": {
+        "id": "ELDRIN_01",
+        "speaker": "Eldrin the Star-Carver",
+        "speakerTitle": "The Sacrificial Artificer",
+        "text": "Step no closer... shadow-walker. The floor... is tethered to the Warden's dynamo. Every breath I draw feeds the siphon... holding the deep dark back from the keep.",
+        "choices": [
+          {
+            "text": "I solved the siphon valves, Eldrin. The cage is grounded. I am getting you out.",
+            "nextDialogueNodeId": "ELDRIN_SACRIFICE"
+          },
+          {
+            "text": "Hold on, old man! Drink this Aether Tonic!",
+            "nextDialogueNodeId": "ELDRIN_SACRIFICE",
+            "requiredItemId": "consumable_aether_tonic"
+          }
+        ]
+      },
+      "ELDRIN_SACRIFICE": {
+        "id": "ELDRIN_SACRIFICE",
+        "speaker": "Eldrin the Star-Carver",
+        "speakerTitle": "The Sacrificial Artificer",
+        "text": "Look at my hands, boy. There is no flesh left to rescue. Vaelor carved out my heart forty years ago to power his mirror stars. Take it! Take the last ember of the Star-Carvers! When you walk through the Master's deepest shadow, let this light burn his mirrors to ash!",
+        "choices": [
+          {
+            "text": "[Grip Eldrin's hand as the light converges into the amulet]",
+            "actionTrigger": "GIVE_ITEM",
+            "actionPayload": "relic_martyr_amulet"
+          }
+        ]
+      }
+    }
+  },
+  "maren": {
+    "npcId": "maren",
+    "rootNodeId": "MAREN_01",
+    "nodes": {
+      "MAREN_01": {
+        "id": "MAREN_01",
+        "speaker": "Librarian Maren",
+        "speakerTitle": "Archivist of Suppressed Annals",
+        "text": "Silence, intruder. The dust on these shelves has ears, and Vaelor's censors listen through the ventilation flues. If you seek gold, the treasury is east. If you seek the truth of the plague year... you have brought an inadequate dagger.",
+        "choices": [
+          {
+            "text": "I seek Cynthia's true history, Maren. Why is her name struck from every ledger?",
+            "nextDialogueNodeId": "MAREN_02"
+          },
+          {
+            "text": "[Present the red-ink diary page recovered from the Nursery]",
+            "nextDialogueNodeId": "MAREN_02",
+            "requiredItemId": "quest_cynthia_diary_page"
+          }
+        ]
+      },
+      "MAREN_02": {
+        "id": "MAREN_02",
+        "speaker": "Librarian Maren",
+        "speakerTitle": "Archivist of Suppressed Annals",
+        "text": "Cynthia did not die of the autumn plague. She died of Vaelor's experiments with reverse-entropy mirrors. And when her heart stopped, his mind shattered. Reorder the six suppressed annals, and I will give you the Memory Thread to navigate the shifting corridors upstairs.",
+        "choices": [
+          {
+            "text": "I will restore the true timeline.",
+            "actionTrigger": "ACCEPT_QUEST",
+            "actionPayload": "Q2"
+          }
+        ]
+      }
+    }
+  },
+  "eleanor": {
+    "npcId": "eleanor",
+    "rootNodeId": "ELEANOR_01",
+    "nodes": {
+      "ELEANOR_01": {
+        "id": "ELEANOR_01",
+        "speaker": "Lady Eleanor the Sun-Scarred",
+        "speakerTitle": "Knight-Commander of the Radiant Aegis",
+        "text": "You tread softly, child of shadow. Are you another of Vaelor's phantasms sent to mimic the confession of my fallen knights?",
+        "choices": [
+          {
+            "text": "No phantom, Lady Eleanor. I am Kaelen Voss.",
+            "nextDialogueNodeId": "ELEANOR_02"
+          },
+          {
+            "text": "Sir Roderick still stands on the high solarium. He is calcified in stone.",
+            "nextDialogueNodeId": "ELEANOR_02"
+          }
+        ]
+      },
+      "ELEANOR_02": {
+        "id": "ELEANOR_02",
+        "speaker": "Lady Eleanor the Sun-Scarred",
+        "speakerTitle": "Knight-Commander of the Radiant Aegis",
+        "text": "The Solar Prism atop this altar is blinded with mirror grime. Cleanse the four pedestal mirrors with Consecration Oil. Align them to the virtues of dawn: Justice, Fortitude, Temperance, Truth. Converge the pure sunlight into the monstrance, and shatter the curse binding Roderick!",
+        "choices": [
+          {
+            "text": "I will ignite the sun upon your altar, Lady Eleanor.",
+            "actionTrigger": "ACCEPT_QUEST",
+            "actionPayload": "S26"
+          }
+        ]
+      }
+    }
+  },
+  "aurelius": {
+    "npcId": "aurelius",
+    "rootNodeId": "AURELIUS_01",
+    "nodes": {
+      "AURELIUS_01": {
+        "id": "AURELIUS_01",
+        "speaker": "Lord Aurelius the Sky-Sovereign",
+        "speakerTitle": "Ancient Mythical Aether-Gryphon",
+        "text": "Crawl no closer, mortal mite! For two hundred years the Archillusionist has caged my roost with humming clockwork wind-baffles and stolen the Solar Heart to power his false storm! Do you come with a butcher's blade or an executioner's bell?",
+        "choices": [
+          {
+            "text": "I come with neither, Sovereign. I came to shatter your shackles.",
+            "nextDialogueNodeId": "AURELIUS_PACT"
+          },
+          {
+            "text": "[Ring the Echo Bell to harmonize with his scream]",
+            "nextDialogueNodeId": "AURELIUS_PACT",
+            "requiredItemId": "relic_echo_bell"
+          }
+        ]
+      },
+      "AURELIUS_PACT": {
+        "id": "AURELIUS_PACT",
+        "speaker": "Lord Aurelius the Sky-Sovereign",
+        "speakerTitle": "Ancient Mythical Aether-Gryphon",
+        "text": "Boreas in C, Eurus in G, Notus in C, Zephyrus in E! Align the steam sliders to the celestial octave! Bring me the Solar Heart, and I will sweep Vaelor's false clouds from the sky! Wrap my golden mantle around your shoulders—take to the air!",
+        "choices": [
+          {
+            "text": "The sky shall be yours again, Sovereign.",
+            "actionTrigger": "ACCEPT_QUEST",
+            "actionPayload": "S29"
+          }
+        ]
+      }
+    }
+  },
+  "asterion": {
+    "npcId": "asterion",
+    "rootNodeId": "ASTERION_STUN",
+    "nodes": {
+      "ASTERION_STUN": {
+        "id": "ASTERION_STUN",
+        "speaker": "Asterion the Brass-Horned",
+        "speakerTitle": "The Steam-Heart Minotaur",
+        "text": "The maze... the roaring in my skull... make it stop! Mother... where is the thread? I cannot see the sky... only brass... only blood!",
+        "choices": [
+          {
+            "text": "[Use Whisper to sever the steam-control collar at his nape]",
+            "nextDialogueNodeId": "ASTERION_FREED",
+            "requiredStat": {
+              "stat": "DEX",
+              "minVal": 12
+            }
+          },
+          {
+            "text": "[Drive Daybreak into his exposed steam core]",
+            "nextDialogueNodeId": "ASTERION_SLAIN",
+            "requiredItemId": "weapon_daybreak"
+          }
+        ]
+      },
+      "ASTERION_FREED": {
+        "id": "ASTERION_FREED",
+        "speaker": "Asterion the Liberated",
+        "speakerTitle": "The Restored Guardian",
+        "text": "The roaring... it has ceased. For seventy winters Vaelor made me his brute, burying my compass in iron. You held the thread, shadow-walker. Take my labrys—when you stand before the deceiver, let him hear the brass horns of the labyrinth!",
+        "choices": [
+          {
+            "text": "Rest now, Asterion. The labyrinth is open.",
+            "actionTrigger": "GIVE_ITEM",
+            "actionPayload": "weapon_minotaur_labrys"
+          }
+        ]
+      },
+      "ASTERION_SLAIN": {
+        "id": "ASTERION_SLAIN",
+        "speaker": "Asterion the Slain",
+        "speakerTitle": "The Fallen Beast",
+        "text": "*(With a final shuddering groan of scalding steam, the minotaur collapses; the brass labrys slips from his dying grip)*",
+        "choices": [
+          {
+            "text": "[Retrieve the Labrys and Horn from the steam]",
+            "actionTrigger": "GIVE_ITEM",
+            "actionPayload": "weapon_minotaur_labrys"
+          }
+        ]
+      }
+    }
+  },
+  "vaelor": {
+    "npcId": "vaelor",
+    "rootNodeId": "VAELOR_01",
+    "nodes": {
+      "VAELOR_01": {
+        "id": "VAELOR_01",
+        "speaker": "Archillusionist Vaelor",
+        "speakerTitle": "Master of Veilkeep",
+        "text": "Kaelen. My little thief. Eighty years I watched you in the glass, waiting to see if the world beyond my walls had learned to conquer death. And what did you bring me? Cold iron. Severed threads. The screams of my servants.",
+        "choices": [
+          {
+            "text": "I brought the truth, Vaelor. Lower the veil. Cynthia is gone.",
+            "nextDialogueNodeId": "VAELOR_02A"
+          },
+          {
+            "text": "You didn't build this keep to protect her. You built it because you couldn't face an empty room.",
+            "nextDialogueNodeId": "VAELOR_02B",
+            "requiredStat": {
+              "stat": "INT",
+              "minVal": 12
+            }
+          },
+          {
+            "text": "[Hold up the completed Shattered Glass Music Box]",
+            "nextDialogueNodeId": "VAELOR_02C"
+          }
+        ]
+      },
+      "VAELOR_02A": {
+        "id": "VAELOR_02A",
+        "speaker": "Archillusionist Vaelor",
+        "speakerTitle": "Master of Veilkeep",
+        "text": "Truth? In your 'truth', she is cold dust beneath a churchyard stone! In here, she breathes! She smiles! She plays her song!",
+        "choices": [
+          {
+            "text": "She doesn't breathe, Vaelor. She repeats seven notes on a broken spring.",
+            "nextDialogueNodeId": "VAELOR_BATTLE"
+          }
+        ]
+      },
+      "VAELOR_02B": {
+        "id": "VAELOR_02B",
+        "speaker": "Archillusionist Vaelor",
+        "speakerTitle": "Master of Veilkeep",
+        "text": "I tore down the laws of entropy! I forged an empire where no rose ever withers, where no child ever coughs blood into her pillow! Draw your blade, foster son! Let the curtain fall!",
+        "choices": [
+          {
+            "text": "[Draw Whisper and prepare for Phase 1]",
+            "actionTrigger": "START_COMBAT",
+            "actionPayload": "boss_vaelor"
+          }
+        ]
+      },
+      "VAELOR_02C": {
+        "id": "VAELOR_02C",
+        "speaker": "Archillusionist Vaelor",
+        "speakerTitle": "Master of Veilkeep",
+        "text": "The box... how did you... I threw those shards into the abyss the night you were banished. I couldn't bear to hear the lullaby... because it ended. Why won't you let me keep her safe?!",
+        "choices": [
+          {
+            "text": "Because she asked me to steal her away. It's time to let her rest.",
+            "actionTrigger": "START_COMBAT",
+            "actionPayload": "boss_vaelor"
+          }
+        ]
+      },
+      "VAELOR_BATTLE": {
+        "id": "VAELOR_BATTLE",
+        "speaker": "Archillusionist Vaelor",
+        "speakerTitle": "Master of Veilkeep",
+        "text": "Then let us see if your shadow can withstand the full glory of the dawn that never sets!",
+        "choices": [
+          {
+            "text": "[Begin Climactic Battle]",
+            "actionTrigger": "START_COMBAT",
+            "actionPayload": "boss_vaelor"
+          }
+        ]
+      }
+    }
+  },
+  "cynthia": {
+    "npcId": "cynthia",
+    "rootNodeId": "CYNTHIA_01",
+    "nodes": {
+      "CYNTHIA_01": {
+        "id": "CYNTHIA_01",
+        "speaker": "Lady Cynthia Vaelor [Spirit]",
+        "speakerTitle": "The Soul in the Music Box",
+        "text": "Hush now, Father. The music box has played its last turn. The sun has set, and the bed is warm. Master Voss... thank you for keeping your promise. The mirrors are quiet now. What will you do with my father's house?",
+        "choices": [
+          {
+            "text": "[ENDING A — True Dawn]: Release Cynthia, shatter the Heart, and let the fortress rest.",
+            "nextDialogueNodeId": "ENDING_A"
+          },
+          {
+            "text": "[ENDING B — Sovereign of Glass]: Claim the crown and rule the illusions yourself.",
+            "nextDialogueNodeId": "ENDING_B"
+          },
+          {
+            "text": "[ENDING C — Preserved Memory]: Seal the fortress in starlight amber as an eternal museum.",
+            "nextDialogueNodeId": "ENDING_C"
+          },
+          {
+            "text": "[ENDING D — Guild's Price]: Deliver the Heart of Mirrors to Sable for 3,000 moons.",
+            "nextDialogueNodeId": "ENDING_D"
+          }
+        ]
+      },
+      "ENDING_A": {
+        "id": "ENDING_A",
+        "speaker": "Lady Cynthia Vaelor [Spirit]",
+        "speakerTitle": "The Soul in the Music Box",
+        "text": "Look, Father... the sun is rising over the mountains. Warm sunlight... not glass. Goodbye, Kaelen.",
+        "choices": [
+          {
+            "text": "[Step out into the morning sun]",
+            "actionTrigger": "CLOSE"
+          }
+        ]
+      },
+      "ENDING_B": {
+        "id": "ENDING_B",
+        "speaker": "Kaelen Voss",
+        "speakerTitle": "The New Archillusionist",
+        "text": "The crown is mine. The midnight shall never end.",
+        "choices": [
+          {
+            "text": "[Ascend the glass throne]",
+            "actionTrigger": "CLOSE"
+          }
+        ]
+      },
+      "ENDING_C": {
+        "id": "ENDING_C",
+        "speaker": "Lady Cynthia Vaelor [Spirit]",
+        "speakerTitle": "The Soul in the Music Box",
+        "text": "Frozen in amber... safe forever, yet never awake. Goodnight, Kaelen.",
+        "choices": [
+          {
+            "text": "[Turn the key and seal the doors]",
+            "actionTrigger": "CLOSE"
+          }
+        ]
+      },
+      "ENDING_D": {
+        "id": "ENDING_D",
+        "speaker": "Guildmaster Sable",
+        "speakerTitle": "Shadow Syndicate Spymaster",
+        "text": "A pleasure doing business with you, Shadowhand. The realm belongs to the syndicate now.",
+        "choices": [
+          {
+            "text": "[Count your silver moons]",
+            "actionTrigger": "CLOSE"
+          }
+        ]
+      }
+    }
+  }
+}

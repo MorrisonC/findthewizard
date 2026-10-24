@@ -1,0 +1,760 @@
+[
+  {
+    "id": "P1",
+    "name": "Mirror Alignment",
+    "roomCode": "Gatehouse",
+    "zoneId": "gatehouse",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Light & Mirror Reflection",
+    "summary": "Rotate mirrors to route light beam to sensor",
+    "fullSolution": "Align 3 mirrors; beam color indicates correctness",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Gatehouse and observe puzzle state",
+        "stateTriggerFlag": "P1_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Align 3 mirrors; beam color indicates correctness",
+        "stateTriggerFlag": "P1_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P2",
+    "name": "True Mirror",
+    "roomCode": "Halls of Mirrors",
+    "zoneId": "halls_of_mir",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Doors keyed to reflection direction",
+    "fullSolution": "Only the mirror that does NOT mimic you opens the door",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Halls of Mirrors and observe puzzle state",
+        "stateTriggerFlag": "P2_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Only the mirror that does NOT mimic you opens the door",
+        "stateTriggerFlag": "P2_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P3",
+    "name": "Belief Garden",
+    "roomCode": "Dreaming Gardens",
+    "zoneId": "dreaming_gar",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Flowers bloom if you \"believe\" they are real",
+    "fullSolution": "Read plaques; believe only marked flowers; path forms",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Dreaming Gardens and observe puzzle state",
+        "stateTriggerFlag": "P3_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Read plaques; believe only marked flowers; path forms",
+        "stateTriggerFlag": "P3_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P4",
+    "name": "Clockwork Sequence",
+    "roomCode": "Clockwork Spire",
+    "zoneId": "clockwork_sp",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Levers set time; platforms move",
+    "fullSolution": "Match clock faces to mural times (I, IV, VII, X)",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Clockwork Spire and observe puzzle state",
+        "stateTriggerFlag": "P4_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Match clock faces to mural times (I, IV, VII, X)",
+        "stateTriggerFlag": "P4_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P5",
+    "name": "Library Index",
+    "roomCode": "Arcane Library",
+    "zoneId": "arcane_libra",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Books out of order; find true history",
+    "fullSolution": "Cross-reference \"Index of Lies\" quest",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Arcane Library and observe puzzle state",
+        "stateTriggerFlag": "P5_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Cross-reference \"Index of Lies\" quest",
+        "stateTriggerFlag": "P5_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P6",
+    "name": "Echo Chamber",
+    "roomCode": "Undercrypt",
+    "zoneId": "undercrypt",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Acoustic / Rhythm",
+    "summary": "Sound-based; repeat phrase",
+    "fullSolution": "Use Echo Bell; phrase is Vaelor's oath",
+    "requiredToolIds": [
+      "relic_echo_bell"
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Undercrypt and observe puzzle state",
+        "stateTriggerFlag": "P6_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Use Echo Bell; phrase is Vaelor's oath",
+        "stateTriggerFlag": "P6_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P7",
+    "name": "Statue Riddle",
+    "roomCode": "Outer Wards",
+    "zoneId": "outer_wards",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Four statues, one lies",
+    "fullSolution": "Truth-binding oath: the statue that cannot lie is Vaelor's",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Outer Wards and observe puzzle state",
+        "stateTriggerFlag": "P7_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Truth-binding oath: the statue that cannot lie is Vaelor's",
+        "stateTriggerFlag": "P7_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P8",
+    "name": "Dumbwaiter Climb",
+    "roomCode": "Kitchens",
+    "zoneId": "kitchens",
+    "difficulty": "Introductory",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Vertical climbing puzzle",
+    "fullSolution": "Time movements to avoid falling pots",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Kitchens and observe puzzle state",
+        "stateTriggerFlag": "P8_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Time movements to avoid falling pots",
+        "stateTriggerFlag": "P8_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P9",
+    "name": "Perspective Gravity",
+    "roomCode": "Relativity Cloister",
+    "zoneId": "relativity_c",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Gravity-defying navigation",
+    "fullSolution": "Align stairways to a chosen \"floor\"; Iron Nails anchor; windows reveal true path",
+    "requiredToolIds": [
+      "relic_iron_nails"
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Relativity Cloister and observe puzzle state",
+        "stateTriggerFlag": "P9_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Align stairways to a chosen \"floor\"; Iron Nails anchor; windows reveal true path",
+        "stateTriggerFlag": "P9_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P10",
+    "name": "Constellation Alignment",
+    "roomCode": "Astronomy Tower",
+    "zoneId": "astronomy_to",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Star-map puzzle",
+    "fullSolution": "Align telescope to 3 constellations; hidden room opens",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Astronomy Tower and observe puzzle state",
+        "stateTriggerFlag": "P10_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Align telescope to 3 constellations; hidden room opens",
+        "stateTriggerFlag": "P10_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P11",
+    "name": "Brewing Timing",
+    "roomCode": "Alchemist's Lab",
+    "zoneId": "alchemist's_",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Timing mini-game",
+    "fullSolution": "Mix reagents in correct order/timing",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Alchemist's Lab and observe puzzle state",
+        "stateTriggerFlag": "P11_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Mix reagents in correct order/timing",
+        "stateTriggerFlag": "P11_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P12",
+    "name": "Prison Break",
+    "roomCode": "Prison Block",
+    "zoneId": "prison_block",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Stealth/escort",
+    "fullSolution": "Steal keys, free prisoners, evade guards",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Prison Block and observe puzzle state",
+        "stateTriggerFlag": "P12_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Steal keys, free prisoners, evade guards",
+        "stateTriggerFlag": "P12_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P13",
+    "name": "Wind Redirect",
+    "roomCode": "Rooftop Gardens",
+    "zoneId": "rooftop_gard",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Wind puzzles",
+    "fullSolution": "Redirect gusts to unlock glider",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Rooftop Gardens and observe puzzle state",
+        "stateTriggerFlag": "P13_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Redirect gusts to unlock glider",
+        "stateTriggerFlag": "P13_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P14",
+    "name": "Dream Logic",
+    "roomCode": "Void Realm",
+    "zoneId": "void_realm",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Reality-bending",
+    "fullSolution": "Objects behave by belief; anchor with Memory Thread",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Void Realm and observe puzzle state",
+        "stateTriggerFlag": "P14_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Objects behave by belief; anchor with Memory Thread",
+        "stateTriggerFlag": "P14_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P15",
+    "name": "Knife-Wheel Cadence",
+    "roomCode": "Playhouse (PH2)",
+    "zoneId": "playhouse_(p",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Rotating target wheel timing game",
+    "fullSolution": "Throw daggers into moving target windows without hitting dummy",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Playhouse (PH2) and observe puzzle state",
+        "stateTriggerFlag": "P15_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Throw daggers into moving target windows without hitting dummy",
+        "stateTriggerFlag": "P15_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 10,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P16",
+    "name": "Titan's High-Striker",
+    "roomCode": "Playhouse (PH3)",
+    "zoneId": "playhouse_(p",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Feat of strength / timing gauge",
+    "fullSolution": "Strike anvil at peak of power meter (or STR 12) to ring sky bell",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Playhouse (PH3) and observe puzzle state",
+        "stateTriggerFlag": "P16_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Strike anvil at peak of power meter (or STR 12) to ring sky bell",
+        "stateTriggerFlag": "P16_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P17",
+    "name": "High-Wire Balance",
+    "roomCode": "Playhouse (PH5)",
+    "zoneId": "playhouse_(p",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Tightrope balance timing",
+    "fullSolution": "Counteract wind gusts with timed directional balance inputs",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Playhouse (PH5) and observe puzzle state",
+        "stateTriggerFlag": "P17_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Counteract wind gusts with timed directional balance inputs",
+        "stateTriggerFlag": "P17_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P18",
+    "name": "Anamorphic Chronos Mirrors",
+    "roomCode": "Halls of Mirrors (HM6)",
+    "zoneId": "halls_of_mir",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Light & Mirror Reflection",
+    "summary": "Mirrors reflect distinct non-player objects; slide along grooved rails to order timeline",
+    "fullSolution": "Sequence: Cradle → Swallow → Hourglass → Rose; triggers causal cascade across mirror glass",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Halls of Mirrors (HM6) and observe puzzle state",
+        "stateTriggerFlag": "P18_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Sequence: Cradle → Swallow → Hourglass → Rose; triggers causal cascade across mirror glass",
+        "stateTriggerFlag": "P18_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P19",
+    "name": "Pneumatic Steam-Condenser Circuit",
+    "roomCode": "Foundry (BF4)",
+    "zoneId": "foundry_(bf4",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Light & Mirror Reflection",
+    "summary": "Balance 3 wheel valves to 120 PSI; steam fogs cold mirrors to reveal ciphers and focus beam",
+    "fullSolution": "Regulate Low/Mid/High valves to 120 PSI; wipe condensation on mirrors B and C",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Foundry (BF4) and observe puzzle state",
+        "stateTriggerFlag": "P19_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Regulate Low/Mid/High valves to 120 PSI; wipe condensation on mirrors B and C",
+        "stateTriggerFlag": "P19_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P20",
+    "name": "Differential Escapement Governor",
+    "roomCode": "Foundry (BF5) / Spire (CS2)",
+    "zoneId": "foundry_(bf5",
+    "difficulty": "Moderate",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Slot 3 brass cog tooth-ratios into differential gearbox to synchronize flywheel",
+    "fullSolution": "Ratio sequence: 12T Pinion → 24T Reduction → 36T Idler; slows crushing pistons",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Foundry (BF5) / Spire (CS2) and observe puzzle state",
+        "stateTriggerFlag": "P20_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Ratio sequence: 12T Pinion → 24T Reduction → 36T Idler; slows crushing pistons",
+        "stateTriggerFlag": "P20_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P21",
+    "name": "Cartesian Dualism Dialectic",
+    "roomCode": "Skeptic's Refectory (RD3)",
+    "zoneId": "skeptic's_re",
+    "difficulty": "Complex",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Balance material substance (res extensa) against immaterial thought (res cogitans) on an armillary scale",
+    "fullSolution": "Balance lead weights with memory shard resonance frequencies",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Skeptic's Refectory (RD3) and observe puzzle state",
+        "stateTriggerFlag": "P21_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Balance lead weights with memory shard resonance frequencies",
+        "stateTriggerFlag": "P21_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P22",
+    "name": "Pentagram Alignment Glyph",
+    "roomCode": "Crucible of Phantasms (ME3)",
+    "zoneId": "crucible_of_",
+    "difficulty": "Complex",
+    "mechanicCategory": "Spatial / Non-Euclidean Navigation",
+    "summary": "Rotate 3 concentric silver floor rings to match trial beast's elemental resonance",
+    "fullSolution": "Sequence: Fire/Ash/Iron (Pyregoyle) · Light/Mirror/Void (Speculor) · Gravity/Star/Salt (Astrophage)",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Crucible of Phantasms (ME3) and observe puzzle state",
+        "stateTriggerFlag": "P22_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Sequence: Fire/Ash/Iron (Pyregoyle) · Light/Mirror/Void (Speculor) · Gravity/Star/Salt (Astrophage)",
+        "stateTriggerFlag": "P22_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P23",
+    "name": "The Un-Fallen Bridge of Chronos",
+    "roomCode": "Chronomantic Atrium (CR3)",
+    "zoneId": "chronomantic",
+    "difficulty": "Complex",
+    "mechanicCategory": "Reverse-Entropy Chronomancy",
+    "summary": "Reverse-entropy chasm crossing",
+    "fullSolution": "Walk backward through tachyon field while anchoring focal prisms to force 1,000-ton shattered stone arches to un-fall from the abyss",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Chronomantic Atrium (CR3) and observe puzzle state",
+        "stateTriggerFlag": "P23_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Walk backward through tachyon field while anchoring focal prisms to force 1,000-ton shattered stone arches to un-fall from the abyss",
+        "stateTriggerFlag": "P23_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P24",
+    "name": "The Retrocausal Paradox Portcullis",
+    "roomCode": "Chronomantic Scriptorium (CR4)",
+    "zoneId": "chronomantic",
+    "difficulty": "Complex",
+    "mechanicCategory": "Reverse-Entropy Chronomancy",
+    "summary": "Reverse causality sequence",
+    "fullSolution": "Present consequences before causes (cold ash → burnt wood → unlit tallow) and un-loot the vault chest to collapse the temporal loop",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Chronomantic Scriptorium (CR4) and observe puzzle state",
+        "stateTriggerFlag": "P24_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Present consequences before causes (cold ash → burnt wood → unlit tallow) and un-loot the vault chest to collapse the temporal loop",
+        "stateTriggerFlag": "P24_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P25",
+    "name": "The Cadence of Resonant Harmonies",
+    "roomCode": "Harmonic Conservatory (MS3)",
+    "zoneId": "harmonic_con",
+    "difficulty": "Complex",
+    "mechanicCategory": "Acoustic / Rhythm",
+    "summary": "3-lane isometric rhythm timing mini-game",
+    "fullSolution": "Perform 3 musical movements on the glass-armonica; achieve 80%+ resonance to break stasis",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Harmonic Conservatory (MS3) and observe puzzle state",
+        "stateTriggerFlag": "P25_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Perform 3 musical movements on the glass-armonica; achieve 80%+ resonance to break stasis",
+        "stateTriggerFlag": "P25_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P26",
+    "name": "The Solar Prism Refraction Alignment",
+    "roomCode": "Chapel Vestry (C3)",
+    "zoneId": "chapel_vestr",
+    "difficulty": "Complex",
+    "mechanicCategory": "Light & Mirror Reflection",
+    "summary": "Optical prism convergence",
+    "fullSolution": "Cleanse 4 mirrors with consecrated oil and align NW/E/SE/S angles to focus dawn light on Sir Roderick",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Chapel Vestry (C3) and observe puzzle state",
+        "stateTriggerFlag": "P26_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Cleanse 4 mirrors with consecrated oil and align NW/E/SE/S angles to focus dawn light on Sir Roderick",
+        "stateTriggerFlag": "P26_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P27",
+    "name": "The Séance of Shifting Shadows",
+    "roomCode": "Haunted Chambers (HA4)",
+    "zoneId": "haunted_cham",
+    "difficulty": "Master",
+    "mechanicCategory": "Light & Mirror Reflection",
+    "summary": "Poltergeist parrying & spirit mirror reflection",
+    "fullSolution": "Align authentic childhood relics, strike Echo Bell, and shatter false mirrors with Truth Lens",
+    "requiredToolIds": [
+      "relic_truth_lens"
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Haunted Chambers (HA4) and observe puzzle state",
+        "stateTriggerFlag": "P27_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Align authentic childhood relics, strike Echo Bell, and shatter false mirrors with Truth Lens",
+        "stateTriggerFlag": "P27_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P28",
+    "name": "The Aeolian Tempest Harmony",
+    "roomCode": "High Eyrie (EY3)",
+    "zoneId": "high_eyrie_(",
+    "difficulty": "Master",
+    "mechanicCategory": "Acoustic / Rhythm",
+    "summary": "Acoustic wind-baffle tuning",
+    "fullSolution": "Tune 4 bronze wind-harps with Echo Bell to harmonize with storm and unseal Lord Aurelius",
+    "requiredToolIds": [
+      "relic_echo_bell"
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in High Eyrie (EY3) and observe puzzle state",
+        "stateTriggerFlag": "P28_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Tune 4 bronze wind-harps with Echo Bell to harmonize with storm and unseal Lord Aurelius",
+        "stateTriggerFlag": "P28_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P29",
+    "name": "The Clew of Shifting Corridors",
+    "roomCode": "Brass Labyrinth (LB2–LB4)",
+    "zoneId": "brass_labyri",
+    "difficulty": "Master",
+    "mechanicCategory": "Acoustic / Rhythm",
+    "summary": "8-beat steam rhythm navigation & acoustic stealth",
+    "fullSolution": "Anchor Starlight Clew to 3 bollards, move on steam beats, evade blind Minotaur's acoustic hearing",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Brass Labyrinth (LB2–LB4) and observe puzzle state",
+        "stateTriggerFlag": "P29_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Anchor Starlight Clew to 3 bollards, move on steam beats, evade blind Minotaur's acoustic hearing",
+        "stateTriggerFlag": "P29_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  },
+  {
+    "id": "P30",
+    "name": "The Hydraulic Siphon Matrix",
+    "roomCode": "Prison Block (PB3/PB5)",
+    "zoneId": "prison_block",
+    "difficulty": "Master",
+    "mechanicCategory": "Hydraulic Pressure Balancing",
+    "summary": "Shifting 3×3 cage grid & pressure valve balancing",
+    "fullSolution": "Equalize valves to 180 PSI, form central mid-level bridge across siphon trench, and bypass arc lights",
+    "requiredToolIds": [],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "actionDescription": "Approach mechanism in Prison Block (PB3/PB5) and observe puzzle state",
+        "stateTriggerFlag": "P30_INIT"
+      },
+      {
+        "stepNumber": 2,
+        "actionDescription": "Equalize valves to 180 PSI, form central mid-level bridge across siphon trench, and bypass arc lights",
+        "stateTriggerFlag": "P30_SOLVED"
+      }
+    ],
+    "hazardDamageOnMistake": 25,
+    "rewardItemIds": []
+  }
+]

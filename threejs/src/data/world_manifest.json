@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "unitMeters": 1,
+  "camera": { "projection": "orthographic", "pitchDegrees": 35.264, "yawDegrees": 45 },
+  "artDirection": "moonlit_painterly_diorama",
+  "scenes": [
+    {
+      "id": "S00",
+      "name": "Approach & Sunken Courtyard",
+      "zone": "approach",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 12, "height": 12 },
+      "spawn": [0, 0.6, 3],
+      "exits": [
+        { "to": "OW1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false }
+      ],
+      "encounterVariant": null
+    },
+    {
+      "id": "OW1",
+      "name": "Outer Wards Courtyard",
+      "zone": "outer_wards",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 18, "height": 14 },
+      "spawn": [0, 0.6, 2],
+      "items": [
+        { "id": "ITEM_IRON_NAIL", "at": [2, 0.5, -1], "requires": [] }
+      ],
+      "exits": [
+        { "to": "S00", "spawn": [0, 0.6, 3], "requires": [], "oneWay": false },
+        { "to": "GH1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false }
+      ],
+      "encounterVariant": null
+    },
+    {
+      "id": "GH1",
+      "name": "Gatehouse Approach",
+      "zone": "gatehouse",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 14, "height": 12 },
+      "spawn": [0, 0.6, 2],
+      "exits": [
+        { "to": "OW1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
+        { "to": "GH2", "spawn": [0, 0.6, 2], "requires": ["ITEM_IRON_NAIL"], "oneWay": false }
+      ],
+      "encounterVariant": null
+    },
+    {
+      "id": "GH2",
+      "name": "Gatehouse Mirror Lock",
+      "zone": "gatehouse",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 14, "height": 12 },
+      "spawn": [0, 0.6, 2],
+      "puzzle": "PUZZLE_MIRROR_LOCK",
+      "exits": [
+        { "to": "GH1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
+        { "to": "GH3", "spawn": [0, 0.6, 2], "requires": ["PUZZLE_MIRROR_LOCK"], "oneWay": false }
+      ],
+      "encounterVariant": null
+    },
+    {
+      "id": "GH3",
+      "name": "Captain's Landing",
+      "zone": "gatehouse",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 18, "height": 14 },
+      "spawn": [0, 0.6, 2],
+      "rewards": ["ABILITY_WALL_LEAP"],
+      "exits": [
+        { "to": "GH2", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
+        { "to": "HM1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
+        { "to": "S00", "spawn": [0, 0.6, 3], "requires": [], "oneWay": true }
+      ],
+      "encounterVariant": "captain_finale"
+    },
+    {
+      "id": "HM1",
+      "name": "Halls of Mirrors Entry",
+      "zone": "halls_of_mirrors",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 16, "height": 14 },
+      "spawn": [0, 0.6, 2],
+      "exits": [
+        { "to": "GH3", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false }
+      ],
+      "encounterVariant": null
+    }
+  ]
+}
