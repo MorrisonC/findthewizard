@@ -1334,13 +1334,28 @@ new THREE.TextureLoader().load(ASSETS.CONCEPT.SCENE00_APPROACH_SUNKEN, (tex) => 
 // ---------- S00 authored courtyard ----------
 const s00Group = new THREE.Group();
 const gltfLoader = new GLTFLoader();
-const [courtyardScene, kaelenModel, guardModel, roomShellModel, gateArchModel, mirrorLockModel] = await Promise.all([
+const [
+  courtyardScene,
+  kaelenModel,
+  guardModel,
+  roomShellModel,
+  gateArchModel,
+  mirrorLockModel,
+  bq1FeastModel,
+  ag1TreeModel,
+  mh1HearthModel,
+  san1SanctumModel,
+] = await Promise.all([
   gltfLoader.loadAsync('/assets/models/s00_courtyard.glb').then((g) => g.scene),
   gltfLoader.loadAsync('/assets/models/kaelen.glb').then((g) => g.scene),
   gltfLoader.loadAsync('/assets/models/keep_guard.glb').then((g) => g.scene),
   gltfLoader.loadAsync('/assets/models/room_shell.glb').then((g) => g.scene),
   gltfLoader.loadAsync('/assets/models/gate_arch.glb').then((g) => g.scene),
   gltfLoader.loadAsync('/assets/models/mirror_lock.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('/assets/models/bq1_feast.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('/assets/models/ag1_tree.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('/assets/models/mh1_hearth.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('/assets/models/san1_sanctum.glb').then((g) => g.scene),
 ]);
 courtyardScene.traverse((node) => {
   // The GLB contains decorative thorn/veil meshes; hide those and keep the
@@ -1749,61 +1764,52 @@ function buildGenericScene(id: SceneId): THREE.Group {
     wraith = createMirrorWraith('HM1', 0, -2.0);
     group.add(wraith.mesh);
   } else if (id === 'BQ1') {
-    // The Cenacle of Eternal Satiety
-    const tableTop = new THREE.Mesh(
-      new THREE.BoxGeometry(2.0, 0.7, 6.2),
-      new THREE.MeshStandardMaterial({ color: 0x271711, roughness: 0.4 })
-    );
-    tableTop.position.set(0, 0.35, 0);
-    tableTop.castShadow = true;
-    tableTop.receiveShadow = true;
-    group.add(tableTop);
+    // The Cenacle of Eternal Satiety: Blender-sculpted Mahogany Feast, Silver Platter & Themis Scale
+    const feastScene = bq1FeastModel.clone();
+    feastScene.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        node.castShadow = true;
+        node.receiveShadow = true;
+      }
+    });
+    group.add(feastScene);
 
-    const cloth = new THREE.Mesh(
-      new THREE.BoxGeometry(2.1, 0.05, 6.3),
-      new THREE.MeshStandardMaterial({ color: 0x881337, roughness: 0.7 })
-    );
-    cloth.position.set(0, 0.72, 0);
-    group.add(cloth);
-
-    // Silver tableware & candelabras
-    for (let zi = -2.2; zi <= 2.2; zi += 0.88) {
-      const plateL = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.02, 12), new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.9, roughness: 0.2 }));
-      plateL.position.set(-0.7, 0.75, zi);
-      const plateR = plateL.clone();
-      plateR.position.set(0.7, 0.75, zi);
-      group.add(plateL, plateR);
-
-      const candelabra = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.08, 0.35, 8), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8 }));
-      candelabra.position.set(0, 0.85, zi);
-      const candleLight = new THREE.PointLight(0xf59e0b, 0.6, 2.5);
-      candleLight.position.set(0, 0.25, 0);
-      candelabra.add(candleLight);
-      group.add(candelabra);
-    }
+    // Warm Victorian candlelight along table
+    const candleLightN = new THREE.PointLight(0xf59e0b, 1.2, 5.0);
+    candleLightN.position.set(0, 1.4, -1.4);
+    group.add(candleLightN);
+    const candleLightS = new THREE.PointLight(0xf59e0b, 1.2, 5.0);
+    candleLightS.position.set(0, 1.4, 1.4);
+    group.add(candleLightS);
 
     // Roast Boar illusion center-piece
     const isFeastDispelled = solvedPuzzles.has('PUZZLE_FEAST_SATIETY');
-    banquetBoarMesh = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.32, 0.45, 1.2, 8),
-      new THREE.MeshStandardMaterial({
-        color: isFeastDispelled ? 0x374151 : 0xb45309,
-        emissive: isFeastDispelled ? 0x111827 : 0xd97706,
-        emissiveIntensity: 0.8,
-        roughness: isFeastDispelled ? 0.9 : 0.3
-      })
-    );
-    banquetBoarMesh.rotation.z = Math.PI / 2;
-    banquetBoarMesh.position.set(0, 0.95, 0);
-    banquetBoarMesh.castShadow = true;
-    group.add(banquetBoarMesh);
+    const boarNode = feastScene.getObjectByName('RoastBoarBody') as THREE.Mesh | undefined;
+    if (boarNode) {
+      if (boarNode.material) boarNode.material = (boarNode.material as THREE.Material).clone();
+      banquetBoarMesh = boarNode;
+      if (boarNode.material && 'color' in boarNode.material) {
+        const mat = boarNode.material as THREE.MeshStandardMaterial;
+        mat.color.setHex(isFeastDispelled ? 0x374151 : 0xb45309);
+        mat.emissive.setHex(isFeastDispelled ? 0x111827 : 0xd97706);
+        mat.emissiveIntensity = isFeastDispelled ? 0.2 : 0.8;
+      }
+    } else {
+      banquetBoarMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.32, 0.45, 1.2, 8),
+        new THREE.MeshStandardMaterial({
+          color: isFeastDispelled ? 0x374151 : 0xb45309,
+          emissive: isFeastDispelled ? 0x111827 : 0xd97706,
+          emissiveIntensity: 0.8,
+        })
+      );
+      banquetBoarMesh.position.set(0, 0.95, 0);
+      group.add(banquetBoarMesh);
+    }
 
     // Themis balance scale
-    themisScaleMesh = new THREE.Group();
-    const col = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.06, 0.6, 8), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9 }));
-    col.position.set(0, 1.0, -2.6);
-    themisScaleMesh.add(col);
-    group.add(themisScaleMesh);
+    themisScaleMesh = (feastScene.getObjectByName('ThemisScaleBase') as THREE.Group) || new THREE.Group();
+    themisScaleMesh.position.set(0, 0.81, -2.5);
 
     // Lord Morvath NPC
     morvathMesh = makeGuardMesh(0x7e22ce);
@@ -1815,36 +1821,40 @@ function buildGenericScene(id: SceneId): THREE.Group {
 
     group.add(createLoreOrb(loreObjects[3]));
   } else if (id === 'AG1') {
-    // The Ancient Bough
+    // The Ancient Bough: Blender-sculpted Gnarled Ancient Heartwood Tree & Thorny Root Wall
+    const treeScene = ag1TreeModel.clone();
+    treeScene.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        node.castShadow = true;
+        node.receiveShadow = true;
+      }
+    });
+    group.add(treeScene);
+
+    // Sacred Starlight Eye pulsating light
+    const treeLight = new THREE.PointLight(0x06b6d4, 2.5, 7.5);
+    treeLight.position.set(0, 2.4, -1.8);
+    group.add(treeLight);
+
+    // Yggdra interaction anchor at ancient trunk center
     yggdraMesh = new THREE.Group();
-    const trunk = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.9, 1.5, 4.2, 10),
-      new THREE.MeshStandardMaterial({ color: 0x1c1917, roughness: 0.9 })
-    );
-    trunk.position.set(0, 2.1, 0);
-    trunk.castShadow = true;
-    yggdraMesh.add(trunk);
-
-    const eye = new THREE.Mesh(
-      new THREE.SphereGeometry(0.3, 8, 8),
-      new THREE.MeshStandardMaterial({ color: 0x06b6d4, emissive: 0x38bdf8, emissiveIntensity: 1.8 })
-    );
-    eye.position.set(0, 2.4, 0.85);
-    yggdraMesh.add(eye);
-
-    const treeLight = new THREE.PointLight(0x06b6d4, 2.2, 7);
-    treeLight.position.set(0, 2.5, 1.0);
-    yggdraMesh.add(treeLight);
-
     yggdraMesh.position.set(0, 0, -2.8);
+    const eyeNode = treeScene.getObjectByName('EyeCoreStarlight');
+    if (eyeNode) yggdraMesh.add(eyeNode);
     group.add(yggdraMesh);
 
-    // Thorny root wall blocking north portal
+    // Thorny root wall barrier blocking north exit at z = -5.0
+    const rootWallGroup = new THREE.Group();
+    for (let bi = 0; bi < 8; bi++) {
+      const bar = treeScene.getObjectByName(`RootWallBar_${bi}`);
+      if (bar) rootWallGroup.add(bar);
+    }
     rootWallMesh = new THREE.Mesh(
       new THREE.BoxGeometry(4.2, 2.4, 0.6),
-      new THREE.MeshStandardMaterial({ color: 0x2e1065, emissive: 0x3b0764, emissiveIntensity: 0.5, wireframe: true })
+      new THREE.MeshStandardMaterial({ visible: false })
     );
     rootWallMesh.position.set(0, 1.2, -5.0);
+    rootWallMesh.add(rootWallGroup);
     rootWallMesh.visible = !solvedPuzzles.has('PUZZLE_ARBOREAL_WEAVE');
     group.add(rootWallMesh);
 
@@ -1858,40 +1868,33 @@ function buildGenericScene(id: SceneId): THREE.Group {
 
     group.add(createLoreOrb(loreObjects[4]));
   } else if (id === 'MH1') {
-    // Mother Hazel's Hearth
-    const hearth = new THREE.Mesh(
-      new THREE.BoxGeometry(2.6, 1.8, 0.8),
-      new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.9 })
-    );
-    hearth.position.set(0, 0.9, -4.8);
-    group.add(hearth);
+    // Mother Hazel's Hearth: Blender-sculpted Victorian Brick Hearth, Hanging Kettle, and Porcelain Dolls
+    const hearthScene = mh1HearthModel.clone();
+    hearthScene.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        node.castShadow = true;
+        node.receiveShadow = true;
+      }
+    });
+    group.add(hearthScene);
 
-    const hearthLight = new THREE.PointLight(0xf97316, 3.0, 7);
+    // Firebox warm glowing illumination
+    const hearthLight = new THREE.PointLight(0xf97316, 3.2, 7.5);
     hearthLight.position.set(0, 0.8, -4.3);
     group.add(hearthLight);
 
-    kettleMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.32, 8, 8),
-      new THREE.MeshStandardMaterial({ color: 0x18181b, metalness: 0.8, roughness: 0.4 })
-    );
-    kettleMesh.position.set(0, 0.6, -4.4);
-    group.add(kettleMesh);
-
-    // Dollhouse shelf with miniature porcelain figurines
-    const shelf = new THREE.Mesh(
-      new THREE.BoxGeometry(0.4, 0.8, 3.2),
-      new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.7 })
-    );
-    shelf.position.set(-4.5, 0.4, 0);
-    group.add(shelf);
-
-    for (let di = -1.2; di <= 1.2; di += 0.5) {
-      const doll = new THREE.Mesh(
-        new THREE.ConeGeometry(0.08, 0.3, 6),
-        new THREE.MeshStandardMaterial({ color: 0xf472b6, emissive: 0xec4899, emissiveIntensity: 0.6 })
+    // Interactive hanging cast-iron kettle
+    const kettleNode = hearthScene.getObjectByName('KettlePotBelly') as THREE.Mesh | undefined;
+    if (kettleNode) {
+      kettleMesh = kettleNode;
+      kettleMesh.position.set(0, 0.62, -4.4);
+    } else {
+      kettleMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.32, 8, 8),
+        new THREE.MeshStandardMaterial({ color: 0x18181b, metalness: 0.8, roughness: 0.4 })
       );
-      doll.position.set(-4.5, 0.95, di);
-      group.add(doll);
+      kettleMesh.position.set(0, 0.6, -4.4);
+      group.add(kettleMesh);
     }
 
     hazelMesh = makeGuardMesh(0xbe123c);
@@ -1903,21 +1906,45 @@ function buildGenericScene(id: SceneId): THREE.Group {
 
     group.add(createLoreOrb(loreObjects[5]));
   } else if (id === 'SAN1') {
-    // The Sanctum of the Glass Heart
+    // The Sanctum of the Glass Heart: Blender-sculpted Crystalline Throne & Multifaceted Glass Heart
+    const sanctumScene = san1SanctumModel.clone();
+    sanctumScene.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        node.castShadow = true;
+        node.receiveShadow = true;
+      }
+    });
+    group.add(sanctumScene);
+
+    // Multifaceted Glass Heart Dodecahedron & Cynthia Soul Crystal
     cynthiaCrystal = new THREE.Group();
-    const outerDodec = new THREE.Mesh(
-      new THREE.DodecahedronGeometry(1.2, 0),
-      new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.85 })
-    );
-    const innerSpirit = new THREE.Mesh(
-      new THREE.SphereGeometry(0.45, 12, 12),
-      new THREE.MeshStandardMaterial({ color: 0xf472b6, emissive: 0xec4899, emissiveIntensity: 2.2 })
-    );
-    cynthiaCrystal.add(outerDodec, innerSpirit);
+    cynthiaCrystal.position.set(0, 1.8, -1.0);
+
+    const cageNode = sanctumScene.getObjectByName('GlassHeartOuterCage');
+    const soulNode = sanctumScene.getObjectByName('CynthiaSoulCrystal');
+    const ring1Node = sanctumScene.getObjectByName('StarlightGimbalRing1');
+    const ring2Node = sanctumScene.getObjectByName('StarlightGimbalRing2');
+
+    if (cageNode) {
+      cageNode.position.set(0, 0, 0);
+      cynthiaCrystal.add(cageNode);
+    }
+    if (soulNode) {
+      soulNode.position.set(0, 0, 0);
+      cynthiaCrystal.add(soulNode);
+    }
+    if (ring1Node) {
+      ring1Node.position.set(0, 0, 0);
+      cynthiaCrystal.add(ring1Node);
+    }
+    if (ring2Node) {
+      ring2Node.position.set(0, 0, 0);
+      cynthiaCrystal.add(ring2Node);
+    }
+
     const crystalLight = new THREE.PointLight(0xec4899, 2.5, 9);
     crystalLight.position.set(0, 0, 0);
     cynthiaCrystal.add(crystalLight);
-    cynthiaCrystal.position.set(0, 1.8, -1.0);
     group.add(cynthiaCrystal);
 
     // Starlight Victory Portal unsealed upon Vaelor's defeat
