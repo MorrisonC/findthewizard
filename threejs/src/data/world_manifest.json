@@ -81,10 +81,76 @@
       "art": "moonlit_diorama",
       "bounds": { "width": 16, "height": 14 },
       "spawn": [0, 0.6, 2],
+      "puzzle": "PUZZLE_TRUE_MIRROR",
       "exits": [
-        { "to": "GH3", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false }
+        { "to": "GH3", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
+        { "to": "BQ1", "spawn": [0, 0.6, 5], "requires": [], "oneWay": false }
       ],
       "encounterVariant": null
+    },
+    {
+      "id": "BQ1",
+      "name": "The Cenacle of Eternal Satiety",
+      "zone": "grand_refectory",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 22, "height": 16 },
+      "spawn": [0, 0.6, 5],
+      "puzzle": "PUZZLE_FEAST_SATIETY",
+      "items": [
+        { "id": "ITEM_TANTALUS_GOBLET", "at": [0, 0.5, 0], "requires": [] }
+      ],
+      "exits": [
+        { "to": "HM1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
+        { "to": "AG1", "spawn": [0, 0.6, 5], "requires": ["PUZZLE_FEAST_SATIETY"], "oneWay": false }
+      ],
+      "encounterVariant": null
+    },
+    {
+      "id": "AG1",
+      "name": "The Ancient Bough",
+      "zone": "dreaming_gardens",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 20, "height": 16 },
+      "spawn": [0, 0.6, 5],
+      "puzzle": "PUZZLE_ARBOREAL_WEAVE",
+      "rewards": ["ABILITY_STARLIGHT_DASH"],
+      "exits": [
+        { "to": "BQ1", "spawn": [0, 0.6, 5], "requires": [], "oneWay": false },
+        { "to": "MH1", "spawn": [0, 0.6, 4], "requires": ["PUZZLE_ARBOREAL_WEAVE"], "oneWay": false }
+      ],
+      "encounterVariant": null
+    },
+    {
+      "id": "MH1",
+      "name": "Mother Hazel's Hearth",
+      "zone": "dollhouse",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 14, "height": 14 },
+      "spawn": [0, 0.6, 4],
+      "puzzle": "PUZZLE_HOSPITALITY_GAMBIT",
+      "items": [
+        { "id": "ITEM_SUGAR_SPOON", "at": [2, 0.5, 1], "requires": [] }
+      ],
+      "exits": [
+        { "to": "AG1", "spawn": [0, 0.6, 5], "requires": [], "oneWay": false },
+        { "to": "SAN1", "spawn": [0, 0.6, 7], "requires": ["PUZZLE_HOSPITALITY_GAMBIT"], "oneWay": false }
+      ],
+      "encounterVariant": null
+    },
+    {
+      "id": "SAN1",
+      "name": "The Sanctum of the Glass Heart",
+      "zone": "sanctum",
+      "art": "moonlit_diorama",
+      "bounds": { "width": 24, "height": 20 },
+      "spawn": [0, 0.6, 7],
+      "puzzle": "PUZZLE_HOLLOW_GLASS",
+      "rewards": ["ABILITY_GRAVITON_INVERSION"],
+      "exits": [
+        { "to": "MH1", "spawn": [0, 0.6, 4], "requires": [], "oneWay": false },
+        { "to": "S00", "spawn": [0, 0.6, 3], "requires": [], "oneWay": true }
+      ],
+      "encounterVariant": "vaelor_boss"
     }
   ]
 }

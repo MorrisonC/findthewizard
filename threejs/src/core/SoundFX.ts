@@ -624,6 +624,80 @@ class SoundFXManager {
     });
   }
 
+  public playTreeGroan(): void {
+    const ctx = this.init();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(85, now);
+    osc.frequency.exponentialRampToValueAtTime(45, now + 0.6);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.2, now + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.75);
+  }
+
+  public playFeastWaltz(): void {
+    const ctx = this.init();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const chord = [330, 392, 493.88, 587.33];
+    chord.forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(f, now + i * 0.08);
+      gain.gain.setValueAtTime(0.001, now + i * 0.08);
+      gain.gain.linearRampToValueAtTime(0.12, now + i * 0.08 + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.8);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + i * 0.08);
+      osc.stop(now + i * 0.08 + 0.85);
+    });
+  }
+
+  public playWitchGiggle(): void {
+    const ctx = this.init();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const notes = [600, 780, 680, 920];
+    notes.forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, now + i * 0.06);
+      gain.gain.setValueAtTime(0.08, now + i * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.1);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + i * 0.06);
+      osc.stop(now + i * 0.06 + 0.12);
+    });
+  }
+
+  public playBossPhaseShift(): void {
+    const ctx = this.init();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(45, now + 0.8);
+    gain.gain.setValueAtTime(0.28, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.95);
+  }
+
   public setMusicVolume(val: number): void {
     if (!this.ctx || !this.musicPadGain) return;
     this.musicPadGain.gain.setValueAtTime(Math.max(0.0001, val * 0.038), this.ctx.currentTime);

@@ -613,5 +613,229 @@
         ]
       }
     }
+  },
+  "morvath": {
+    "npcId": "morvath",
+    "rootNodeId": "MORVATH_01",
+    "nodes": {
+      "MORVATH_01": {
+        "id": "MORVATH_01",
+        "speaker": "Lord Morvath of the Silver Flagon",
+        "speakerTitle": "Patriarch of the Phantom Feast",
+        "text": "Sit, traveler! Drink of Duke Vaelor's vintage claret and taste the honeyed boar. For thirty years, this feast has warmed our hearts. Why march in the cold mountain winds when heaven is laid out before you?",
+        "choices": [
+          {
+            "text": "Look at your plate, Morvath. You are chewing cold fireplace ash.",
+            "nextDialogueNodeId": "MORVATH_REBUT"
+          },
+          {
+            "text": "[Truth Lens] Behold your wife's reflection in the silver cloche: she is starving to the bone.",
+            "nextDialogueNodeId": "MORVATH_REFUTE"
+          },
+          {
+            "text": "A dream of joy cannot replace authentic life. Your sons did not die so you could hide here.",
+            "nextDialogueNodeId": "MORVATH_SOLVED"
+          }
+        ]
+      },
+      "MORVATH_REBUT": {
+        "id": "MORVATH_REBUT",
+        "speaker": "Lord Morvath of the Silver Flagon",
+        "speakerTitle": "Patriarch of the Phantom Feast",
+        "text": "Ash? If this is ash, why does it warm my soul? Outside these doors, my ancestral home burned and my sons were buried in mud. What virtue is there in gnawing cold stones of reality when a phantom roast brings peace?",
+        "choices": [
+          {
+            "text": "Peace built on an illusion is cowardice. True love honors the dead through truth.",
+            "nextDialogueNodeId": "MORVATH_SOLVED"
+          }
+        ]
+      },
+      "MORVATH_REFUTE": {
+        "id": "MORVATH_REFUTE",
+        "speaker": "Lord Morvath of the Silver Flagon",
+        "speakerTitle": "Patriarch of the Phantom Feast",
+        "text": "Vivienne... your hands... your ring has fallen into the dust! Merciful heavens... what have we done to ourselves?!",
+        "choices": [
+          {
+            "text": "Stand up, Morvath. Break the waltz and balance the scales.",
+            "nextDialogueNodeId": "MORVATH_SOLVED"
+          }
+        ]
+      },
+      "MORVATH_SOLVED": {
+        "id": "MORVATH_SOLVED",
+        "speaker": "Lord Morvath of the Silver Flagon",
+        "speakerTitle": "Awakened Courtyard Lord",
+        "text": "God forgive us... we have starved in heaven. Take the Tantalus Goblet, shadow-thief. Let the bitter air of reality flood this tomb!",
+        "choices": [
+          {
+            "text": "[Drop your silver fork and shatter the banquet glamour]",
+            "actionTrigger": "GIVE_ITEM",
+            "actionPayload": "ITEM_TANTALUS_GOBLET"
+          }
+        ]
+      }
+    }
+  },
+  "yggdra": {
+    "npcId": "yggdra",
+    "rootNodeId": "YGGDRA_01",
+    "nodes": {
+      "YGGDRA_01": {
+        "id": "YGGDRA_01",
+        "speaker": "Yggdra the Ancient Bough",
+        "speakerTitle": "The Weeping Heartwood",
+        "text": "Mortal of flesh and shadow... Vaelor siphons my celestial sap into iron boilers. Three riddles of wood and steel bar your path. Answer true, or the thorny roots shall drag you into the loam.",
+        "choices": [
+          {
+            "text": "Speak your riddles, Ancient Father.",
+            "nextDialogueNodeId": "YGGDRA_R1"
+          },
+          {
+            "text": "[Attack the thorny root barrier with your stiletto]",
+            "actionTrigger": "START_COMBAT",
+            "actionPayload": "tree_guardian"
+          }
+        ]
+      },
+      "YGGDRA_R1": {
+        "id": "YGGDRA_R1",
+        "speaker": "Yggdra the Ancient Bough",
+        "speakerTitle": "The Weeping Heartwood",
+        "text": "Riddle the First: I have no flesh, yet rings tell my mortal age. I drink starlight from the sky and hold the mountaintop in silent embrace. What am I?",
+        "choices": [
+          {
+            "text": "A Living Tree.",
+            "nextDialogueNodeId": "YGGDRA_R2"
+          },
+          {
+            "text": "A Clockwork Escapement.",
+            "nextDialogueNodeId": "YGGDRA_FAIL"
+          }
+        ]
+      },
+      "YGGDRA_R2": {
+        "id": "YGGDRA_R2",
+        "speaker": "Yggdra the Ancient Bough",
+        "speakerTitle": "The Weeping Heartwood",
+        "text": "Truth speaks in your mouth. Riddle the Second: Cold as the grave, forged in fire, biting the bough to build the pyre. What breaks the wood?",
+        "choices": [
+          {
+            "text": "The Cold-Iron Ax.",
+            "nextDialogueNodeId": "YGGDRA_R3"
+          },
+          {
+            "text": "The Phantom Mirror.",
+            "nextDialogueNodeId": "YGGDRA_FAIL"
+          }
+        ]
+      },
+      "YGGDRA_R3": {
+        "id": "YGGDRA_R3",
+        "speaker": "Yggdra the Ancient Bough",
+        "speakerTitle": "The Weeping Heartwood",
+        "text": "Riddle the Final: Woven in deepest darkness, linking every branch across the mountain crag. Invisible to the eye, yet sustaining all life. What binds us?",
+        "choices": [
+          {
+            "text": "The Harmonic Root-Weave.",
+            "nextDialogueNodeId": "YGGDRA_SOLVED"
+          },
+          {
+            "text": "The Chains of Lethe.",
+            "nextDialogueNodeId": "YGGDRA_FAIL"
+          }
+        ]
+      },
+      "YGGDRA_FAIL": {
+        "id": "YGGDRA_FAIL",
+        "speaker": "Yggdra the Ancient Bough",
+        "speakerTitle": "The Weeping Heartwood",
+        "text": "Falsehood! The thorns hunger for shadow-blood!",
+        "choices": [
+          {
+            "text": "[Defend yourself against the thorns!]",
+            "actionTrigger": "START_COMBAT",
+            "actionPayload": "tree_guardian"
+          }
+        ]
+      },
+      "YGGDRA_SOLVED": {
+        "id": "YGGDRA_SOLVED",
+        "speaker": "Yggdra the Ancient Bough",
+        "speakerTitle": "The Weeping Heartwood",
+        "text": "Wisdom dwells in your shadow. The iron siphons wither; the root-archway uncoils before you. Take the Starlight Dash, and leap across the void to the Spire!",
+        "choices": [
+          {
+            "text": "[Receive the blessing of the World Tree]",
+            "actionTrigger": "GIVE_ITEM",
+            "actionPayload": "ABILITY_STARLIGHT_DASH"
+          }
+        ]
+      }
+    }
+  },
+  "hazel": {
+    "npcId": "hazel",
+    "rootNodeId": "HAZEL_01",
+    "nodes": {
+      "HAZEL_01": {
+        "id": "HAZEL_01",
+        "speaker": "Mother Hazel",
+        "speakerTitle": "The Sugar-Spun Weaver",
+        "text": "Come in, my handsome darling! Auntie Hazel has baked fresh hazelnut scones and poured piping-hot tea. Drink deep, and let Auntie tuck you into velvet slippers...",
+        "choices": [
+          {
+            "text": "[DEX 12 — Sleight of Hand]: Tip the drugged tea into the potted begonia and pretend to drink.",
+            "nextDialogueNodeId": "HAZEL_SMOKE"
+          },
+          {
+            "text": "Who are all those porcelain dolls on your mantelpiece, Auntie?",
+            "nextDialogueNodeId": "HAZEL_DOLLS"
+          },
+          {
+            "text": "I'm not your darling, witch. Step away from that hearth!",
+            "actionTrigger": "START_COMBAT",
+            "actionPayload": "hazel_combat"
+          }
+        ]
+      },
+      "HAZEL_DOLLS": {
+        "id": "HAZEL_DOLLS",
+        "speaker": "Mother Hazel",
+        "speakerTitle": "The Sugar-Spun Weaver",
+        "text": "Aren't they my good children? They never bleed, they never yell, and they never, ever leave Auntie's hearth! Once you finish your tea, you shall have the prettiest little porcelain boots on the mantel...",
+        "choices": [
+          {
+            "text": "[DEX 12]: Divert her attention to the Chantilly lace and swap the tea for water.",
+            "nextDialogueNodeId": "HAZEL_SMOKE"
+          }
+        ]
+      },
+      "HAZEL_SMOKE": {
+        "id": "HAZEL_SMOKE",
+        "speaker": "Mother Hazel",
+        "speakerTitle": "The Sugar-Spun Weaver",
+        "text": "Oh, that's my precious boy! Let the sweet slumber take you while Auntie prepares the sugar glaze... *[Kaelen secretly tosses volatile sulfur into the hearth fire!]*",
+        "choices": [
+          {
+            "text": "[The hearth detonates in purple sulfur smoke! Snip the apron key and grapple up the chimney flue!]",
+            "nextDialogueNodeId": "HAZEL_SOLVED"
+          }
+        ]
+      },
+      "HAZEL_SOLVED": {
+        "id": "HAZEL_SOLVED",
+        "speaker": "Mother Hazel",
+        "speakerTitle": "The Trapped Confectioner",
+        "text": "*COUGH! WHEEZE!* My lace doilies! You treacherous little gutter-rat! You locked the cupola hatch from outside! Give back my porcelain children!",
+        "choices": [
+          {
+            "text": "[Lock the miniature dollhouse door and claim the bone-sugar spoon]",
+            "actionTrigger": "GIVE_ITEM",
+            "actionPayload": "ITEM_SUGAR_SPOON"
+          }
+        ]
+      }
+    }
   }
 }

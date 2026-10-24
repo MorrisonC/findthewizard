@@ -127,7 +127,7 @@ function flashMesh(group: THREE.Group, colorHex: number, durationMs = 140): void
 }
 
 type Spawn = { x: number; y: number; z: number };
-type SceneId = 'S00' | 'OW1' | 'GH1' | 'GH2' | 'GH3' | 'HM1';
+type SceneId = 'S00' | 'OW1' | 'GH1' | 'GH2' | 'GH3' | 'HM1' | 'BQ1' | 'AG1' | 'MH1' | 'SAN1';
 type GuardState = 'patrol' | 'chase' | 'dead';
 interface Guard {
   sceneId: SceneId;
@@ -205,6 +205,19 @@ interface ActiveProjectile {
 const activeProjectiles: ActiveProjectile[] = [];
 const enemyProjectiles: ActiveProjectile[] = [];
 
+// Extended Room Entities & Boss State
+let morvathMesh: THREE.Group | null = null;
+let banquetBoarMesh: THREE.Mesh | null = null;
+let themisScaleMesh: THREE.Group | null = null;
+let yggdraMesh: THREE.Group | null = null;
+let rootWallMesh: THREE.Mesh | null = null;
+let treeGuardian: Guard | null = null;
+let hazelMesh: THREE.Group | null = null;
+let kettleMesh: THREE.Mesh | null = null;
+let vaelorBoss: Guard | null = null;
+let cynthiaCrystal: THREE.Group | null = null;
+let vaelorPhase2Triggered = false;
+
 // Quest Log Modal
 function toggleQuestLog(): void {
   isQuestLogOpen = !isQuestLogOpen;
@@ -227,7 +240,11 @@ function renderQuestObjectives(): void {
     { desc: 'Shatter Gatehouse Mirror Lock (GH2)', done: solvedPuzzles.has('PUZZLE_MIRROR_LOCK') },
     { desc: 'Neutralize Barbican Captain (GH3)', done: abilities.has('ABILITY_WALL_LEAP') },
     { desc: 'Infiltrate the Halls of Mirrors (HM1)', done: currentSceneId === 'HM1' },
-    { desc: 'Shatter True Mirror & Banish Wraith (HM1)', done: solvedPuzzles.has('PUZZLE_TRUE_MIRROR') }
+    { desc: 'Shatter True Mirror & Banish Wraith (HM1)', done: solvedPuzzles.has('PUZZLE_TRUE_MIRROR') },
+    { desc: 'Dispel the Cenacle Feast & Free Morvath (BQ1)', done: solvedPuzzles.has('PUZZLE_FEAST_SATIETY') },
+    { desc: 'Commune with Yggdra the Ancient Bough (AG1)', done: solvedPuzzles.has('PUZZLE_ARBOREAL_WEAVE') },
+    { desc: 'Solve Mother Hazel\'s Hospitality Gambit (MH1)', done: solvedPuzzles.has('PUZZLE_HOSPITALITY_GAMBIT') },
+    { desc: 'Shatter Vaelor\'s Glass Heart & Liberate Cynthia (SAN1)', done: solvedPuzzles.has('PUZZLE_HOLLOW_GLASS') }
   ];
   questObjectivesList.innerHTML = '';
   objs.forEach((o) => {
@@ -424,12 +441,36 @@ function renderDialogueNode(npcKey: string, nodeId: string): void {
 function chooseDialogueOption(choice: DialogueChoice): void {
   SoundFX.playDialogueNext();
   if (choice.actionTrigger === 'GIVE_ITEM' && choice.actionPayload) {
-    inventory.add(choice.actionPayload);
+    if (choice.actionPayload.startsWith('ABILITY_')) {
+      abilities.add(choice.actionPayload);
+    } else {
+      inventory.add(choice.actionPayload);
+    }
     SoundFX.playPickup();
     showToast(`Acquired: ${choice.actionPayload.replace(/_/g, ' ').toUpperCase()}`);
+
+    // Trigger associated room puzzle resolution upon quest dialogue completion
+    if (choice.actionPayload === 'ITEM_TANTALUS_GOBLET') {
+      solvedPuzzles.add('PUZZLE_FEAST_SATIETY');
+      SoundFX.playFeastWaltz();
+      if (banquetBoarMesh) {
+        (banquetBoarMesh.material as THREE.MeshStandardMaterial).color.setHex(0x374151);
+        (banquetBoarMesh.material as THREE.MeshStandardMaterial).emissive.setHex(0x111827);
+      }
+    } else if (choice.actionPayload === 'ABILITY_STARLIGHT_DASH') {
+      solvedPuzzles.add('PUZZLE_ARBOREAL_WEAVE');
+      if (rootWallMesh) rootWallMesh.visible = false;
+      SoundFX.playTreeGroan();
+    } else if (choice.actionPayload === 'ITEM_SUGAR_SPOON') {
+      solvedPuzzles.add('PUZZLE_HOSPITALITY_GAMBIT');
+      SoundFX.playWitchGiggle();
+    }
     saveCheckpoint();
   } else if (choice.actionTrigger === 'START_COMBAT') {
     closeDialogue();
+    if (choice.actionPayload === 'tree_guardian' && treeGuardian) {
+      treeGuardian.state = 'chase';
+    }
     showToast('Encounter Initiated: Defend yourself!');
     return;
   }
@@ -475,6 +516,38 @@ const ITEM_LORE_DATABASE: Record<string, { name: string; tier: string; category:
     stats: 'Unlocks Inner Barbican Portcullis',
     desc: 'A heavy brass mortise key stamped with Duke Vaelor\'s twin-raven crest. Given by Gatekeeper Orin after his mind was grounded by cold iron.',
     icon: '🗝️'
+  },
+  ITEM_TANTALUS_GOBLET: {
+    name: 'The Tantalus Goblet',
+    tier: 'Ethereal Relic',
+    category: 'Vessel of Ash',
+    stats: 'Dispels Phantom Satiety & Gastronomic Glamours',
+    desc: 'Forged in Nozick\'s Crucible. Liquid poured into it drains through invisible capillaries into the nether, demonstrating the hollow nature of phantom sustenance.',
+    icon: '🍷'
+  },
+  ABILITY_STARLIGHT_DASH: {
+    name: 'Starlight Dash',
+    tier: 'Ancient Arboreal Feat',
+    category: 'Phase Traversal',
+    stats: 'Surges forward with starlight phase evasion',
+    desc: 'Bestowed by Yggdra the Ancient Bough. Uncoils spatial knots and pierces thorny root barriers with pure starlight acceleration.',
+    icon: '✨'
+  },
+  ITEM_SUGAR_SPOON: {
+    name: 'Witch\'s Sugar Spoon',
+    tier: 'Alchemical Relic',
+    category: 'Confectionery Tool',
+    stats: 'Stirs Phantasmic Concoctions & Reveals Flues',
+    desc: 'Carved by Mother Hazel from petrified sugar cane. Dissolves confectionery illusions and unlocks chimney flue escape routes.',
+    icon: '🥄'
+  },
+  ABILITY_GRAVITON_INVERSION: {
+    name: 'Graviton Inversion',
+    tier: 'Master Illusionist Feat',
+    category: 'Transmutation',
+    stats: 'Inverts local gravitational flux',
+    desc: 'Acquired upon shattering Archillusionist Vaelor\'s Glass Heart. Inverts local gravitational flux, allowing ascension to the Highest Spire.',
+    icon: '🌌'
   }
 };
 
@@ -563,6 +636,38 @@ const loreObjects: LoreObject[] = [
     pos: { x: 3.5, y: 0.5, z: -1.0 },
     title: "Archival Record — Garrison Daguerreotype (1888)",
     text: "A silver-plate photograph of the Gatehouse garrison dated Autumn 1888.\n\nThe faces of all twelve guardsmen have been scratched away with a cold-iron stylus, leaving only silver silhouettes reflecting the room behind you.",
+  },
+  {
+    id: 'LORE_BQ1',
+    sceneId: 'BQ1',
+    name: "Banquet of Ashes Menu",
+    pos: { x: 3.2, y: 0.5, z: 0.5 },
+    title: "Archival Record — Archival Menu of the Eve of Betrothal (1886)",
+    text: "An ornate gold-leaf menu recovered from Lord Morvath's place setting:\n\n'First Course: Roasted Swan in Spun Amber.\nSecond Course: Candied Nightingale Tongue in Fig Wine.\n\nNote in margins: We have chewed these phantom figs for two hundred years. Our teeth are worn to dust, yet the hunger never ceases.'",
+  },
+  {
+    id: 'LORE_AG1',
+    sceneId: 'AG1',
+    name: "Yggdra's Heartwood Rings",
+    pos: { x: 3.2, y: 0.5, z: 0.5 },
+    title: "Archival Record — Arborist's Chronicle of the World Bough",
+    text: "Inscribed upon a ring of petrified sapwood:\n\n'The root does not hunger for light, nor does the branch fear the night. Speak three truths to the ringed eye, and the bramble road shall yield.'",
+  },
+  {
+    id: 'LORE_MH1',
+    sceneId: 'MH1',
+    name: "Hazel's Confectionery Ledger",
+    pos: { x: -3.2, y: 0.5, z: 0.5 },
+    title: "Archival Record — Mother Hazel's Recipe Folio",
+    text: "A sticky parchment bound with dried peppermint bark:\n\n'Three parts marzipan to six parts spun starlight. Let the guests sip until their feet turn into gingerbread pedestals. True hospitality never lets a traveler leave hungry.'",
+  },
+  {
+    id: 'LORE_SAN1',
+    sceneId: 'SAN1',
+    name: "Vaelor's Final Epilogue",
+    pos: { x: 3.2, y: 0.5, z: -3.0 },
+    title: "Archival Record — Archillusionist Vaelor's Testament",
+    text: "Fragment of crystalline glass suspended in midair:\n\n'The Glass Heart beats not with blood, but with the memory of light. Break the mirror, and you break the world we built to keep out the void.'",
   },
 ];
 
@@ -679,7 +784,9 @@ const engine = new GameEngine({
     // Music State Controller based on Enemy Alertness
     const anyEnemyChasing = (guard && guard.state === 'chase' && guard.sceneId === currentSceneId) ||
       (captain && captain.state === 'chase' && captain.sceneId === currentSceneId) ||
-      (wraith && wraith.state === 'chase' && wraith.sceneId === currentSceneId);
+      (wraith && wraith.state === 'chase' && wraith.sceneId === currentSceneId) ||
+      (treeGuardian && treeGuardian.state === 'chase' && treeGuardian.sceneId === currentSceneId) ||
+      (vaelorBoss && vaelorBoss.state === 'chase' && vaelorBoss.sceneId === currentSceneId);
     SoundFX.setMusicState(anyEnemyChasing ? 'combat' : 'explore');
 
     // Decoy Timer Update
@@ -698,7 +805,7 @@ const engine = new GameEngine({
       p.mesh.position.addScaledVector(p.dir, stepDist);
       p.distTraveled += stepDist;
 
-      const enemies = [guard, captain, wraith].filter((g): g is Guard => !!g && g.state !== 'dead' && g.sceneId === currentSceneId);
+      const enemies = [guard, captain, wraith, treeGuardian, vaelorBoss].filter((g): g is Guard => !!g && g.state !== 'dead' && g.sceneId === currentSceneId);
       let hitTarget = false;
       for (const g of enemies) {
         const d = Math.hypot(g.mesh.position.x - p.mesh.position.x, g.mesh.position.z - p.mesh.position.z);
@@ -728,7 +835,24 @@ const engine = new GameEngine({
           if (g.hp <= 0) {
             g.state = 'dead';
             g.mesh.parent?.remove(g.mesh);
-            if (g.isWraith) {
+            if (g === vaelorBoss) {
+              solvedPuzzles.add('PUZZLE_HOLLOW_GLASS');
+              abilities.add('ABILITY_GRAVITON_INVERSION');
+              SoundFX.playPuzzleSolved();
+              cameraShake = 0.5;
+              showToast('VICTORY: Archillusionist Vaelor Defeated! Cynthia Liberated!');
+              if (starlightPortalMesh) starlightPortalMesh.visible = true;
+              saveCheckpoint();
+              openDialogue('cynthia', 'CYNTHIA_01');
+            } else if (g === treeGuardian) {
+              solvedPuzzles.add('PUZZLE_ARBOREAL_WEAVE');
+              abilities.add('ABILITY_STARLIGHT_DASH');
+              if (rootWallMesh) rootWallMesh.visible = false;
+              SoundFX.playTreeGroan();
+              SoundFX.playPuzzleSolved();
+              showToast('Tree Guardian Uprooted: Starlight Dash Claimed!');
+              saveCheckpoint();
+            } else if (g.isWraith) {
               showToast('Mirror Wraith Banished: Halls of Mirrors Cleansed!');
               SoundFX.playPuzzleSolved();
             } else {
@@ -935,12 +1059,51 @@ const engine = new GameEngine({
         }
         hasPrompt = true;
       }
+    } else if (!hasPrompt && currentSceneId === 'BQ1' && !activeDialogue) {
+      if (morvathMesh && Math.hypot(morvathMesh.position.x - playerState.x, morvathMesh.position.z - playerState.z) < 2.5) {
+        showInteractPrompt('Speak with Lord Morvath (Master of the Cenacle)');
+        hasPrompt = true;
+      } else if (banquetBoarMesh && !solvedPuzzles.has('PUZZLE_FEAST_SATIETY') && Math.hypot(banquetBoarMesh.position.x - playerState.x, banquetBoarMesh.position.z - playerState.z) < 2.8) {
+        showInteractPrompt(inventory.has('ITEM_TANTALUS_GOBLET') || truthLensActive ? 'Expose Phantom Feast with Tantalus Goblet' : 'Phantom Roast Boar (Requires Tantalus Goblet or Truth Lens)');
+        hasPrompt = true;
+      }
+    } else if (!hasPrompt && currentSceneId === 'AG1' && !activeDialogue) {
+      if (yggdraMesh && Math.hypot(yggdraMesh.position.x - playerState.x, yggdraMesh.position.z - playerState.z) < 3.2) {
+        showInteractPrompt('Commune with Yggdra the Ancient Bough');
+        hasPrompt = true;
+      } else if (rootWallMesh && rootWallMesh.visible && Math.hypot(rootWallMesh.position.x - playerState.x, rootWallMesh.position.z - playerState.z) < 2.5) {
+        showInteractPrompt(abilities.has('ABILITY_STARLIGHT_DASH') ? 'Pierce Root Wall with Starlight Dash' : 'Thorny Root Wall (Requires Starlight Dash)');
+        hasPrompt = true;
+      }
+    } else if (!hasPrompt && currentSceneId === 'MH1' && !activeDialogue) {
+      if (hazelMesh && Math.hypot(hazelMesh.position.x - playerState.x, hazelMesh.position.z - playerState.z) < 2.5) {
+        showInteractPrompt('Speak with Mother Hazel (The Confectioner)');
+        hasPrompt = true;
+      } else if (kettleMesh && !solvedPuzzles.has('PUZZLE_HOSPITALITY_GAMBIT') && Math.hypot(kettleMesh.position.x - playerState.x, kettleMesh.position.z - playerState.z) < 2.5) {
+        showInteractPrompt(inventory.has('ITEM_SUGAR_SPOON') ? 'Stir Boiling Kettle with Sugar Spoon' : 'Boiling Hearth Kettle (Requires Sugar Spoon)');
+        hasPrompt = true;
+      }
+    } else if (!hasPrompt && currentSceneId === 'SAN1' && !activeDialogue) {
+      if (cynthiaCrystal && Math.hypot(cynthiaCrystal.position.x - playerState.x, cynthiaCrystal.position.z - playerState.z) < 2.8) {
+        showInteractPrompt(solvedPuzzles.has('PUZZLE_HOLLOW_GLASS') ? 'Commune with Liberated Cynthia' : 'Cynthia in Glass Heart (Defeat Archillusionist Vaelor)');
+        hasPrompt = true;
+      } else if (vaelorBoss && vaelorBoss.hp > 0 && Math.hypot(vaelorBoss.mesh.position.x - playerState.x, vaelorBoss.mesh.position.z - playerState.z) < 2.8) {
+        showInteractPrompt('Confront Archillusionist Vaelor');
+        hasPrompt = true;
+      }
     }
     if (!hasPrompt) hideInteractPrompt();
+
+    // Rotate Cynthia's Dodecahedron crystal in SAN1
+    if (currentSceneId === 'SAN1' && cynthiaCrystal) {
+      cynthiaCrystal.rotation.y += 0.8 * dt;
+    }
 
     if (guard) updateGuard(guard, dt);
     if (captain) updateGuard(captain, dt);
     if (wraith) updateGuard(wraith, dt);
+    if (treeGuardian) updateGuard(treeGuardian, dt);
+    if (vaelorBoss) updateGuard(vaelorBoss, dt);
 
     if (exitCooldown > 0) exitCooldown -= dt;
     if (lockedMessageCooldown > 0) lockedMessageCooldown -= dt;
@@ -1211,9 +1374,78 @@ function createMirrorWraith(sceneId: SceneId, x: number, z: number): Guard {
   };
 }
 
+function createBossVaelor(sceneId: SceneId, x: number, z: number): Guard {
+  const mesh = new THREE.Group();
+  mesh.position.set(x, 1.2, z);
+
+  const robeMat = new THREE.MeshStandardMaterial({
+    color: 0x312e81,
+    emissive: 0x4338ca,
+    emissiveIntensity: 0.9,
+    roughness: 0.25,
+  });
+  const robe = new THREE.Mesh(new THREE.ConeGeometry(0.5, 1.5, 8), robeMat);
+  robe.castShadow = true;
+  mesh.add(robe);
+
+  const haloMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true });
+  const halo = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.04, 8, 24), haloMat);
+  halo.position.set(0, 0.95, 0);
+  halo.rotation.x = Math.PI / 2;
+  mesh.add(halo);
+
+  const maskMat = new THREE.MeshStandardMaterial({
+    color: 0xe0e7ff,
+    emissive: 0x818cf8,
+    emissiveIntensity: 0.7,
+    metalness: 0.9,
+    roughness: 0.1,
+  });
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.22, 8, 8), maskMat);
+  head.position.set(0, 0.8, 0);
+  mesh.add(head);
+
+  const bossLight = new THREE.PointLight(0x818cf8, 2.5, 8);
+  bossLight.position.set(0, 1.0, 0);
+  mesh.add(bossLight);
+
+  const barEl = document.createElement('div');
+  barEl.className = 'enemy-hp-bar boss-hp-bar';
+  const fillEl = document.createElement('div');
+  fillEl.className = 'enemy-hp-fill';
+  fillEl.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+  barEl.appendChild(fillEl);
+  damageContainer?.appendChild(barEl);
+
+  return {
+    sceneId,
+    mesh,
+    hp: 120,
+    maxHp: 120,
+    patrol: [new THREE.Vector3(x - 3, 1.2, z), new THREE.Vector3(x + 3, 1.2, z)],
+    patrolIndex: 0,
+    state: 'patrol',
+    cooldown: 0.8,
+    speed: 2.4,
+    captain: true,
+    isWraith: true,
+    hpBarEl: barEl,
+    hpFillEl: fillEl,
+    hpBarTimer: 0,
+  };
+}
+
 function buildGenericScene(id: SceneId): THREE.Group {
   const group = new THREE.Group();
-  const tint = id === 'OW1' ? 0x89a0aa : id === 'GH1' ? 0x9a86aa : id === 'GH2' ? 0x7f96b5 : id === 'HM1' ? 0x6d28d9 : 0xa68196;
+  const tint = id === 'OW1' ? 0x89a0aa
+    : id === 'GH1' ? 0x9a86aa
+    : id === 'GH2' ? 0x7f96b5
+    : id === 'HM1' ? 0x6d28d9
+    : id === 'BQ1' ? 0x881337
+    : id === 'AG1' ? 0x065f46
+    : id === 'MH1' ? 0x9a3412
+    : id === 'SAN1' ? 0x1e1b4b
+    : 0xa68196;
 
   const shell = roomShellModel.clone();
   shell.traverse((node) => {
@@ -1302,6 +1534,190 @@ function buildGenericScene(id: SceneId): THREE.Group {
 
     wraith = createMirrorWraith('HM1', 0, -2.0);
     group.add(wraith.mesh);
+  } else if (id === 'BQ1') {
+    // The Cenacle of Eternal Satiety
+    const tableTop = new THREE.Mesh(
+      new THREE.BoxGeometry(2.0, 0.7, 6.2),
+      new THREE.MeshStandardMaterial({ color: 0x271711, roughness: 0.4 })
+    );
+    tableTop.position.set(0, 0.35, 0);
+    tableTop.castShadow = true;
+    tableTop.receiveShadow = true;
+    group.add(tableTop);
+
+    const cloth = new THREE.Mesh(
+      new THREE.BoxGeometry(2.1, 0.05, 6.3),
+      new THREE.MeshStandardMaterial({ color: 0x881337, roughness: 0.7 })
+    );
+    cloth.position.set(0, 0.72, 0);
+    group.add(cloth);
+
+    // Silver tableware & candelabras
+    for (let zi = -2.2; zi <= 2.2; zi += 0.88) {
+      const plateL = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.02, 12), new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.9, roughness: 0.2 }));
+      plateL.position.set(-0.7, 0.75, zi);
+      const plateR = plateL.clone();
+      plateR.position.set(0.7, 0.75, zi);
+      group.add(plateL, plateR);
+
+      const candelabra = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.08, 0.35, 8), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.8 }));
+      candelabra.position.set(0, 0.85, zi);
+      const candleLight = new THREE.PointLight(0xf59e0b, 0.6, 2.5);
+      candleLight.position.set(0, 0.25, 0);
+      candelabra.add(candleLight);
+      group.add(candelabra);
+    }
+
+    // Roast Boar illusion center-piece
+    const isFeastDispelled = solvedPuzzles.has('PUZZLE_FEAST_SATIETY');
+    banquetBoarMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.32, 0.45, 1.2, 8),
+      new THREE.MeshStandardMaterial({
+        color: isFeastDispelled ? 0x374151 : 0xb45309,
+        emissive: isFeastDispelled ? 0x111827 : 0xd97706,
+        emissiveIntensity: 0.8,
+        roughness: isFeastDispelled ? 0.9 : 0.3
+      })
+    );
+    banquetBoarMesh.rotation.z = Math.PI / 2;
+    banquetBoarMesh.position.set(0, 0.95, 0);
+    banquetBoarMesh.castShadow = true;
+    group.add(banquetBoarMesh);
+
+    // Themis balance scale
+    themisScaleMesh = new THREE.Group();
+    const col = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.06, 0.6, 8), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9 }));
+    col.position.set(0, 1.0, -2.6);
+    themisScaleMesh.add(col);
+    group.add(themisScaleMesh);
+
+    // Lord Morvath NPC
+    morvathMesh = makeGuardMesh(0x7e22ce);
+    morvathMesh.position.set(1.6, 0.6, -1.8);
+    const morvathLight = new THREE.PointLight(0xca8a04, 1.2, 4);
+    morvathLight.position.set(0, 1.2, 0);
+    morvathMesh.add(morvathLight);
+    group.add(morvathMesh);
+
+    group.add(createLoreOrb(loreObjects[3]));
+  } else if (id === 'AG1') {
+    // The Ancient Bough
+    yggdraMesh = new THREE.Group();
+    const trunk = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.9, 1.5, 4.2, 10),
+      new THREE.MeshStandardMaterial({ color: 0x1c1917, roughness: 0.9 })
+    );
+    trunk.position.set(0, 2.1, 0);
+    trunk.castShadow = true;
+    yggdraMesh.add(trunk);
+
+    const eye = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 8, 8),
+      new THREE.MeshStandardMaterial({ color: 0x06b6d4, emissive: 0x38bdf8, emissiveIntensity: 1.8 })
+    );
+    eye.position.set(0, 2.4, 0.85);
+    yggdraMesh.add(eye);
+
+    const treeLight = new THREE.PointLight(0x06b6d4, 2.2, 7);
+    treeLight.position.set(0, 2.5, 1.0);
+    yggdraMesh.add(treeLight);
+
+    yggdraMesh.position.set(0, 0, -2.8);
+    group.add(yggdraMesh);
+
+    // Thorny root wall blocking north portal
+    rootWallMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(4.2, 2.4, 0.6),
+      new THREE.MeshStandardMaterial({ color: 0x2e1065, emissive: 0x3b0764, emissiveIntensity: 0.5, wireframe: true })
+    );
+    rootWallMesh.position.set(0, 1.2, -5.0);
+    rootWallMesh.visible = !solvedPuzzles.has('PUZZLE_ARBOREAL_WEAVE');
+    group.add(rootWallMesh);
+
+    treeGuardian = createGuard('AG1', 0, 0, true);
+    treeGuardian.mesh.traverse((node) => {
+      if (node instanceof THREE.Mesh && node.material && 'color' in node.material) {
+        (node.material as THREE.MeshStandardMaterial).color.setHex(0x15803d);
+      }
+    });
+    group.add(treeGuardian.mesh);
+
+    group.add(createLoreOrb(loreObjects[4]));
+  } else if (id === 'MH1') {
+    // Mother Hazel's Hearth
+    const hearth = new THREE.Mesh(
+      new THREE.BoxGeometry(2.6, 1.8, 0.8),
+      new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.9 })
+    );
+    hearth.position.set(0, 0.9, -4.8);
+    group.add(hearth);
+
+    const hearthLight = new THREE.PointLight(0xf97316, 3.0, 7);
+    hearthLight.position.set(0, 0.8, -4.3);
+    group.add(hearthLight);
+
+    kettleMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.32, 8, 8),
+      new THREE.MeshStandardMaterial({ color: 0x18181b, metalness: 0.8, roughness: 0.4 })
+    );
+    kettleMesh.position.set(0, 0.6, -4.4);
+    group.add(kettleMesh);
+
+    // Dollhouse shelf with miniature porcelain figurines
+    const shelf = new THREE.Mesh(
+      new THREE.BoxGeometry(0.4, 0.8, 3.2),
+      new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.7 })
+    );
+    shelf.position.set(-4.5, 0.4, 0);
+    group.add(shelf);
+
+    for (let di = -1.2; di <= 1.2; di += 0.5) {
+      const doll = new THREE.Mesh(
+        new THREE.ConeGeometry(0.08, 0.3, 6),
+        new THREE.MeshStandardMaterial({ color: 0xf472b6, emissive: 0xec4899, emissiveIntensity: 0.6 })
+      );
+      doll.position.set(-4.5, 0.95, di);
+      group.add(doll);
+    }
+
+    hazelMesh = makeGuardMesh(0xbe123c);
+    hazelMesh.position.set(1.8, 0.6, -1.8);
+    const hazelLight = new THREE.PointLight(0xf59e0b, 1.2, 4);
+    hazelLight.position.set(0, 1.2, 0);
+    hazelMesh.add(hazelLight);
+    group.add(hazelMesh);
+
+    group.add(createLoreOrb(loreObjects[5]));
+  } else if (id === 'SAN1') {
+    // The Sanctum of the Glass Heart
+    cynthiaCrystal = new THREE.Group();
+    const outerDodec = new THREE.Mesh(
+      new THREE.DodecahedronGeometry(1.2, 0),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.85 })
+    );
+    const innerSpirit = new THREE.Mesh(
+      new THREE.SphereGeometry(0.45, 12, 12),
+      new THREE.MeshStandardMaterial({ color: 0xf472b6, emissive: 0xec4899, emissiveIntensity: 2.2 })
+    );
+    cynthiaCrystal.add(outerDodec, innerSpirit);
+    const crystalLight = new THREE.PointLight(0xec4899, 2.5, 9);
+    crystalLight.position.set(0, 0, 0);
+    cynthiaCrystal.add(crystalLight);
+    cynthiaCrystal.position.set(0, 1.8, -1.0);
+    group.add(cynthiaCrystal);
+
+    // Starlight Victory Portal unsealed upon Vaelor's defeat
+    const portalGeom = new THREE.TorusGeometry(1.6, 0.1, 16, 64);
+    const portalMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true });
+    starlightPortalMesh = new THREE.Mesh(portalGeom, portalMat);
+    starlightPortalMesh.position.set(0, 1.8, -4.8);
+    starlightPortalMesh.visible = solvedPuzzles.has('PUZZLE_HOLLOW_GLASS');
+    group.add(starlightPortalMesh);
+
+    vaelorBoss = createBossVaelor('SAN1', 0, -3.2);
+    group.add(vaelorBoss.mesh);
+
+    group.add(createLoreOrb(loreObjects[6]));
   }
   return group;
 }
@@ -1326,7 +1742,15 @@ function requirementsMet(requires: string[]): boolean {
 function updateHUD(): void {
   const scene = sceneById.get(currentSceneId)!;
   if (hudZone) hudZone.textContent = scene.name;
-  if (hudQuest) hudQuest.textContent = currentSceneId === 'GH3' ? 'Q0 — Defeat the Captain' : 'Q0 — Infiltrate Fortress Barbican';
+  if (hudQuest) {
+    if (currentSceneId === 'GH3') hudQuest.textContent = 'Q0 — Defeat the Barbican Captain';
+    else if (currentSceneId === 'HM1') hudQuest.textContent = 'Q1 — Banish the Mirror Wraith';
+    else if (currentSceneId === 'BQ1') hudQuest.textContent = 'S38 — The Cenacle of Eternal Satiety';
+    else if (currentSceneId === 'AG1') hudQuest.textContent = 'Q2 — Commune with the Ancient Bough';
+    else if (currentSceneId === 'MH1') hudQuest.textContent = 'Q3 — Mother Hazel\'s Hearth';
+    else if (currentSceneId === 'SAN1') hudQuest.textContent = 'Q4 — Shatter the Glass Heart of Vaelor';
+    else hudQuest.textContent = 'Q0 — Infiltrate Fortress Barbican';
+  }
   if (hpFill) hpFill.style.width = `${Math.max(0, playerHP)}%`;
 }
 
@@ -1453,7 +1877,7 @@ function tryAttack(): void {
   SoundFX.playSlash();
   attackLungeOffset = 0.28;
 
-  const targets = [guard, captain, wraith].filter((g): g is Guard => !!g && g.state !== 'dead' && g.sceneId === currentSceneId);
+  const targets = [guard, captain, wraith, treeGuardian, vaelorBoss].filter((g): g is Guard => !!g && g.state !== 'dead' && g.sceneId === currentSceneId);
   for (const g of targets) {
     const dist = Math.hypot(g.mesh.position.x - playerState.x, g.mesh.position.z - playerState.z);
     if (dist < 1.45) {
@@ -1485,7 +1909,18 @@ function tryAttack(): void {
       g.mesh.position.z += kz;
       g.hpBarTimer = 3.5;
 
-      // Mirror Wraith Dimensional Teleport on Hit
+      // Boss Vaelor Phase 2 Shift at 50% HP
+      if (g === vaelorBoss && g.hp <= 60 && !vaelorPhase2Triggered && g.hp > 0) {
+        vaelorPhase2Triggered = true;
+        SoundFX.playBossPhaseShift();
+        cameraShake = 0.45;
+        showToast('Archillusionist Vaelor: Phase 2 Inversion — The Mirror Shatters!');
+        g.speed = 3.2;
+        g.mesh.position.set(0, 1.2, -3.2);
+        flashMesh(g.mesh, 0xf59e0b, 500);
+      }
+
+      // Mirror Wraith / Boss Dimensional Teleport on Hit
       if (g.isWraith && g.hp > 0) {
         const spots = [
           new THREE.Vector3(-3.5, 1.1, -1.0),
@@ -1504,7 +1939,24 @@ function tryAttack(): void {
       if (g.hp <= 0) {
         g.state = 'dead';
         g.mesh.parent?.remove(g.mesh);
-        if (g.isWraith) {
+        if (g === vaelorBoss) {
+          solvedPuzzles.add('PUZZLE_HOLLOW_GLASS');
+          abilities.add('ABILITY_GRAVITON_INVERSION');
+          SoundFX.playPuzzleSolved();
+          cameraShake = 0.5;
+          showToast('VICTORY: Archillusionist Vaelor Defeated! Cynthia Liberated!');
+          if (starlightPortalMesh) starlightPortalMesh.visible = true;
+          saveCheckpoint();
+          openDialogue('cynthia', 'CYNTHIA_01');
+        } else if (g === treeGuardian) {
+          solvedPuzzles.add('PUZZLE_ARBOREAL_WEAVE');
+          abilities.add('ABILITY_STARLIGHT_DASH');
+          if (rootWallMesh) rootWallMesh.visible = false;
+          SoundFX.playTreeGroan();
+          SoundFX.playPuzzleSolved();
+          showToast('Tree Guardian Uprooted: Starlight Dash Claimed!');
+          saveCheckpoint();
+        } else if (g.isWraith) {
           showToast('Mirror Wraith Banished: Halls of Mirrors Cleansed!');
           SoundFX.playPuzzleSolved();
         } else if (g.captain) {
@@ -1535,7 +1987,7 @@ function interact(): void {
     }
   }
 
-  // Dialogue interactions
+  // S00 Starlight Raven
   if (currentSceneId === 'S00' && ravenMesh) {
     const d = Math.hypot(ravenMesh.position.x - playerState.x, ravenMesh.position.z - playerState.z);
     if (d < 2.5) {
@@ -1543,7 +1995,10 @@ function interact(): void {
       else openDialogue('sable', 'SABLE_01');
       return;
     }
-  } else if (currentSceneId === 'OW1' && orinMesh) {
+  }
+
+  // OW1 Gatekeeper Orin
+  if (currentSceneId === 'OW1' && orinMesh) {
     const d = Math.hypot(orinMesh.position.x - playerState.x, orinMesh.position.z - playerState.z);
     if (d < 2.5) {
       if (activeDialogue) closeDialogue();
@@ -1552,6 +2007,7 @@ function interact(): void {
     }
   }
 
+  // GH2 Mirror Lock
   if (currentSceneId === 'GH2' && mirrorMesh && mirrorMesh.visible) {
     const d = Math.hypot(mirrorMesh.position.x - playerState.x, mirrorMesh.position.z - playerState.z);
     if (d < 2.5) {
@@ -1570,7 +2026,7 @@ function interact(): void {
     }
   }
 
-  // True Mirror in HM1
+  // HM1 True Mirror
   if (currentSceneId === 'HM1' && trueMirrorMesh && trueMirrorMesh.visible) {
     const d = Math.hypot(trueMirrorMesh.position.x - playerState.x, trueMirrorMesh.position.z - playerState.z);
     if (d < 2.5) {
@@ -1583,6 +2039,119 @@ function interact(): void {
       showToast('Puzzle Solved: True Mirror Shattered — Starlight Portal Unsealed!');
       saveCheckpoint();
       return;
+    }
+  }
+
+  // BQ1 Lord Morvath & Phantom Feast
+  if (currentSceneId === 'BQ1') {
+    if (morvathMesh) {
+      const d = Math.hypot(morvathMesh.position.x - playerState.x, morvathMesh.position.z - playerState.z);
+      if (d < 2.5) {
+        if (activeDialogue) closeDialogue();
+        else openDialogue('morvath', 'MORVATH_01');
+        return;
+      }
+    }
+    if (banquetBoarMesh && !solvedPuzzles.has('PUZZLE_FEAST_SATIETY')) {
+      const d = Math.hypot(banquetBoarMesh.position.x - playerState.x, banquetBoarMesh.position.z - playerState.z);
+      if (d < 2.8) {
+        if (inventory.has('ITEM_TANTALUS_GOBLET') || truthLensActive) {
+          solvedPuzzles.add('PUZZLE_FEAST_SATIETY');
+          (banquetBoarMesh.material as THREE.MeshStandardMaterial).color.setHex(0x374151);
+          (banquetBoarMesh.material as THREE.MeshStandardMaterial).emissive.setHex(0x111827);
+          SoundFX.playFeastWaltz();
+          SoundFX.playPuzzleSolved();
+          cameraShake = 0.28;
+          showToast('Puzzle Solved: The Feast Dissolves to Cold Ash!');
+          saveCheckpoint();
+        } else {
+          SoundFX.playLocked();
+          showToast('Phantom Satiety: Requires Truth Lens or the Tantalus Goblet');
+        }
+        return;
+      }
+    }
+  }
+
+  // AG1 Yggdra the Ancient Bough & Root Wall
+  if (currentSceneId === 'AG1') {
+    if (yggdraMesh) {
+      const d = Math.hypot(yggdraMesh.position.x - playerState.x, yggdraMesh.position.z - playerState.z);
+      if (d < 3.2) {
+        if (activeDialogue) closeDialogue();
+        else openDialogue('yggdra', 'YGGDRA_01');
+        return;
+      }
+    }
+    if (rootWallMesh && rootWallMesh.visible) {
+      const d = Math.hypot(rootWallMesh.position.x - playerState.x, rootWallMesh.position.z - playerState.z);
+      if (d < 2.5) {
+        if (abilities.has('ABILITY_STARLIGHT_DASH')) {
+          solvedPuzzles.add('PUZZLE_ARBOREAL_WEAVE');
+          rootWallMesh.visible = false;
+          SoundFX.playTreeGroan();
+          SoundFX.playPuzzleSolved();
+          showToast('Arboreal Roots Parted with Starlight Dash!');
+          saveCheckpoint();
+        } else {
+          SoundFX.playLocked();
+          showToast('Thorny Root Wall: Commune with Yggdra or claim Starlight Dash');
+        }
+        return;
+      }
+    }
+  }
+
+  // MH1 Mother Hazel & Confectionery Kettle
+  if (currentSceneId === 'MH1') {
+    if (hazelMesh) {
+      const d = Math.hypot(hazelMesh.position.x - playerState.x, hazelMesh.position.z - playerState.z);
+      if (d < 2.5) {
+        if (activeDialogue) closeDialogue();
+        else openDialogue('hazel', 'HAZEL_01');
+        return;
+      }
+    }
+    if (kettleMesh && !solvedPuzzles.has('PUZZLE_HOSPITALITY_GAMBIT')) {
+      const d = Math.hypot(kettleMesh.position.x - playerState.x, kettleMesh.position.z - playerState.z);
+      if (d < 2.5) {
+        if (inventory.has('ITEM_SUGAR_SPOON')) {
+          solvedPuzzles.add('PUZZLE_HOSPITALITY_GAMBIT');
+          SoundFX.playWitchGiggle();
+          SoundFX.playPuzzleSolved();
+          cameraShake = 0.25;
+          showToast('Puzzle Solved: Flue Unlocked with Sugar Spoon!');
+          saveCheckpoint();
+        } else {
+          SoundFX.playLocked();
+          showToast('Boiling Confectionery Kettle: Requires Witch\'s Sugar Spoon');
+        }
+        return;
+      }
+    }
+  }
+
+  // SAN1 Liberated Cynthia & Archillusionist Vaelor
+  if (currentSceneId === 'SAN1') {
+    if (cynthiaCrystal) {
+      const d = Math.hypot(cynthiaCrystal.position.x - playerState.x, cynthiaCrystal.position.z - playerState.z);
+      if (d < 2.8) {
+        if (solvedPuzzles.has('PUZZLE_HOLLOW_GLASS')) {
+          if (activeDialogue) closeDialogue();
+          else openDialogue('cynthia', 'CYNTHIA_01');
+        } else {
+          showToast('Cynthia Trapped in the Glass Heart! Defeat Archillusionist Vaelor!');
+        }
+        return;
+      }
+    }
+    if (vaelorBoss && vaelorBoss.hp > 0) {
+      const d = Math.hypot(vaelorBoss.mesh.position.x - playerState.x, vaelorBoss.mesh.position.z - playerState.z);
+      if (d < 2.8) {
+        if (activeDialogue) closeDialogue();
+        else openDialogue('vaelor', 'VAELOR_01');
+        return;
+      }
     }
   }
 }
@@ -1608,6 +2177,23 @@ const exits: Record<SceneId, ExitTrigger[]> = {
   ],
   HM1: [
     { x: 0, z: 5.0, to: 'GH3', requires: [] },
+    { x: 0, z: -5.0, to: 'BQ1', requires: ['PUZZLE_TRUE_MIRROR'] },
+  ],
+  BQ1: [
+    { x: 0, z: 5.0, to: 'HM1', requires: [] },
+    { x: 0, z: -5.0, to: 'AG1', requires: ['PUZZLE_FEAST_SATIETY'] },
+  ],
+  AG1: [
+    { x: 0, z: 5.0, to: 'BQ1', requires: [] },
+    { x: 0, z: -5.0, to: 'MH1', requires: ['PUZZLE_ARBOREAL_WEAVE'] },
+  ],
+  MH1: [
+    { x: 0, z: 5.0, to: 'AG1', requires: [] },
+    { x: 0, z: -5.0, to: 'SAN1', requires: ['PUZZLE_HOSPITALITY_GAMBIT'] },
+  ],
+  SAN1: [
+    { x: 0, z: 5.0, to: 'MH1', requires: [] },
+    { x: 0, z: -5.0, to: 'S00', requires: ['PUZZLE_HOLLOW_GLASS'] },
   ],
 };
 
@@ -1620,8 +2206,16 @@ function checkExits(): void {
         exitCooldown = 1.5;
         loadScene(exit.to, exit.spawn);
       } else if (lockedMessageCooldown <= 0) {
-        SoundFX.playLocked();
-        const reqLabels = exit.requires.map(r => r === 'ITEM_IRON_NAIL' ? 'Iron Nail' : r === 'PUZZLE_MIRROR_LOCK' ? 'Mirror Lock' : r);
+        const reqLabels = exit.requires.map(r =>
+          r === 'ITEM_IRON_NAIL' ? 'Iron Nail'
+          : r === 'PUZZLE_MIRROR_LOCK' ? 'Mirror Lock'
+          : r === 'PUZZLE_TRUE_MIRROR' ? 'True Mirror Cleansed'
+          : r === 'PUZZLE_FEAST_SATIETY' ? 'Feast Satiety Dispelled'
+          : r === 'PUZZLE_ARBOREAL_WEAVE' ? 'Arboreal Root Weave'
+          : r === 'PUZZLE_HOSPITALITY_GAMBIT' ? 'Hospitality Gambit Solved'
+          : r === 'PUZZLE_HOLLOW_GLASS' ? 'Glass Heart Shattered'
+          : r
+        );
         showToast(`Barred Gate: Requires ${reqLabels.join(', ')}`);
         lockedMessageCooldown = 2.2;
       }
