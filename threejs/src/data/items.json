@@ -10,7 +10,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "weaponStats": {
       "damageMin": 18,
       "damageMax": 26,
@@ -39,7 +39,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "weaponStats": {
       "damageMin": 45,
       "damageMax": 68,
@@ -68,7 +68,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "weaponStats": {
       "damageMin": 52,
       "damageMax": 74,
@@ -97,7 +97,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 4,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Permanent tool. Anchor impossible architecture in Relativity Cloister and reverse-entropy keystones.",
     "tags": [
       "tool",
@@ -117,7 +117,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Triggers acoustic resonance puzzles, reveals invisible hollow walls, and synchronizes with wind-baffle harps.",
     "tags": [
       "tool",
@@ -137,7 +137,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Hold [Space] to activate Veil Sight: dissolves false walls, reveals true pit traps, and exposes mimic chests.",
     "tags": [
       "tool",
@@ -157,7 +157,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Unspools behind Kaelen to prevent spatial displacement in shifting maze corridors.",
     "tags": [
       "tool",
@@ -176,7 +176,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+50% combat parry window; completely silences footstep noise; 3-beat cadence charges a 360° sonic stun pulse.",
     "tags": [
       "accessory",
@@ -196,7 +196,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Projects a cone of ghost-light revealing invisible ethereal pathways and forcing poltergeists to manifest.",
     "tags": [
       "tool",
@@ -216,7 +216,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "armorStats": {
       "physicalDef": 24,
       "etherealDef": 38,
@@ -242,7 +242,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Pins hydraulic shifting labyrinth walls to guide bollards, establishing a permanent safe thoroughfare.",
     "tags": [
       "tool",
@@ -261,7 +261,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Permanent Starlight Veil: dispels pitch-black shadow mists, grants immunity to dark-drain environmental hazards, and allows entry to the Abyssal Core.",
     "tags": [
       "accessory",
@@ -281,7 +281,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Unlocks all fortress dumbwaiter chutes, pantry cupboards, and cellar vaults across all 27 zones.",
     "tags": [
       "key",
@@ -300,7 +300,7 @@
     "isConsumable": true,
     "isKeyItem": false,
     "maxStack": 10,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Restores 50 HP and 30 FP; grants +15% parry and rhythm timing accuracy for 10 minutes.",
     "tags": [
       "consumable",
@@ -319,7 +319,7 @@
     "isConsumable": true,
     "isKeyItem": false,
     "maxStack": 5,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Used to cleanse calcified prism mirrors; coats weapon in holy fire for 3 minutes (+20 radiant damage).",
     "tags": [
       "consumable",
@@ -339,7 +339,7 @@
     "isConsumable": true,
     "isKeyItem": false,
     "maxStack": 20,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Allows attempting lockpick mini-games on chest and door tumblers.",
     "tags": [
       "consumable",
@@ -358,7 +358,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Permanently increases lockpicking speed by +15%.",
     "tags": [
       "memory_shard",
@@ -377,7 +377,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Resting restores full health and grants +10 max stamina for 20 minutes.",
     "tags": [
       "memory_shard",
@@ -396,7 +396,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Phantasmal Hounds hesitate 1.5 seconds before attacking Kaelen.",
     "tags": [
       "memory_shard",
@@ -415,7 +415,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Increases max FP by +15 and immunity to floral sleep spores.",
     "tags": [
       "memory_shard",
@@ -434,7 +434,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+10% dodge invulnerability frames.",
     "tags": [
       "memory_shard",
@@ -453,7 +453,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Reveals hidden crypt illusions without consuming Truth Lens charges.",
     "tags": [
       "memory_shard",
@@ -472,7 +472,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Unlocks the True Dawn Ending when confronting Vaelor.",
     "tags": [
       "memory_shard",
@@ -491,7 +491,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Records 8 seconds of locomotion; activate to spawn a controllable Temporal Echo that distracts sentries.",
     "tags": [
       "accessory",
@@ -510,7 +510,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Enables backward locomotion to rebuild fractured architectural bridges.",
     "tags": [
       "tool",
@@ -529,7 +529,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+2 INT; reduces duration of Confused and Illusion debuffs by 50%.",
     "tags": [
       "accessory",
@@ -548,7 +548,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Strike near illusory sentries to instantly shatter their physical projection.",
     "tags": [
       "tool",
@@ -567,7 +567,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+20% critical strike chance when attacking illusion clones and mirage bosses.",
     "tags": [
       "accessory",
@@ -586,7 +586,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "armorStats": {
       "physicalDef": 8,
       "etherealDef": 24,
@@ -611,7 +611,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Summons Zephyr the falcon to retrieve distant keys or drop smoke bombs on sentries.",
     "tags": [
       "tool",
@@ -630,7 +630,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+15% parry and rhythm timing window; displays HUD real-time day/night soft clock.",
     "tags": [
       "accessory",
@@ -649,7 +649,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+15 Ethereal Def; upon taking fatal damage, triggers 2.5s of invulnerable spirit mist (5 min cooldown).",
     "tags": [
       "accessory",
@@ -668,7 +668,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Grapple to overhead steam pipes, parapet copings, and high ventilation grates.",
     "tags": [
       "tool",
@@ -687,7 +687,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+10% sprint speed, +1 Luck (increases rare loot drops).",
     "tags": [
       "accessory",
@@ -706,7 +706,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Glide across exterior fortress chasms on thermal wind updrafts.",
     "tags": [
       "tool",
@@ -725,7 +725,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "armorStats": {
       "physicalDef": 14,
       "etherealDef": 32,
@@ -750,7 +750,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+1 STR; unlocks the one-way Colosseum shortcut descending directly into the Undercrypt.",
     "tags": [
       "relic",
@@ -769,7 +769,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Unlocks the main Gatehouse portcullis.",
     "tags": [
       "key",
@@ -787,7 +787,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Unlocks all cell gates in the Abyssal Prison Block.",
     "tags": [
       "key",
