@@ -1,156 +1,1307 @@
 {
-  "version": 1,
-  "unitMeters": 1,
-  "camera": { "projection": "orthographic", "pitchDegrees": 35.264, "yawDegrees": 45 },
-  "artDirection": "moonlit_painterly_diorama",
-  "scenes": [
+  "version": 2,
+  "title": "VEILKEEP: The Illusionist's Fortress \u2014 Canonical World Manifest v2.0",
+  "canonicalScaleMetersPerUnit": 1.0,
+  "camera": {
+    "projection": "orthographic_isometric",
+    "pitchDegrees": 35.264,
+    "yawDegrees": 45.0
+  },
+  "chronology": {
+    "mortalYear": 1900,
+    "lockdownMortalYearsElapsed": 14,
+    "internalSubjectiveWintersElapsed": 80,
+    "timeDilationRatio": 5.714,
+    "nightLoopDurationSeconds": 2700,
+    "phases": [
+      {
+        "id": "PHASE_1_DUSK",
+        "startSec": 0,
+        "endSec": 900,
+        "guardAlertMod": 1.0
+      },
+      {
+        "id": "PHASE_2_NIGHTFALL_SHIFT_CHANGE",
+        "startSec": 900,
+        "endSec": 1800,
+        "shiftChangeWindowSec": [
+          870,
+          960
+        ],
+        "guardAlertMod": 0.85
+      },
+      {
+        "id": "PHASE_3_WITCHING_MIDNIGHT",
+        "startSec": 1800,
+        "endSec": 2400,
+        "voidRealmOpen": true,
+        "astronomyAligned": true,
+        "guardAlertMod": 1.1
+      },
+      {
+        "id": "PHASE_4_FALSE_DAWN_RESET",
+        "startSec": 2400,
+        "endSec": 2700,
+        "boilerPressurePSI": 160,
+        "guardAlertMod": 1.25
+      }
+    ]
+  },
+  "crpgSystems": {
+    "origins": [
+      {
+        "id": "ORIGIN_ALCHEMIST",
+        "name": "The Gutter-Alchemist of Greyport",
+        "stats": {
+          "INT": 2,
+          "LCK": 1,
+          "STR": -1
+        },
+        "startingItems": [
+          "ITEM_VOLATILE_SULFUR_POUCH"
+        ]
+      },
+      {
+        "id": "ORIGIN_CHARLATAN",
+        "name": "The Velvet-Tongued Confidence Man",
+        "stats": {
+          "CHA": 2,
+          "AGI": 1,
+          "VIT": -1
+        },
+        "enablesSocialDisguise": true
+      },
+      {
+        "id": "ORIGIN_ENFORCER",
+        "name": "The Dockside Pit-Cutthroat",
+        "stats": {
+          "STR": 2,
+          "VIT": 1,
+          "CHA": -1
+        },
+        "staggerBonus": 0.25
+      },
+      {
+        "id": "ORIGIN_ANTIQUARIAN",
+        "name": "The Occult Reliquary Fence",
+        "stats": {
+          "LCK": 2,
+          "INT": 1,
+          "AGI": -1
+        },
+        "cursePenaltyReduction": 0.5
+      }
+    ],
+    "traits": [
+      {
+        "id": "TRAIT_COMPULSIVE_MAGPIE",
+        "goldMultiplier": 1.25,
+        "impulseCheckStat": "INT",
+        "impulseCheckDC": 11
+      },
+      {
+        "id": "TRAIT_GLASS_EYED_SKEPTIC",
+        "magicResistBonus": 0.3,
+        "disablesChapelBlessings": true
+      },
+      {
+        "id": "TRAIT_CLOCKWORK_EAR",
+        "timingWindowBonus": 0.2,
+        "sonicVulnerabilityPenalty": 0.5
+      },
+      {
+        "id": "TRAIT_CLAUSTROPHILE",
+        "ventSpeedBonus": 0.3,
+        "openArenaDodgePenalty": -0.1
+      }
+    ],
+    "convictions": [
+      "CONVICTION_RATIONALISM",
+      "CONVICTION_EMPATHY",
+      "CONVICTION_SOLIPSISM"
+    ],
+    "musicBoxRestoration": {
+      "casingShards": [
+        "SHARD_01_GATE",
+        "SHARD_02_HEARTH",
+        "SHARD_03_GLASS",
+        "SHARD_04_CALLIOPE",
+        "SHARD_05_PERSPECTIVE",
+        "SHARD_06_COG",
+        "SHARD_07_CRYPT"
+      ],
+      "brassCylinders": [
+        "CYLINDER_01_HARMONY_MS5",
+        "CYLINDER_02_GRIEF_HA5",
+        "CYLINDER_03_TRUTH_LB5"
+      ]
+    }
+  },
+  "traversalBrands": [
+    {
+      "id": "ABILITY_WALL_LEAP",
+      "name": "The Shadow Mantle",
+      "sourceBoss": "Brutus the Iron Cleaver",
+      "arenaScene": "OW5"
+    },
+    {
+      "id": "ABILITY_AIR_DASH",
+      "name": "The Starlight Dart",
+      "sourceBoss": "Vesper the Swift-Stitch",
+      "arenaScene": "M2"
+    },
+    {
+      "id": "ABILITY_GRAV_INVERSION",
+      "name": "The Graviton Brand",
+      "sourceBoss": "Magus Malakor the Void-Eyed",
+      "arenaScene": "CS4"
+    },
+    {
+      "id": "ABILITY_MIRROR_PHASE",
+      "name": "The Mirror Phase",
+      "sourceBoss": "Duchess Seraphina Vane",
+      "arenaScene": "CO3"
+    }
+  ],
+  "mvpVerticalSliceScenes": [
     {
       "id": "S00",
-      "name": "Approach & Sunken Courtyard",
+      "name": "The Approach & Sunken Courtyard",
       "zone": "approach",
+      "tier": 2,
+      "elevationMeters": 0,
       "art": "moonlit_diorama",
-      "bounds": { "width": 12, "height": 12 },
-      "spawn": [0, 0.6, 3],
-      "exits": [
-        { "to": "OW1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false }
+      "model": "assets/models/s00_courtyard.glb",
+      "bounds": {
+        "width": 16,
+        "height": 12
+      },
+      "spawn": [
+        0,
+        0.6,
+        3
       ],
-      "encounterVariant": null
+      "surfaces": [
+        {
+          "type": "stone",
+          "noiseMultiplier": 1.0,
+          "traction": 1.0
+        },
+        {
+          "type": "moss_hedge",
+          "noiseMultiplier": 0.35,
+          "traction": 1.0,
+          "stealthBonus": 0.25
+        },
+        {
+          "type": "water_sluice",
+          "noiseMultiplier": 1.5,
+          "traction": 0.85,
+          "conductsElectricity": true
+        }
+      ],
+      "puzzles": [
+        {
+          "id": "PUZ_S00_BRAMBLES",
+          "solutions": [
+            {
+              "method": "OPTICAL_BEACON",
+              "requires": []
+            },
+            {
+              "method": "ALCHEMICAL_BURN",
+              "requires": [
+                "ORIGIN_ALCHEMIST"
+              ]
+            },
+            {
+              "method": "CLIFF_TRELLIS_BYPASS",
+              "requires": [
+                "STAT_AGI_11"
+              ]
+            }
+          ]
+        }
+      ],
+      "exits": [
+        {
+          "id": "S00_TO_OW1",
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            5
+          ],
+          "requires": [
+            "PUZ_S00_BRAMBLES"
+          ],
+          "oneWay": false
+        },
+        {
+          "id": "S00_TO_GH4",
+          "to": "GH4",
+          "spawn": [
+            -3,
+            0.6,
+            2
+          ],
+          "requires": [
+            "STAT_AGI_11"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "OW1",
-      "name": "Outer Wards Courtyard",
+      "name": "Outer Wards Courtyard & Panopticon",
       "zone": "outer_wards",
+      "tier": 2,
+      "elevationMeters": 5,
       "art": "moonlit_diorama",
-      "bounds": { "width": 18, "height": 14 },
-      "spawn": [0, 0.6, 2],
-      "items": [
-        { "id": "ITEM_IRON_NAIL", "at": [2, 0.5, -1], "requires": [] }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 20,
+        "height": 16
+      },
+      "spawn": [
+        0,
+        0.6,
+        5
+      ],
+      "pickups": [
+        {
+          "id": "ITEM_IRON_NAIL",
+          "position": [
+            -4,
+            0.5,
+            -2
+          ],
+          "reusable": true
+        },
+        {
+          "id": "ITEM_BRASS_COG",
+          "position": [
+            3,
+            0.5,
+            2
+          ],
+          "reusable": false
+        },
+        {
+          "id": "SHARD_01_GATE",
+          "position": [
+            6,
+            0.5,
+            -4
+          ],
+          "requires": [
+            "SKILL_LOCKPICK_2"
+          ]
+        }
+      ],
+      "puzzles": [
+        {
+          "id": "PUZ_38_PANOPTICON_GAZE",
+          "solutions": [
+            {
+              "method": "TRUTHFUL_STATUE_SHIELD_REFLECT",
+              "requires": []
+            },
+            {
+              "method": "BOILER_SOOT_FOULING",
+              "requires": [
+                "ITEM_BRASS_COG"
+              ]
+            },
+            {
+              "method": "ZEPHYR_CLOAK_DRAPE",
+              "requires": [
+                "ITEM_PIGEON_WHISTLE"
+              ]
+            }
+          ]
+        }
       ],
       "exits": [
-        { "to": "S00", "spawn": [0, 0.6, 3], "requires": [], "oneWay": false },
-        { "to": "GH1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false }
-      ],
-      "encounterVariant": null
+        {
+          "id": "OW1_TO_S00",
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            -4
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "id": "OW1_TO_GH1",
+          "to": "GH1",
+          "spawn": [
+            0,
+            0.6,
+            4
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "id": "OW1_TO_B1",
+          "to": "B1",
+          "spawn": [
+            5,
+            0.6,
+            0
+          ],
+          "requires": [
+            "ITEM_BARRACKS_POSTERN_KEY"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "GH1",
-      "name": "Gatehouse Approach",
+      "name": "Gatehouse Exterior & Orin's Watch",
       "zone": "gatehouse",
+      "tier": 2,
+      "elevationMeters": 10,
       "art": "moonlit_diorama",
-      "bounds": { "width": 14, "height": 12 },
-      "spawn": [0, 0.6, 2],
-      "exits": [
-        { "to": "OW1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
-        { "to": "GH2", "spawn": [0, 0.6, 2], "requires": ["ITEM_IRON_NAIL"], "oneWay": false }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 12
+      },
+      "spawn": [
+        0,
+        0.6,
+        4
       ],
-      "encounterVariant": null
+      "npcs": [
+        {
+          "id": "NPC_ORIN",
+          "name": "Gatekeeper Orin",
+          "dialogueTree": "SCENE_02_ORIN",
+          "checks": [
+            "ITEM_IRON_NAIL",
+            "STAT_CHA_9",
+            "STAT_STR_11"
+          ],
+          "failForwardEvent": "EVENT_ORIN_PANIC_STEAM_JAM"
+        }
+      ],
+      "exits": [
+        {
+          "id": "GH1_TO_OW1",
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            -5
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "id": "GH1_TO_GH2",
+          "to": "GH2",
+          "spawn": [
+            0,
+            0.6,
+            4
+          ],
+          "requires": [
+            "ORIN_RESOLVED_OR_FAIL_FORWARD"
+          ],
+          "oneWay": false
+        },
+        {
+          "id": "GH1_TO_GH4",
+          "to": "GH4",
+          "spawn": [
+            0,
+            0.6,
+            0
+          ],
+          "requires": [
+            "SKILL_CLIMBING_2"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "GH2",
-      "name": "Gatehouse Mirror Lock",
+      "name": "Gatehouse Mirror Lock Interior",
       "zone": "gatehouse",
+      "tier": 2,
+      "elevationMeters": 12,
       "art": "moonlit_diorama",
-      "bounds": { "width": 14, "height": 12 },
-      "spawn": [0, 0.6, 2],
-      "puzzle": "PUZZLE_MIRROR_LOCK",
-      "exits": [
-        { "to": "GH1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
-        { "to": "GH3", "spawn": [0, 0.6, 2], "requires": ["PUZZLE_MIRROR_LOCK"], "oneWay": false }
+      "model": "assets/models/mirror_lock.glb",
+      "bounds": {
+        "width": 16,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        4
       ],
-      "encounterVariant": null
+      "puzzles": [
+        {
+          "id": "PUZ_GH2_MIRROR_LOCK",
+          "solutions": [
+            {
+              "method": "ROTATE_MIRRORS_45_90_135",
+              "requires": []
+            },
+            {
+              "method": "IRON_NAIL_GROUND_FAULT",
+              "requires": [
+                "ITEM_IRON_NAIL"
+              ]
+            },
+            {
+              "method": "STEAM_PISTON_BYPASS",
+              "requires": [
+                "ITEM_BRASS_COG"
+              ]
+            }
+          ]
+        }
+      ],
+      "exits": [
+        {
+          "id": "GH2_TO_GH1",
+          "to": "GH1",
+          "spawn": [
+            0,
+            0.6,
+            -4
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "id": "GH2_TO_GH3",
+          "to": "GH3",
+          "spawn": [
+            0,
+            0.6,
+            4
+          ],
+          "requires": [
+            "PUZ_GH2_MIRROR_LOCK"
+          ],
+          "oneWay": false
+        },
+        {
+          "id": "GH2_TO_SQ1",
+          "to": "SQ1",
+          "spawn": [
+            0,
+            0.6,
+            5
+          ],
+          "requires": [
+            "PUZ_GH2_MIRROR_LOCK",
+            "ITEM_GATEHOUSE_KEY"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "GH3",
-      "name": "Captain's Landing",
+      "name": "Captain's Landing & Bastion Overlook",
       "zone": "gatehouse",
+      "tier": 2,
+      "elevationMeters": 18,
       "art": "moonlit_diorama",
-      "bounds": { "width": 18, "height": 14 },
-      "spawn": [0, 0.6, 2],
-      "rewards": ["ABILITY_WALL_LEAP"],
-      "exits": [
-        { "to": "GH2", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
-        { "to": "HM1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
-        { "to": "S00", "spawn": [0, 0.6, 3], "requires": [], "oneWay": true }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 18,
+        "height": 18
+      },
+      "spawn": [
+        0,
+        0.6,
+        4
       ],
-      "encounterVariant": "captain_finale"
+      "encounter": {
+        "id": "ENC_GH3_CAPTAIN",
+        "bossName": "Brutus the Iron Cleaver / Gatehouse Captain",
+        "lethalReward": [
+          "ABILITY_WALL_LEAP",
+          "ITEM_GATEHOUSE_KEY"
+        ],
+        "nonLethalMethods": [
+          "DROP_COUNTERWEIGHT_CAGE",
+          "STEALTH_PICKPOCKET_KEY"
+        ],
+        "nonLethalBonusXP": 150
+      },
+      "exits": [
+        {
+          "id": "GH3_TO_GH2",
+          "to": "GH2",
+          "spawn": [
+            0,
+            0.6,
+            -4
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "id": "GH3_TO_S00_SHORTCUT",
+          "to": "S00",
+          "spawn": [
+            5,
+            0.6,
+            -2
+          ],
+          "requires": [
+            "ABILITY_WALL_LEAP"
+          ],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "B1",
+      "name": "Barracks Postern",
+      "zone": "extended",
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "GH4",
+      "name": "Gatehouse Vent Ascent",
+      "zone": "extended",
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "GH1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "SQ1",
+      "name": "Servants Quarters",
+      "zone": "extended",
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "GH1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "HM1",
-      "name": "Halls of Mirrors Entry",
-      "zone": "halls_of_mirrors",
+      "name": "Halls of Mirrors",
+      "zone": "extended",
       "art": "moonlit_diorama",
-      "bounds": { "width": 16, "height": 14 },
-      "spawn": [0, 0.6, 2],
-      "puzzle": "PUZZLE_TRUE_MIRROR",
-      "exits": [
-        { "to": "GH3", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
-        { "to": "BQ1", "spawn": [0, 0.6, 5], "requires": [], "oneWay": false }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
       ],
-      "encounterVariant": null
+      "exits": [
+        {
+          "to": "GH3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "BQ1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [
+            "PUZZLE_TRUE_MIRROR"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "BQ1",
-      "name": "The Cenacle of Eternal Satiety",
-      "zone": "grand_refectory",
+      "name": "Banquet of Satiety",
+      "zone": "extended",
       "art": "moonlit_diorama",
-      "bounds": { "width": 22, "height": 16 },
-      "spawn": [0, 0.6, 5],
-      "puzzle": "PUZZLE_FEAST_SATIETY",
-      "items": [
-        { "id": "ITEM_TANTALUS_GOBLET", "at": [0, 0.5, 0], "requires": [] }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
       ],
       "exits": [
-        { "to": "HM1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false },
-        { "to": "AG1", "spawn": [0, 0.6, 5], "requires": ["PUZZLE_FEAST_SATIETY"], "oneWay": false }
-      ],
-      "encounterVariant": null
+        {
+          "to": "HM1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "AG1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [
+            "PUZZLE_FEAST_SATIETY"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "AG1",
-      "name": "The Ancient Bough",
-      "zone": "dreaming_gardens",
+      "name": "Ancient Bough",
+      "zone": "extended",
       "art": "moonlit_diorama",
-      "bounds": { "width": 20, "height": 16 },
-      "spawn": [0, 0.6, 5],
-      "puzzle": "PUZZLE_ARBOREAL_WEAVE",
-      "rewards": ["ABILITY_STARLIGHT_DASH"],
-      "exits": [
-        { "to": "BQ1", "spawn": [0, 0.6, 5], "requires": [], "oneWay": false },
-        { "to": "MH1", "spawn": [0, 0.6, 4], "requires": ["PUZZLE_ARBOREAL_WEAVE"], "oneWay": false }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
       ],
-      "encounterVariant": null
+      "exits": [
+        {
+          "to": "BQ1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "MH1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [
+            "PUZZLE_ARBOREAL_WEAVE"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "MH1",
-      "name": "Mother Hazel's Hearth",
-      "zone": "dollhouse",
+      "name": "Mother Hazel Hearth",
+      "zone": "extended",
       "art": "moonlit_diorama",
-      "bounds": { "width": 14, "height": 14 },
-      "spawn": [0, 0.6, 4],
-      "puzzle": "PUZZLE_HOSPITALITY_GAMBIT",
-      "items": [
-        { "id": "ITEM_SUGAR_SPOON", "at": [2, 0.5, 1], "requires": [] }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
       ],
       "exits": [
-        { "to": "AG1", "spawn": [0, 0.6, 5], "requires": [], "oneWay": false },
-        { "to": "SAN1", "spawn": [0, 0.6, 7], "requires": ["PUZZLE_HOSPITALITY_GAMBIT"], "oneWay": false }
-      ],
-      "encounterVariant": null
+        {
+          "to": "AG1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "SAN1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [
+            "PUZZLE_HOSPITALITY_GAMBIT"
+          ],
+          "oneWay": false
+        }
+      ]
     },
     {
       "id": "SAN1",
-      "name": "The Sanctum of the Glass Heart",
-      "zone": "sanctum",
+      "name": "Sanctum of Vaelor",
+      "zone": "extended",
       "art": "moonlit_diorama",
-      "bounds": { "width": 24, "height": 20 },
-      "spawn": [0, 0.6, 7],
-      "puzzle": "PUZZLE_HOLLOW_GLASS",
-      "rewards": ["ABILITY_GRAVITON_INVERSION"],
-      "exits": [
-        { "to": "MH1", "spawn": [0, 0.6, 4], "requires": [], "oneWay": false },
-        { "to": "S00", "spawn": [0, 0.6, 3], "requires": [], "oneWay": true }
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
       ],
-      "encounterVariant": "vaelor_boss"
+      "exits": [
+        {
+          "to": "MH1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [
+            "PUZZLE_HOLLOW_GLASS"
+          ],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RC1",
+      "name": "Relativity Cloister",
+      "zone": "extended",
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": []
+    },
+    {
+      "id": "BT1",
+      "name": "Belfry of the Void",
+      "zone": "extended",
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": []
+    }
+  ],
+  "macroZoneGraph28": [
+    {
+      "zoneId": "S00",
+      "name": "Approach & Sunken Courtyard",
+      "tier": 2,
+      "elevation": 0,
+      "neighbors": [
+        "OW",
+        "GH"
+      ]
+    },
+    {
+      "zoneId": "OW",
+      "name": "Outer Wards",
+      "tier": 2,
+      "elevation": 5,
+      "neighbors": [
+        "S00",
+        "GH",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "zoneId": "GH",
+      "name": "Gatehouse",
+      "tier": 2,
+      "elevation": 12,
+      "neighbors": [
+        "S00",
+        "OW",
+        "SQ",
+        "HM"
+      ]
+    },
+    {
+      "zoneId": "SQ",
+      "name": "Servants' Quarters",
+      "tier": 2,
+      "elevation": 15,
+      "neighbors": [
+        "GH",
+        "K",
+        "SH",
+        "B",
+        "C",
+        "HM",
+        "DG"
+      ]
+    },
+    {
+      "zoneId": "K",
+      "name": "Kitchens",
+      "tier": 2,
+      "elevation": 12,
+      "neighbors": [
+        "SQ",
+        "SH",
+        "BF",
+        "U"
+      ]
+    },
+    {
+      "zoneId": "SH",
+      "name": "Seneschal's Household",
+      "tier": 2,
+      "elevation": 15,
+      "neighbors": [
+        "SQ",
+        "K",
+        "BQ",
+        "RD"
+      ]
+    },
+    {
+      "zoneId": "B",
+      "name": "Guard Barracks",
+      "tier": 2,
+      "elevation": 10,
+      "neighbors": [
+        "OW",
+        "SQ",
+        "PB",
+        "TR",
+        "CO"
+      ]
+    },
+    {
+      "zoneId": "C",
+      "name": "Chapel & Consecrated Solar Vestry",
+      "tier": 3,
+      "elevation": 60,
+      "neighbors": [
+        "SQ",
+        "RD",
+        "U",
+        "OW"
+      ]
+    },
+    {
+      "zoneId": "HM",
+      "name": "Halls of Mirrors",
+      "tier": 3,
+      "elevation": 65,
+      "neighbors": [
+        "GH",
+        "SQ",
+        "AL",
+        "ME"
+      ]
+    },
+    {
+      "zoneId": "AL",
+      "name": "Arcane Library & Flayed Scriptorium",
+      "tier": 3,
+      "elevation": 70,
+      "neighbors": [
+        "HM",
+        "ME",
+        "BF",
+        "AL_LAB"
+      ]
+    },
+    {
+      "zoneId": "ME",
+      "name": "Menagerie & Glacial Pavilion",
+      "tier": 3,
+      "elevation": 68,
+      "neighbors": [
+        "HM",
+        "AL",
+        "EN",
+        "DG"
+      ]
+    },
+    {
+      "zoneId": "EN",
+      "name": "Thaumaturges' Enclave & Crucible",
+      "tier": 1,
+      "elevation": -35,
+      "neighbors": [
+        "TR",
+        "ME",
+        "U"
+      ]
+    },
+    {
+      "zoneId": "TR",
+      "name": "Trophy Hall",
+      "tier": 2,
+      "elevation": 20,
+      "neighbors": [
+        "B",
+        "EN",
+        "GA",
+        "HA",
+        "U"
+      ]
+    },
+    {
+      "zoneId": "GA",
+      "name": "Genie Alcove",
+      "tier": 2,
+      "elevation": 20,
+      "neighbors": [
+        "TR"
+      ]
+    },
+    {
+      "zoneId": "HA",
+      "name": "Haunted Manor Suites",
+      "tier": 2,
+      "elevation": 22,
+      "neighbors": [
+        "TR",
+        "BQ"
+      ]
+    },
+    {
+      "zoneId": "BQ",
+      "name": "The Cenacle of Eternal Satiety",
+      "tier": 2,
+      "elevation": 15,
+      "neighbors": [
+        "SH",
+        "HA"
+      ]
+    },
+    {
+      "zoneId": "BF",
+      "name": "Aether-Steam Foundry & Boiler Core",
+      "tier": 1,
+      "elevation": -45,
+      "neighbors": [
+        "K",
+        "U",
+        "AL",
+        "CS",
+        "LB"
+      ]
+    },
+    {
+      "zoneId": "PB",
+      "name": "Abyssal Prison Block & Oubliette",
+      "tier": 1,
+      "elevation": -65,
+      "neighbors": [
+        "B",
+        "U"
+      ]
+    },
+    {
+      "zoneId": "U",
+      "name": "Undercrypt",
+      "tier": 1,
+      "elevation": -50,
+      "neighbors": [
+        "K",
+        "BF",
+        "C",
+        "PB",
+        "LB",
+        "TR",
+        "CO",
+        "EN"
+      ]
+    },
+    {
+      "zoneId": "LB",
+      "name": "Daedalian Brass Labyrinth",
+      "tier": 1,
+      "elevation": -85,
+      "neighbors": [
+        "U",
+        "BF"
+      ]
+    },
+    {
+      "zoneId": "RD",
+      "name": "Skeptic's Refectory",
+      "tier": 3,
+      "elevation": 85,
+      "neighbors": [
+        "C",
+        "RS",
+        "BF",
+        "CS",
+        "SH"
+      ]
+    },
+    {
+      "zoneId": "DG",
+      "name": "Dreaming Gardens, Winter Solarium & Dollhouse",
+      "tier": 3,
+      "elevation": 80,
+      "neighbors": [
+        "SQ",
+        "ME",
+        "RS",
+        "CS",
+        "RG",
+        "AL_LAB"
+      ]
+    },
+    {
+      "zoneId": "AL_LAB",
+      "name": "Alchemist's Lab",
+      "tier": 3,
+      "elevation": 78,
+      "neighbors": [
+        "DG",
+        "AL"
+      ]
+    },
+    {
+      "zoneId": "RS",
+      "name": "Relativity Cloister",
+      "tier": 3,
+      "elevation": 95,
+      "neighbors": [
+        "DG",
+        "RD",
+        "CS"
+      ]
+    },
+    {
+      "zoneId": "CO",
+      "name": "The Veil Colosseum",
+      "tier": 2,
+      "elevation": 30,
+      "neighbors": [
+        "B",
+        "PH",
+        "CS",
+        "U"
+      ]
+    },
+    {
+      "zoneId": "PH",
+      "name": "Phantasmagoria Playhouse",
+      "tier": 2,
+      "elevation": 35,
+      "neighbors": [
+        "CO",
+        "MS",
+        "CS"
+      ]
+    },
+    {
+      "zoneId": "MS",
+      "name": "Gilded Music Salon & Conservatory",
+      "tier": 2,
+      "elevation": 40,
+      "neighbors": [
+        "PH",
+        "CR",
+        "CS"
+      ]
+    },
+    {
+      "zoneId": "CS",
+      "name": "Clockwork Spire",
+      "tier": 4,
+      "elevation": 135,
+      "neighbors": [
+        "DG",
+        "BF",
+        "RS",
+        "RD",
+        "CO",
+        "PH",
+        "MS",
+        "CR",
+        "EY",
+        "RG",
+        "SA"
+      ]
+    },
+    {
+      "zoneId": "CR",
+      "name": "Chronomantic Scriptorium",
+      "tier": 4,
+      "elevation": 140,
+      "neighbors": [
+        "CS",
+        "MS"
+      ]
+    },
+    {
+      "zoneId": "EY",
+      "name": "High Eyrie of the Sky-Sovereign",
+      "tier": 4,
+      "elevation": 175,
+      "neighbors": [
+        "CS",
+        "RG",
+        "AV",
+        "C"
+      ]
+    },
+    {
+      "zoneId": "RG",
+      "name": "Rooftop Gardens",
+      "tier": 4,
+      "elevation": 150,
+      "neighbors": [
+        "CS",
+        "DG",
+        "EY",
+        "AV",
+        "AT"
+      ]
+    },
+    {
+      "zoneId": "AV",
+      "name": "Grand Columbarium & Starlight Aviary",
+      "tier": 4,
+      "elevation": 160,
+      "neighbors": [
+        "RG",
+        "AT",
+        "EY"
+      ]
+    },
+    {
+      "zoneId": "AT",
+      "name": "Astronomy Tower",
+      "tier": 4,
+      "elevation": 170,
+      "neighbors": [
+        "RG",
+        "AV",
+        "VR"
+      ]
+    },
+    {
+      "zoneId": "VR",
+      "name": "The Void Realm (Midnight)",
+      "tier": 4,
+      "elevation": 180,
+      "neighbors": [
+        "AT",
+        "SA"
+      ]
+    },
+    {
+      "zoneId": "SA",
+      "name": "Sanctum of the Archillusionist",
+      "tier": 4,
+      "elevation": 165,
+      "neighbors": [
+        "CS",
+        "VR"
+      ]
     }
   ]
 }

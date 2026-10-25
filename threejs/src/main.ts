@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GameEngine } from './core/Engine';
 import { ASSETS } from './core/AssetManifest';
 import { GlobalEventBus } from './core/EventBus';
+import { QualityManager } from './core/Quality';
 import { RapierPhysics } from './physics/PhysicsWorld';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { SoundFX } from './core/SoundFX';
@@ -79,6 +80,26 @@ const mapDossierDesc = document.getElementById('map-dossier-desc');
 const mapDossierStatus = document.getElementById('map-dossier-status');
 const btnFastTravel = document.getElementById('btn-fast-travel') as HTMLButtonElement | null;
 
+// Character & Relic Folio UI Elements
+const charModal = document.getElementById('hud-character-modal');
+const charCloseBtn = document.getElementById('char-close-btn');
+const hudCharCard = document.getElementById('hud-char-card');
+const charRelicLoreTitle = document.getElementById('char-relic-lore-title');
+const charRelicLoreBody = document.getElementById('char-relic-lore-body');
+let isCharFolioOpen = false;
+
+// Audio Toggle Button
+const hudAudioBtn = document.getElementById('hud-audio-btn');
+const hudAudioLabel = document.getElementById('hud-audio-label');
+
+// Ending Epilogue Modal
+const endingModal = document.getElementById('hud-ending-modal');
+const endingChoicesGrid = document.getElementById('ending-choices-grid');
+const endingEpilogueScroll = document.getElementById('ending-epilogue-scroll');
+let isEndingModalOpen = false;
+void endingChoicesGrid;
+void isEndingModalOpen;
+
 let toastTimer: number | null = null;
 function showToast(message: string, duration = 2400): void {
   if (!hudToast) return;
@@ -140,7 +161,7 @@ function flashMesh(group: THREE.Group, colorHex: number, durationMs = 140): void
 }
 
 type Spawn = { x: number; y: number; z: number };
-type SceneId = 'S00' | 'OW1' | 'GH1' | 'GH2' | 'GH3' | 'HM1' | 'BQ1' | 'AG1' | 'MH1' | 'SAN1';
+type SceneId = 'S00' | 'OW1' | 'GH1' | 'GH2' | 'GH3' | 'HM1' | 'BQ1' | 'AG1' | 'MH1' | 'SAN1' | 'RC1' | 'BT1';
 type GuardState = 'patrol' | 'chase' | 'dead';
 interface Guard {
   sceneId: SceneId;
@@ -154,6 +175,8 @@ interface Guard {
   speed: number;
   captain: boolean;
   isWraith?: boolean;
+  isVaelorClone?: boolean;
+  isHound?: boolean;
   hpBarEl?: HTMLDivElement;
   hpFillEl?: HTMLDivElement;
   hpBarTimer?: number;
@@ -166,7 +189,7 @@ interface ExitTrigger {
   requires: string[];
 }
 
-const sceneById = new Map(worldManifest.scenes.map((scene) => [scene.id as SceneId, scene]));
+const sceneById = new Map(worldManifest.mvpVerticalSliceScenes.map((scene) => [scene.id as SceneId, scene]));
 const sceneSpawn = (id: SceneId): Spawn => {
   const scene = sceneById.get(id)!;
   return { x: scene.spawn[0], y: scene.spawn[1], z: scene.spawn[2] };
@@ -232,7 +255,15 @@ let hazelMesh: THREE.Group | null = null;
 let kettleMesh: THREE.Mesh | null = null;
 let vaelorBoss: Guard | null = null;
 let cynthiaCrystal: THREE.Group | null = null;
+let vaelorPhase: 1 | 2 | 3 | 4 = 1;
 let vaelorPhase2Triggered = false;
+const vaelorClones: Guard[] = [];
+const phantasmalHounds: Guard[] = [];
+let gravityInversionTimer = 0;
+void vaelorPhase;
+void vaelorClones;
+void phantasmalHounds;
+void gravityInversionTimer;
 
 // Quest Log Modal
 function toggleQuestLog(): void {
@@ -253,7 +284,9 @@ function renderQuestObjectives(): void {
   const objs = [
     { desc: 'Infiltrate the Sunken Courtyard (S00)', done: true },
     { desc: 'Acquire Cold-Iron Nail Relic (OW1)', done: inventory.has('ITEM_IRON_NAIL') },
+    { desc: 'Anchor Escher Stairs in Relativity Cloister (RC1)', done: solvedPuzzles.has('PUZZLE_RELATIVITY_STAIRS') },
     { desc: 'Shatter Gatehouse Mirror Lock (GH2)', done: solvedPuzzles.has('PUZZLE_MIRROR_LOCK') },
+    { desc: 'Tune Aeolian Baffles in Bell Tower (BT1)', done: solvedPuzzles.has('PUZZLE_AEOLIAN_CHIME') },
     { desc: 'Neutralize Barbican Captain (GH3)', done: abilities.has('ABILITY_WALL_LEAP') },
     { desc: 'Infiltrate the Halls of Mirrors (HM1)', done: currentSceneId === 'HM1' },
     { desc: 'Shatter True Mirror & Banish Wraith (HM1)', done: solvedPuzzles.has('PUZZLE_TRUE_MIRROR') },
@@ -358,9 +391,23 @@ const SCENE_DOSSIER: Record<SceneId, SceneDossierEntry> = {
     hazards: 'Archillusionist Vaelor (Phase 2 Inversion, Levitation, Starlight Beams).',
     isCleansed: () => solvedPuzzles.has('PUZZLE_HOLLOW_GLASS'),
   },
+  RC1: {
+    chapter: 'Secret Vault: Non-Euclidean Cloister',
+    subtitle: 'The Relativity Cloister',
+    desc: 'An impossible Escher-like cloister where stone stairways wrap onto vertical walls. Cold-iron grounding is required to stabilize the perspective flux.',
+    hazards: 'Non-Euclidean gravitational flux & vertigo loops.',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_RELATIVITY_STAIRS'),
+  },
+  BT1: {
+    chapter: 'Secret Spire: The Aeolian Baffles',
+    subtitle: 'The Aeolian Bell Tower',
+    desc: 'A windswept Victorian bell tower housing giant bronze acoustic baffles. Ringing the Echo Bell harmonizes the gale-force chime resonance.',
+    hazards: 'Gale dissonance & resonant shockwaves.',
+    isCleansed: () => solvedPuzzles.has('PUZZLE_AEOLIAN_CHIME'),
+  },
 };
 
-const ORDERED_SCENES: SceneId[] = ['S00', 'OW1', 'GH1', 'GH2', 'GH3', 'HM1', 'BQ1', 'AG1', 'MH1', 'SAN1'];
+const ORDERED_SCENES: SceneId[] = ['S00', 'OW1', 'GH1', 'GH2', 'GH3', 'HM1', 'BQ1', 'AG1', 'MH1', 'SAN1', 'RC1', 'BT1'];
 
 function toggleMap(): void {
   isMapOpen = !isMapOpen;
@@ -379,8 +426,8 @@ function toggleMap(): void {
 function renderMap(): void {
   if (!mapNodesContainer || !mapDiscoveryBadge || !hudMapSubtitle) return;
   const exploredCount = discoveredScenes.size;
-  mapDiscoveryBadge.textContent = `${exploredCount} / 10 Explored`;
-  hudMapSubtitle.textContent = `${exploredCount} / 10 Explored`;
+  mapDiscoveryBadge.textContent = `${exploredCount} / ${ORDERED_SCENES.length} Explored`;
+  hudMapSubtitle.textContent = `${exploredCount} / ${ORDERED_SCENES.length} Explored`;
 
   mapNodesContainer.innerHTML = '';
   ORDERED_SCENES.forEach((sId) => {
@@ -762,6 +809,22 @@ const ITEM_LORE_DATABASE: Record<string, { name: string; tier: string; category:
     stats: 'Inverts local gravitational flux',
     desc: 'Acquired upon shattering Archillusionist Vaelor\'s Glass Heart. Inverts local gravitational flux, allowing ascension to the Highest Spire.',
     icon: '🌌'
+  },
+  ITEM_COLD_IRON_KEY: {
+    name: 'Cold-Iron Cloister Key',
+    tier: 'Ancient Key',
+    category: 'Non-Euclidean Vault',
+    stats: 'Unlocks Escherian Wall Portals',
+    desc: 'Found in the Relativity Cloister. Stamped with impossible geometry runes, this key stabilizes perspective stairs.',
+    icon: '🗝️'
+  },
+  ITEM_CHIME_TUNER: {
+    name: 'Aeolian Chime Tuner',
+    tier: 'Harmonic Relic',
+    category: 'Acoustic Tool',
+    stats: 'Harmonizes Baffle Resonance & Echo Bells',
+    desc: 'Constructed of resonant bronze from the Aeolian Bell Tower. Vibrates with pure fourths and fifths when brought near secret passageways.',
+    icon: '🔔'
   }
 };
 
@@ -814,6 +877,144 @@ function renderInventorySlots(): void {
 invCloseBtn?.addEventListener('click', () => {
   if (isInventoryOpen) toggleInventory();
 });
+
+// Victorian Character & Relic Folio Modal
+function toggleCharacterFolio(): void {
+  isCharFolioOpen = !isCharFolioOpen;
+  if (!charModal) return;
+  if (isCharFolioOpen) {
+    charModal.style.display = 'block';
+    SoundFX.playFolioToggle();
+    renderCharacterFolio();
+  } else {
+    charModal.style.display = 'none';
+  }
+}
+
+function renderCharacterFolio(): void {
+  const strEl = document.getElementById('stat-str');
+  const dexEl = document.getElementById('stat-dex');
+  const intEl = document.getElementById('stat-int');
+  const cynthiaTierEl = document.getElementById('cynthia-resonance-tier');
+
+  const strBonus = inventory.has('ITEM_IRON_NAIL') || inventory.has('ITEM_COLD_IRON_KEY') ? 2 : 0;
+  const dexBonus = abilities.has('ABILITY_STARLIGHT_DASH') || abilities.has('ABILITY_WALL_LEAP') ? 3 : 0;
+  const intBonus = solvedPuzzles.has('PUZZLE_TRUE_MIRROR') || inventory.has('ITEM_CHIME_TUNER') ? 4 : 0;
+
+  if (strEl) strEl.textContent = `${14 + strBonus} (+${Math.floor((14 + strBonus - 10) / 2)})`;
+  if (dexEl) dexEl.textContent = `${16 + dexBonus} (+${Math.floor((16 + dexBonus - 10) / 2)})`;
+  if (intEl) intEl.textContent = `${18 + intBonus} (+${Math.floor((18 + intBonus - 10) / 2)})`;
+
+  if (cynthiaTierEl) {
+    const solvedCount = solvedPuzzles.size;
+    cynthiaTierEl.textContent = solvedCount >= 4 ? 'Tier IV · Transcendental Synthesis' :
+      solvedCount >= 2 ? 'Tier III · Harmonic Resonance' : 'Tier II · Harmonic Reverberation';
+  }
+
+  // Relic Click Listeners
+  const relicCards = document.querySelectorAll('.relic-slot-card');
+  const relicInfo: Record<string, { title: string; desc: string }> = {
+    truth_lens: {
+      title: 'Truth Lens (Nozick Glaze Glass)',
+      desc: 'Forged in the Royal Lensworks. Holding [Q] pierces phantom satieties, reveals secret passages, and highlights invisible ethereal triggers.'
+    },
+    echo_bell: {
+      title: 'Echo Bell (Aeolian Acoustic Tuning)',
+      desc: 'Tapping [F] sends forth an expanding acoustic pulse that vibrates chime crystals, opens echo doors, and disrupts stealth.'
+    },
+    iron_nails: {
+      title: 'Cold-Iron Nails (Grounding Artifact)',
+      desc: 'Dense cold-iron nails that pin down dream-flux, stabilize non-Euclidean stairways, and awaken clockwork guards from illusion stasis.'
+    },
+    starlight_dash: {
+      title: 'Starlight Dash (Arboreal Phase Surge)',
+      desc: 'Claimed from Yggdra the Ancient Bough. Pressing [C] or [Shift] propels Kaelen through solid thorns and hazardous traps with invulnerability.'
+    },
+    graviton: {
+      title: 'Graviton Inversion (The Highest Spire)',
+      desc: 'Bestowed upon shattering the Glass Heart. Inverts local gravitational vectors, permitting vertical ascent and non-Euclidean traversal.'
+    },
+    tantalus: {
+      title: 'Tantalus Goblet (Vessel of Emptiness)',
+      desc: 'Acquired in the Cenacle of Eternal Satiety. Drains phantom wine into the void, dissolving false feasts and breaking illusions of satiety.'
+    }
+  };
+
+  relicCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const relicKey = card.getAttribute('data-relic') || '';
+      const data = relicInfo[relicKey];
+      if (data && charRelicLoreTitle && charRelicLoreBody) {
+        charRelicLoreTitle.textContent = data.title;
+        charRelicLoreBody.textContent = data.desc;
+        SoundFX.playMenuClick();
+      }
+    });
+  });
+}
+
+charCloseBtn?.addEventListener('click', () => {
+  if (isCharFolioOpen) toggleCharacterFolio();
+});
+hudCharCard?.addEventListener('click', () => {
+  toggleCharacterFolio();
+});
+
+// Audio Toggle Button Handler
+hudAudioBtn?.addEventListener('click', () => {
+  const isMuted = SoundFX.toggleMute();
+  if (hudAudioLabel) {
+    hudAudioLabel.textContent = isMuted ? 'Music: OFF' : 'Music: ON';
+  }
+});
+
+// Ending Epilogue Modal Handlers
+function openEndingModal(): void {
+  isEndingModalOpen = true;
+  if (!endingModal) return;
+  endingModal.style.display = 'block';
+  SoundFX.playChimeTune();
+
+  const endingCards = document.querySelectorAll('.ending-card');
+  endingCards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const endingType = card.getAttribute('data-ending');
+      SoundFX.playPuzzleSolved();
+      renderEndingEpilogue(endingType || 'shatter');
+    });
+  });
+}
+void openEndingModal;
+
+function renderEndingEpilogue(type: string): void {
+  if (!endingEpilogueScroll) return;
+  endingEpilogueScroll.style.display = 'block';
+
+  let title = '';
+  let body = '';
+
+  if (type === 'shatter') {
+    title = 'EPILOGUE I — EXILE OF THE TRUE SKY';
+    body = 'You drive your silver stiletto into the facets of the Glass Heart. The crystal explodes into a blinding tempest of starlight, tearing away all illusions, mirrors, and gilded glamours from the mountain citadel. Cynthia\'s spirit ascends like an incandescent comet into the aurora above. As the stone towers crumble into silent ruins, you step onto the mountain pass alone—free of dreams, unburdened by false comfort, facing the cold, beautiful dawn of mortal reality.';
+  } else if (type === 'crown') {
+    title = 'EPILOGUE II — SOVEREIGN OF THE FRACTAL THRONE';
+    body = 'Stepping past the fallen form of Duke Vaelor, you ascend the three obsidian tiers of the Dais and don the Starlight Diadem. The infinite reflections in every corridor bow in unison. The spinning Glass Heart becomes your eternal lamp, and Cynthia remains preserved within the crystal cage as your muse. The outer gates of Veilkeep seal shut against the mundane world. You have become the new Archillusionist, monarch of a kingdom that never was and never shall fade.';
+  } else if (type === 'weave') {
+    title = 'EPILOGUE III — THE LUCID SANCTUARY';
+    body = 'Refusing both destruction and tyranny, you channel your own illusionist will into the resonant frequency of the Glass Heart. Your mind merges with Cynthia\'s spirit in gentle harmony. The cold nightmare of Veilkeep softens into a radiant, lucid sanctuary where weary wanderers find peace and lost souls are sheltered from the harsh world. Together, you weave the living starlight into an everlasting haven between dream and memory.';
+  } else {
+    title = 'EPILOGUE IV — GROUNDED IN COLD IRON';
+    body = 'You draw the heavy cold-iron nail and the ancient mortise key from your satchel and drive them straight into the heart of the obsidian dais. A deep resonant shockwave shudders through the rock. Every mirror shatters, every starlight spire dematerializes, and the gilded phantasms vanish like smoke. What remains is a quiet, weathered Victorian manor of damp slate and moss, washed clean by the morning autumn rain. The spell is broken. The world is awake.';
+  }
+
+  endingEpilogueScroll.innerHTML = `
+    <div style="font-size: 15px; font-weight: 700; color: #fbbf24; margin-bottom: 8px;">${title}</div>
+    <div style="font-family: 'Inter', sans-serif; font-size: 12.5px; line-height: 1.8; color: #e2e8f0; margin-bottom: 14px;">${body}</div>
+    <div style="text-align: center;">
+      <button class="map-travel-btn" style="display: inline-flex; width: auto; padding: 8px 18px;" onclick="location.reload()">↺ Begin New Expedition</button>
+    </div>
+  `;
+}
 
 // Inspectable Lore Objects
 interface LoreObject {
@@ -939,8 +1140,10 @@ const magicalBushes: {
   targetScale: THREE.Vector3;
 }[] = [];
 
+let quality: QualityManager;
 const engine = new GameEngine({
   canvas,
+  onRender: () => quality.frame(),
   onUpdate: (dt) => {
     // Pause movement during dialogue, inventory, quest log, lore archival, or pause menu
     let moveX = 0;
@@ -1324,6 +1527,7 @@ const engine = new GameEngine({
     checkExits();
   },
 });
+quality = new QualityManager(engine.renderer);
 
 new THREE.TextureLoader().load(ASSETS.CONCEPT.SCENE00_APPROACH_SUNKEN, (tex) => {
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -2442,6 +2646,8 @@ const exits: Record<SceneId, ExitTrigger[]> = {
     { x: 0, z: 5.0, to: 'MH1', requires: [] },
     { x: 0, z: -5.0, to: 'S00', requires: ['PUZZLE_HOLLOW_GLASS'] },
   ],
+  RC1: [],
+  BT1: [],
 };
 
 function checkExits(): void {
@@ -2563,6 +2769,7 @@ window.addEventListener('keydown', (e) => {
   if (k === ' ') tryAttack();
   if (k === 'x') tryParry();
   if (k === 'e') interact();
+  if (k === 'q') quality.cycle();
 
   // Relic: Truth Lens ([Q] hold)
   if (k === 'q' && !truthLensActive) {
@@ -2659,4 +2866,5 @@ console.log('🚀 VEILKEEP slice running: WASD move, Space attack, E interact, M
   get sceneId() { return currentSceneId; },
   loadScene,
   toggleMap,
+  quality,
 };

@@ -1,6 +1,6 @@
 # VEILKEEP: The Illusionist's Fortress — Game Design Document
 
-> **Version:** 1.0 · **Engine:** Three.js (WebGL2 / WebGPU, TypeScript/JavaScript) · **Platforms:** Web (Desktop & Mobile Browser), PWA, Android (Capacitor / WebView)
+> **Version:** 2.0 (Master Narrative, Topological Map, Puzzle & CRPG Overhaul) · **Engine:** Three.js (WebGL2 / WebGPU, TypeScript/JavaScript) · **Platforms:** Web (Desktop & Mobile Browser), PWA, Android (Capacitor / WebView)
 
 ## 1. Overview
 
@@ -9,7 +9,7 @@
 **Length:** 12-18 hours main; 25+ with side content
 **Rating:** T (fantasy violence, mild horror)
 
-![VEILKEEP — Isometric In-Game Gameplay Mockup (Stealth, Mirror Beams, & HUD)](assets/gameplay_mockup.jpg)
+
 
 **High Concept:** You are Kaelen Voss, the Shadowhand — a master thief hired to infiltrate the floating fortress of Archillusionist Vaelor and steal the Heart of Mirrors. The fortress is a living labyrinth of illusions: shifting corridors, false walls, phantasmal guardians, and NPCs who may be real or dreamed. Meaningful quests, deep puzzles, and a multi-phase boss fight await.
 
@@ -148,6 +148,39 @@ Centuries ago, Vaelor gifted Cynthia an intricate musical automata box that play
 | **VI. The Shard of the Cog** | Clockwork Spire (CS5 Warden Antechamber) | The solemn chime of the central clock as court physicians inform Vaelor the Hollow Glass disease is terminal. | Unlocks *Escapement Focus* (+10% critical strike rate against mechanical constructs). |
 | **VII. The Shard of the Crypt** | Undercrypt (U4 Monks' Secret Vault) | Vaelor weeping on his knees before the altar of the monastery, swearing an oath to conquer death itself. | Unlocks *Truth of the Martyr* (grants immunity to Vaelor's Phase 3 mind-control hallucinations). |
 
+### The Three Master Brass Cylinders (Peripheral Sector Synthesis)
+In addition to the **Seven Prismatic Casing Shards** (which restore the music box's crystal housing and Kaelen's childhood memories), playing the complete three-part counter-lullaby in the Sanctum requires recovering the **Three Master Brass Cylinders** hidden in the keep's peripheral wings:
+1. **Cylinder I — *"Nocturne of the Starlight Glass"* (The Chord of Harmony):** Recovered from the Maestro's Archive (`MS5`) after achieving 80%+ Harmonic Resonance in the Gilded Music Salon (`S25`).
+2. **Cylinder II — *"Lullaby of the Pale Governess"* (The Chord of Grief):** Recovered from the Ancestral Crypt-Vault (`HA5`) and Pale Nursery (`HA3`) after resolving the Séance of Shifting Shadows (`S28`).
+3. **Cylinder III — *"The Weaver's Lullaby"* (The Chord of Truth):** Recovered from the Architect's Master Vault (`LB5`) after liberating or defeating Asterion in the Daedalian Brass Labyrinth (`S30`).
+
+---
+
+## 2f. The Law of Pressurized Solipsism & Relativistic Veil Dilation (v2.0 Lore Alignment)
+
+### 1. Thermodynamic Grounding: How Aether-Steam, Memory, and Optics Interlock
+Inspired by the systemic conflict between magic and technology in [Arcanum: Of Steamworks and Magick Obscura](https://en.wikipedia.org/wiki/Arcanum:_Of_Steamworks_and_Magick_Obscura) and the metaphysical grounding of [Planescape: Torment](https://en.wikipedia.org/wiki/Planescape:_Torment), Veilkeep's mystical illusions and Victorian steampunk machinery operate as a single closed thermodynamic loop:
+- **The Geothermal Source:** Beneath the Undercrypt (`U4`) lies a natural alpine fissure of liquid celestial starlight tended by the ancient *Order of the Silent Star*. Raw starlight is psycho-reactive—shaping itself to calm meditation—but evaporates within seconds at normal atmospheric pressure.
+- **The Industrial Siphon & Boiler Core:** To make illusions permanent and solid across an entire mountain citadel, Vaelor commissioned Chief Mechanist Vane (`BF2`) and Architect Asterion (`LB4`) to construct a subterranean industrial engine. In the Abyssal Prison (`PB4–PB5`), living captives are clamped into **Hydraulic Siphon Crucibles** that extract human autobiographical memories. Those memories are pumped via pneumatic tubes into the **Grand Boiler Core** (`BF2`) and superheated with starlight coal to **120–180 PSI**, producing **Pressurized Aether-Steam**.
+- **The Biological Prism:** Pressurized Aether-Steam flows through copper pipes behind every mirror in the keep, focused through the crystallized heart of **Lady Cynthia** in the Sanctum (`SA2`). Every beat of her slowed heart refracts the memory-steam into solid stone, banquets, and sentries.
+- **Systemic Steampunk Vulnerabilities:** Because every illusion is sustained by pressurized steam and mirror optics, every illusion has a physical industrial counter:
+  1. *Thermal Drop:* Venting a room's steam manifold below **90 PSI** condenses phantasmal walls and enemies into harmless mist.
+  2. *Soot Fouling:* Injecting coal soot or sulfur into a boiler feed clouds mirror lenses, blinding optical security beams.
+  3. *Cold-Iron Grounding:* Driving a physical **Iron Nail** into shifting geometry creates a thermodynamic ground-fault, locking [M.C. Escher](https://en.wikipedia.org/wiki/M._C._Escher) stairs and illusions into permanent physical reality.
+
+### 2. Reconciling the Timeline: The 14-Year vs. 80-Winter Relativistic Dilation
+Why is Kaelen Voss 29 years old (having fled the keep 14 years ago in 1886), while inhabitants inside the keep speak of **80 winters** of captivity?
+- **The Chronomantic Overclock:** When Vaelor tore the mountain into the sky in **1886** (14 mortal years before the present year **1900**), he discovered that even crystal stasis could not completely halt Cynthia's *Hollow Glass* disease. Desperate to buy centuries of research time before her heart beat its last, Vaelor sealed the **Chronomantic Scriptorium** (`CR1–CR5`) and accelerated the keep's internal temporal field to **5.714× mortal speed** while resetting the household's domestic clock every midnight.
+- **Dual Temporal Reality:** To Kaelen and Guildmaster Sable down in Greyport, **14 mortal years** have elapsed. To Gatekeeper Orin, Butler Bartholomew, Lady Eleanor, and Lord Byakko trapped inside the pressurized Starlight Veil, **80 subjective winters** of repeating midnight loops have ground away their sanity.
+
+### 3. Kaelen's Hidden Complicity: "The First Fracture"
+Uncovered across Shards VI (`CS5`) and VII (`U4`), Kaelen is not merely an innocent victim of Vaelor's memory wipe:
+- **The Childhood Heist:** Two years before the Great Lockdown, Guildmaster Sable—then a crooked merchant antiquarian—blackmailed 13-year-old orphan Kaelen into picking the lock of Vaelor's forbidden Undercrypt wellspring (`U4`) to steal a sample of raw starlight.
+- **The Accidental Infection:** Nine-year-old Cynthia followed Kaelen into the dark vault out of devotion to her playmate. When Kaelen tripped a containment seal, Cynthia inhaled the unrefined starlight vapor—**infecting her with the terminal Hollow Glass curse**.
+- **The Self-Inflicted Lethe:** On the night of the failed escape on the Outer Wards bridge, Vaelor did not force Kaelen into the *Mirror of Lethe*. Crushed by unbearable guilt as Cynthia's fingers turned to glass in his hand, **young Kaelen willingly gazed into the Mirror of Lethe** to burn away the memory of having doomed his only friend.
+
+---
+
 ### The True Ending: "The Awakening of the Mind"
 If Kaelen gathers all seven shards, he reconstructs the **Starlight Music Box**. In the Sanctum climax, instead of shattering Cynthia's crystal or claiming the keep's power for himself, Kaelen places the playing music box upon her altar:
 - The haunting music box lullaby resonates through the crystal matrix.
@@ -159,7 +192,7 @@ If Kaelen gathers all seven shards, he reconstructs the **Starlight Music Box**.
 
 ## 3. Protagonist — Kaelen Voss, "The Shadowhand"
 
-![Kaelen Voss, The Shadowhand — 16/32-Bit Isometric Sprite Sheet & Keyframe States](assets/kaelen_sprites.jpg)
+
 
 | Field | Value |
 |---|---|
@@ -213,7 +246,7 @@ If Kaelen gathers all seven shards, he reconstructs the **Starlight Music Box**.
 
 ## 4. Antagonist — Archillusionist Vaelor the Veiled
 
-![Archillusionist Vaelor the Veiled — Boss Sprite Sheet, Casting, & Phantasmal Clones](assets/vaelor_sprites.jpg)
+
 
 Ageless. Speaks in riddles. Believes reality is a draft. His power: the Heart of Mirrors, which lets him overwrite perception. He does not kill directly — he "edits" intruders out of existence (they become part of the keep's illusions).
 
@@ -289,12 +322,12 @@ Minor captains command roaming patrols and guard vital district checkpoints. Eac
   - *Metroidvania Gate:* Unlocks the mind-bending ceiling pathways of the Relativity Cloister, inverted elevator shafts in the Clockwork Spire, and sunken ceiling tombs of the Undercrypt.
 - **Defeat Dialogue:** *"Up is down... down is a lie... you will learn what it feels like to fall into the sky..."*
 
-#### Major Captain 4: Lady Cynthia "The Glass Queen"
+#### Major Captain 4: Duchess Seraphina Vane "The Glass Queen"
 - **Title:** Grand Warlord of the Ironfang (Act IV Gym Leader)
 - **Arena:** *The Crystal Theater (Colosseum CO3 / Mirror Stage)* — An amphitheater flanked by giant gilded mirrors, watched by thousands of featureless silent Dreamwalkers in the tiered stands.
 - **Combat Style & Mechanics:** Aristocratic master duelist wielding a rapier forged from raw crystallized mirror-glass.
   - *Phase 1:* Flawless fencing ripostes, blinding prism flashes that invert player directional controls (Confused status), and thrusts that send shockwaves of glass shards.
-  - *Phase 2 (Mirror Shatter at 50% HP):* Disappears directly into the arena wall mirrors. Attacks emerge from four mirrors simultaneously as illusory reflections before the real Cynthia strikes. Shatters the stage floor into floating glass shards.
+  - *Phase 2 (Mirror Shatter at 50% HP):* Disappears directly into the arena wall mirrors. Attacks emerge from four mirrors simultaneously as illusory reflections before the real Seraphina strikes (having forged her rapier from shards of Lady Cynthia's broken stasis glass to mock Vaelor). Shatters the stage floor into floating glass shards.
 - **Movement Ability Unlocked:** **The Mirror Phase (Prismatic Phase-Shift)**
   - *Mechanic:* Tap dash while moving toward barred iron portcullises, cracked illusion walls, or red rune laser barriers to seamlessly dematerialize and phase straight through them (*Salt & Sanctuary Redshift / Dart Brand* equivalent).
   - *Metroidvania Gate:* Grants access to the deepest sealed monk reliquaries of the Undercrypt, the hidden Genie Alcove, and the sealed outer seals of the Archillusionist's Sanctum.
@@ -328,6 +361,57 @@ Minor captains command roaming patrols and guard vital district checkpoints. Eac
 | 18 | 2150 | 172 | 142 | — |
 | 19 | 2360 | 180 | 148 | — |
 | 20 | — | 190 | 156 | Prestige (NG+) |
+
+
+## 5b. Deep CRPG Systems: Origins, Convictions, Mindscape Cabinet & Living Schedules (v2.0)
+
+To elevate VEILKEEP into a deeply reactive Computer Role-Playing Game in the lineage of [*The CRPG Book*](https://crpgbook.wordpress.com/), [*Planescape: Torment*](https://en.wikipedia.org/wiki/Planescape:_Torment), [*Disco Elysium*](https://en.wikipedia.org/wiki/Disco_Elysium), [*Ultima VII: The Black Gate*](https://en.wikipedia.org/wiki/Ultima_VII:_The_Black_Gate), and [*Arcanum*](https://en.wikipedia.org/wiki/Arcanum:_Of_Steamworks_and_Magick_Obscura), v2.0 expands character creation, psychological alignment, skill checks, and world simulation across five systemic pillars:
+
+### 1. The "Shadow Past" Origin & Trait System (Character Creation)
+At the opening contract briefing (`S00`), the player defines how Kaelen Voss survived his 14 years of amnesia in Greyport by selecting **1 Shadow Past (Origin)** and up to **2 Kleptomaniac Quirks (Traits)**:
+
+| Shadow Past (Origin) | Stat Modifiers | Signature Passive & Exclusive Dialogue Tag | Unique World & Puzzle Interaction |
+|---|---|---|---|
+| **Gutter-Alchemist of Greyport** | `+2 INT, +1 LCK, -1 STR` | **`[Alchemist]` Tag:** Auto-identifies potions, poisons, and boiler PSI pressures. Starts with *Volatile Sulfur Pouch*. | Synthesizes *Acid Vials* to melt Grade-3 brass locks silently; unlocks advanced chemical sabotage with Alchemist Vex (`S10`) and Master Vane (`S18`). |
+| **Velvet-Tongued Confidence Man** | `+2 CHA, +1 AGI, -1 VIT` | **`[Charlatan]` Tag:** Enables **Social Disguise Stealth**—wearing stolen Guard Tabards, Monk Robes, or Footman Tailcoats lets Kaelen walk past patrols in plain sight. | Convinces Keep Guards he is a royal boiler inspector and bluffs Ringmaster Valenti (`PH2`) or Castellan Dredge (`PB2`). |
+| **Dockside Pit-Cutthroat** | `+2 STR, +1 VIT, -1 CHA` | **`[Enforcer]` Tag:** Heavy/unarmed strikes deal `+25% stagger`; intimidates minor brigands into surrendering coin purses without combat. | Challenges Strongman Boris (`PH3`) to bare-knuckle wagers and pries open rusted steam grates with raw muscle (`[STR 12]`). |
+| **Occult Reliquary Fence** | `+2 LCK, +1 INT, -1 AGI` | **`[Antiquarian]` Tag:** Senses hidden doors and cursed relics within 8m; reduces Max HP/STA penalties from *Liber Cutis* and *Genie Bargains* by 50%. | Reads Monastic Latin natively in `U2` and `L5`, unlocking secret pact loopholes with The Genie (`S14`) and Liber Cutis (`S33`). |
+
+- **Optional Trade-Off Traits (Choose up to 2):**
+  - *Compulsive Magpie:* `+25% Silver Moons and gem find`, **but** passing within 2.5m of an unlooted gilded item triggers an `[INT 11]` impulse check—on failure, Kaelen automatically pockets it, risking pressure-plate triggers!
+  - *Glass-Eyed Skeptic:* `+30% Magic/Illusion Resist` and passive shimmer on false walls, **but** cannot receive Chapel blessings (`S2`) or use faith-scaled weapons.
+  - *Clockwork Ear:* `+20% wider timing windows` on lockpicking, parrying, and Conservatory rhythm trials (`MS3`), **but** `+50% sonic/stagger damage` taken from acoustic hazards and sirens.
+  - *Claustrophile of the Vents:* `+30% crouch speed and +2 STA/s regen` in vents and darkness, **but** `-10% Dodge` in brightly lit open arenas (`Colosseum`, `High Eyrie`).
+
+### 2. The "Mindscape Cabinet" & Epistemic Conviction Triangle
+Because Veilkeep is a reality-warping mindscape, Kaelen's philosophical choices shift him along three competing **Epistemic Convictions**, mutating his combat/stealth rules and internalizing recovered **Memory Shards**:
+
+| Conviction Axis (Ranks 1–5) | Earned By | Passive Gameplay Mutation | World & Ending Impact |
+|---|---|---|---|
+| **Empirical Rationalism** (*"Only what has mass and bleeds is real."*) | Grounding NPCs with Iron Nails, completing Renatus's Wax/Senses quests (`S19–S21`), shattering illusions with Truth Lens. | **Iron Grip:** Physical weapons deal `+5% per rank` bonus damage to Illusions/Constructs; Confused duration `-15% per rank`. At Rank 5, footsteps auto-dispel minor mirage traps. | Unlocks `[Rationalist]` dialectic checks (refuting Marquess Cassian in `BQ1`, skipping Vaelor Phase 1). |
+| **Empathetic Mercy** (*"Even a dream deserves grace."*) | Sparing Lord Byakko (`S32`), freeing the Dreaming Beast (`Q3`), liberating Asterion (`S30`), comforting Vivienne (`S28`), observing Bartholomew's tea rites (`S27`). | **Gentle Tread:** Phantasmal beasts/spirits hesitate `0.5s per rank` before attacking; companion cooldowns `-20%`. At Rank 5, non-boss phantasms become neutral unless struck first. | Unlocks `[Empathetic]` checks required for **Ending A (The True Dawn)** and full allied summons in the Sanctum. |
+| **Solipsistic Mastery** (*"Reality is clay for the strong."*) | Embracing *Liber Cutis* Chapters I–III (`S33`), accepting Genie Bargains (`S14`), drinking Moon-Tiger Blood raw (`S32`), extorting NPCs. | **Will Over Matter:** `+8 Max FP per rank`; Arcane Trickster & Blood spells deal `+10% per rank` damage. At Rank 5, Kaelen walks across illusory bridges without solving belief plaques. | Unlocks `[Solipsist]` mind-domination checks; required for **Ending B (Usurper)** and **Ending E (Sovereign of Flesh)**. |
+
+- **Memory Shard Internalization:** Each of the 7 Memory Shards can be interpreted in the Field Journal in one of three ways (`Empathy`, `Rationalism`, or `Solipsism`), letting players customize the perk granted by each childhood memory.
+
+### 3. Multi-Stat Dialogue Checks & "Failing Forward" State Mutations
+Major conversations support parallel skill avenues (`[STR / Intimidation]`, `[AGI / Sleight of Hand]`, `[INT / Epistemology]`, `[CHA / Etiquette]`, `[LCK / Gambler's Intuition]`), and **failed skill checks never dead-end progress—they mutate the tactical room state ("Failing Forward")**:
+- *Example (Gatekeeper Orin in `GH1`):* Failing `[CHA 9]` to persuade Orin causes Kaelen to accidentally slip Guildmaster Sable's name. Orin panics—convinced Kaelen is an assassin sent to erase him—and bolts into `GH2`, slamming his halberd into the steam-lift lever. The portcullis jams halfway open (allowing Kaelen to crouch-slide under!), *but* ruptures a 120 PSI steam line that floods `GH2` with scalding fog and puts the Guard Captain in `GH3` on high alert.
+
+### 4. Living 45-Minute Night-Reset Schedule & Iron Nail Persistence
+The keep's 45-minute soft clock is structured into four 10–15 minute systemic phases:
+1. **Dusk (`00:00–15:00`):** Household staff active in `SH1`/`K1`; Guard Shift Alpha patrols outer perimeters.
+2. **Nightfall & Shift Change (`15:00–30:00`):** At `14:30–16:00`, Guard Shift Alpha rotates with Shift Beta in the Barracks (`B1`), leaving posts in `GH1` and `AL1` **completely unmanned for 90 seconds** (prime Ghost heist window). Dreamwalkers migrate from `RS` to `CO1` and `BQ1`.
+3. **The Witching Midnight (`30:00–40:00`):** Vaelor speaks to mirrors (`HM1`/`SA1`); Astronomy constellations align (`AT1`); **Void Realm (`VR1`)** portal opens; Poltergeist activity peaks in `HA1–HA5`.
+4. **False Dawn & The 13th-Bell Reset (`40:00–45:00`):** Boiler pressure spikes to 160 PSI; guard detection `+25%`. At `45:00`, Vaelor resets the keep's clock to Dusk—respawning illusion enemies **except** in rooms Kaelen has grounded with an **Iron Nail** or wings where the **Major Captain** has been defeated.
+
+### 5. Non-Lethal / Sabotage Boss Resolutions ("Shadowhand" Pacifist Path)
+Every human boss and mini-boss features a dedicated non-lethal Thief Tradecraft takedown that awards **100% equivalent Ghost XP**, making a zero-kill run fully viable:
+- **Brutus "The Iron Cleaver" (`OW5`):** Bait his bull-rush into the 3 cracked parapet pillars, then sever the counterweight hoist rope to drop the iron portcullis cage over him alive and pluck the *Shadow Mantle* from his belt.
+- **Vesper "The Swift-Stitch" (`M2`):** Pickpocket her *Antidote Vial* (`[Sleight of Hand 3]`) during a smoke-dash and puncture the Menagerie *Somnambulist Gas Pipe* to knock her out with her own sleeping fog.
+- **Magus Malakor "The Void-Eyed" (`CS4`):** During Phase 2 inverted gravity, drive **3 Iron Nails** into the magnetic floor rings beneath his clockwork harness to short-circuit and immobilize his rig.
+- **Duchess Seraphina Vane (`CO3`):** Present her father's *Cracked Pocket Watch* (from Master Vane in `BF2`) and shatter her 4 vanity mirrors with the *Truth Lens* (`[CHA 14]` or `[Empathy 4]`), prompting her to surrender the *Mirror Phase* brand in tears.
+- **Castellan Dredge (`PB2`):** Lure him onto the central inspection grating and pull the *Emergency Prisoner Clamp Lever* (`[Lockpick 3]`), locking him inside his own padded siphon chair.
 
 ## 6. Combat System
 
@@ -454,7 +538,7 @@ In specialized cryogenic environments such as **The Cursed Winter Solarium (WS1)
 
 ## 8. Inventory & Items
 
-![VEILKEEP — Pixel Art Item & Tool Inventory Grid](assets/item_sprites.jpg)
+
 
 Grid inventory (6x8 base, expandable bags). Weight limit. Categories: Weapons, Armor, Tools, Consumables, Quest Items, Keys, Artifacts.
 
@@ -528,7 +612,7 @@ Grid inventory (6x8 base, expandable bags). Weight limit. Categories: Weapons, A
 | The Minotaur's Brass Labrys | Legendary | Heavy two-handed steam greataxe: deals +40% stagger damage and cleaves reinforced barriers with steam-assisted slams | Asterion (Labyrinth S30) |
 | Asterion's Gilded Horn | Rare | +15% heavy melee damage; tapping sprint twice executes a bull-rush shoulder charge that staggers sentries | Asterion (Labyrinth S30) |
 | The Martyr's Starlight Amulet | Legendary | Upgraded from Mirror Shard Amulet via Eldrin's sacrifice: passes through lethal Starlight Security Wards, reveals all true hidden doors/paths within 20m, immunizes against dark miasma, and emits a 6s blinding flash pulse [60s CD] | Eldrin's Sacrifice (Prison S31) |
-| Siphon Warden's Ring | Rare | +2 STR, +15% damage against constructs and armored wardens; grants immunity to energy-drain siphons | Warden Malakor (Prison PB2) |
+| Siphon Warden's Ring | Rare | +2 STR, +15% damage against constructs and armored wardens; grants immunity to energy-drain siphons | Castellan Dredge (Prison PB2) |
 | Lord Byakko's Star-Whistle | Legendary | Summons Lord Byakko in open-air exterior zones for a devastating Astral Pounce (300 kinetic/frost dmg & knockdown) | Lord Byakko (Menagerie S32 - Spared) |
 | Star-Flayed Claw Talisman | Rare | +12% melee speed, +10% cold damage on all physical weapon strikes | Menagerie (M5) |
 | Liber Cutis (The Flayed Lexicon) | Legendary | Sentient flesh-bound grimoire: whispers hidden truths; grants dark blood spells at the cost of permanent flesh tolls | Library Scriptorium L5 (Puzzle 32) |
@@ -740,7 +824,7 @@ Every possible loot item within VEILKEEP is documented below with its category, 
 | **Phosphor Flash-Dart (x3)** | Uncommon | +4 Dmg, 6m Blind Radius | Detonates on impact with blinding magnesium flare; permanently disables camera eyes and optical sensors on Clockwork Sentinels for 8s. | Alchemist Vex (AL1), Clockwork Trapeze Phantasms |
 | **Mother Hazel's Bone-Sugar Spoon** | Unique (Boss/Puzzle) | +14 Dagger Dmg, +10 Ethereal Dmg | Carved from fossilized whalebone and crystallized amber sugar. Sneak attack strikes inflict *Sugar-Laced Stupefaction*, causing humanoids to sink into a 4-second blissful stupor; ignores 30% armor. | The Gilded Dollhouse MH1 (Outsmarting Mother Hazel) |
 | **The Tantalus Goblet** | Unique Tactical Relic | Converts 20% Magic Dmg to FP, +100% Food Duration | Forged of sterling silver lined with matte obsidian stone from the Cenacle of Eternal Satiety. Absorbs ethereal resonance and grants complete immunity to phantom scents, drunken stupor, and false satiety hexes. | The Cenacle of Eternal Satiety BQ1 (Puzzle 37) |
-| **Archival Menu of the Eve of Betrothal (1886)** | Unique Inspectable Lore | Lore Parchment / Quest Document | An opulent embossed menu detailing a 14-course imperial feast for Cynthia's betrothal that never happened. Frantic pencil annotations trace 30 years of psychological decay. | Lord Morvath's Place Setting (BQ1) |
+| **Archival Menu of the Eve of Betrothal (1886)** | Unique Inspectable Lore | Lore Parchment / Quest Document | An opulent embossed menu detailing a 14-course imperial feast for Cynthia's betrothal that never happened. Frantic pencil annotations trace 30 years of psychological decay. | Marquess Cassian's Place Setting (BQ1) |
 | **Soot-Stained Silverware of the Cenacle** | Masterwork Crafting Curio | High Alchemical Conductivity | Masterwork Victorian silverware coated in ancient fireplace ash. Can be sold for 350 gold moons or melted down to forge Cold-Iron throwing darts. | Sideboard in BQ1 |
 
 ### 2. Armor, Coats, Headwear & Shields
@@ -839,7 +923,7 @@ Every possible loot item within VEILKEEP is documented below with its category, 
 | **Starlight Coal Chunk** | Uncommon | Super-compressed anthracite coal infused with celestial starlight oil. | Burns with violet flame at 1800°C; placed in cold steam boilers to instantly power dormant hydraulic lifts. | Dropped by Boiler-Hulk Brigands (BF1/BF2) |
 | **High-Tensile Steel Wire** | Common | Braided piano-gauge steel wire capable of supporting 500 lbs of tension. | Strung between doorway jambs to create tripping tripwires; repairs elevator hoists and grapple cables. | Dropped by Clockwork Trapeze Phantasms |
 | **Precision Escapement Core** | Rare | Master jewel-bearing mechanical escapement beating at exactly 60 Hz. | Required to repair the Grand Clockwork Elevator in Spire CS4; upgrades Chrono-Metronome parry window. | Dropped by Clockwork Warden (Mini-Boss) |
-| **High-Voltage Arc Capacitor** | Rare | Leyden jar capacitor storing 5,000 volts of starlight electrical charge. | Thrown into flooded rooms to electrocute all standing water; powers auxiliary prison security consoles. | Dropped by Siphon Warden Malakor (PB2) |
+| **High-Voltage Arc Capacitor** | Rare | Leyden jar capacitor storing 5,000 volts of starlight electrical charge. | Thrown into flooded rooms to electrocute all standing water; powers auxiliary prison security consoles. | Dropped by Castellan Dredge the Iron Gaoler (PB2) |
 | **Starlight Steam Core** | Legendary | Miniature brass boiler sphere containing self-sustaining pressurized ether-steam. | Replaces broken engine blocks; can be overcharged to blow through reinforced dungeon vault doors. | Dropped by Asterion the Brass-Horned (LB4) |
 | **Rusted Iron Cogwheel** | Common | Heavy 15-pound iron wheel with missing teeth. | Thrown weapon (15 blunt dmg); placed on pressure plates; can be smelted at foundry for iron scrap. | Dropped by Clockwork Soldiers & Scavengers |
 
@@ -879,7 +963,7 @@ Every possible loot item within VEILKEEP is documented below with its category, 
 | **Aurelius's Solar Heart Talisman** | Key Item | Lord Aurelius the Sky-Sovereign | Restores flight to the ancient gryphon; dispels the tempest storm barrier around Spire. | Spire High Vault (CS4 - Pressure Chest) |
 | **Cynthia's Porcelain Music Doll** | Key Item | Madame Vivienne / Music Box Track 6 | Restores Cynthia's governess to peace; unlocks sixth music cylinder on childhood music box. | Pale Nursery (HA3 - Hidden Under Floorboards) |
 | **Cynthia's Seventh Music Cylinder** | Key Item | Childhood Music Box (Final Track) | Completes Cynthia's lullaby collection; required to unseal Cynthia's starlight crystal peacefully. | Architect's Master Vault (Labyrinth LB5) |
-| **The Warden's Abyssal Master Keyring** | Key Item | Prison Siphon Shackles & Cell Blocks | Unlocks all 36 hydraulic prisoner cells across PB1-PB5; frees Korr and Eldrin. | Dropped by Siphon Warden Malakor (PB2) |
+| **The Warden's Abyssal Master Keyring** | Key Item | Prison Siphon Shackles & Cell Blocks | Unlocks all 36 hydraulic prisoner cells across PB1-PB5; frees Korr and Eldrin. | Dropped by Castellan Dredge the Iron Gaoler (PB2) |
 | **Eldrin's Star-Chisel** | Key Item | Siphon Crucible & Lapidary Lock Mechanisms | Cuts through starlight siphon shackles; aligns prism facets without shattering glass. | Eldrin the Star-Carver (Prison PB5) |
 | **Octagram Cryo-Key** | Key Item | Cryo-Prism Manifold (Puzzle 31) | Triangular brass key required to engage the emergency steam defrost in Menagerie M4. | Menagerie Keeper's Lockbox (M3) |
 | **The Solar Reliquary of Saint Valerius**| Key Item | Chapel Solar Prism Monstrance | Cleanses the four corrupted mirrors in Chapel Vestry C3 to break Sir Roderick's petrification. | Chapel Crypts (SV3 - Dropped by Templars) |
@@ -946,7 +1030,7 @@ Corridors lined with deadly traps are encountered in their *already-triggered* s
 
 ## 9c. Acoustic Resonance & The Rhythm-Timing System
 
-![The Gilded Music Salon & Harmonic Conservatory: Rotunda, Grand Fortepiano, & Steam Orchestrion](assets/scene_harmonic_salon.jpg)
+
 
 Within Veilkeep, music is not merely an aesthetic art—it is the architectural science of **harmonic acoustic resonance**. Archillusionist Vaelor's floating keep is anchored by crystallized starlight that vibrates at precise harmonic frequencies. When dissonance infects these frequencies, spatial geometry twists and illusions turn lethal.
 
@@ -978,71 +1062,71 @@ Mastering rhythm timing is not confined to the mini-game; the rewarded relic—*
 
 The fortress comprises 16 core interconnected zones and 11 specialized peripheral sectors (27 total interactive zones); unlocking requires puzzle, quest, and ability-gated progression. Click a room on the map below for details.
 
-<div class="map-wrap">
-  <div class="map-svg">
-    <svg viewBox="0 0 520 375" xmlns="http://www.w3.org/2000/svg">
-      <rect class="room" data-id="outer" x="20" y="20" width="90" height="60" rx="6"/>
-      <text x="65" y="55" text-anchor="middle" fill="#9aa0b8" font-size="10">Outer Wards</text>
-      <rect class="room" data-id="gate" x="120" y="30" width="70" height="40" rx="6"/>
-      <text x="155" y="55" text-anchor="middle" fill="#9aa0b8" font-size="10">Gatehouse</text>
-      <rect class="room" data-id="servants" x="20" y="95" width="90" height="50" rx="6"/>
-      <text x="65" y="125" text-anchor="middle" fill="#9aa0b8" font-size="10">Servants Q.</text>
-      <rect class="room" data-id="kitchen" x="120" y="95" width="70" height="50" rx="6"/>
-      <text x="155" y="125" text-anchor="middle" fill="#9aa0b8" font-size="9">Kitchens</text>
-      <rect class="room" data-id="mirrors" x="205" y="20" width="110" height="90" rx="6"/>
-      <text x="260" y="70" text-anchor="middle" fill="#9aa0b8" font-size="10">Halls of Mirrors</text>
-      <rect class="room" data-id="library" x="330" y="20" width="90" height="60" rx="6"/>
-      <text x="375" y="55" text-anchor="middle" fill="#9aa0b8" font-size="10">Library</text>
-      <rect class="room" data-id="menagerie" x="205" y="120" width="110" height="60" rx="6"/>
-      <text x="260" y="155" text-anchor="middle" fill="#9aa0b8" font-size="10">Menagerie</text>
-      <rect class="room" data-id="gardens" x="330" y="95" width="90" height="60" rx="6"/>
-      <text x="375" y="130" text-anchor="middle" fill="#9aa0b8" font-size="10">Dream Gardens</text>
-      <rect class="room" data-id="barracks" x="20" y="160" width="43" height="50" rx="6"/>
-      <text x="41" y="189" text-anchor="middle" fill="#9aa0b8" font-size="8.5">Barracks</text>
-      <rect class="room" data-id="prison" x="67" y="160" width="43" height="50" rx="6" style="fill:#1e2029;stroke:#e63946"/>
-      <text x="88" y="189" text-anchor="middle" fill="#ff6b6b" font-size="8.5">Prison</text>
-      <rect class="room" data-id="eyrie" x="430" y="20" width="70" height="40" rx="6" style="fill:#1c2838;stroke:#48cae4"/>
-      <text x="465" y="44" text-anchor="middle" fill="#90e0ef" font-size="8.5">Gryphon Eyrie</text>
-      <rect class="room" data-id="clock" x="430" y="65" width="70" height="90" rx="6"/>
-      <text x="465" y="115" text-anchor="middle" fill="#9aa0b8" font-size="10">Clockwork Spire</text>
-      <rect class="room" data-id="crypt" x="205" y="195" width="110" height="50" rx="6"/>
-      <text x="260" y="225" text-anchor="middle" fill="#9aa0b8" font-size="10">Undercrypt</text>
-      <rect class="room" data-id="sanctum" x="330" y="170" width="170" height="75" rx="6" style="fill:#2a1f3d;stroke:#9b7cff"/>
-      <text x="415" y="212" text-anchor="middle" fill="#d4af37" font-size="11">Sanctum (Boss)</text>
-      <rect class="room" data-id="chapel" x="20" y="225" width="90" height="50" rx="6"/>
-      <text x="65" y="255" text-anchor="middle" fill="#9aa0b8" font-size="10">Chapel</text>
-      <rect class="room" data-id="relativity" x="205" y="255" width="110" height="60" rx="6"/>
-      <text x="260" y="280" text-anchor="middle" fill="#9aa0b8" font-size="10">Relativity Cloister</text>
-      <rect class="room" data-id="colosseum" x="330" y="260" width="110" height="60" rx="6"/>
-      <text x="385" y="290" text-anchor="middle" fill="#9aa0b8" font-size="10">Colosseum</text>
-      <rect class="room" data-id="trophy" x="20" y="285" width="110" height="46" rx="6"/>
-      <text x="75" y="313" text-anchor="middle" fill="#9aa0b8" font-size="10">Trophy Hall</text>
-      <rect class="room" data-id="haunted" x="20" y="337" width="110" height="30" rx="6" style="fill:#1a1c26;stroke:#7c5cbf"/>
-      <text x="75" y="356" text-anchor="middle" fill="#b39ddb" font-size="8.5">Haunted Chambers</text>
-      <rect class="room" data-id="playhouse" x="450" y="260" width="60" height="58" rx="6"/>
-      <text x="480" y="294" text-anchor="middle" fill="#9aa0b8" font-size="9">Playhouse</text>
-      <rect class="room" data-id="foundry" x="120" y="155" width="75" height="60" rx="6" style="fill:#2d241e;stroke:#d48837"/>
-      <text x="157" y="188" text-anchor="middle" fill="#e0a060" font-size="9">Steam Foundry</text>
-      <rect class="room" data-id="refectory" x="120" y="225" width="75" height="55" rx="6" style="fill:#1a2332;stroke:#5b9bd5"/>
-      <text x="157" y="256" text-anchor="middle" fill="#8cbbe8" font-size="8">Skeptic's Refectory</text>
-      <rect class="room" data-id="enclave" x="135" y="285" width="65" height="46" rx="6" style="fill:#251c33;stroke:#b277d6"/>
-      <text x="167" y="313" text-anchor="middle" fill="#d9aff5" font-size="8">Mages' Enclave</text>
-      <rect class="room" data-id="labyrinth" x="135" y="337" width="65" height="30" rx="6" style="fill:#2b1e17;stroke:#e76f51"/>
-      <text x="167" y="356" text-anchor="middle" fill="#f4a261" font-size="7.5">Brass Labyrinth</text>
-      <rect class="room" data-id="columbarium" x="205" y="322" width="110" height="42" rx="6" style="fill:#1c2833;stroke:#5dade2"/>
-      <text x="260" y="348" text-anchor="middle" fill="#aed6f1" font-size="8.5">Grand Columbarium</text>
-      <rect class="room" data-id="chronomancy" x="330" y="322" width="110" height="42" rx="6" style="fill:#2d2038;stroke:#c084fc"/>
-      <text x="385" y="348" text-anchor="middle" fill="#e9d5ff" font-size="8">Chronomantic Atrium</text>
-      <rect class="room" data-id="conservatory" x="450" y="322" width="60" height="42" rx="6" style="fill:#2d261e;stroke:#e5a93c"/>
-      <text x="480" y="342" text-anchor="middle" fill="#fbd38d" font-size="7.5">Harmonic</text>
-      <text x="480" y="352" text-anchor="middle" fill="#fbd38d" font-size="7.5">Salon</text>
-    </svg>
-  </div>
-  <div class="info-panel" id="roomInfo">
-    <h4>Select a room</h4>
-    <p>Click any room on the map to see description, puzzles, NPCs, and loot.</p>
-  </div>
-</div>
+&lt;div class=&quot;map-wrap&quot;&gt;
+  &lt;div class=&quot;map-svg&quot;&gt;
+    &lt;svg viewBox=&quot;0 0 520 375&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;outer&quot; x=&quot;20&quot; y=&quot;20&quot; width=&quot;90&quot; height=&quot;60&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;65&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Outer Wards&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;gate&quot; x=&quot;120&quot; y=&quot;30&quot; width=&quot;70&quot; height=&quot;40&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;155&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Gatehouse&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;servants&quot; x=&quot;20&quot; y=&quot;95&quot; width=&quot;90&quot; height=&quot;50&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;65&quot; y=&quot;125&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Servants Q.&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;kitchen&quot; x=&quot;120&quot; y=&quot;95&quot; width=&quot;70&quot; height=&quot;50&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;155&quot; y=&quot;125&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;9&quot;&gt;Kitchens&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;mirrors&quot; x=&quot;205&quot; y=&quot;20&quot; width=&quot;110&quot; height=&quot;90&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;260&quot; y=&quot;70&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Halls of Mirrors&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;library&quot; x=&quot;330&quot; y=&quot;20&quot; width=&quot;90&quot; height=&quot;60&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;375&quot; y=&quot;55&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Library&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;menagerie&quot; x=&quot;205&quot; y=&quot;120&quot; width=&quot;110&quot; height=&quot;60&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;260&quot; y=&quot;155&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Menagerie&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;gardens&quot; x=&quot;330&quot; y=&quot;95&quot; width=&quot;90&quot; height=&quot;60&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;375&quot; y=&quot;130&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Dream Gardens&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;barracks&quot; x=&quot;20&quot; y=&quot;160&quot; width=&quot;43&quot; height=&quot;50&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;41&quot; y=&quot;189&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;8.5&quot;&gt;Barracks&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;prison&quot; x=&quot;67&quot; y=&quot;160&quot; width=&quot;43&quot; height=&quot;50&quot; rx=&quot;6&quot; style=&quot;fill:#1e2029;stroke:#e63946&quot;/&gt;
+      &lt;text x=&quot;88&quot; y=&quot;189&quot; text-anchor=&quot;middle&quot; fill=&quot;#ff6b6b&quot; font-size=&quot;8.5&quot;&gt;Prison&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;eyrie&quot; x=&quot;430&quot; y=&quot;20&quot; width=&quot;70&quot; height=&quot;40&quot; rx=&quot;6&quot; style=&quot;fill:#1c2838;stroke:#48cae4&quot;/&gt;
+      &lt;text x=&quot;465&quot; y=&quot;44&quot; text-anchor=&quot;middle&quot; fill=&quot;#90e0ef&quot; font-size=&quot;8.5&quot;&gt;Gryphon Eyrie&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;clock&quot; x=&quot;430&quot; y=&quot;65&quot; width=&quot;70&quot; height=&quot;90&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;465&quot; y=&quot;115&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Clockwork Spire&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;crypt&quot; x=&quot;205&quot; y=&quot;195&quot; width=&quot;110&quot; height=&quot;50&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;260&quot; y=&quot;225&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Undercrypt&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;sanctum&quot; x=&quot;330&quot; y=&quot;170&quot; width=&quot;170&quot; height=&quot;75&quot; rx=&quot;6&quot; style=&quot;fill:#2a1f3d;stroke:#9b7cff&quot;/&gt;
+      &lt;text x=&quot;415&quot; y=&quot;212&quot; text-anchor=&quot;middle&quot; fill=&quot;#d4af37&quot; font-size=&quot;11&quot;&gt;Sanctum (Boss)&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;chapel&quot; x=&quot;20&quot; y=&quot;225&quot; width=&quot;90&quot; height=&quot;50&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;65&quot; y=&quot;255&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Chapel&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;relativity&quot; x=&quot;205&quot; y=&quot;255&quot; width=&quot;110&quot; height=&quot;60&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;260&quot; y=&quot;280&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Relativity Cloister&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;colosseum&quot; x=&quot;330&quot; y=&quot;260&quot; width=&quot;110&quot; height=&quot;60&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;385&quot; y=&quot;290&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Colosseum&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;trophy&quot; x=&quot;20&quot; y=&quot;285&quot; width=&quot;110&quot; height=&quot;46&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;75&quot; y=&quot;313&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;10&quot;&gt;Trophy Hall&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;haunted&quot; x=&quot;20&quot; y=&quot;337&quot; width=&quot;110&quot; height=&quot;30&quot; rx=&quot;6&quot; style=&quot;fill:#1a1c26;stroke:#7c5cbf&quot;/&gt;
+      &lt;text x=&quot;75&quot; y=&quot;356&quot; text-anchor=&quot;middle&quot; fill=&quot;#b39ddb&quot; font-size=&quot;8.5&quot;&gt;Haunted Chambers&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;playhouse&quot; x=&quot;450&quot; y=&quot;260&quot; width=&quot;60&quot; height=&quot;58&quot; rx=&quot;6&quot;/&gt;
+      &lt;text x=&quot;480&quot; y=&quot;294&quot; text-anchor=&quot;middle&quot; fill=&quot;#9aa0b8&quot; font-size=&quot;9&quot;&gt;Playhouse&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;foundry&quot; x=&quot;120&quot; y=&quot;155&quot; width=&quot;75&quot; height=&quot;60&quot; rx=&quot;6&quot; style=&quot;fill:#2d241e;stroke:#d48837&quot;/&gt;
+      &lt;text x=&quot;157&quot; y=&quot;188&quot; text-anchor=&quot;middle&quot; fill=&quot;#e0a060&quot; font-size=&quot;9&quot;&gt;Steam Foundry&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;refectory&quot; x=&quot;120&quot; y=&quot;225&quot; width=&quot;75&quot; height=&quot;55&quot; rx=&quot;6&quot; style=&quot;fill:#1a2332;stroke:#5b9bd5&quot;/&gt;
+      &lt;text x=&quot;157&quot; y=&quot;256&quot; text-anchor=&quot;middle&quot; fill=&quot;#8cbbe8&quot; font-size=&quot;8&quot;&gt;Skeptic&#39;s Refectory&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;enclave&quot; x=&quot;135&quot; y=&quot;285&quot; width=&quot;65&quot; height=&quot;46&quot; rx=&quot;6&quot; style=&quot;fill:#251c33;stroke:#b277d6&quot;/&gt;
+      &lt;text x=&quot;167&quot; y=&quot;313&quot; text-anchor=&quot;middle&quot; fill=&quot;#d9aff5&quot; font-size=&quot;8&quot;&gt;Mages&#39; Enclave&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;labyrinth&quot; x=&quot;135&quot; y=&quot;337&quot; width=&quot;65&quot; height=&quot;30&quot; rx=&quot;6&quot; style=&quot;fill:#2b1e17;stroke:#e76f51&quot;/&gt;
+      &lt;text x=&quot;167&quot; y=&quot;356&quot; text-anchor=&quot;middle&quot; fill=&quot;#f4a261&quot; font-size=&quot;7.5&quot;&gt;Brass Labyrinth&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;columbarium&quot; x=&quot;205&quot; y=&quot;322&quot; width=&quot;110&quot; height=&quot;42&quot; rx=&quot;6&quot; style=&quot;fill:#1c2833;stroke:#5dade2&quot;/&gt;
+      &lt;text x=&quot;260&quot; y=&quot;348&quot; text-anchor=&quot;middle&quot; fill=&quot;#aed6f1&quot; font-size=&quot;8.5&quot;&gt;Grand Columbarium&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;chronomancy&quot; x=&quot;330&quot; y=&quot;322&quot; width=&quot;110&quot; height=&quot;42&quot; rx=&quot;6&quot; style=&quot;fill:#2d2038;stroke:#c084fc&quot;/&gt;
+      &lt;text x=&quot;385&quot; y=&quot;348&quot; text-anchor=&quot;middle&quot; fill=&quot;#e9d5ff&quot; font-size=&quot;8&quot;&gt;Chronomantic Atrium&lt;/text&gt;
+      &lt;rect class=&quot;room&quot; data-id=&quot;conservatory&quot; x=&quot;450&quot; y=&quot;322&quot; width=&quot;60&quot; height=&quot;42&quot; rx=&quot;6&quot; style=&quot;fill:#2d261e;stroke:#e5a93c&quot;/&gt;
+      &lt;text x=&quot;480&quot; y=&quot;342&quot; text-anchor=&quot;middle&quot; fill=&quot;#fbd38d&quot; font-size=&quot;7.5&quot;&gt;Harmonic&lt;/text&gt;
+      &lt;text x=&quot;480&quot; y=&quot;352&quot; text-anchor=&quot;middle&quot; fill=&quot;#fbd38d&quot; font-size=&quot;7.5&quot;&gt;Salon&lt;/text&gt;
+    &lt;/svg&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;info-panel&quot; id=&quot;roomInfo&quot;&gt;
+    &lt;h4&gt;Select a room&lt;/h4&gt;
+    &lt;p&gt;Click any room on the map to see description, puzzles, NPCs, and loot.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 
 **Location Details:**
 
@@ -1070,7 +1154,7 @@ The fortress comprises 16 core interconnected zones and 11 specialized periphera
 - **Genie Alcove (hidden):** Behind the largest "slain" beast in Trophy Hall (lockpick 3). A small chamber with a dusty bottle on a pedestal. Opening it releases The Genie. Bargains offered here. Mimic chests may guard the approach (rare).
 - **Astronomy Tower:** A tall spire with a telescope and star-map floor. Constellation puzzles reveal hidden rooms; the stars are illusions that shift nightly. Quest: "The Star That Lies".
 - **Alchemist's Lab:** A cluttered workshop with brewing stations, unstable experiments, and a crafting bench. Mix reagents into tools/buffs. Quest: "The Unstable Formula".
-- **The Abyssal Prison Block & Penitent's Oubliette:** The subterranean maximum-security dungeon and cognitive extraction vaults carved into the keep's black bedrock beneath the Barracks. Patrolled by armored guards and the brutal Siphon Warden Malakor. Here, real prisoners are clamped into steam-powered starlight siphons to bleed their memories and lifeforce into Vaelor's illusion projectors. Features the dramatic rescue of Eldrin the Star-Carver, who makes the ultimate heroic self-sacrifice inside the runaway reactor crucible to power up Kaelen's amulet into *The Martyr's Starlight Amulet*, enabling passage through previously impassable starlight security grids across the keep. NPCs: Prisoner Korr, Eldrin the Star-Carver. Mini-Boss: Siphon Warden Malakor. Puzzle: *The Hydraulic Siphon Matrix* (Puzzle 30). Quest: S31 "The Martyr's Dying Ember". Loot: The Martyr's Starlight Amulet, Siphon Warden's Ring, Prison Keyring.
+- **The Abyssal Prison Block & Penitent's Oubliette:** The subterranean maximum-security dungeon and cognitive extraction vaults carved into the keep's black bedrock beneath the Barracks. Patrolled by armored guards and the brutal Castellan Dredge the Iron Gaoler. Here, real prisoners are clamped into steam-powered starlight siphons to bleed their memories and lifeforce into Vaelor's illusion projectors. Features the dramatic rescue of Eldrin the Star-Carver, who makes the ultimate heroic self-sacrifice inside the runaway reactor crucible to power up Kaelen's amulet into *The Martyr's Starlight Amulet*, enabling passage through previously impassable starlight security grids across the keep. NPCs: Prisoner Korr, Eldrin the Star-Carver. Mini-Boss: Castellan Dredge the Iron Gaoler. Puzzle: *The Hydraulic Siphon Matrix* (Puzzle 30). Quest: S31 "The Martyr's Dying Ember". Loot: The Martyr's Starlight Amulet, Siphon Warden's Ring, Prison Keyring.
 - **Rooftop Gardens:** Exterior terraces with wind puzzles and vista points; glider shortcuts between zones. Quest: "The Wind's Secret".
 - **The Void Realm:** A dream-space between illusions; reality-bending rules; appears only at midnight. Quest: "The Dreamer's Descent".
 - **The Phantasmagoria Playhouse:** A macabre, gothic traveling carnival and performance hall preserved inside the keep. Covered in faded woodcut playbills, steam calliope pipe organ, gaslight lamps, and velvet drapes. Features performing illusionists, clockwork automaton acrobats, and a cynical talking draft horse named Barnaby. Houses carnival mini-games: the rotating Knife-Wheel (timing), Tightrope Balance, and the Titan's High-Striker (feat of strength). NPCs: Ringmaster Valenti, Barnaby the Talking Horse, Strongman Boris.
@@ -1085,7 +1169,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **S00 — The Approach & Sunken Courtyard (Exterior)**
 
-![S00 — The Approach: Sunken Courtyard outside the imposing terracotta-stone and red-brick mountain fortress](assets/scene_approach.jpg)
+
 
 - **Visual Vista & Atmosphere:** 
   - Kaelen stands on the lower winding cliffside approach at twilight, overlooking a breathtaking panorama of misty emerald-green rolling hills and ancient forested valleys beneath an atmospheric cerulean sky.
@@ -1121,7 +1205,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Outer Wards**
 
-![Outer Wards: Courtyard Entrance & Statue Riddle Scene](assets/scene_outer_wards.jpg)
+
 
 - **OW1 Courtyard Entrance** — Broken statues, 2-guard patrol (tutorial stealth). Exits: N→OW2, E→OW4 (hidden, lockpick 2).
 - **OW2 Statue Garden** — 4 statues (Statue Riddle). NPC: none. Exits: N→OW3, S→OW1.
@@ -1131,7 +1215,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Gatehouse**
 
-![Gatehouse: Lift-Gate Interior & Mirror Alignment Mechanics](assets/gameplay_mockup.jpg)
+
 
 - **GH1 Gatehouse Exterior** — Guard captain patrol. Exits: N→GH2, S→OW5, V (vent)→GH4 (climbing 2).
 - **GH2 Gatehouse Interior** — Lift-gate puzzle (Mirror Alignment). Exits: N→SQ1 (after unlock), S→GH1.
@@ -1140,7 +1224,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Servants' Quarters (Hub)**
 
-![Servants' Quarters & Kitchens: Peaceful Sanctuary Hub with Hearth & Dumbwaiter](assets/scene_servants_hub.jpg)
+
 
 - **SQ1 Main Hall** — Hub: NPCs (Lira, Hesta, Pim), quests, rumors, save point. Exits: N→K1, E→L1, W→B1, U→DG1, S→GH2.
 - **SQ2 Maid Rooms** — Lira's quarters; locket (Q4). Exits: S→SQ1.
@@ -1168,7 +1252,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Halls of Mirrors**
 
-![Halls of Mirrors: Grand Vaulted Gallery of Impossible Reflections](assets/scene_halls_of_mirrors.jpg)
+
 
 - **HM1 Entry Hall** — First mirrors; Mirror Merchant. Exits: W→SQ1, E→HM2.
 - **HM2 Mirror Maze A** — Reflection doors. Exits: E→HM3, N→HM4, S→HM6.
@@ -1179,7 +1263,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Arcane Library**
 
-![Arcane Library: Stacks, Floating Tomes, and Scholar Desks](assets/scene_arcane_library.jpg)
+
 
 - **L1 Main Stacks** — Colossal two-story mahogany book stacks holding thousands of censored historical volumes; floating candelabras; patrolled by 2 Keep Guards. NPC: Librarian Maren (Q2). Exits: W→HM3 (Halls of Mirrors), E→L2, U→L4 (Upper Balcony).
 - **L2 Index Desk** — The central cataloging rotunda. Sorting desks, brass catalog drawers, and the *Library Index Puzzle* (reordering books by original un-censored publication date). Exits: W→L1, N→L3.
@@ -1197,7 +1281,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Menagerie**
 
-![Menagerie: The Glacial Pavilion & Beast Vaults](assets/menagerie.png)
+
 
 - **M1 Entrance Cages** — Ornate Victorian wrought-iron cages housing phantasmal beasts, chimeras, and dreaming human prisoners suspended in starlight amber. Patrolled by 2 Keep Guards and 1 Phantasm Hound. Exits: W→L1 (Library), E→M2, S→M4 (Glacial Pavilion).
 - **M2 Beast Arena** — Sunken combat amphitheater lined with heavy brass bars. The captive beast is a dreaming court prisoner (Q3 "The Beast That Dreams"). Exits: E→M3, W→M1.
@@ -1215,7 +1299,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Dreaming Gardens & The Winter Solarium**
 
-![Dreaming Gardens: Floating Terraces, Bioluminescent Flora, & Starlight Tree](assets/scene_dreaming_gardens.jpg)
+
 
 - **DG1 Terrace Entry** — Open-air terraces overlooking the cloud void; bioluminescent dream-logic flora; connected to the kitchen dumbwaiters. Exits: D→SQ1 (Servants' Quarters), E→DG2, W→M5 (Menagerie Balcony link).
 - **DG2 Belief Garden** — The botanical belief puzzle chamber. Five giant floating starlight flowers that bridge the chasm only when Kaelen "believes" in their reality by examining the inscribed truth plaques. Exits: W→DG1, E→WS1 (The Cursed Winter Solarium).
@@ -1276,7 +1360,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **Sanctum**
 
-![Sanctum Boss Arena: Archillusionist Vaelor's Lair](assets/vaelor_sprites.jpg)
+
 
 - **SA1 Antechamber** — H4: Daughter's Room (requires Memory Thread). Exits: S→CS5, N→SA2.
 - **SA2 Sanctum Arena** — Boss fight: Vaelor (4 phases). Exits: N→SA3 (after victory).
@@ -1309,7 +1393,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **The Gilded Music Salon & Harmonic Conservatory**
 
-![The Gilded Music Salon & Harmonic Conservatory: Rotunda, Grand Fortepiano, & Steam Orchestrion](assets/scene_harmonic_salon.jpg)
+
 
 - **MS1 The Vestibule of Chimes** — Soundproofed foyer lined with sound-dampening velvet curtains and brass tuning bells. Acoustic floor frets glow when stepped on in sequence. Exits: N→PH1 (Phantasmagoria bypass), S→MS2, W→CR1 (Chronomancy link).
 - **MS2 The Salon Rotunda** — Soaring vaulted Victorian ballroom under a crystal chandelier. Features Maestro Niccolò's solo dais, Madame Clara's resonant concert grand piano, and Bandmaster Gustav's steam-orchestrion organ. Dialogue hub and quest start for S25. Exits: N→MS1, E→MS3, U→MS4.
@@ -1343,7 +1427,7 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **The High Eyrie of the Sky-Sovereign**
 
-![The High Eyrie of the Sky-Sovereign: Granite Dais, Aeolian Harps, & Lord Aurelius](assets/scene_gryphon_eyrie.jpg)
+
 
 - **EY1 The Gale-Swept Parapet** — Marble stairs ascending from Clockwork Spire CS4. Dizzying vertical drop overlooking the shattered crags; high winds reduce forward move speed unless crouching. Wind-baffle pressure lever controls storm flow. Exits: D→CS4, N→EY2.
 - **EY2 The Roost of Gilded Trophies** — Sun-bleached circular granite dais littered with centuries of antique gold coin hoards, broken imperial crowns, and velvet bower nests. Lord Aurelius reclines in majestic eagle-lion splendor, his golden claws bound by glowing aether-tether chains. Dialogue hub and quest start for S29. Exits: S→EY1, W→EY3, E→EY4.
@@ -1360,14 +1444,14 @@ Every screen of the world is listed below with its contents and transitions. The
 
 **The Abyssal Prison Block & Penitent's Oubliette**
 
-![The Abyssal Prison Block & Cognitive Siphon Gaol](assets/prison.png)
+
 
 - **PB1 The Upper Cell Tier** — Suspended iron catwalks spanning a yawning abyss in the fortress bedrock. Flanked by barred isolation cells where real prisoners are subjected to psychological sensory deprivation. Guard patrols with hounds. Cell of Prisoner Korr (S11). Exits: U→Barracks B1, D→PB2, S→PB3.
-- **PB2 The Warden's Iron Watch** — Fortified iron checkpoint and weapons lockup. Siphon Warden Malakor commands guard forces from an armored observation balcony equipped with steam sirens. Contains the Warden's desk, prison registers detailing sixty years of starlight siphoning, and the rack holding *The Warden's Abyssal Master Keyring*. Exits: U→PB1, S→PB3, E→PB4.
+- **PB2 The Warden's Iron Watch** — Fortified iron checkpoint and weapons lockup. Castellan Dredge the Iron Gaoler commands guard forces from an armored observation balcony equipped with steam sirens. Contains the Warden's desk, prison registers detailing sixty years of starlight siphoning, and the rack holding *The Warden's Abyssal Master Keyring*. Exits: U→PB1, S→PB3, E→PB4.
 - **PB3 The Hydraulic Cell Matrix** — Monumental chasm over an active starlight conduit where nine suspended iron cage blocks shift on hydraulic counterweights. Location of Puzzle 30 (*The Hydraulic Siphon Matrix*). Aligning the steam pressure valves creates a crossing bridge while avoiding deadly sweeping arc searchlights. Exits: N→PB1, N→PB2, S→PB5.
 - **PB4 The Cognitive Extraction Chambers** — Chilling laboratory filled with copper vacuum lines, glass memory cylinders, and padded extraction chairs where prisoners have their memories and souls distilled into liquid aether. Environmental lore revealing Vaelor's earliest attempts to preserve Cynthia's consciousness. Exits: W→PB2, S→PB5.
 - **PB5 The Siphon Crucibles (Eldrin's Cell)** — The deepest subterranean oubliette, humming with lethal starlight ozone and crackling azure conduits. Eldrin the Star-Carver is clamped into a colossal 4-point brass siphon ring, his life essence being siphoned into Vaelor's illusion projectors. Releasing Eldrin triggers the keep-wide containment breach alarm. Exits: N→PB3, N→PB4, S→PB6.
-- **PB6 The Abyssal Trench Vestibule & Sacrifice Crucible** — High-pressure airlock chamber at the threshold of the subterranean exit tunnel. When Warden Malakor triggers the containment lockout, lethal Null-Matter Starlight Disintegration Barriers seal the blast doors and the siphon reactor enters catastrophic overload. Eldrin enters the inner crucible to manually vent the pressure, channeling the raw celestial starlight into Kaelen's amulet. The resulting supernova fuses Eldrin's soul into *The Martyr's Starlight Amulet*, vaporizing the barriers and unlocking deep exploration across the fortress. Exits: N→PB5, S→Escape Tunnel / Undercrypt shortcut (unlocked by the new Amulet).
+- **PB6 The Abyssal Trench Vestibule & Sacrifice Crucible** — High-pressure airlock chamber at the threshold of the subterranean exit tunnel. When Castellan Dredge triggers the containment lockout, lethal Null-Matter Starlight Disintegration Barriers seal the blast doors and the siphon reactor enters catastrophic overload. Eldrin enters the inner crucible to manually vent the pressure, channeling the raw celestial starlight into Kaelen's amulet. The resulting supernova fuses Eldrin's soul into *The Martyr's Starlight Amulet*, vaporizing the barriers and unlocking deep exploration across the fortress. Exits: N→PB5, S→Escape Tunnel / Undercrypt shortcut (unlocked by the new Amulet).
 
 ## 10c. Metroidvania Progression & Special Exploration (Salt and Sanctuary Style)
 
@@ -1382,7 +1466,7 @@ Defeating the **4 Major Brigand Captains** awards Kaelen permanent movement abil
 | **Shadow Mantle** (Wall-Leap) | Brutus "The Iron Cleaver" (Shattered Bastion) | Jump against vertical walls; tap interact at ledge crests | Sheer stone walls, narrow chimney shafts, high rafters | Upper Barracks Rafters, Servants' Attic, Arcane Library Balcony (L4), High Gatehouse Vent |
 | **Starlight Dart** (Air-Dash) | Vesper "The Swift-Stitch" (The Charnel Pit) | Press dodge while airborne; horizontal air-burst | Abyssal cloud chasms, wide pit traps, high-speed beam traps | Dreaming Gardens Floating Terraces (DG2-DG4), Starlight Grove, Rooftop Gardens (RG1-RG4), Collapsing Dumbwaiter Shafts |
 | **Graviton Brand** (Inversion Sigil) | Malakor "The Void-Eyed" (Pendulum Core) | Interact with blue Graviton Runes on walls/ceilings | Inverted gravity corridors, ceiling-mounted doorways, vertical chasm shafts | Relativity Cloister Ceiling Halls (RS2-RS6), Inverted Spire Core, Undercrypt Ceiling Catacombs |
-| **Mirror Phase** (Prismatic Shift) | Lady Cynthia "The Glass Queen" (Crystal Theater) | Dash forward into iron portcullises or cracked illusion barriers | Heavy barred iron gates, cracked glowing illusion seams, red ward laser grids | Sealed Undercrypt Monk Vaults (U4), Genie Alcove (GA1-GA3), Sanctum Antechamber (SA1-SA3), Void Realm Portal (VR1) |
+| **Mirror Phase** (Prismatic Shift) | Duchess Seraphina Vane "The Glass Queen" (Crystal Theater) | Dash forward into iron portcullises or cracked illusion barriers | Heavy barred iron gates, cracked glowing illusion seams, red ward laser grids | Sealed Undercrypt Monk Vaults (U4), Genie Alcove (GA1-GA3), Sanctum Antechamber (SA1-SA3), Void Realm Portal (VR1) |
 
 ### 2. Fortress Backtracking & Exploration Guide
 
@@ -1558,7 +1642,12 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 | Knife-Wheel Cadence | Playhouse (PH2) | Rotating target wheel timing game | Throw daggers into moving target windows without hitting dummy |
 | Titan's High-Striker | Playhouse (PH3) | Feat of strength / timing gauge | Strike anvil at peak of power meter (or STR 12) to ring sky bell |
 | High-Wire Balance | Playhouse (PH5) | Tightrope balance timing | Counteract wind gusts with timed directional balance inputs |
-| The Satiety of Tantalus | The Cenacle of Eternal Satiety (BQ1) | Sensory deconstruction, Nozick's philosophical refutation, mass restoration | Dispel olfactory incense with bitter salt, jam waltz governor, refute Lord Morvath's solipsism, balance Themis scale |
+| The Panopticon of Shifting Gaze | Outer Wards (OW2) | Sweeping True-Sight projector tower + statue shields + boiler soot | Reflect beam via truthful statue shield (45° N), foul steam pipe with soot in OW4, or drape cloak via Zephyr |
+| The Pneumatic Transcript Hijack | Foundry (BF3) <-> Library (L2) / Barracks (B3) | High-speed vacuum canister routing & pressure reversal (Suction vs. Blowback) | Send forged riot order to Tube Beta (clears B3 Armory), reverse Tube Alpha pressure (blasts censored books to L2), or mail flash-bomb to PB2 |
+| Acoustic Architecture of the Silent Star | Conservatory (MS3) <-> Undercrypt (U3) / Mirrors (HM4) | 432 Hz standing wave broadcast through structural bedrock columns | Lock Conservatory organ pedal with Iron Nail & play Cynthia's Counter-Lullaby; permanently solidifies U3 spirit bridge & shatters HM4 source mirrors |
+| The Escher Gravity Flood | Kitchens (K1) -> Relativity Cloister (RS4) -> Foundry (BF2) | Non-Euclidean water flow follows whichever plane is anchored as Local Floor | Open K1 sluice, rotate RS2–RS4 gravity 90° E then 180° with Iron Nails; water flows up wall and across ceiling aqueduct to quench RS4 vault & feed BF2 boiler |
+| Portrait Gallery Peephole Heist | Trophy Hall (TR2) <-> Barracks (B1) / Manor (HA2) / Sanctum (SA1) | Intra-wall servant spy-crawlways behind hollow-eyed portraits | Enter behind *Kaspar the Prestidigitator* (TR2); peer through painted eyes to learn vault ciphers, poison goblets below, or garrote sentries undetected |
+| The Satiety of Tantalus | The Cenacle of Eternal Satiety (BQ1) | Sensory deconstruction, Nozick's philosophical refutation, mass restoration | Dispel olfactory incense with bitter salt, jam waltz governor, refute Marquess Cassian's solipsism, balance Themis scale |
 | Anamorphic Chronos Mirrors | Halls of Mirrors (HM6) | Mirrors reflect distinct non-player objects; slide along grooved rails to order timeline | Sequence: Cradle → Swallow → Hourglass → Rose; triggers causal cascade across mirror glass |
 | Pneumatic Steam-Condenser Circuit | Foundry (BF4) | Balance 3 wheel valves to 120 PSI; steam fogs cold mirrors to reveal ciphers and focus beam | Regulate Low/Mid/High valves to 120 PSI; wipe condensation on mirrors B and C |
 | Differential Escapement Governor | Foundry (BF5) / Spire (CS2) | Slot 3 brass cog tooth-ratios into differential gearbox to synchronize flywheel | Ratio sequence: 12T Pinion → 24T Reduction → 36T Idler; slows crushing pistons |
@@ -1721,7 +1810,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
   - **The Cascade Payoff:** If freed, Asterion lets out a cathartic roar as the brass mask retracts, restoring his humanity and granting him as an ally for Sanctum Boss Phase 2. The labyrinth walls lock into a permanent open thoroughfare, and the Architect's Master Vault (`LB5`) unseals.
   - **Loot & Reward:** Solves Puzzle 29, completes S30, and rewards **Ariadne's Starlight Clew**, **The Minotaur's Brass Labrys**, and **Asterion's Gilded Horn**.
 - **The Hydraulic Siphon Matrix (The Siphon Warden's Lockout — PB3 & PB5):**
-  - **Concept & Narrative Context:** In the subterranean gaol (`PB3`), nine hanging isolation cells form a shifting 3×3 matrix suspended over an electrified starlight siphon trench. Warden Malakor has decoupled the hydraulic balance to isolate the deep oubliette (`PB5`) where Eldrin the Star-Carver is drained. To reach Eldrin, Kaelen must manipulate the three high-pressure manifold levers (`Valve Alpha`, `Valve Beta`, `Valve Gamma`) on the observation catwalk while evading sweeping starlight searchlights that trigger an automatic alarm and electrified floor grids.
+  - **Concept & Narrative Context:** In the subterranean gaol (`PB3`), nine hanging isolation cells form a shifting 3×3 matrix suspended over an electrified starlight siphon trench. Castellan Dredge has decoupled the hydraulic balance to isolate the deep oubliette (`PB5`) where Eldrin the Star-Carver is drained. To reach Eldrin, Kaelen must manipulate the three high-pressure manifold levers (`Valve Alpha`, `Valve Beta`, `Valve Gamma`) on the observation catwalk while evading sweeping starlight searchlights that trigger an automatic alarm and electrified floor grids.
   - **The Mechanics:**
     - The 3×3 cage grid starts in a staggered configuration (Cell elevations: High, Mid, Low). Only cells at 'Mid' elevation form a walkable stepping-stone bridge; cells at 'Low' are submerged in lethal starlight acid; cells at 'High' are blocked by ceiling spikes.
     - Each lever shifts hydraulic fluid between connected tanks:
@@ -1832,7 +1921,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
        - *The Solution:* Kaelen crouches and inspects the cat's velvet collar. A miniature silver locket is wedged behind its mechanical windup key. Kaelen drives an *Iron Nail* into the cat's windup keyhole, grounding its stasis loop. The porcelain cat ceases its mechanical breathing, relaxing into an ordinary antique ceramic figurine, and releases *Cynthia's Silver Locket* into Kaelen's hands.
     4. *The Shifting Family Portrait (The Liar's Gaze):*
        - Above the mantel, Vaelor's painted smile stretches too wide and Cynthia's hands turn to glass whenever Kaelen looks away.
-       - *The Solution:* Kaelen stands directly on the hearthstone, making unbroken eye contact with the portrait. He equips the *Truth Lens* (or recites Vaelor's true mortal name: *"Morvath"*). Stripped of its flattering illusion, the oil paint bubbles: Vaelor's smile collapses into a look of profound, agonizing grief; Cynthia's glass hands drop a crystal rose; and the figures bow their heads, closing their painted eyes as tears of dried turpentine streak their cheeks.
+       - *The Solution:* Kaelen stands directly on the hearthstone, making unbroken eye contact with the portrait. He equips the *Truth Lens* (or recites Vaelor's true mortal name: *"Aethelgard"*). Stripped of its flattering illusion, the oil paint bubbles: Vaelor's smile collapses into a look of profound, agonizing grief; Cynthia's glass hands drop a crystal rose; and the figures bow their heads, closing their painted eyes as tears of dried turpentine streak their cheeks.
   - **The Dissolution Cutscene & Exit Manifestation:**
     - As the fourth anomaly is resolved, the peaceful illusion shudders violently like a cracked photographic plate.
     - The golden afternoon sunlight outside the window flickers and drops away as the painted canvas falls, revealing the cold midnight starlight of the keep.
@@ -1890,76 +1979,98 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
   - **The Four-Stage Deconstruction & Philosophical Solution:**
     1. *Stage 1: The Olfactory Anchor & The Bitter Sea-Salt (`[Acrobatics / DEX 12]` & `[Alchemy]`):* The hypnotic illusion of taste and smell is maintained by four brass censers suspended above the table burning *Aether-Lotus Oil*. Kaelen scales the carved sideboard, grapples across the velvet drapery to the rafters, and replaces the burning oil with *Apothecary Bitter Sea-Salt* from the kitchen flues. The aroma instantly shifts from savory roast to suffocating, acrid burning bone and chimney soot. The guests cough, blink, and scrape dust from their tongues—the first crack in the illusion.
     2. *Stage 2: The Acoustic Governor & The Waltz of Lethe (`[Lockpick / DEX 13]`):* A monumental grandfather-clock music box in the corner drives the guests' synchronized chewing rhythm with an enchanted brass cylinder playing the *Lydian Satiety Waltz*. Kaelen uses his tension wrench to jam the brass escapement gear. The waltz screeches to a violent halt, breaking the guests' hypnotic cadence and freezing their cutlery in mid-air.
-    3. *Stage 3: The Socratic Refutation & Nozick's Experience Machine (`[Philosophy / INT 13]` or `[Truth Lens Q]`):* Kaelen takes the vacant seat opposite Lord Morvath. Morvath defends the illusion with Robert Nozick's classic philosophical dilemma: *"My estate burned. My sons died in war. Here, the pheasant is warm and my wife smiles. What moral virtue is there in gnawing cold stones of reality when a phantom roast gives peace?"* Kaelen must counter him:
-       - *The Empirical Proof:* Present the polished silver cloche or activate the *Truth Lens* (<kbd>Q</kbd>) before Lady Vivienne. The reflection reveals her sunken skeletal skull and cobwebbed pearls, proving that the dream does not preserve life—it merely embalms starvation.
-       - *The Authenticity Proof:* Argue that love and grief are inseparable; by embalming his sons' memory in fake sugar, Morvath has erased their real sacrifices. To choose the machine over reality is spiritual suicide.
-    4. *Stage 4: The Restoration of Mass & The Great Steam Release:* Conviction shattered, Lord Morvath weeps and drops his silver fork onto the porcelain. The sound echoes like a funeral bell. Across the table, the illusion violently dissolves: the glistening hams turn to piles of grey furnace ash, the sparkling wine turns to stagnant pond-water, and the guests stand up in trembling revelation. The true physical gravity and mortal reality of twenty-four living beings collapses onto the floorboards, depressing the floor pressure-plates. The central *Balance of Themis* swings into alignment, the pneumatic relief valve vents a deafening plume of steam, and the monumental blast-doors unlock!
+    3. *Stage 3: The Socratic Refutation & Nozick's Experience Machine (`[Philosophy / INT 13]` or `[Truth Lens Q]`):* Kaelen takes the vacant seat opposite Marquess Cassian. Cassian defends the illusion with [Robert Nozick's Experience Machine](https://en.wikipedia.org/wiki/Experience_machine) dilemma: *"My estate burned. My sons died in war. Here, the pheasant is warm and my wife smiles. What moral virtue is there in gnawing cold stones of reality when a phantom roast gives peace?"* Kaelen must counter him:
+       - *The Empirical Proof:* Present the polished silver cloche or activate the *Truth Lens* (&lt;kbd&gt;Q&lt;/kbd&gt;) before Marchioness Genevieve. The reflection reveals her sunken skeletal skull and cobwebbed pearls, proving that the dream does not preserve life—it merely embalms starvation.
+       - *The Authenticity Proof:* Argue that love and grief are inseparable; by embalming his sons' memory in fake sugar, Cassian has erased their real sacrifices. To choose the machine over reality is spiritual suicide.
+    4. *Stage 4: The Restoration of Mass & The Great Steam Release:* Conviction shattered, Marquess Cassian weeps and drops his silver fork onto the porcelain. The sound echoes like a funeral bell. Across the table, the illusion violently dissolves: the glistening hams turn to piles of grey furnace ash, the sparkling wine turns to stagnant pond-water, and the guests stand up in trembling revelation. The true physical gravity and mortal reality of twenty-four living beings collapses onto the floorboards, depressing the floor pressure-plates. The central *Balance of Themis* swings into alignment, the pneumatic relief valve vents a deafening plume of steam, and the monumental blast-doors unlock!
   - **Loot & Reward:** Solves Puzzle 37; advances Quest `S38`; awards the *Tantalus Goblet* (Unique Relic: converts 20% magic damage to FP; doubles food buff durations), *Archival Menu of the Eve of Betrothal (1886)* (Inspectable Lore), *Soot-Stained Silverware of the Cenacle* (Rare Crafting Curio / 350 Moons), and +750 XP.
+
+- **The Panopticon of Shifting Gaze (Outer Wards — OW2):**
+  - **The Premise:** Above the Statue Garden rises a central brass Watchtower housing an automated **All-Seeing Ocular Projector**. Every 6 seconds, its rotating prism sweeps a 90° cone of violet *True-Sight Light* across the courtyard, animating petrified hedge-guards and locking the Gatehouse portcullis on contact.
+  - **Three-Pillar Solutions:**
+    1. *Optical & Deductive Path:* Solve the *Statue Riddle* to identify the one statue bound by Vaelor's truth-oath (*"I do not know if I am real"*), then rotate its bronze shield to `45° N` to reflect the sweeping violet beam straight back into the tower's lens, shattering the projector.
+    2. *Steampunk Sabotage Path:* In `OW4`, open the copper steam-feed valve supplying the Watchtower's rotation gear and inject *Volatile Sugar-Soot* or jam a *Rusted Iron Cogwheel*, coating the projector lens in opaque black coal soot.
+    3. *Thief & Companion Path:* Command **Zephyr the Starlight Columba** (`Aether-Pigeon Whistle`) to drape a wet linen cloth over the turret housing for 30s, or use *Shadow Mantle* (`ABILITY_WALL_LEAP`) along the broken arcade pillars.
+- **The Pneumatic Transcript Hijack (Foundry BF3 <-> Library L2 <-> Barracks B3 <-> Prison PB2):**
+  - **The Premise:** Security orders and censorship decrees travel at 60 mph inside brass canisters through overhead vacuum tubes terminating at the `BF3` Pneumatic Switchboard (Tubes Alpha = Library, Beta = Barracks, Gamma = Prison).
+  - **Three-Pillar Solutions:**
+    1. *The Forged Patrol Order (Tube Beta):* Forge Castellan Dredge's seal on a blank dispatch cylinder (`[Sleight of Hand 2]` or `[INT 12]`) and fire it into Tube Beta; Barracks guards abandon `B3` Armory to answer a fake riot in the Wine Cellar.
+    2. *The Censorship Blowback (Tube Alpha):* Flip the `BF3` manifold from *Vacuum Suction* to *140 PSI Blowback*, blasting Vaelor's incineration-queue books backward out of the furnace chute directly onto Librarian Maren's desk in `L2`.
+    3. *The Pneumatic Bomb (Tube Gamma):* Load a *Phosphor Flash-Dart* or *Blast Powder Satchel* into a canister and route it to Tube Gamma, detonating inside `PB2` to destroy Dredge's alarm siren before Kaelen enters the Prison Block.
+- **The Acoustic Architecture of the Silent Star (Conservatory MS3 <-> Undercrypt U3 <-> Mirrors HM4):**
+  - **The Premise:** Vaelor's illusions hum at 60 Hz, whereas the ancient monastery bedrock was tuned by the monks to **432 Hz (The Chord of Unmaking)**.
+  - **Solution & World Payoff:** Wedge an **Iron Nail** into the Conservatory steam-orchestrion's bass damper pedal (`MS3`) and perform Cynthia's Counter-Lullaby on the Glass-Armonica. The 432 Hz standing wave resonates through the castle's stone columns—permanently solidifying the invisible spirit bridge in `U3` (Echo Chamber) and shattering two source mirrors in `HM4` (halving Mirror Wraith spawns).
+- **The Escher Gravity Flood (Kitchens K1 -> Relativity Cloister RS4 -> Steam Foundry BF2):**
+  - **The Premise:** A slag-encased key vault in `RS4` requires thermal shock (cold alpine water) to crack, while Master Vane's auxiliary boiler in `BF2` is dry and overheating.
+  - **Solution:** Open the kitchen flood-sluice (`K1`) so water pours into `RS1`. Interact with the Escher perspective landings in `RS2–RS4` and lock them with **Iron Nails** to rotate local gravity by **90° East** and **180° Inverted**. The water stream bends up the wall, flows upside-down across the ceiling aqueduct of `RS4` (cracking the slag vault), and drains through the ceiling grate directly into Vane's overhead boiler funnel in `BF2`.
+- **The Portrait Gallery Peephole Heist (Trophy Hall TR2 <-> Barracks B1 <-> Haunted Manor HA2 <-> Sanctum SA1):**
+  - **The Premise:** Hidden behind the vanishing canvas of *Kaspar the Prestidigitator* (`TR2`) is a narrow intra-wall **Servant Spy-Crawlway** connecting the hollow peephole eyes of five major portraits across the keep.
+  - **Solution & Utility:** Kaelen can traverse the spy-crawlways to peer through painted eyes into `B1`, `HA2`, `HM1`, and `SA1`—eavesdropping on spoken vault ciphers, dropping somnambulist powder into goblets on sideboards directly below the frames, or firing a *Garrote Wire* through the canvas eyes for zero-detection takedowns.
 
 ## 12. Quests
 
-<div class="tabs" id="questTabs">
-  <div class="tab active" data-tab="main">Main</div>
-  <div class="tab" data-tab="side">Side</div>
-  <div class="tab" data-tab="hidden">Hidden</div>
-</div>
-<div class="quest-panes">
-<div id="main" class="tabpane active">
-<div class="quest"><div class="title">Q0 — The Commission</div><div class="meta">Giver: Guildmaster Sable · Act I</div><p>Receive the contract. Enter the keep via air-skiff. Objective: Reach Servants' Quarters without alarm.</p></div>
-<div class="quest"><div class="title">Q1 — The Gatekeeper's Doubt</div><div class="meta">Giver: Gatekeeper Orin · Act I</div><p>Orin, a guard, questions his reality. Help him find proof he is real (Iron Nail grounding). Reward: Gatehouse Key, +Servants rep.</p></div>
-<div class="quest"><div class="title">Q2 — Index of Lies</div><div class="meta">Giver: Librarian Maren · Act II</div><p>Reorder the library index; discover Vaelor's true history. Reward: Memory Thread, Veil Sight unlock.</p></div>
-<div class="quest"><div class="title">Q3 — The Beast That Dreams</div><div class="meta">Giver: Menagerie Keeper · Act II</div><p>A caged beast is a dreaming prisoner. Free or kill? Choice affects ending. Reward: Veil-Piercing Dagger (if freed, beast ally in boss).</p></div>
-<div class="quest"><div class="title">Q4 — The Missing Heir</div><div class="meta">Giver: Servant Lira · Act III</div><p>Find evidence of Vaelor's daughter. Leads to Undercrypt revelation. Reward: Heart of Mirrors lore, +1 INT.</p></div>
-<div class="quest"><div class="title">Q5 — The Ascent</div><div class="meta">Giver: Self · Act III</div><p>Climb Clockwork Spire, defeat Warden, reach Sanctum antechamber.</p></div>
-<div class="quest"><div class="title">Q6 — The Veil Falls</div><div class="meta">Giver: Self · Act IV</div><p>Confront Vaelor. Multi-phase boss. Ending based on choices (free daughter, destroy keep, claim power).</p></div>
-</div>
-<div id="side" class="tabpane">
-<div class="quest"><div class="title">S1 — The Missing Spice</div><div class="meta">Giver: Cook Hesta · Servants</div><p>Find starlight pepper in Dreaming Gardens. Reward: Starlight Vial x3, food buffs.</p></div>
-<div class="quest"><div class="title">S2 — Confession</div><div class="meta">Giver: Blind Priest · Chapel</div><p>Confess a truth to unlock blessing. Reward: Cure Confused, +morale (crit +5% for zone).</p></div>
-<div class="quest"><div class="title">S3 — Rest for the Weary</div><div class="meta">Giver: Ghost Monk · Undercrypt</div><p>Lay 3 monk spirits to rest. Reward: Rested buff (HP regen), lore.</p></div>
-<div class="quest"><div class="title">S4 — The Dreamer's Prophecy</div><div class="meta">Giver: Dreamer · Gardens</div><p>Interpret a dream; gain hint to a hidden room. Reward: Mirror Shard Amulet upgrade.</p></div>
-<div class="quest"><div class="title">S5 — Pickpocket Patrol</div><div class="meta">Giver: Guild contact (letter)</div><p>Steal guard keyrings without detection. Reward: Gold, throwing knives.</p></div>
-<div class="quest"><div class="title">S6 — The Stair That Remembers</div><div class="meta">Giver: The Diner · Relativity Cloister</div><p>Navigate the paradoxical cloister and dine with the eternal diner. Reward: Perspective Lens, +1 INT, shortcut to Clockwork Spire.</p></div>
-<div class="quest"><div class="title">S7 — Trial of the Veil</div><div class="meta">Giver: Arena Master (illusion) · Colosseum</div><p>Survive three arena waves (combat + puzzle). Reward: Champion's Sigil, +1 STR, arena access.</p></div>
-<div class="quest"><div class="title">S8 — The Hunter's Lie</div><div class="meta">Giver: Curator · Trophy Hall</div><p>Discover which trophies are lies; find the hidden passage behind the "slain" beast. Reward: Hunter's Cloak, lore.</p></div>
-<div class="quest"><div class="title">S9 — The Star That Lies</div><div class="meta">Giver: Stargazer · Astronomy Tower</div><p>Align constellations to reveal a hidden room. Reward: Star Map (reveals secret doors at night).</p></div>
-<div class="quest"><div class="title">S10 — The Unstable Formula</div><div class="meta">Giver: Alchemist Vex · Alchemist's Lab</div><p>Brew a potion without blowing up the lab. Reward: crafting recipes, Alchemist's Apron.</p></div>
-<div class="quest"><div class="title">S11 — Free the Forgotten</div><div class="meta">Giver: Prisoner Korr · Prison Block</div><p>Rescue 3 real prisoners; evade guards. Reward: Prison Keyring, +Prisoners rep, lore.</p></div>
-<div class="quest"><div class="title">S12 — The Wind's Secret</div><div class="meta">Giver: Windkeeper · Rooftop Gardens</div><p>Solve wind puzzles to unlock a glider shortcut. Reward: Glider (fast travel between zones).</p></div>
-<div class="quest"><div class="title">S13 — The Dreamer's Descent</div><div class="meta">Giver: The Dreamer (Void) · Void Realm</div><p>Enter the Void Realm at midnight; survive dream-logic. Reward: Void Cloak (immune to Confused).</p></div>
-<div class="quest"><div class="title">S14 — The Genie's Bargains</div><div class="meta">Giver: The Genie · Genie Alcove</div><p>Open the bottle; accept 3 bargains (bonus at a cost). Reward: chosen bonuses; costs applied.</p></div>
-<div class="quest"><div class="title">S15 — The Final Wish</div><div class="meta">Giver: The Genie · Genie Alcove</div><p>Choose: free the Genie (ally in final boss) or claim the last wish (power). Reward: ending flag.</p></div>
-<div class="quest"><div class="title">S16 — The Equine's Dignity</div><div class="meta">Giver: Barnaby the Talking Horse · Playhouse</div><p>Barnaby, an arrogant nobleman cursed into horse form, seeks his family signet ring hidden in the dressing chest. Reward: Houyhnhnm's Horseshoe (+10% run speed, +1 LCK), lore on Vaelor's court.</p></div>
-<div class="quest"><div class="title">S17 — The Grand Performance</div><div class="meta">Giver: Ringmaster Valenti · Playhouse</div><p>Complete the Ringmaster's gauntlet: score a bullseye on the spinning knife-wheel and ring the Titan's High-Striker bell. Reward: Jester's Throwing Dagger, Titan's Belt, Carnival Tokens, catwalk shortcut.</p></div>
-<div class="quest"><div class="title">S18 — The Steam-Heart Pressure</div><div class="meta">Giver: Master Vane · Boiler Core</div><p>Balance the runaway boiler manifold and repair the pneumatic line to the Library. Reward: Pneumatic Harpoon Grapple, +200 XP, steam hazard immunity.</p></div>
-<div class="quest"><div class="title">S19 — The Malicious Demon's Wax</div><div class="meta">Giver: Philosopher Renatus · Refectory</div><p>Gather 3 invariant physical specimens (Chapel candle wax, Foundry steam cog, Garden root) to prove material permanence under illusion. Reward: The Cogito Ring (+2 INT, 50% shorter Confused duration), 250 XP.</p></div>
-<div class="quest"><div class="title">S20 — The Five Senses of Deception</div><div class="meta">Giver: Philosopher Renatus · Refectory</div><p>Dispel Vaelor's sensory dampening fields by striking brass harmonic tuning forks across 5 keep zones. Reward: Tuning Fork of Unmaking (active tool to dispel phantom sentries), +400 XP.</p></div>
-<div class="quest"><div class="title">S21 — Cogito, Ergo Sum (The Radical Proof)</div><div class="meta">Giver: Philosopher Renatus · Refectory</div><p>Confront Renatus's existential terror that he is a phantom. Deliver proof of autonomous will. Reward: The Meditations of Doctor Renatus (Legendary accessory; +20% counter-illusion crit damage), +500 XP.</p></div>
-<div class="quest"><div class="title">S22 — The Thaumaturges' Crucible</div><div class="meta">Giver: The Apostate Mages · Enclave</div><p>Slay 3 creature mini-bosses in the Crucible pit to extract primal catalysts. In exchange, learn 4 Arcane Trickster spells. Reward: 4 Spells, Spellweaver's Bracers, +600 XP.</p></div>
-<div class="quest"><div class="title">S23 — The Sky-Courier's Cipher</div><div class="meta">Giver: Pigeon Master Corvo · Columbarium</div><p>Repair 3 broken coop roosts, intercept an Imperial courier pigeon, and decode the flight cipher. Reward: Aether-Pigeon Whistle, Zephyr (bonded companion), dead-drop contract access, +450 XP.</p></div>
-<div class="quest"><div class="title">S24 — The Hourglass Turned Backwards</div><div class="meta">Giver: Lady Aurelia · Chronomantic Scriptorium</div><p>Un-fall the shattered chasm bridge, solve the retrocausal portcullis, and recover Cynthia's music-spring from the past. Reward: Retrograde Ouroboros, Temporal Echo ability, +500 XP.</p></div>
-<div class="quest"><div class="title">S25 — The Maestro's Devilish Caprice</div><div class="meta">Giver: Maestro Niccolò · Music Salon</div><p>Perform the 3-movement rhythm cadence on the glass-armonica to break the dissonant stasis. Reward: Maestro's Chrono-Metronome, Starlight Rosin x2, +550 XP.</p></div>
-<div class="quest"><div class="title">S26 — The Sunfall Crusade's Requiem</div><div class="meta">Giver: Lady Eleanor · Chapel Vestry</div><p>Purify the corrupted Solar Prism monstrance, lay the Phantasmal Templars to rest, and decalcify Sir Roderick. Reward: Daybreak Solar Greatsword, Aegis of the Solar Prism, The Knight's Consecrated Vow, +600 XP.</p></div>
-<div class="quest"><div class="title">S27 — The Seneschal's Silver Service</div><div class="meta">Giver: Mister Bartholomew Sterling · Servants' Hall</div><p>Recover stolen heirloom silverware and serve ceremonial afternoon tea to the fortress's eccentric masters under strict etiquette. Reward: The Grand Seneschal's Master Passkey, Sterling's Silver Pocket Watch, +550 XP.</p></div>
-<div class="quest"><div class="title">S28 — The Séance of Broken Memories</div><div class="meta">Giver: Madame Vivienne · Haunted Chambers</div><p>Brave the telekinetic poltergeist storm, unmask Vaelor's fraudulent memory mirrors, and grant peace to Cynthia's pale governess. Reward: Spectral Spirit-Lantern, Vivienne's Mourning Cameo, Cynthia's Porcelain Music Doll, +600 XP.</p></div>
-<div class="quest"><div class="title">S29 — The Sky-Sovereign's Restored Crown</div><div class="meta">Giver: Lord Aurelius · High Eyrie</div><p>Ascend the Clockwork Spire, solve the Trial of the Four Winds, and recover the ancient gryphon's stolen Solar Heart talisman. Reward: Cloak of the Sky-Sovereign, Aurelius's Royal Gryphon Whistle, +650 XP.</p></div>
-<div class="quest"><div class="title">S30 — The Clew of the Minotaur's Sorrow</div><div class="meta">Giver: Ariadne the Weaver · Brass Labyrinth</div><p>Unspool Ariadne's Starlight Clew through shifting steam corridors, confront Asterion, and free the tragic architect. Reward: Ariadne's Starlight Clew, The Minotaur's Brass Labrys, Asterion's Gilded Horn, +700 XP.</p></div>
-<div class="quest"><div class="title">S31 — The Martyr's Dying Ember</div><div class="meta">Giver: Eldrin the Star-Carver · Prison Block</div><p>Infiltrate the subterranean extraction gaol, rescue the dying master lapidary Eldrin, and witness his heroic sacrifice to transform your amulet into The Martyr's Starlight Amulet. Reward: The Martyr's Starlight Amulet, Siphon Warden's Ring, Prison Keyring, +750 XP.</p></div>
-<div class="quest"><div class="title">S32 — The White Tiger's Pledged Blood</div><div class="meta">Giver: Lord Byakko · Menagerie M4</div><p>Bargain with the imprisoned talking white tiger, solve the Cryo-Prism Octagram to break his starlight cage, survive his sudden feral betrayal in a 3-phase boss battle, and claim the rare Vial of Primordial Moon-Tiger Blood. Reward: Vial of Primordial Moon-Tiger Blood, Byakko's Quicksilver Fang / Star-Whistle, Mantle of the White Tiger, +750 XP.</p></div>
-<div class="quest"><div class="title">S33 — The Flayed Scribe's Whisper</div><div class="meta">Giver: Liber Cutis · Library L5</div><p>Discover the subterranean scriptorium beneath the Arcane Library, decode the dermal stanzas, and feed the blood-siphon lectern to unbind the sentient skin-grimoire Liber Cutis. Navigate its seductive whispers, weigh the dark power of its three forbidden chapters against your creeping physical corruption, and decide whether to burn the tome at the holy altar or unleash the Flayed King in the Sanctum. Reward: Liber Cutis / The Consecrated Palimpsest, Blood-Step, Grave-Thorns, Edict of the Flayed King, +800 XP.</p></div>
-<div class="quest"><div class="title">S34 — The Thawing of the Winter Solarium</div><div class="meta">Giver: Environmental Discovery · Winter Solarium WS1</div><p>Infiltrate the blizzard-choked Victorian conservatory, navigate deep snowdrifts using thief senses, disarm concealed cryo-mines and monofilament tripwires, pick the four radiator hearth lockboxes, and vent the ceiling flues to permanently melt the winter curse and shatter the Permafrost Ward Wall blocking the Spire. Reward: Frost-Tension Lockpick Kit, Sigil of the Thawed Rose, Heart of Glacial Mourning (Dormant Core), +650 XP, access to DG3.</p></div>
-<div class="quest"><div class="title">S35 — The House That Refused to Die</div><div class="meta">Giver: Memory Resonance · Haunted Manor HA6</div><p>Step through an antique daguerreotype into an idyllic, sunlit Victorian parlor from fourteen years ago. Confront the uncanny psychological horror anomalies hidden beneath the docile domestic routine—a 13th-hour clock, a porcelain cat that breathes like a child, a shifting portrait with porcelain teeth, and a false painted sun—to manifest the exit door handle and reclaim Cynthia's silver locket. Reward: Cynthia's Silver Locket, Memory Shard IV, +650 XP, access to HA4.</p></div>
-<div class="quest"><div class="title">S36 — The Whispers of the Ancient Bough</div><div class="meta">Giver: Yggdra the Star-Weeper · Dreamer's Grove DG3</div><p>Confront the ancient sentient starlight willow Yggdra in the sunken grove. Answer its three philosophical riddles of the forest, the thief, and the veil. Choose your path to unseal the Clockwork Spire staircase: conquer the primordial tree in combat or solve the Root-Harmonic Weave puzzle to disarm Vaelor's sap-siphons. Reward: Bough of the Arbiter / Heartwood Staff, Sap of the World Tree, +700 XP, access to CS1.</p></div>
-<div class="quest"><div class="title">S37 — A Cup of Sweet Oblivion</div><div class="meta">Giver: Mother Hazel ("Auntie Hazel") · Miniature Parlor MH1</div><p>Step through an antique Victorian dollhouse into a suffocatingly quaint pocket cottage. Survive the confectioner witch's lethal hospitality without consuming her drugged tea. Sabotage her baking hearth with volatile sulfur reagents, pickpocket the Spun-Bone Skeleton Key from her apron, rescue six captive porcelain souls, and scale the chimney flue to reverse the miniaturization hex and lock the witch inside her own miniature hearth. Reward: Mother Hazel's Bone-Sugar Spoon, Pendant of the Porcelain Doll, Shattered Glaze Figurine, +700 XP.</p><div class="quest"><div class="title">S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes)</div><div class="meta">Giver: Lord Morvath / Lady Vivienne · The Cenacle of Eternal Satiety BQ1</div><p>Infiltrate the sealed Grand Refectory where twenty-four aristocrats have feasted on illusory delicacies for thirty years while starving to the bone. Dispel the olfactory incense with bitter salt, silence the hypnotic waltz governor, engage Lord Morvath in a high-stakes philosophical confrontation regarding Nozick's Experience Machine, and restore physical truth to balance the door's hydraulic mass scale.</p><div class="rewards">Rewards: Tantalus Goblet, Archival Menu of the Eve of Betrothal, Soot-Stained Silverware, +750 XP</div></div>
-</div>
-</div>
-<div id="hidden" class="tabpane">
-<div class="quest"><div class="title">H1 — The Smuggler's Cache</div><div class="meta">Hidden · Outer Wards</div><p>Lockpick 2 cache. Reward: Grappling Hook, gold.</p></div>
-<div class="quest"><div class="title">H2 — The True Name</div><div class="meta">Hidden · Library</div><p>Find Vaelor's true name in a footnote. Reward: Boss phase skip (Mirage), +INT.</p></div>
-<div class="quest"><div class="title">H3 — Starlight Grove</div><div class="meta">Hidden · Dreaming Gardens</div><p>Believe the hidden path. Reward: Shadowweave Cloak (Legendary).</p></div>
-<div class="quest"><div class="title">H4 — The Daughter's Room</div><div class="meta">Hidden · Sanctum antechamber</div><p>Requires Memory Thread. Reveals ending choice.</p></div>
-</div>
-</div>
+&lt;div class=&quot;tabs&quot; id=&quot;questTabs&quot;&gt;
+  &lt;div class=&quot;tab active&quot; data-tab=&quot;main&quot;&gt;Main&lt;/div&gt;
+  &lt;div class=&quot;tab&quot; data-tab=&quot;side&quot;&gt;Side&lt;/div&gt;
+  &lt;div class=&quot;tab&quot; data-tab=&quot;hidden&quot;&gt;Hidden&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;quest-panes&quot;&gt;
+&lt;div id=&quot;main&quot; class=&quot;tabpane active&quot;&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;Q0 — The Commission&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Guildmaster Sable · Act I&lt;/div&gt;&lt;p&gt;Receive the contract. Enter the keep via air-skiff. Objective: Reach Servants&#39; Quarters without alarm.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;Q1 — The Gatekeeper&#39;s Doubt&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Gatekeeper Orin · Act I&lt;/div&gt;&lt;p&gt;Orin, a guard, questions his reality. Help him find proof he is real (Iron Nail grounding). Reward: Gatehouse Key, +Servants rep.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;Q2 — Index of Lies&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Librarian Maren · Act II&lt;/div&gt;&lt;p&gt;Reorder the library index; discover Vaelor&#39;s true history. Reward: Memory Thread, Veil Sight unlock.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;Q3 — The Beast That Dreams&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Menagerie Keeper · Act II&lt;/div&gt;&lt;p&gt;A caged beast is a dreaming prisoner. Free or kill? Choice affects ending. Reward: Veil-Piercing Dagger (if freed, beast ally in boss).&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;Q4 — The Missing Heir&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Servant Lira · Act III&lt;/div&gt;&lt;p&gt;Find evidence of Vaelor&#39;s daughter. Leads to Undercrypt revelation. Reward: Heart of Mirrors lore, +1 INT.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;Q5 — The Ascent&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Self · Act III&lt;/div&gt;&lt;p&gt;Climb Clockwork Spire, defeat Warden, reach Sanctum antechamber.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;Q6 — The Veil Falls&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Self · Act IV&lt;/div&gt;&lt;p&gt;Confront Vaelor. Multi-phase boss. Ending based on choices (free daughter, destroy keep, claim power).&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;side&quot; class=&quot;tabpane&quot;&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S1 — The Missing Spice&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Cook Hesta · Servants&lt;/div&gt;&lt;p&gt;Find starlight pepper in Dreaming Gardens. Reward: Starlight Vial x3, food buffs.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S2 — Confession&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Blind Priest · Chapel&lt;/div&gt;&lt;p&gt;Confess a truth to unlock blessing. Reward: Cure Confused, +morale (crit +5% for zone).&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S3 — Rest for the Weary&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Ghost Monk · Undercrypt&lt;/div&gt;&lt;p&gt;Lay 3 monk spirits to rest. Reward: Rested buff (HP regen), lore.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S4 — The Dreamer&#39;s Prophecy&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Dreamer · Gardens&lt;/div&gt;&lt;p&gt;Interpret a dream; gain hint to a hidden room. Reward: Mirror Shard Amulet upgrade.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S5 — Pickpocket Patrol&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Guild contact (letter)&lt;/div&gt;&lt;p&gt;Steal guard keyrings without detection. Reward: Gold, throwing knives.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S6 — The Stair That Remembers&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: The Diner · Relativity Cloister&lt;/div&gt;&lt;p&gt;Navigate the paradoxical cloister and dine with the eternal diner. Reward: Perspective Lens, +1 INT, shortcut to Clockwork Spire.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S7 — Trial of the Veil&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Arena Master (illusion) · Colosseum&lt;/div&gt;&lt;p&gt;Survive three arena waves (combat + puzzle). Reward: Champion&#39;s Sigil, +1 STR, arena access.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S8 — The Hunter&#39;s Lie&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Curator · Trophy Hall&lt;/div&gt;&lt;p&gt;Discover which trophies are lies; find the hidden passage behind the &quot;slain&quot; beast. Reward: Hunter&#39;s Cloak, lore.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S9 — The Star That Lies&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Stargazer · Astronomy Tower&lt;/div&gt;&lt;p&gt;Align constellations to reveal a hidden room. Reward: Star Map (reveals secret doors at night).&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S10 — The Unstable Formula&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Alchemist Vex · Alchemist&#39;s Lab&lt;/div&gt;&lt;p&gt;Brew a potion without blowing up the lab. Reward: crafting recipes, Alchemist&#39;s Apron.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S11 — Free the Forgotten&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Prisoner Korr · Prison Block&lt;/div&gt;&lt;p&gt;Rescue 3 real prisoners; evade guards. Reward: Prison Keyring, +Prisoners rep, lore.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S12 — The Wind&#39;s Secret&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Windkeeper · Rooftop Gardens&lt;/div&gt;&lt;p&gt;Solve wind puzzles to unlock a glider shortcut. Reward: Glider (fast travel between zones).&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S13 — The Dreamer&#39;s Descent&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: The Dreamer (Void) · Void Realm&lt;/div&gt;&lt;p&gt;Enter the Void Realm at midnight; survive dream-logic. Reward: Void Cloak (immune to Confused).&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S14 — The Genie&#39;s Bargains&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: The Genie · Genie Alcove&lt;/div&gt;&lt;p&gt;Open the bottle; accept 3 bargains (bonus at a cost). Reward: chosen bonuses; costs applied.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S15 — The Final Wish&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: The Genie · Genie Alcove&lt;/div&gt;&lt;p&gt;Choose: free the Genie (ally in final boss) or claim the last wish (power). Reward: ending flag.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S16 — The Equine&#39;s Dignity&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Barnaby the Talking Horse · Playhouse&lt;/div&gt;&lt;p&gt;Barnaby, an arrogant nobleman cursed into horse form, seeks his family signet ring hidden in the dressing chest. Reward: Houyhnhnm&#39;s Horseshoe (+10% run speed, +1 LCK), lore on Vaelor&#39;s court.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S17 — The Grand Performance&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Ringmaster Valenti · Playhouse&lt;/div&gt;&lt;p&gt;Complete the Ringmaster&#39;s gauntlet: score a bullseye on the spinning knife-wheel and ring the Titan&#39;s High-Striker bell. Reward: Jester&#39;s Throwing Dagger, Titan&#39;s Belt, Carnival Tokens, catwalk shortcut.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S18 — The Steam-Heart Pressure&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Master Vane · Boiler Core&lt;/div&gt;&lt;p&gt;Balance the runaway boiler manifold and repair the pneumatic line to the Library. Reward: Pneumatic Harpoon Grapple, +200 XP, steam hazard immunity.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S19 — The Malicious Demon&#39;s Wax&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Philosopher Renatus · Refectory&lt;/div&gt;&lt;p&gt;Gather 3 invariant physical specimens (Chapel candle wax, Foundry steam cog, Garden root) to prove material permanence under illusion. Reward: The Cogito Ring (+2 INT, 50% shorter Confused duration), 250 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S20 — The Five Senses of Deception&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Philosopher Renatus · Refectory&lt;/div&gt;&lt;p&gt;Dispel Vaelor&#39;s sensory dampening fields by striking brass harmonic tuning forks across 5 keep zones. Reward: Tuning Fork of Unmaking (active tool to dispel phantom sentries), +400 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S21 — Cogito, Ergo Sum (The Radical Proof)&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Philosopher Renatus · Refectory&lt;/div&gt;&lt;p&gt;Confront Renatus&#39;s existential terror that he is a phantom. Deliver proof of autonomous will. Reward: The Meditations of Doctor Renatus (Legendary accessory; +20% counter-illusion crit damage), +500 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S22 — The Thaumaturges&#39; Crucible&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: The Apostate Mages · Enclave&lt;/div&gt;&lt;p&gt;Slay 3 creature mini-bosses in the Crucible pit to extract primal catalysts. In exchange, learn 4 Arcane Trickster spells. Reward: 4 Spells, Spellweaver&#39;s Bracers, +600 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S23 — The Sky-Courier&#39;s Cipher&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Pigeon Master Corvo · Columbarium&lt;/div&gt;&lt;p&gt;Repair 3 broken coop roosts, intercept an Imperial courier pigeon, and decode the flight cipher. Reward: Aether-Pigeon Whistle, Zephyr (bonded companion), dead-drop contract access, +450 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S24 — The Hourglass Turned Backwards&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Lady Aurelia · Chronomantic Scriptorium&lt;/div&gt;&lt;p&gt;Un-fall the shattered chasm bridge, solve the retrocausal portcullis, and recover Cynthia&#39;s music-spring from the past. Reward: Retrograde Ouroboros, Temporal Echo ability, +500 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S25 — The Maestro&#39;s Devilish Caprice&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Maestro Niccolò · Music Salon&lt;/div&gt;&lt;p&gt;Perform the 3-movement rhythm cadence on the glass-armonica to break the dissonant stasis. Reward: Maestro&#39;s Chrono-Metronome, Starlight Rosin x2, +550 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S26 — The Sunfall Crusade&#39;s Requiem&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Lady Eleanor · Chapel Vestry&lt;/div&gt;&lt;p&gt;Purify the corrupted Solar Prism monstrance, lay the Phantasmal Templars to rest, and decalcify Sir Roderick. Reward: Daybreak Solar Greatsword, Aegis of the Solar Prism, The Knight&#39;s Consecrated Vow, +600 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S27 — The Seneschal&#39;s Silver Service&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Mister Bartholomew Sterling · Servants&#39; Hall&lt;/div&gt;&lt;p&gt;Recover stolen heirloom silverware and serve ceremonial afternoon tea to the fortress&#39;s eccentric masters under strict etiquette. Reward: The Grand Seneschal&#39;s Master Passkey, Sterling&#39;s Silver Pocket Watch, +550 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S28 — The Séance of Broken Memories&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Madame Vivienne · Haunted Chambers&lt;/div&gt;&lt;p&gt;Brave the telekinetic poltergeist storm, unmask Vaelor&#39;s fraudulent memory mirrors, and grant peace to Cynthia&#39;s pale governess. Reward: Spectral Spirit-Lantern, Vivienne&#39;s Mourning Cameo, Cynthia&#39;s Porcelain Music Doll, +600 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S29 — The Sky-Sovereign&#39;s Restored Crown&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Lord Aurelius · High Eyrie&lt;/div&gt;&lt;p&gt;Ascend the Clockwork Spire, solve the Trial of the Four Winds, and recover the ancient gryphon&#39;s stolen Solar Heart talisman. Reward: Cloak of the Sky-Sovereign, Aurelius&#39;s Royal Gryphon Whistle, +650 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S30 — The Clew of the Minotaur&#39;s Sorrow&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Ariadne the Weaver · Brass Labyrinth&lt;/div&gt;&lt;p&gt;Unspool Ariadne&#39;s Starlight Clew through shifting steam corridors, confront Asterion, and free the tragic architect. Reward: Ariadne&#39;s Starlight Clew, The Minotaur&#39;s Brass Labrys, Asterion&#39;s Gilded Horn, +700 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S31 — The Martyr&#39;s Dying Ember&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Eldrin the Star-Carver · Prison Block&lt;/div&gt;&lt;p&gt;Infiltrate the subterranean extraction gaol, rescue the dying master lapidary Eldrin, and witness his heroic sacrifice to transform your amulet into The Martyr&#39;s Starlight Amulet. Reward: The Martyr&#39;s Starlight Amulet, Siphon Warden&#39;s Ring, Prison Keyring, +750 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S32 — The White Tiger&#39;s Pledged Blood&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Lord Byakko · Menagerie M4&lt;/div&gt;&lt;p&gt;Bargain with the imprisoned talking white tiger, solve the Cryo-Prism Octagram to break his starlight cage, survive his sudden feral betrayal in a 3-phase boss battle, and claim the rare Vial of Primordial Moon-Tiger Blood. Reward: Vial of Primordial Moon-Tiger Blood, Byakko&#39;s Quicksilver Fang / Star-Whistle, Mantle of the White Tiger, +750 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S33 — The Flayed Scribe&#39;s Whisper&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Liber Cutis · Library L5&lt;/div&gt;&lt;p&gt;Discover the subterranean scriptorium beneath the Arcane Library, decode the dermal stanzas, and feed the blood-siphon lectern to unbind the sentient skin-grimoire Liber Cutis. Navigate its seductive whispers, weigh the dark power of its three forbidden chapters against your creeping physical corruption, and decide whether to burn the tome at the holy altar or unleash the Flayed King in the Sanctum. Reward: Liber Cutis / The Consecrated Palimpsest, Blood-Step, Grave-Thorns, Edict of the Flayed King, +800 XP.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S34 — The Thawing of the Winter Solarium&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Environmental Discovery · Winter Solarium WS1&lt;/div&gt;&lt;p&gt;Infiltrate the blizzard-choked Victorian conservatory, navigate deep snowdrifts using thief senses, disarm concealed cryo-mines and monofilament tripwires, pick the four radiator hearth lockboxes, and vent the ceiling flues to permanently melt the winter curse and shatter the Permafrost Ward Wall blocking the Spire. Reward: Frost-Tension Lockpick Kit, Sigil of the Thawed Rose, Heart of Glacial Mourning (Dormant Core), +650 XP, access to DG3.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S35 — The House That Refused to Die&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Memory Resonance · Haunted Manor HA6&lt;/div&gt;&lt;p&gt;Step through an antique daguerreotype into an idyllic, sunlit Victorian parlor from fourteen years ago. Confront the uncanny psychological horror anomalies hidden beneath the docile domestic routine—a 13th-hour clock, a porcelain cat that breathes like a child, a shifting portrait with porcelain teeth, and a false painted sun—to manifest the exit door handle and reclaim Cynthia&#39;s silver locket. Reward: Cynthia&#39;s Silver Locket, Memory Shard IV, +650 XP, access to HA4.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S36 — The Whispers of the Ancient Bough&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Yggdra the Star-Weeper · Dreamer&#39;s Grove DG3&lt;/div&gt;&lt;p&gt;Confront the ancient sentient starlight willow Yggdra in the sunken grove. Answer its three philosophical riddles of the forest, the thief, and the veil. Choose your path to unseal the Clockwork Spire staircase: conquer the primordial tree in combat or solve the Root-Harmonic Weave puzzle to disarm Vaelor&#39;s sap-siphons. Reward: Bough of the Arbiter / Heartwood Staff, Sap of the World Tree, +700 XP, access to CS1.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S37 — A Cup of Sweet Oblivion&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Mother Hazel (&quot;Auntie Hazel&quot;) · Miniature Parlor MH1&lt;/div&gt;&lt;p&gt;Step through an antique Victorian dollhouse into a suffocatingly quaint pocket cottage. Survive the confectioner witch&#39;s lethal hospitality without consuming her drugged tea. Sabotage her baking hearth with volatile sulfur reagents, pickpocket the Spun-Bone Skeleton Key from her apron, rescue six captive porcelain souls, and scale the chimney flue to reverse the miniaturization hex and lock the witch inside her own miniature hearth. Reward: Mother Hazel&#39;s Bone-Sugar Spoon, Pendant of the Porcelain Doll, Shattered Glaze Figurine, +700 XP.&lt;/p&gt;&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes)&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Giver: Marquess Cassian / Marchioness Genevieve · The Cenacle of Eternal Satiety BQ1&lt;/div&gt;&lt;p&gt;Infiltrate the sealed Grand Refectory where twenty-four aristocrats have feasted on illusory delicacies for thirty years while starving to the bone. Dispel the olfactory incense with bitter salt, silence the hypnotic waltz governor, engage Marquess Cassian in a high-stakes philosophical confrontation regarding Nozick&#39;s Experience Machine, and restore physical truth to balance the door&#39;s hydraulic mass scale.&lt;/p&gt;&lt;div class=&quot;rewards&quot;&gt;Rewards: Tantalus Goblet, Archival Menu of the Eve of Betrothal, Soot-Stained Silverware, +750 XP&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;hidden&quot; class=&quot;tabpane&quot;&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;H1 — The Smuggler&#39;s Cache&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Hidden · Outer Wards&lt;/div&gt;&lt;p&gt;Lockpick 2 cache. Reward: Grappling Hook, gold.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;H2 — The True Name&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Hidden · Library&lt;/div&gt;&lt;p&gt;Find Vaelor&#39;s true name in a footnote. Reward: Boss phase skip (Mirage), +INT.&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;H3 — Starlight Grove&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Hidden · Dreaming Gardens&lt;/div&gt;&lt;p&gt;Believe the hidden path. Reward: Shadowweave Cloak (Legendary).&lt;/p&gt;&lt;/div&gt;
+&lt;div class=&quot;quest&quot;&gt;&lt;div class=&quot;title&quot;&gt;H4 — The Daughter&#39;s Room&lt;/div&gt;&lt;div class=&quot;meta&quot;&gt;Hidden · Sanctum antechamber&lt;/div&gt;&lt;p&gt;Requires Memory Thread. Reveals ending choice.&lt;/p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
 **Quest Details & Dialogue:**
 
@@ -2000,7 +2111,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 - **S28 — The Séance of Broken Memories:** Giver: Madame Vivienne (The Pale Nursery HA3). Objectives: 1) Discover the secret passage behind the mounted chimera in Trophy Hall TR2 (lockpick 2 or phase shift). 2) Navigate the Vestibule of Whispers (`HA1`) using the *Truth Lens* to avoid phantom pit traps. 3) Meet Madame Vivienne in the Pale Nursery (`HA3`); learn that she does not realize she is dead and searches eternally for Lady Cynthia. 4) Enter the Mourning Drawing Room (`HA2`) and survive the telekinetic poltergeist assault of Lord Morvath Vaelor by taking cover behind dust-sheeted divans and parrying hurled candelabras. 5) Recover three authentic memory anchors: the un-altered physician's diagnosis in the secret desk drawer, the *Duchess's Sterling Teacup* from the sideboard, and *Cynthia's Porcelain Music Doll* hidden beneath the nursery floorboards. 6) Enter the Séance Parlor (`HA4`) and solve Puzzle 27 (*The Séance of Shifting Shadows*): align the authentic relics on the hovering table, strike the *Echo Bell*, and shatter the deceptive illusion mirrors with the *Truth Lens*. 7) Retrieve the *Spectral Spirit-Lantern* from the unsealed ancestral crypt-vault (`HA5`) and return the Porcelain Music Doll to Madame Vivienne. Rewards: *Spectral Spirit-Lantern* (Legendary Off-hand Tool: projects a cone of ghost-light revealing invisible paths, ethereal traps, and forcing poltergeists to manifest), *Vivienne's Mourning Cameo* (+15 Ethereal Def; triggers 2.5s invulnerable spirit mist on fatal damage), *Cynthia's Porcelain Music Doll* (Unlocks Cynthia's music box sixth track), +600 XP, +Servants rep. *Vivienne (fading into soft golden starlight):* "Hush now... the nursery is quiet at last. She was never behind the glass, was she? She was resting all along. Take my lantern, gentle shadow. Walk through the Master's dark house, and let the light show you what his grief sought to bury."
 - **S29 — The Sky-Sovereign's Restored Crown:** Giver: Lord Aurelius the Sky-Sovereign (The High Eyrie EY2). Objectives: 1) Ascend to the Spire pinnacle (`EY1`) and bypass the gale winds. 2) Enter the Roost of Gilded Trophies (`EY2`) and converse with the ancient mythical talking Aether-Gryphon Lord Aurelius. 3) Solve Puzzle 28 (*The Aeolian Tempest Harmony*): tune the four Aeolian wind-baffle vanes (`EY3`) using the *Echo Bell* to shatter Vaelor's artificial storm barrier. 4) Infiltrate the Spire High Vault (`CS4`) and retrieve *The Solar Heart of Aethelgard* from the pressure-sealed chest. 5) Break the aether-tether shackles binding Aurelius's golden talons using the *Tuning Fork of Unmaking* or *Whisper*. 6) Return the Solar Heart to Aurelius to witness the storm-dispelling awakening cutscene. Rewards: *Cloak of the Sky-Sovereign* (Legendary Armor/Relic: mid-air gliding, thermal lift, fall damage immunity, silent airborne landings), *Aurelius's Royal Gryphon Whistle* (Summons an aerial dive-bomb strike dealing 250 kinetic/radiant dmg in open-air zones), unseals the Gryphon Air-Bridge fast-travel flight network, +650 XP. *Aurelius (raising his golden crest with thunderous majesty):* "Look upon the horizon, shadow-walker! The clouds part because the True Sovereign breathes once more! For two centuries that posturing conjurer caged my plumage with his buzzing clockwork toys. You crawl upon the dust, mortal, yet you possess the heart of a hawk! Wrap this mantle around your shoulders—take to the air, and let the false god tremble when the shadow of the gryphon sweeps his glass throne!"
 - **S30 — The Clew of the Minotaur's Sorrow:** Giver: Ariadne the Clockwork Weaver (The Daedalian Labyrinth LB1). Objectives: 1) Enter the subterranean labyrinth threshold through the Undercrypt descent (`U4`). 2) Speak with Ariadne the Clockwork Weaver; receive *Ariadne's Starlight Clew*. 3) Anchor the glowing starlight thread to the three brass guide nodes (`LB2`/`LB3`) while timing movements across shifting brass wall corridors to the 8-beat steam rhythm cycle. 4) Infiltrate Asterion's steaming arena (`LB4`) using crouch stealth and steam plumes to evade his acoustic blind tracking. 5) Confront Asterion: either bait his charges into the stone pillars to shatter his horns in combat, or grapple onto his shoulders during stun recovery to sever Vaelor's mind-control collar with the *Truth Lens* and *Memory Thread* [DEX 12 or INT 12]. 6) Retrieve *Cynthia's Seventh Music Cylinder* and *The Minotaur's Brass Labrys* from the unlocked Architect's Master Vault (`LB5`). Rewards: *Ariadne's Starlight Clew* (Legendary Tool), *The Minotaur's Brass Labrys* (Legendary Weapon), *Asterion's Gilded Horn*, *Cynthia's Seventh Music Cylinder* (Completes Cynthia's music box collection), unseals Asterion as an ally for Sanctum Boss Phase 2, +700 XP. *Asterion (his brass faceplate hissing open, weeping tears of steam):* "The maze... the roaring in my skull... it has stopped. For seventy winters Vaelor made me his brute, burying my compass in iron. You held the thread, shadow-walker. Take my labrys—when you stand before the deceiver, let him hear the brass horns of the labyrinth shattering his hall of mirrors!"
-- **S31 — The Martyr's Dying Ember:** Giver: Eldrin the Star-Carver (The Abyssal Prison Block PB5). Objectives: 1) Infiltrate the subterranean extraction gaol (`PB1`–`PB2`) through the Barracks trapdoor or Undercrypt shaft. 2) Defeat or pickpocket Siphon Warden Malakor in `PB2` to acquire *The Warden's Abyssal Master Keyring*. 3) Solve Puzzle 30 (*The Hydraulic Siphon Matrix*) in `PB3` by equalizing the 3x3 cage pressure grid to 180 PSI and crossing the starlight siphon trench. 4) Unlock Eldrin's cell (`PB5`) and shatter his 4-point siphon shackles using *Eldrin's Star-Chisel* or *Whisper*. 5) Escort the weakened, dying Eldrin toward the escape vestibule (`PB6`). 6) When Warden Malakor triggers the emergency containment lockout, sealing the exit with lethal *Null-Matter Starlight Security Wards* and triggering reactor overload, speak with Eldrin. 7) Hand the *Mirror Shard Amulet* to Eldrin and witness his heroic self-sacrifice as he seals himself inside the blast crucible to pull the manual venting lever. 8) Retrieve the newly ascended *The Martyr's Starlight Amulet* from the molten pedestal. Rewards: *The Martyr's Starlight Amulet* (Legendary Exploration Relic: permanently phases through starlight security grids and null-matter wards, reveals all true doors/paths within 20m, immunizes against dark miasma, unlocks active 6s blind flash pulse), *Siphon Warden's Ring*, *Prison Keyring*, unseals all previously blocked starlight security corridors across the entire fortress, +750 XP. *Eldrin (his voice serene, body dissolving into radiant celestial gold through the crucible viewport):* "My thread was spun out sixty years ago, shadow-walker. Vaelor took my youth, took my freedom, but he could never extinguish the artisan's fire! Take this stone... whenever you walk in his dark house, let my light remind the tyrant that truth casts no shadow!"
+- **S31 — The Martyr's Dying Ember:** Giver: Eldrin the Star-Carver (The Abyssal Prison Block PB5). Objectives: 1) Infiltrate the subterranean extraction gaol (`PB1`–`PB2`) through the Barracks trapdoor or Undercrypt shaft. 2) Defeat or pickpocket Castellan Dredge the Iron Gaoler in `PB2` to acquire *The Warden's Abyssal Master Keyring*. 3) Solve Puzzle 30 (*The Hydraulic Siphon Matrix*) in `PB3` by equalizing the 3x3 cage pressure grid to 180 PSI and crossing the starlight siphon trench. 4) Unlock Eldrin's cell (`PB5`) and shatter his 4-point siphon shackles using *Eldrin's Star-Chisel* or *Whisper*. 5) Escort the weakened, dying Eldrin toward the escape vestibule (`PB6`). 6) When Castellan Dredge triggers the emergency containment lockout, sealing the exit with lethal *Null-Matter Starlight Security Wards* and triggering reactor overload, speak with Eldrin. 7) Hand the *Mirror Shard Amulet* to Eldrin and witness his heroic self-sacrifice as he seals himself inside the blast crucible to pull the manual venting lever. 8) Retrieve the newly ascended *The Martyr's Starlight Amulet* from the molten pedestal. Rewards: *The Martyr's Starlight Amulet* (Legendary Exploration Relic: permanently phases through starlight security grids and null-matter wards, reveals all true doors/paths within 20m, immunizes against dark miasma, unlocks active 6s blind flash pulse), *Siphon Warden's Ring*, *Prison Keyring*, unseals all previously blocked starlight security corridors across the entire fortress, +750 XP. *Eldrin (his voice serene, body dissolving into radiant celestial gold through the crucible viewport):* "My thread was spun out sixty years ago, shadow-walker. Vaelor took my youth, took my freedom, but he could never extinguish the artisan's fire! Take this stone... whenever you walk in his dark house, let my light remind the tyrant that truth casts no shadow!"
 - **S32 — The White Tiger's Pledged Blood:** Giver: Lord Byakko the White Tiger (Menagerie M4). Objectives: 1) Infiltrate the frozen pavilion `M4` through the Menagerie Keeper's Office. 2) Converse with the articulate talking white tiger Lord Byakko; learn of his eighty-year stasis and the rare gift he offers—the *Vial of Primordial Moon-Tiger Blood*. 3) Acquire the *Octagram Cryo-Key* from keeper's desk in `M3`. 4) Solve Puzzle 31 (*The Cryo-Prism Octagram*): equalize the eight cryogenic steam valves to 90 PSI, align the four starlight prisms, and sever the acoustic lock with the *Echo Bell*. 5) Witness Byakko's release and survive his feral betrayal in a 3-phase climactic boss fight (The Prowling Mirage, The Glacial Apex, and The Astral Apex). 6) Bring Byakko to his haunches at 5% HP and make the fateful choice:
   - *Branch A (Spare Byakko):* Sheathe weapons. Byakko honors Kaelen as a peer of the hunt, willingly bestowing the *Vial of Primordial Moon-Tiger Blood*, *Lord Byakko's Star-Whistle* (allowing Kaelen to call Byakko into battle as a combat summon in exterior zones and the Sanctum), and his winter undercoat pelt.
   - *Branch B (Slay Byakko):* Deliver a lethal strike. Harvest the *Vial of Primordial Moon-Tiger Blood*, carve *Byakko's Quicksilver Fang* (Legendary frost dagger), and harvest the *Pelt of the Astral Apex* to craft the *Mantle of the White Tiger*.
@@ -2022,20 +2133,20 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
   Rewards: *Bough of the Arbiter* OR *Heartwood Staff of the Ancient Grove*, *Sap of the World Tree*, +700 XP, unseals the grand staircase leading up to **CS1 Clockwork Spire Base**. *Yggdra (its branches gently whispering in the mountain breeze):* "You carry cold steel in your belt, Master Voss, but your mind understands the rhythm of growing things. Go then... ascend into the tower of iron and gears. Remind the man of glass that the roots of the mountain were here before him, and they will drink from the rain long after his mirrors have turned to dust."
 - **S37 — A Cup of Sweet Oblivion:** Giver: Mother Hazel / Captive Porcelain Souls (The Gilded Dollhouse MH1). Objectives: 1) Inspect the glowing 1:12 scale dollhouse in the Dreaming Gardens and trigger the transmutation aperture. 2) Enter the dollhouse parlor at miniature scale and navigate Mother Hazel's hospitality without raising her Suspicion Gauge to 100%. 3) Use Sleight of Hand to pour the drugged *Sweet Oblivion Tea* into the potted begonia and fake drowsiness. 4) Sabotage her boiling sugar cauldron by swapping star-cinnamon with volatile sulfur saltpeter to create a blinding smoke screen. 5) Pickpocket the *Spun-Bone Skeleton Key* from her apron string. 6) (Optional) Unlock the curio cabinet to rescue the 6 glazed porcelain figurines. 7) Ascend the brick chimney flue, unlock the rooftop cupola hatch, burst back to full scale, and lock Mother Hazel inside her own miniature home.
   Rewards: *Mother Hazel's Bone-Sugar Spoon* (Unique Stiletto/Focus), *Pendant of the Porcelain Doll* (Rare Amulet), *Shattered Glaze Figurine* (Legendary Curio), +700 XP. *Mother Hazel (screeching at 4-inch scale behind the dollhouse window):* "You deceitful, insolent little scamp! I knit you a silk blanket! I heated the oven for you! Unlock this latch this instant, or I'll turn your heart into sugar-candy!" *Lord Commander Gregory (thawing from porcelain):* "By the Light... twenty years I stood on that mantelpiece, watching her bake. You have given us back our lives, Master Voss. Take this pendant—may no illusion or witch ever snare your senses again."
-- **S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes):** Giver: Lord Morvath / The Starved Courtiers (The Cenacle of Eternal Satiety BQ1). Objectives: 1) Infiltrate the sealed Grand Refectory and resist the Satiety Languor. 2) Climb to the ceiling rafters and substitute the Lotus censers with bitter sea-salt. 3) Jam the clockwork waltz governor. 4) Engage Lord Morvath in Socratic debate, using the Truth Lens to reveal his wife's skeletal reflection and refuting the validity of the Experience Machine. 5) Restore physical mass to the Themis scale to vent the steam doors. Rewards: *Tantalus Goblet*, *Archival Menu of the Eve of Betrothal (1886)*, *Soot-Stained Silverware*, +750 XP.
+- **S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes):** Giver: Marquess Cassian / The Starved Courtiers (The Cenacle of Eternal Satiety BQ1). Objectives: 1) Infiltrate the sealed Grand Refectory and resist the Satiety Languor. 2) Climb to the ceiling rafters and substitute the Lotus censers with bitter sea-salt. 3) Jam the clockwork waltz governor. 4) Engage Lord Morvath in Socratic debate, using the Truth Lens to reveal his wife's skeletal reflection and refuting the validity of the Experience Machine. 5) Restore physical mass to the Themis scale to vent the steam doors. Rewards: *Tantalus Goblet*, *Archival Menu of the Eve of Betrothal (1886)*, *Soot-Stained Silverware*, +750 XP.
 - **H1 — The Smuggler's Cache:** Location: Outer Wards. Lockpick 2 cache. Rewards: Grappling Hook, 100 moons.
 - **H2 — The True Name:** Location: Library footnote. Find Vaelor's true name. Rewards: Boss Phase 1 (Mirage) skipped, +1 INT.
 - **H3 — Starlight Grove:** Location: Dreaming Gardens. Believe hidden path. Rewards: Shadowweave Cloak (Legendary).
 - **H4 — The Daughter's Room:** Location: Sanctum antechamber. Requires Memory Thread. Reveals ending choice and daughter.
 
-<div class="card">
-  <h4 style="margin-top:0;color:var(--accent2)">Quest Log (UI Wireframe)</h4>
-  <ul style="margin:0">
-    <li><b>Q1 The Gatekeeper's Doubt</b> — Active: Find proof Orin is real. <span class="tag warn">In Progress</span></li>
-    <li><b>S1 The Missing Spice</b> — Active: Find starlight pepper. <span class="tag warn">In Progress</span></li>
-    <li><b>H1 The Smuggler's Cache</b> — Complete. <span class="tag good">Done</span></li>
-  </ul>
-</div>
+&lt;div class=&quot;card&quot;&gt;
+  &lt;h4 style=&quot;margin-top:0;color:var(--accent2)&quot;&gt;Quest Log (UI Wireframe)&lt;/h4&gt;
+  &lt;ul style=&quot;margin:0&quot;&gt;
+    &lt;li&gt;&lt;b&gt;Q1 The Gatekeeper&#39;s Doubt&lt;/b&gt; — Active: Find proof Orin is real. &lt;span class=&quot;tag warn&quot;&gt;In Progress&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;S1 The Missing Spice&lt;/b&gt; — Active: Find starlight pepper. &lt;span class=&quot;tag warn&quot;&gt;In Progress&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;H1 The Smuggler&#39;s Cache&lt;/b&gt; — Complete. &lt;span class=&quot;tag good&quot;&gt;Done&lt;/span&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
 
 ## 13. NPCs (Peaceful)
 
@@ -2082,12 +2193,12 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 | Ariadne the Clockwork Weaver | Brass Labyrinth (LB1) | Automaton seamstress, starlight thread spinner | S30 |
 | Asterion the Brass-Horned | Brass Labyrinth (LB4) | Restored architect-general, Minotaur guardian ally | S30 |
 | Eldrin the Star-Carver | Prison Block (PB5) | Siphoned master lapidary, martyr of the heart | S31 |
-| Siphon Warden Malakor | Prison Block (PB2) | Ruthless dungeon warden, extraction overseer | S31 |
+| Castellan Dredge the Iron Gaoler | Prison Block (PB2) | Ruthless dungeon warden, extraction overseer | S31 |
 | Lord Byakko the White Tiger | Menagerie (M4) | Imprisoned celestial white tiger prince, apex predator | S32 |
 | Liber Cutis (The Sentient Lexicon) | Arcane Library (L5) | Flesh-bound sentient grimoire, whispers forbidden power and madness | S33 |
 | Yggdra the Star-Weeper | Dreamer's Grove (DG3) | Ancient sentient weeping starlight tree, primordial arboreal arbiter | S36 |
 | Mother Hazel ("Auntie Hazel") | The Gilded Dollhouse (MH1) | The Sugar-Spun Weaver / Confectioner Witch; tries to trap Kaelen forever | S37 |
-| Lord Morvath & Lady Vivienne | The Cenacle of Eternal Satiety (BQ1) | Aristocratic guests trapped in Vaelor's 30-year phantom banquet; defend false satiety | S38 |
+| Marquess Cassian & Marchioness Genevieve | The Cenacle of Eternal Satiety (BQ1) | Aristocratic guests trapped in Vaelor's 30-year phantom banquet; defend false satiety | S38 |
 
 **NPC Profiles:**
 - **Mother Hazel ("Auntie Hazel the Sugar-Spun Weaver"):** An ancient, deceptively matronly confectioner witch residing inside the miniature dollhouse of the dreaming gardens. She embodies the nightmare of smothering domestic comfort: offering warm blackberry crumbles, drowsy nightshade tea, and endless velvet cradle-rest to weary wanderers. Her hearth mantelpiece displays thirty living adventurers and thieves petrified into glazed porcelain figurines. Direct attacks trigger an instant lethal petrification counter; she must be defeated purely through thief cunning, chemical misdirection, and sleight-of-hand.
@@ -2193,13 +2304,13 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
   - **Tragedy & Lore:** Decades ago, Eldrin was celebrated as the greatest celestial lapidary across the realms. Vaelor commissioned him to cut the hundred-faceted prism casing meant to house the fortress's crystalline core. When Eldrin discovered Vaelor's monstrous scheme to trap the soul of his dying daughter Cynthia within the crystal, Eldrin tried to smash the crucible. Vaelor imprisoned him in the deepest extraction cell (`PB5`), attaching a four-point hydraulic vacuum siphon to his spine to drain his latent magical essence into the keep's illusions.
   - **The Heroic Sacrifice:** Having survived on pure defiance, Eldrin recognizes Kaelen as the catalyst for Vaelor's downfall. When the lockdown seals the exit and threatens catastrophic containment overload, Eldrin gladly surrenders his fading physical form: sealing himself into the crucible, manually venting the surge, and focusing his entire soul into Kaelen's amulet to create *The Martyr's Starlight Amulet*.
   - **Dialogue Sample:** *"Look closely at your hands, thief. When you cut glass, the stone never lies to the chisel. Vaelor spent sixty winters trying to grind my marrow into his false mirrors, yet he could not extinguish the spark in my chest. My body was broken decades ago... but this soul is still mine to strike! Take your amulet... when you face that grieving tyrant, let him see that the light he sought to steal has returned to burn down his house!"*
-- **Siphon Warden Malakor (The Iron Gaoler):**
+- **Castellan Dredge the Iron Gaoler (The Iron Gaoler):**
   - **Archetype & Visuals:** A brutal, sadistic seven-foot prison commander clad in blackened iron plate armor reinforced with hydraulic steam tubes. Wears a welded iron executioner's visor with a single glowing amber slit, and wields a colossal pneumatic trench hammer that discharges electric starlight arcs across metal floors.
   - **Role & Mechanics:** Oversees the day-to-day extraction of prisoner memories and lifeforce in the subterranean oubliette. Arrogant, cruel, and completely loyal to Vaelor's orders. If provoked or challenged in `PB2`, he deploys explosive arc mines and charges with sweeping unparryable hammer swings, requiring Kaelen to flank during hammer recovery or backstab him while dodging his shockwaves.
   - **Dialogue Sample:** *"Another rat sniffing around the bilge! The Archillusionist weaves the sky above, but down here in the mud, iron and blood are the only truths that matter! Throw him into the siphon crucible—let's see what color his memories bleed!"*
 
-- **Lord Morvath of the Silver Flagon:** A weary, once-noble patriarch seated at the head of the eternal banquet table in the Cenacle of Eternal Satiety. He is fully aware on some subconscious level that his plate is ash, but clings to the illusion to escape the agony of his burned homeland and dead sons. He embodies the intellectual defense of Robert Nozick's "Experience Machine," arguing with eloquent tragedy that happiness derived from a phantom is morally superior to authentic despair.
-- **Lady Vivienne the Emaciated:** Morvath's wife, seated beside him in tattered silk lace and loose pearls. Her fingers have thinned so severely that her gold wedding band rests in the soot on her plate. She is terrified of reality because she fears she has grown too old, weak, and ugly to survive outside the flattering candlelight of the banquet.
+- **Marquess Cassian of the Silver Flagon:** A weary, once-noble patriarch seated at the head of the eternal banquet table in the Cenacle of Eternal Satiety. He is fully aware on some subconscious level that his plate is ash, but clings to the illusion to escape the agony of his burned homeland and dead sons. He embodies the intellectual defense of Robert Nozick's "Experience Machine," arguing with eloquent tragedy that happiness derived from a phantom is morally superior to authentic despair.
+- **Marchioness Genevieve the Emaciated:** Cassian's wife, seated beside him in tattered silk lace and loose pearls. Her fingers have thinned so severely that her gold wedding band rests in the soot on her plate. She is terrified of reality because she fears she has grown too old, weak, and ugly to survive outside the flattering candlelight of the banquet.
 
 ## 14. Enemies
 
@@ -2233,7 +2344,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 | Phantasmal Templar | 95 | Undead / Illusion | Shield wall, radiant sun-smite, blinding flash | Backstab during shield bash recovery / Truth Lens | Solar Steel Ingot, Templar's Broken Seal |
 | Poltergeist Apparition | 70 | Spectral / Undead | Telekinetically hurls furniture/cutlery, phases through walls | Reveal via Spectral Spirit-Lantern / Iron Nails / Holy damage | Ectoplasmic Residue, Ghostly Silver |
 | Asterion the Brass-Horned | 240 | Boss / Construct | Blind acoustic tracking, bull-rush wall charge, steam labrys cleave | Lure into charging stone pillars / sever neck control collar | Asterion's Gilded Horn, Starlight Steam Core |
-| Siphon Warden Malakor | 210 | Elite / Mini-Boss | Heavy steam-hammer, shockwave ground slam, deploys starlight arc mines | Flank during hammer recovery / backstab / Frost | Warden's Abyssal Keyring, Siphon Warden's Ring |
+| Castellan Dredge the Iron Gaoler | 210 | Elite / Mini-Boss | Heavy steam-hammer, shockwave ground slam, deploys starlight arc mines | Flank during hammer recovery / backstab / Frost | Warden's Abyssal Keyring, Siphon Warden's Ring |
 | Lord Byakko the White Tiger | 380 | Boss / Beast | 3-Phase apex predator: Prowling Mirage, Glacial Blood Frenzy, Astral Apex | Parry third cadence hit / Vent steam to melt fog / Iron Nails anchor rifts | Vial of Primordial Moon-Tiger Blood, Byakko's Quicksilver Fang, Mantle of the White Tiger, Pelt of the Astral Apex |
 | Yggdra the Star-Weeper | 320 | Boss / Arboreal | 2-Phase primordial tree: Root-Spike Eruption, Sweeping Bough Lash, Spore Cloud, Iron-Bark | Sever 3 sap roots / Fire damage (Cinder Step, Torches, Steam Stiletto) | Heartwood Staff of the Ancient Grove, Petrified Bark Mantle, Starlight Amber Sap |
 
@@ -2272,7 +2383,7 @@ In strict adherence to the diegetic simulation standards of the CRPG canon, **ev
 | **Phantasmal Templar** | Undead / Elite | Solar Steel Ingot x1, Consecrated Oil | Templar's Broken Sun-Seal | Crusader's Vambrace | Consecrated oil purifies corrupted mirror shrines and dispels mirages. |
 | **Poltergeist Apparition**| Spectral / Undead | Ectoplasmic Residue x2, Ghostly Silver Obol | Poltergeist's Lodestone | Spectral Silver Dust | Lodestone magnetically snatches dropped keys through cell bars. |
 | **Asterion Brass-Horned** | Construct / Boss | Asterion's Gilded Horn, Minotaur's Labrys | Starlight Steam Core | Daedalus's Master Keystock | Labrys cleaves cracked stone walls; Keystock unseals Master Vault. |
-| **Siphon Warden Malakor** | Humanoid / Mini-Boss | Warden's Abyssal Keyring, Siphon Ring | High-Voltage Arc Capacitor | Hydraulic Piston Assembly | Keyring unlocks all 36 cells across the Abyssal Prison Block. |
+| **Castellan Dredge the Iron Gaoler** | Humanoid / Mini-Boss | Warden's Abyssal Keyring, Siphon Ring | High-Voltage Arc Capacitor | Hydraulic Piston Assembly | Keyring unlocks all 36 cells across the Abyssal Prison Block. |
 | **Lord Byakko White Tiger**| Beast / Boss | Vial of Primordial Moon-Tiger Blood, Pelt | Byakko's Quicksilver Fang / Whistle| Star-Flayed Claw Talisman | Blood grants permanent +15 HP/STA and *Predator's Scent* ability. |
 | **Mother Hazel (The Confectioner Witch)** | Humanoid / Witch (Puzzle Boss) | Mother Hazel's Bone-Sugar Spoon, Pendant of the Porcelain Doll | Jar of Volatile Sugar-Soot x3 | Shattered Glaze Figurine | Spoon inflicts *Sugar-Laced Stupefaction*; Pendant gives total immunity to Sleep/Petrification. |
 | **Archillusionist Vaelor** | Humanoid / Final Boss | Vaelor's Signet, Heart of Mirrors | Archillusionist's Silk Mantle | Scepter of Broken Glass | Core quest artifact required to determine the fate of the floating keep. |
@@ -2349,61 +2460,61 @@ XP curve: level n requires 100*n XP (approx). Rewards per level: stat point, 2 s
 | Pause | Resume, save, settings, quit |
 | Game Over | Retry / load |
 
-<div class="csheet" style="margin-top:12px">
-  <h4 style="margin-top:0;color:var(--accent2)">Character Sheet (UI Wireframe)</h4>
-  <div class="grid">
-    <div><b>Kaelen Voss</b> — Lv 7 Shadowhand<br>HP <div class="bar"><div style="width:78%"></div></div>STA <div class="bar"><div style="width:60%"></div></div>XP <div class="bar"><div style="width:45%"></div></div></div>
-    <div>STR 9 · AGI 16 · VIT 10 · INT 12 · CHA 11 · LCK 8<br><span class="tag good">Focused</span> <span class="tag">Shadowed</span></div>
-  </div>
-</div>
+&lt;div class=&quot;csheet&quot; style=&quot;margin-top:12px&quot;&gt;
+  &lt;h4 style=&quot;margin-top:0;color:var(--accent2)&quot;&gt;Character Sheet (UI Wireframe)&lt;/h4&gt;
+  &lt;div class=&quot;grid&quot;&gt;
+    &lt;div&gt;&lt;b&gt;Kaelen Voss&lt;/b&gt; — Lv 7 Shadowhand&lt;br&gt;HP &lt;div class=&quot;bar&quot;&gt;&lt;div style=&quot;width:78%&quot;&gt;&lt;/div&gt;&lt;/div&gt;STA &lt;div class=&quot;bar&quot;&gt;&lt;div style=&quot;width:60%&quot;&gt;&lt;/div&gt;&lt;/div&gt;XP &lt;div class=&quot;bar&quot;&gt;&lt;div style=&quot;width:45%&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div&gt;STR 9 · AGI 16 · VIT 10 · INT 12 · CHA 11 · LCK 8&lt;br&gt;&lt;span class=&quot;tag good&quot;&gt;Focused&lt;/span&gt; &lt;span class=&quot;tag&quot;&gt;Shadowed&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 
-<div class="card" style="margin-top:12px;border-left:3px solid var(--accent2)">
-  <h4 style="margin-top:0;color:var(--accent2)">The Thief's Field Journal (Diegetic In-Game Interface)</h4>
-  <p style="font-size:13px;color:var(--muted)">Rendered as an aged parchment journal with leather binding, charcoal sketches, and ink notes. Replaces sterile abstract menus with Kaelen's tactile thoughts.</p>
-  <div class="grid">
-    <div style="background:var(--panel2);padding:10px;border-radius:6px;border:1px solid var(--line)">
-      <b style="color:var(--accent)">[ Left Page: Cartography & Field Notes ]</b>
-      <p style="font-size:12px;font-style:italic;margin:6px 0">"Crossed into the Gatehouse. The mirrors don't reflect the moon outside—they reflect a sun that set a hundred years ago. Guard Captain Orin smells of cold tallow. Grounded him with an iron nail. His eyes cleared for a moment. He remembers a girl who used to laugh here."</p>
-      <div style="font-size:11px;color:var(--accent2);border-top:1px dashed var(--line);padding-top:4px">
-        ✍ <i>Sketch:</i> Gatehouse beam angle (45°→90°→135°)<br>
-        ⚠ <i>Note:</i> Rafter vents bypass the courtyard patrol entirely.
-      </div>
-    </div>
-    <div style="background:var(--panel2);padding:10px;border-radius:6px;border:1px solid var(--line)">
-      <b style="color:var(--accent)">[ Right Page: Cynthia's Music Box & Faction Seals ]</b>
-      <div style="font-size:12px;margin:6px 0">
-        <b>Memory Shards Recovered:</b> <span class="tag good">3 / 7</span><br>
-        • Shard of Gate (OW4) — <span class="tag good">Restored</span><br>
-        • Shard of Hearth (SQ4) — <span class="tag good">Restored</span><br>
-        • Shard of Glass (HM5) — <span class="tag good">Restored</span><br>
-        • Shard of Calliope (PH4) — <span class="tag warn">Whispers nearby in Playhouse</span>
-      </div>
-      <div style="font-size:11px;margin-top:8px">
-        <b>Faction Standing Wax Seals:</b><br>
-        <span class="tag good">Servants: Friendly (Hearth Seal)</span>
-        <span class="tag warn">Brigands: Contested (Blood Brand)</span>
-        <span class="tag accent">Carny Troupe: Allied (Jester's Bell)</span>
-      </div>
-    </div>
-    <div style="background:var(--panel2);padding:10px;border-radius:6px;border:1px solid var(--line);grid-column:1 / -1;margin-top:8px">
-      <b style="color:var(--accent)">[ Inserted Parchment: Columbarium Roost Dead-Drop Registry & Air-Drop Scrip ]</b>
-      <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;font-size:12px">
-        <div>
-          <b>Active Dead-Drop Contracts:</b><br>
-          • <i>OW1 Roost (Thieves' Guild):</i> "Lift Gate Captain's Signet" — <span class="tag warn">In Flight</span><br>
-          • <i>L4 Roost (Mages):</i> "Deliver Basilisk Eye" — <span class="tag good">Completed</span><br>
-          • <i>RG2 Roost (Servants):</i> "Spike Kitchen Valve" — <span class="tag">Pending Drop</span>
-        </div>
-        <div>
-          <b>Zephyr Companion Status & Air-Drop:</b><br>
-          • Bond Level: <span class="tag good">Devoted (Lv 2)</span> · Command: [Aerial Recon / Distraction / Snatch]<br>
-          • Remote Smuggler Dispatch: <span class="tag accent">Available (60s delivery)</span><br>
-          • Active Sightline Intel: <span class="tag good">Barracks Vision Cones Decrypted</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+&lt;div class=&quot;card&quot; style=&quot;margin-top:12px;border-left:3px solid var(--accent2)&quot;&gt;
+  &lt;h4 style=&quot;margin-top:0;color:var(--accent2)&quot;&gt;The Thief&#39;s Field Journal (Diegetic In-Game Interface)&lt;/h4&gt;
+  &lt;p style=&quot;font-size:13px;color:var(--muted)&quot;&gt;Rendered as an aged parchment journal with leather binding, charcoal sketches, and ink notes. Replaces sterile abstract menus with Kaelen&#39;s tactile thoughts.&lt;/p&gt;
+  &lt;div class=&quot;grid&quot;&gt;
+    &lt;div style=&quot;background:var(--panel2);padding:10px;border-radius:6px;border:1px solid var(--line)&quot;&gt;
+      &lt;b style=&quot;color:var(--accent)&quot;&gt;[ Left Page: Cartography &amp; Field Notes ]&lt;/b&gt;
+      &lt;p style=&quot;font-size:12px;font-style:italic;margin:6px 0&quot;&gt;&quot;Crossed into the Gatehouse. The mirrors don&#39;t reflect the moon outside—they reflect a sun that set a hundred years ago. Guard Captain Orin smells of cold tallow. Grounded him with an iron nail. His eyes cleared for a moment. He remembers a girl who used to laugh here.&quot;&lt;/p&gt;
+      &lt;div style=&quot;font-size:11px;color:var(--accent2);border-top:1px dashed var(--line);padding-top:4px&quot;&gt;
+        ✍ &lt;i&gt;Sketch:&lt;/i&gt; Gatehouse beam angle (45°→90°→135°)&lt;br&gt;
+        ⚠ &lt;i&gt;Note:&lt;/i&gt; Rafter vents bypass the courtyard patrol entirely.
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;background:var(--panel2);padding:10px;border-radius:6px;border:1px solid var(--line)&quot;&gt;
+      &lt;b style=&quot;color:var(--accent)&quot;&gt;[ Right Page: Cynthia&#39;s Music Box &amp; Faction Seals ]&lt;/b&gt;
+      &lt;div style=&quot;font-size:12px;margin:6px 0&quot;&gt;
+        &lt;b&gt;Memory Shards Recovered:&lt;/b&gt; &lt;span class=&quot;tag good&quot;&gt;3 / 7&lt;/span&gt;&lt;br&gt;
+        • Shard of Gate (OW4) — &lt;span class=&quot;tag good&quot;&gt;Restored&lt;/span&gt;&lt;br&gt;
+        • Shard of Hearth (SQ4) — &lt;span class=&quot;tag good&quot;&gt;Restored&lt;/span&gt;&lt;br&gt;
+        • Shard of Glass (HM5) — &lt;span class=&quot;tag good&quot;&gt;Restored&lt;/span&gt;&lt;br&gt;
+        • Shard of Calliope (PH4) — &lt;span class=&quot;tag warn&quot;&gt;Whispers nearby in Playhouse&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;font-size:11px;margin-top:8px&quot;&gt;
+        &lt;b&gt;Faction Standing Wax Seals:&lt;/b&gt;&lt;br&gt;
+        &lt;span class=&quot;tag good&quot;&gt;Servants: Friendly (Hearth Seal)&lt;/span&gt;
+        &lt;span class=&quot;tag warn&quot;&gt;Brigands: Contested (Blood Brand)&lt;/span&gt;
+        &lt;span class=&quot;tag accent&quot;&gt;Carny Troupe: Allied (Jester&#39;s Bell)&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style=&quot;background:var(--panel2);padding:10px;border-radius:6px;border:1px solid var(--line);grid-column:1 / -1;margin-top:8px&quot;&gt;
+      &lt;b style=&quot;color:var(--accent)&quot;&gt;[ Inserted Parchment: Columbarium Roost Dead-Drop Registry &amp; Air-Drop Scrip ]&lt;/b&gt;
+      &lt;div class=&quot;grid&quot; style=&quot;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;font-size:12px&quot;&gt;
+        &lt;div&gt;
+          &lt;b&gt;Active Dead-Drop Contracts:&lt;/b&gt;&lt;br&gt;
+          • &lt;i&gt;OW1 Roost (Thieves&#39; Guild):&lt;/i&gt; &quot;Lift Gate Captain&#39;s Signet&quot; — &lt;span class=&quot;tag warn&quot;&gt;In Flight&lt;/span&gt;&lt;br&gt;
+          • &lt;i&gt;L4 Roost (Mages):&lt;/i&gt; &quot;Deliver Basilisk Eye&quot; — &lt;span class=&quot;tag good&quot;&gt;Completed&lt;/span&gt;&lt;br&gt;
+          • &lt;i&gt;RG2 Roost (Servants):&lt;/i&gt; &quot;Spike Kitchen Valve&quot; — &lt;span class=&quot;tag&quot;&gt;Pending Drop&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;b&gt;Zephyr Companion Status &amp; Air-Drop:&lt;/b&gt;&lt;br&gt;
+          • Bond Level: &lt;span class=&quot;tag good&quot;&gt;Devoted (Lv 2)&lt;/span&gt; · Command: [Aerial Recon / Distraction / Snatch]&lt;br&gt;
+          • Remote Smuggler Dispatch: &lt;span class=&quot;tag accent&quot;&gt;Available (60s delivery)&lt;/span&gt;&lt;br&gt;
+          • Active Sightline Intel: &lt;span class=&quot;tag good&quot;&gt;Barracks Vision Cones Decrypted&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 
 ## 17. Input & Controls
 
@@ -2629,26 +2740,26 @@ export class AnamorphicMirrorRailController {
 
 Arena: Sanctum, circular, mirrors on walls. 4 phases. Health pool shared; phase transitions at 75/50/25%.
 
-<div class="tabs" id="bossTabs">
-  <div class="tab active" data-tab="p1">Phase 1: Mirage</div>
-  <div class="tab" data-tab="p2">Phase 2: Phantasm</div>
-  <div class="tab" data-tab="p3">Phase 3: Nightmare</div>
-  <div class="tab" data-tab="p4">Phase 4: Reality</div>
-</div>
-<div class="boss-panes">
-<div id="p1" class="tabpane active">
-<p><b>Mirage:</b> Vaelor spawns 3 clones (illusions). Only the real one casts. Clones shatter on hit. Mechanic: watch cast animation — real one has shadow; clones don't. Use Veil Sight. Attack: Mirror Bolt (ranged), Blink.</p>
-</div>
-<div id="p2" class="tabpane">
-<p><b>Phantasm:</b> Arena fills with phantasm hounds; Vaelor becomes intangible, attacks through mirrors. Must destroy 4 wall mirrors to make him vulnerable. Hounds respawn until mirrors down. Attack: Reflection Slash (AoE).</p>
-</div>
-<div id="p3" class="tabpane">
-<p><b>Nightmare:</b> Dream-logic arena: gravity shifts, floor becomes walls. Vaelor uses belief attacks ("you are weak" → stat debuff unless countered with Memory Thread). Must anchor with Iron Nails at 4 points to stabilize. Attack: Mind Spike, Gravity Invert.</p>
-</div>
-<div id="p4" class="tabpane">
-<p><b>Reality:</b> Illusions stripped. Vaelor fights as a real mage: telekinesis, mirror shields, heavy melee. Heart of Mirrors exposed — attacking it damages him but spawns adds. Final choice prompt triggers at 5% HP. Attack: Arcane Barrage, Shield.</p>
-</div>
-</div>
+&lt;div class=&quot;tabs&quot; id=&quot;bossTabs&quot;&gt;
+  &lt;div class=&quot;tab active&quot; data-tab=&quot;p1&quot;&gt;Phase 1: Mirage&lt;/div&gt;
+  &lt;div class=&quot;tab&quot; data-tab=&quot;p2&quot;&gt;Phase 2: Phantasm&lt;/div&gt;
+  &lt;div class=&quot;tab&quot; data-tab=&quot;p3&quot;&gt;Phase 3: Nightmare&lt;/div&gt;
+  &lt;div class=&quot;tab&quot; data-tab=&quot;p4&quot;&gt;Phase 4: Reality&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;boss-panes&quot;&gt;
+&lt;div id=&quot;p1&quot; class=&quot;tabpane active&quot;&gt;
+&lt;p&gt;&lt;b&gt;Mirage:&lt;/b&gt; Vaelor spawns 3 clones (illusions). Only the real one casts. Clones shatter on hit. Mechanic: watch cast animation — real one has shadow; clones don&#39;t. Use Veil Sight. Attack: Mirror Bolt (ranged), Blink.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&quot;p2&quot; class=&quot;tabpane&quot;&gt;
+&lt;p&gt;&lt;b&gt;Phantasm:&lt;/b&gt; Arena fills with phantasm hounds; Vaelor becomes intangible, attacks through mirrors. Must destroy 4 wall mirrors to make him vulnerable. Hounds respawn until mirrors down. Attack: Reflection Slash (AoE).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&quot;p3&quot; class=&quot;tabpane&quot;&gt;
+&lt;p&gt;&lt;b&gt;Nightmare:&lt;/b&gt; Dream-logic arena: gravity shifts, floor becomes walls. Vaelor uses belief attacks (&quot;you are weak&quot; → stat debuff unless countered with Memory Thread). Must anchor with Iron Nails at 4 points to stabilize. Attack: Mind Spike, Gravity Invert.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&quot;p4&quot; class=&quot;tabpane&quot;&gt;
+&lt;p&gt;&lt;b&gt;Reality:&lt;/b&gt; Illusions stripped. Vaelor fights as a real mage: telekinesis, mirror shields, heavy melee. Heart of Mirrors exposed — attacking it damages him but spawns adds. Final choice prompt triggers at 5% HP. Attack: Arcane Barrage, Shield.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 
 **Victory:** Ending variant based on choices/flags (see Progression).
 
@@ -3254,7 +3365,7 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
   - **Narrative Text:** The large gilded oil painting depicts Lord Vaelor standing proudly behind a high-backed velvet chair where young Cynthia sits, with young Kaelen standing at her right. But as Kaelen gazes at the canvas, the paint softens: Vaelor's warm lips pull upward, stretching unnaturally wide across his cheeks to reveal rows of needle-sharp porcelain teeth. Cynthia's fingers on Kaelen's shoulder petrify into brittle, transparent glass. In the portrait, young Kaelen's painted eyes begin weeping thick black ink that drips down the gold frame.
   - **Dialogue / Interaction:**
     - *The Painting's Seductive Whisper:* "Smile, Kaelen! Stand straight for the court painter! If we smile wide enough, death will think we are already statues and pass us by!"
-    - **[Action (Truth Lens / Name Recitation)]:** Equip the *Truth Lens* and speak aloud: *"Your name was Morvath. And Cynthia is gone."*
+    - **[Action (Truth Lens / Name Recitation)]:** Equip the *Truth Lens* and speak aloud: *"Your name is Aethelgard. And Cynthia is gone."*
       - **[Consequence]:** The false painted grins collapse into profound, weeping sorrow. The figures bow their heads; Cynthia's glass fingers dissolve into falling petals; the painted eyes close forever. (4/4 Incongruities Resolved).
 
 - **[NODE PARLOR_ESCAPE_01]:** The Materialized Handle & Dissolution.
@@ -3429,8 +3540,8 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 #### Scene 19: The Cenacle of Eternal Satiety — The Feast of Dust & Nozick's Gambit
 
 - **Location:** The Grand Refectory of Phantoms (`BQ1`).
-- **Participants:** Kaelen Voss, Lord Morvath of the Silver Flagon, Lady Vivienne the Emaciated, Twenty-Two Starved Aristocrats.
-- **Atmosphere:** An overwhelming sensory contradiction. Thousands of beeswax candles shed warm, amber light across fifty meters of polished mahogany. Glistening roast pheasants, sugared figs, and carafes of bubbling vintage claret look and smell intoxicatingly real. But looking through the *Truth Lens* (<kbd>Q</kbd>) reveals twenty-four translucent, skeletal husks in rotting Victorian evening wear, chewing mounds of grey fireplace ash and dry pebbles from silver platters. The air carries the faint, mechanical hum of an antique music box playing the *Lydian Satiety Waltz*.
+- **Participants:** Kaelen Voss, Marquess Cassian of the Silver Flagon, Marchioness Genevieve the Emaciated, Twenty-Two Starved Aristocrats.
+- **Atmosphere:** An overwhelming sensory contradiction. Thousands of beeswax candles shed warm, amber light across fifty meters of polished mahogany. Glistening roast pheasants, sugared figs, and carafes of bubbling vintage claret look and smell intoxicatingly real. But looking through the *Truth Lens* (&lt;kbd&gt;Q&lt;/kbd&gt;) reveals twenty-four translucent, skeletal husks in rotting Victorian evening wear, chewing mounds of grey fireplace ash and dry pebbles from silver platters. The air carries the faint, mechanical hum of an antique music box playing the *Lydian Satiety Waltz*.
 - **The Core Philosophical Dilemma:** Robert Nozick's "Experience Machine" vs. Authentic Mortality. Can an illusion that brings peace and pleasure justify thirty years of physical starvation? Does truth possess moral value when truth is only ashes and grief?
 
 ---
@@ -3439,28 +3550,28 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 
 *(Kaelen steps onto the velvet banquet carpet. The monumental brass doors slam shut behind him with an airtight hydraulic seal. A hundred vacant, smiling eyes turn toward him.)*
 
-- **Lord Morvath (raising a crystal goblet brimming with what looks like deep ruby wine, his voice hollow as wind through a ribcage):**  
+- **Marquess Cassian (raising a crystal goblet brimming with what looks like deep ruby wine, his voice hollow as wind through a ribcage):**  
   *"Ah! A tardy guest for the Lady Cynthia's betrothal feast! Sit, young gentleman, sit! Toastmaster, bring a chair of crimson damask for our friend! You look parched from the mountain winds. Drink of the Duke's private cellar—a vintage pressed from the autumn before the frost began."*
 
 - **Player Dialogue Choices:**
   - **Choice A [Expose the Delusion / Blunt]:** "Look at your goblet, old man. It isn't wine. It's stagnant mineral water and crushed chalk. You're chewing on fireplace soot."
-    - **Lord Morvath (chuckles indulgently, shaking his head with courtly amusement):**  
-      *"Soot? Hear how the common boys jest! Lady Vivienne, my dear, did you hear our young traveler? He mistakes aged Bordeaux for chimney soot! Tell me, boy... if this is soot, why does it warm my belly like summer sun? If this roast pheasant is gravel, why does its crackling skin melt upon my tongue? You have marched too long in the salt-fog. Sit, take up your silver fork, and allow your senses to be cured."*
+    - **Marquess Cassian (chuckles indulgently, shaking his head with courtly amusement):**  
+      *"Soot? Hear how the common boys jest! Marchioness Genevieve, my dear, did you hear our young traveler? He mistakes aged Bordeaux for chimney soot! Tell me, boy... if this is soot, why does it warm my belly like summer sun? If this roast pheasant is gravel, why does its crackling skin melt upon my tongue? You have marched too long in the salt-fog. Sit, take up your silver fork, and allow your senses to be cured."*
   - **Choice B [Investigate the Guests / Diplomatic]:** "Who are all these people, my Lord? The Duke's daughter has been in a glass coma for decades. How long have you been sitting at this table?"
-    - **Lady Vivienne (her smile trembling, her paper-thin hand nervously clutching a strand of loose pearls):**  
+    - **Marchioness Genevieve (her smile trembling, her paper-thin hand nervously clutching a strand of loose pearls):**  
       *"Decades? What an absurd, frightening word... It was only six in the evening when the bells rang. The Duke told us the dessert would be served as soon as the physician finished his examination. We are simply waiting for the toast... It would be dreadfully rude to leave before the bride cuts the cake."*  
       *(Journal Note: Their minds have locked the passage of time; they believe it is still the first evening of the banquet!)*
   - **Choice C [Philosophical Infiltration]:** "If this feast is so magnificent, why are your doors sealed with hydraulic blast-valves? Why is this hall locked like a tomb?"
-    - **Lord Morvath (his smile faltering, his eyes growing dark and ancient):**  
+    - **Marquess Cassian (his smile faltering, his eyes growing dark and ancient):**  
       *"Because outside those doors, the wind is cold. Outside those doors, my sons are dead. You think you are the first thief to stumble in here with iron boots and harsh words? Sit, Kaelen Voss. Let me tell you about the world you are so eager to drag us back to."*
 
 ---
 
 ##### Part II: Nozick's Gambit — The Socratic Duel
 
-*(Kaelen takes the vacant seat of crimson damask opposite Morvath. The roast boar between them radiates the rich, buttery scent of rosemary, fighting against Kaelen's willpower.)*
+*(Kaelen takes the vacant seat of crimson damask opposite Cassian. The roast boar between them radiates the rich, buttery scent of rosemary, fighting against Kaelen's willpower.)*
 
-- **Lord Morvath (leaning forward, his diamond cufflinks rattling against his hollow wristbones):**  
+- **Marquess Cassian (leaning forward, his diamond cufflinks rattling against his hollow wristbones):**  
   *"Let us speak plainly, shadow-thief. You have sharp eyes. You have the look of an orphan who has starved in gutters. You think we are fools who cannot tell bread from ash? Thirty years ago, when the doors first sealed, I knew. I tasted the chalk. I smelled the cold iron.*  
   *And then I remembered what awaited me outside. In the southern province, my ancestral manor was put to the torch during the Grand Cleansing. My three sons were buried in winter mud without coffins. My lands are barren shale. If I stand from this chair, I am a penniless, broken widower whose life was ruined by kings.*  
   *In this hall, the fire never dies. In this hall, the music plays my favorite waltz. My wife sits beside me, young and laughing, untouched by rot. Answer me this, philosopher of the gutter:*  
@@ -3468,25 +3579,25 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 
 - **Player Socratic Counter-Arguments:**
   - **Option 1 [The Existentialist Refutation — Authentic Agency `[INT 13 / Philosophy]`]:**  
-    - "Joy built on a lie is not joy, Morvath—it is an embalmed corpse in a velvet dress. You haven't chosen happiness; you've chosen cowardice. A man who dreams he is an emperor achieves nothing, creates nothing, loves nothing. Your sons did not die in the mud so their father could spend thirty years chewing dust in a coward's parlor. They would weep to see you like this."
-    - **Lord Morvath (recoils as if struck by a blade; his eyes widen with agonizing grief):**  
+    - "Joy built on a lie is not joy, Cassian—it is an embalmed corpse in a velvet dress. You haven't chosen happiness; you've chosen cowardice. A man who dreams he is an emperor achieves nothing, creates nothing, loves nothing. Your sons did not die in the mud so their father could spend thirty years chewing dust in a coward's parlor. They would weep to see you like this."
+    - **Marquess Cassian (recoils as if struck by a blade; his eyes widen with agonizing grief):**  
       *"My sons... Alexander... Julian... They were so brave in their uniforms... Would they... would they despise me for hiding here?"*  
       *(Cognitive Resistance drops to 30%! The roast boar flickers into grey soot.)*
   - **Option 2 [The Empirical Test — The Mirror of Vanity `[Truth Lens Q / Item: Silver Cloche]`]:**  
-    - Kaelen raises the polished silver cloche, angling its reflective curvature directly into Lady Vivienne's face, while activating the *Truth Lens* (<kbd>Q</kbd>).
-    - "Look at your wife, Morvath. Look at her reflection. You say she is young and laughing? Look at her cheekbones. Look at her fingers!"
-    - *(Lady Vivienne looks into the silver curve. She gasps in mortal terror. She sees a sunken, skeletal skull, eyes sunken into black pits, yellowing teeth, and her golden wedding band fallen into the ash on her platter.)*
-    - **Lady Vivienne (screaming in horrified realization, dropping her fork):**  
-      *"Merciful heavens! Morvath! My hands! Where is my flesh?! What have we eaten?! What have you done to us?!"*
-    - **Lord Morvath (horrified, clutching his wife's trembling skeletal hands):**  
-      *"Vivienne... Vivienne, no! Look away! Look at the candles!"*  
+    - Kaelen raises the polished silver cloche, angling its reflective curvature directly into Marchioness Genevieve's face, while activating the *Truth Lens* (&lt;kbd&gt;Q&lt;/kbd&gt;).
+    - "Look at your wife, Cassian. Look at her reflection. You say she is young and laughing? Look at her cheekbones. Look at her fingers!"
+    - *(Marchioness Genevieve looks into the silver curve. She gasps in mortal terror. She sees a sunken, skeletal skull, eyes sunken into black pits, yellowing teeth, and her golden wedding band fallen into the ash on her platter.)*
+    - **Marchioness Genevieve (screaming in horrified realization, dropping her fork):**  
+      *"Merciful heavens! Cassian! My hands! Where is my flesh?! What have we eaten?! What have you done to us?!"*
+    - **Marquess Cassian (horrified, clutching his wife's trembling skeletal hands):**  
+      *"Genevieve... Genevieve, no! Look away! Look at the candles!"*  
       *(The illusion violently stutters; the waltz skips and groans.)*
   - **Option 3 [The Stoic Cold-Iron Libation `[Item: Cold-Iron Nail / Alpine Water]`]:**  
-    - Kaelen reaches into his satchel, withdraws the *Cold-Iron Nail*, and plunges it straight through the golden roast pheasant at the center of the table. In the same motion, he uncorks his alpine waterskin and douses Morvath's crystal goblet.
-    - The golden glamour shatters with the sound of cracking glass! The roasted pheasant collapses into a steaming pile of soot, charcoal chunks, and owl pellets. Morvath's wine turns into grey puddle-water crawling with mold.
-    - "Taste it now, Morvath. Taste your sixty years of peace."
-    - *(Morvath stares at the smoking soot on his silver platter. He slowly raises a trembling pinch of ash to his tongue. He gags, coughing up grey powder.)*
-    - **Lord Morvath (whispering in broken agony):**  
+    - Kaelen reaches into his satchel, withdraws the *Cold-Iron Nail*, and plunges it straight through the golden roast pheasant at the center of the table. In the same motion, he uncorks his alpine waterskin and douses Cassian's crystal goblet.
+    - The golden glamour shatters with the sound of cracking glass! The roasted pheasant collapses into a steaming pile of soot, charcoal chunks, and owl pellets. Cassian's wine turns into grey puddle-water crawling with mold.
+    - "Taste it now, Cassian. Taste your sixty years of peace."
+    - *(Cassian stares at the smoking soot on his silver platter. He slowly raises a trembling pinch of ash to his tongue. He gags, coughing up grey powder.)*
+    - **Marquess Cassian (whispering in broken agony):**  
       *"Ashes... It is all... ashes in my mouth..."*
 
 ---
@@ -3495,7 +3606,7 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 
 *(The waltz music box in the corner grinds to a halt. One by one, the twenty-four aristocrats look at their plates. The hall falls into absolute, suffocating silence, broken only by the sound of muffled weeping.)*
 
-- **Lord Morvath (standing from his chair, his tall frame trembling as the illusion falls away, his voice breaking):**  
+- **Marquess Cassian (standing from his chair, his tall frame trembling as the illusion falls away, his voice breaking):**  
   *"God forgive us... We have starved in heaven. We traded our souls for the smell of sugar..."*
 
 - **The Environmental Resolution:**
@@ -3506,7 +3617,7 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
   - High-pressure starlight steam vents from the bronze archway cylinders. The monumental oak blast-doors grind open, flooding the room with the cool, crisp mountain air of reality.
   - The guests stagger toward the corridor, coughing and weeping, supporting one another like survivors crawling from an open tomb.
 
-- **Lord Morvath (turning to Kaelen at the threshold, handing him an ornate silver chalice lined with black volcanic glass):**  
+- **Marquess Cassian (turning to Kaelen at the threshold, handing him an ornate silver chalice lined with black volcanic glass):**  
   *"Take this, shadow-thief. It is the Tantalus Goblet—Vaelor's gift to me on the night he stole our lives. Let it remind you that a bitter truth is worth a thousand gilded lies. Go... and break his mirrors."*
 
 - **[Quest Completed: S38 — The Banquet of the Lotus-Eaters (A Taste of Ashes)]**  
@@ -3538,7 +3649,7 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 > *"Alistair,*  
 > *You tell me her lungs have succumbed. You tell me that fever is God's will and that a father must bow his head to the soil. I spit upon your God and I spit upon your soil. If nature decrees that Cynthia must die, then nature is a botched design and I will build a better one.*  
 > *Tomorrow I seal the gates. Tomorrow I turn the mirrors inward. If the sun brings only sickness, we shall have no sun. Do not return to the keep, Alistair. In the house I am creating, death is not an inevitability—it is a trespass."*  
-> — **Morvath Vaelor**
+> — **Aethelgard Vaelor**
 
 #### Document II: Young Cynthia's Hidden Music Box Note
 *(Tucked inside the seventh starlight cylinder recovered from the Minotaur's Labyrinth)*
@@ -3626,7 +3737,7 @@ ACT IV: THE VEIL FALLS (THE CLIMAX)
 - **The Chronomantic Scriptorium & Hall of Inverted Hours:** CR1 The Threshold of Backward Rain (reversed precipitation, clock-face turnstile), CR2 The Scriptorium of Inverted Inks (Lady Aurelia's study, un-spilling inkwells, backward dialogue), CR3 The Chasm of Un-Fallen Stone (Puzzle 23, bottomless void, reverse-entropy guide rails), CR4 The Vault of Retrocausality (Puzzle 24, reverse portcullis, cold-ash braziers), CR5 The Frozen Second (Vaelor's Sorrow, starlight crystalline stasis chamber, Cynthia's un-broken memory).
 - **The Gilded Music Salon & Harmonic Conservatory:** MS1 The Vestibule of Chimes (acoustic baffling, velvet drapery, brass tuning bell array), MS2 The Salon Rotunda (Maestro Niccolò's stage, Madame Clara's fortepiano, steam-orchestrion organ), MS3 The Parquet of Resonant Harmonies (Puzzle 25, 3-lane rhythm floorboards, Resonator Glass-Armonica console), MS4 The Acoustic Baffle Loft (high catwalks, copper resonance horns, secret ventilation bypass), MS5 The Maestro's Archive (unsealed vault, Cynthia's music box fifth track, master scores).
 - **The Consecrated Solar Vestry & Bastion of the Sun:** SV1 The Cloister of the Blinded Knights (Lady Eleanor's vigil, broken sun-banners, kneeling statues), SV2 The High Vestry Nave (Puzzle 26, the Solar Prism monstrance, brass reflection pedestals), SV3 The Crypt of Fallen Templars (Phantasmal Templars, tombs of the Sunfall crusaders, consecrated reliquaries), SV4 The Solarium Balcony (parapet overlooking Outer Wards, Sir Roderick's decalcification station).
-- **The Grand Banquet Hall & Seneschal's Pantry:** BQ1 The State Dining Salon (long rosewood banquet table set with tarnished silver covers, Mister Bartholomew Sterling's station), BQ2 The Seneschal's Pantry (silverware polishing bench, tea herb drawers, passkey lockbox), BQ3 The Dumbwaiter Crossroads (central service hub connecting SQ1, K1, and RD1 via service chutes), BQ4 The Lady Cynthia's Private Tea Parlor (preserved childhood room, antique porcelain tea service, hidden music cylinder).
+- **The Grand Banquet Hall & Seneschal's Household (`SH1–SH4`):** SH1 The State Dining Salon (long rosewood banquet table set with tarnished silver covers, Mister Bartholomew Sterling's station), SH2 The Seneschal's Pantry (silverware polishing bench, tea herb drawers, passkey lockbox, sealed blast-door to BQ1), SH3 The Dumbwaiter Crossroads (central service hub connecting SQ1, K1, and RD1 via service chutes), SH4 Lady Cynthia's Private Tea Parlor (preserved childhood room, antique porcelain tea service, hidden music cylinder).
 - **The Haunted Manor Suites & Ghost-Light Chambers:** HA1 The Vestibule of Whispers (translucent draperies, whispering portraits, shifting draft doors), HA2 The Mourning Drawing Room & Portrait Gallery (Lord Morvath's cursed canvas, flying candelabra poltergeist hazard, mirror sconces), HA3 The Pale Nursery (Madame Vivienne's vigil, self-rocking cradle, porcelain music doll pedestal), HA4 The Séance Parlor & Ghost-Light Boudoir (Puzzle 27, 6 oval spirit mirrors, round velvet séance table, ectoplasmic anchor points), HA5 The Ancestral Crypt-Vault (iron-barred reliquary, spectral safe, Spectral Spirit-Lantern pedestal).
 - **The High Eyrie of the Sky-Sovereign:** EY1 The Gale-Swept Parapet (Clockwork Spire stair transition, cross-wind gusts, baffle pressure lever), EY2 The Roost of Gilded Trophies (Lord Aurelius's granite dais, coin hoards, aether-tether chains), EY3 The Aeolian Baffle Array (Puzzle 28, 4 bronze wind-harps, steam-resonator vanes), EY4 The Skyward Leap Vista (precipice over cloud void, glider runway, gryphon flight fast-travel roost).
 - **The Daedalian Brass Labyrinth & Minotaur's Penumbra:** LB1 The Threshold of the Starlight Spool (Ariadne's brass spindle dais, starlight silk loom, descent stair from U4), LB2 The Shifting Corridors of Daedalus (Puzzle 29, 8-beat steam valve shift cycle, brass Clew bollards, hydraulic crushers), LB3 The Chamber of False Reflections (acoustic megaphone baffles, phantom sound traps, double-faced bronze mirrors), LB4 The Steaming Arena of the Minotaur (concentric circular arena, 4 massive stone pillars, boiling steam geysers, Asterion's pacing arena), LB5 The Architect's Master Vault (unsealed upon Asterion's redemption/defeat, Cynthia's Seventh Music Cylinder, The Minotaur's Brass Labrys pedestal).
@@ -3638,88 +3749,88 @@ Generated via Cloudflare Workers AI (flux-1-schnell), stored in `gdd/assets/`.
 
 ### Zones
 
-![Modular Room Kit Preview](assets/room_kit_preview.png)
-![S00 Courtyard GLB Preview](assets/s00_courtyard_model_preview.png)
-![Scene 00 — The Approach & Sunken Courtyard](assets/scene00_approach_sunken.png)
-![The Veilkeep](assets/veilkeep.png)
-![The Approach](assets/approach.png)
-![Outer Wards](assets/outerwards.png)
-![Gatehouse](assets/gatehouse.png)
-![Servants' Quarters](assets/servants.png)
-![Kitchens](assets/kitchens.png)
-![Barracks](assets/barracks.png)
-![Halls of Mirrors](assets/mirrors.png)
-![Arcane Library](assets/library.png)
-![Menagerie](assets/menagerie.png)
-![Dreaming Gardens](assets/gardens.png)
-![Clockwork Spire](assets/clock.png)
-![Undercrypt](assets/undercrypt.png)
-![Chapel of Reflections](assets/chapel.png)
-![Sanctum Arena](assets/sanctum.png)
-![Relativity Cloister](assets/relativity.png)
-![The Veil Colosseum](assets/colosseum.png)
-![Trophy Hall](assets/trophy.png)
-![Astronomy Tower](assets/astronomy.png)
-![Alchemist's Lab](assets/alchemy.png)
-![Prison Block](assets/prison.png)
-![Rooftop Gardens](assets/rooftop.png)
-![Void Realm](assets/void.png)
-![Gatekeeper Orin](assets/gatekeeper.png)
-![The Diner](assets/diner.png)
-![The Gilded Music Salon & Harmonic Conservatory](assets/conservatory.png)
-![The Haunted Manor Suites & Séance Parlor](assets/scene_haunted_chambers.jpg)
-![The High Eyrie of the Sky-Sovereign](assets/scene_gryphon_eyrie.jpg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Characters & NPCs
 
-![Kaelen Voss](assets/kaelen.png)
-![Archillusionist Vaelor](assets/vaelor.png)
-![Orin Servant](assets/orst.png)
-![Librarian Maren](assets/maren.png)
-![Cook Hesta](assets/hesta.png)
-![Blind Priest](assets/priest.png)
-![The Dreamer](assets/dreamer.png)
-![Gardener Pim](assets/pim.png)
-![Mirror Merchant](assets/merchant.png)
-![Menagerie Keeper](assets/keeper.png)
-![The Diner](assets/diner.png)
-![Stairkeeper](assets/stairkeeper.png)
-![Stargazer](assets/stargazer.png)
-![Alchemist Vex](assets/vex.png)
-![Prisoner Korr](assets/korr.png)
-![Windkeeper](assets/windkeeper.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Enemies
 
-![Keep Guard](assets/guard.png)
-![Archer Guard](assets/archer.png)
-![Guard Captain](assets/captain.png)
-![Phantasm Hound](assets/hound.png)
-![Mirror Wraith](assets/wraith.png)
-![Stone Gargoyle](assets/gargoyle.png)
-![Clockwork Soldier](assets/construct.png)
-![Phantasmal Beast](assets/beast.png)
-![Undead Monk](assets/monk.png)
-![Clockwork Warden](assets/warden.png)
-![Mimic Chest](assets/mimic.png)
-![Colosseum Beast](assets/colosseum_beast.png)
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Items
 
-![Whisper Shortblade](assets/whisper.png)
-![Truth Lens](assets/truthlens.png)
-![Shadowweave Cloak](assets/shadowcloak.png)
-![Starlight Vial](assets/starlight.png)
-![Iron Nail](assets/irone.png)
-![Memory Thread](assets/memorythread.png)
-![Perspective Lens](assets/perspective.png)
-![Golden Gate Key](assets/goldengate.png)
-![Lockpick Gauntlets](assets/gauntlets.png)
-![Glider Backpack](assets/gilder.png)
-![Void Cloak](assets/voidcloak.png)
-![Champion's Sigil](assets/sigil.png)
-![Vaelor's Signet](assets/regent.png)
-![Genie Bottle](assets/chin.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -3996,7 +4107,7 @@ Generated with the dungeon-cartography skill conventions.
    |   [Censer 1]                                             [Censer 2] |
    |                                                                     |
    |   +-------------------------------------------------------------+   |
-   |   | [Lord Morvath]   (22 Skeletal Aristocrats)   [Lady Vivienne]|   |
+   |   | [Marquess Cassian] (22 Skeletal Aristocrats) [Genevieve]    |   |
    |   | [Seat of Honor]  (50m Mahogany Banquet Table) [Platters of  |   |
    |   | (Empty Damask)   (Phantom Roast Boar / Ash)   Furnace Ash]  |   |
    |   +-------------------------------------------------------------+   |
@@ -4312,94 +4423,98 @@ IMMUNITIES: Stun, Poison, Bleed, Cold / Frost Hazards
 
 ## 35. Dungeon Generation & Grammar Architect
 
-### 35.1 Adjacency Matrix (Fortress Zones)
+### 35.1 Repaired Symmetric 16-Core Adjacency Matrix & 28-Zone Master Topology (v2.0)
 
-Rooms A–P (16 primary citadel wards of the core traversal graph, with 11 peripheral/subterranean sectors branching as ability-gated nodes), listed in Act order. Entry = traversable adjacency.
+In v1.0, the 16×16 core matrix contained asymmetric one-way discrepancies (`C↔G`, `D↔K`, `F↔H`, `G↔H`, `J↔O`, `K↔L`, `K↔M`, `M↔O`, `N↔P`) and omitted the 12 peripheral sectors. Below is the **strictly symmetric (`M[i][j] == M[j][i]`) 16-Core Citadel Matrix** (`A–P`), followed by the **Complete 28-Zone 4-Tier Topological Graph** governing `world_manifest.json`.
 
-| |A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|
+| Zone | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P |
 |---|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
-|**A Outdoor**| – |1|0|0|1|0|0|0|0|0|0|0|0|0|0|0|
-|**B Gatehouse**|1| – |1|0|0|1|0|0|0|0|0|0|0|0|0|0|
-|**C Servants**|0|1| – |1|0|0|1|0|0|0|0|0|0|0|0|0|
-|**D Kitchens**|0|0|1| – |0|0|0|0|0|0|1|0|0|0|0|0|
-|**E Barracks**|1|0|0|0| – |1|0|0|0|0|0|0|1|0|0|0|
-|**F Mirrors**|0|1|0|0|1| – |0|1|0|0|0|0|0|0|0|0|
-|**G Library**|0|0|1|0|0|0| – |1|0|0|0|0|0|0|0|0|
-|**H Menagerie**|0|0|0|0|0|1|1| – |0|0|0|0|0|0|0|0|
-|**I Gardens**|0|0|0|0|0|0|0|0| – |1|0|0|0|1|0|0|
-|**J Clockwork**|0|0|0|0|0|0|0|0|1| – |0|0|0|0|1|0|
-|**K Undercrypt**|0|0|0|1|0|0|0|0|0|0| – |1|1|0|0|0|
-|**L Chapel**|0|0|0|0|0|0|0|0|0|0|1| – |0|0|0|0|
-|**M Trophy Hall**|0|0|0|0|1|0|0|0|0|0|1|0| – |0|1|0|
-|**N Relativity**|0|0|0|0|0|0|0|0|1|0|0|0|0| – |0|1|
-|**O Colosseum**|0|0|0|0|0|0|0|0|0|1|0|0|1|0| – |0|
-|**P Sanctum**|0|0|0|0|0|0|0|0|0|0|0|0|0|1|0| – |
+| **A Outer Wards (`OW`)** | – | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1* | 0 | 0 | 0 | 0 |
+| **B Gatehouse (`GH`)** | 1 | – | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **C Servants Q. (`SQ`)** | 0 | 1 | – | 1 | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| **D Kitchens (`K`)** | 0 | 0 | 1 | – | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| **E Barracks (`B`)** | 1 | 0 | 1 | 0 | – | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0 |
+| **F Mirrors (`HM`)** | 0 | 1 | 1 | 0 | 0 | – | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **G Library (`AL`)** | 0 | 0 | 0 | 0 | 0 | 1 | – | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **H Menagerie (`ME`)** | 0 | 0 | 0 | 0 | 0 | 1 | 1 | – | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **I Gardens (`DG/WS`)** | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | – | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
+| **J Clockwork (`CS`)** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | – | 0 | 0 | 0 | 1 | 1 | 1 |
+| **K Undercrypt (`U`)** | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | – | 1 | 1* | 0 | 1* | 0 |
+| **L Chapel (`C/SV`)** | 1* | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | – | 0 | 0 | 0 | 0 |
+| **M Trophy Hall (`TR`)** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1* | 0 | – | 0 | 0 | 0 |
+| **N Relativity (`RS`)** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | – | 0 | 0 |
+| **O Colosseum (`CO`)** | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1* | 0 | 0 | 0 | – | 0 |
+| **P Sanctum (`SA`)** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | – |
 
-(1 = traversable connection; 0 = none. Locked doors shown as (l) in room hierarchy.)
+*(Note: `1` = bidirectional traversal; `1*` = unsealed shortcut or one-way drop `TR4→U2`, `CO5→U1`, `SV4→OW1`.)*
 
-### 35.2 Depth-from-Start Graph (BFS from Dungeon Entrance)
+#### Peripheral & Subterranean Sector Adjacencies (Zones 17–28):
+- **`S00` (Approach Courtyard):** `<-> OW1` (Barbican Gate), `<-> GH4` (Cliff Trellis), `<- GH3` (1W Shortcut Drop).
+- **`SH` (Seneschal's Household `SH1–SH4`):** `<-> SQ1`, `<-> K1`, `<-> BQ1` (Blast-Door), `<-> RD1` (Dumbwaiter `SH3`).
+- **`BQ` (Cenacle of Eternal Satiety `BQ1–BQ3`):** `<-> SH2` (Scullery Blast-Door), `<-> HA2` (`BQ3` Wine Cellar of Lethe).
+- **`BF` (Steam Foundry & Boiler Core `BF1–BF5`):** `<-> K3` (Dumbwaiter), `<-> U1` (Drainage), `<-> AL1` (`BF3` Pneumatic Tube), `<-> CS1` (`BF5` Flywheel), `<-> LB1`.
+- **`PB` (Abyssal Prison Block `PB1–PB6`):** `<-> B1` (Barracks Hatch), `<-> U1` (`PB6` Escape Tunnel).
+- **`EN` (Thaumaturges' Enclave `ME1–ME5`):** `<-> TR3`, `<-> M3` (Breach Tunnel), `<-> U3`.
+- **`GA` (Genie Alcove `GA1–GA3`):** `<-> TR3` (Behind Largest Slain Beast).
+- **`HA` (Haunted Manor Suites `HA1–HA6`):** `<-> TR1`, `<-> BQ3` (Wine Cellar), `HA3 <-> HA6` (Daguerreotype Memory Resonance).
+- **`LB` (Daedalian Brass Labyrinth `LB1–LB5`):** `<-> U4`, `<-> BF3`.
+- **`RD` (Skeptic's Refectory `RD1–RD4`):** `<-> C1`, `<-> RS1`, `<-> BF1` (Vent), `<-> CS3` (`RD3` Starlight Skyway).
+- **`PH` (Phantasmagoria Playhouse `PH1–PH5`):** `<-> CO1`, `<-> MS1`, `PH5 -> CS1` (Catwalk Duct).
+- **`MS` (Harmonic Conservatory `MS1–MS5`):** `<-> PH1`, `<-> CR1`, `MS4 -> CS1` (Acoustic Duct).
+- **`AL_LAB` (Alchemist's Lab `AL_L1–AL_L3`):** `<-> DG1`, `<-> AL2`.
+- **`CR` (Chronomantic Atrium `CR1–CR5`):** `<-> CS3`, `<-> MS1`.
+- **`EY` (High Eyrie of the Sky-Sovereign `EY1–EY4`):** `<-> CS4`, `EY4 -> RG1 / AV1 / SV4` (Gryphon Glide).
+- **`RG` (Rooftop Gardens `RG1–RG4`) / `AV` (Grand Columbarium `AV1–AV4`) / `AT` (Astronomy Tower `AT1–AT3`) / `VR` (Void Realm `VR1–VR3`):** `CS4 <-> RG1 <-> AV1 <-> AT1`; `AT3 <-> VR1` (Midnight Only).
+
+### 35.2 Repaired Depth-from-Start Graph (BFS from `S00` Approach)
 
 ```
-depth 0: A (Outer Wards — entry)
-depth 1: B (Gatehouse), E (Barracks)
-depth 2: C (Servants Q), F (Halls of Mirrors)
-depth 3: D (Kitchens), G (Library), H (Menagerie)
-depth 4: K (Undercrypt), I (Dreaming Gardens), M (Trophy Hall)
-depth 5: L (Chapel), J (Clockwork Spire), N (Relativity Cloister), O (Colosseum)
-depth 6: P (Sanctum — boss)
+Depth 0: S00 (The Approach & Sunken Courtyard)
+Depth 1: OW (Outer Wards), GH4 (Cliff Trellis Vent)
+Depth 2: GH (Gatehouse), B (Barracks), OW5 (Shattered Bastion Arena -> ABILITY_WALL_LEAP)
+Depth 3: SQ (Servants' Quarters Hub), HM (Halls of Mirrors), TR (Trophy Hall), CO (Colosseum), PB (Abyssal Prison)
+Depth 4: K (Kitchens), SH (Household), C (Chapel/Solar Vestry), AL (Arcane Library), ME (Menagerie -> ABILITY_AIR_DASH), HA (Haunted Manor), GA (Genie Alcove), PH (Playhouse)
+Depth 5: BF (Steam Foundry), U (Undercrypt), EN (Thaumaturges' Enclave), BQ (Cenacle of Satiety), DG/WS/MH (Dreaming Gardens & Winter Solarium), MS (Harmonic Conservatory), AL_LAB (Alchemist's Lab)
+Depth 6: LB (Daedalian Labyrinth), RD (Skeptic's Refectory), RS (Relativity Cloister), CS (Clockwork Spire -> ABILITY_GRAV_INVERSION)
+Depth 7: CR (Chronomantic Atrium), EY (High Eyrie), RG (Rooftop Gardens), AV (Grand Columbarium), AT (Astronomy Tower), CO3 (Crystal Theater -> ABILITY_MIRROR_PHASE)
+Depth 8: VR (Void Realm — Midnight), SA (Sanctum of the Archillusionist — Final Boss)
 ```
 
-Max branch factor 3; longes tome path = 6 edges (A→B→C→D→K→M→O→P? actually 7). Max depth 7; completion requires depth 6 nodes (P).
+### 35.3 Softlock-Free Lock-and-Key & Brand Dependency DAG (v2.0)
 
-### 35.3 Lock-and-Key Dependency Tree (Graph Grammar)
-
-**Softlock prevention rule**: every key is found **before** any door it unlocks. Dependency tree (parent = prerequisite, child = unlock):
+In v1.0, `EchoBell` was placed inside `U3` while required to open `U3`, and `K9 BottleKey` was gated behind `Vaelor's Signet` (an endgame drop). The repaired Directed Acyclic Graph below satisfies [Joris Dormans' mission/space graph grammar](https://www.pcgworkshop.com/archive/smith2018graphbased.pdf) and [Mark Brown's Boss Keys](https://github.com/amidos2006/GraphDungeonGenerator) invariants:
 
 ```
-DungeonEntrance
- └─ A OutdoorWards
-     └─ K1 IronNail(4)      ← reusable, not consumed
-     └─ B Gatehouse
-         ├─ K2 GatehouseKey (from E Captain or Orin quest)
-         │   └─ C ServantsQuarters
-         │       └─ K3 PantryKey (from Hesta quest S1)
-         │           └─ D Kitchens
-         │               └─ K4 DumbwaiterPass (Climbing 3)
-         │                   └─ K Undercrypt
-         │                       ├─ K5 EchoBell (Maren Q2)
-         │                       └─ K6 PrisonKeyring (S11)
-         │                           └─ L Chapel (blessing)
-         └─ E Barracks
-             ├─ K7 RaftersAccess (Climbing 2)
-             └─ M Trophy Hall
-                 ├─ K8 SecretPassage (Lockpick 3 / S8)
-                 │   └─ GA Genie Alcove
-                 │       └─ K9 BottleKey (from Vaelor's Signet OR S15)
-                 └─ K10 Gilder Key (S12 windkeeper)
-                     └─ RG Rooftop Gardens
-                         └─ AT Astronomy Tower (night only)
-                             └─ K11 StarMap (S9)
-                                 └─ VR VoidRealm (midnight only)
-                                     └─ K12 MemoryThread (Q2)
-                                         └─ SanctumAntechamber (H4)
-     └─ F HallsOfMirrors
-         └─ K13 TrueMirrorSight (H2 footnote OR Veil Sight lvl2)
-             └─ HM7 MirrorMazeB
-                 └─ HM7 Mirror Maze B → Mirror Shard Amulet
-                     └─ O Colosseum (champion's dais)
-                         └─ K14 UndercryptShortcut (champion's sigil only)
-                             └─ Connects to K (no new zone)
-     └─ P Sanctum
-         └─ K15 HeartAccess = ( Q6 | Q4.questComplete )
-             (also requires: MemoryThread for H4, OR Champion's Sigil for shortcut)
+S00_Approach
+ └─► OW1_OuterWards [Pickup: ITEM_IRON_NAIL (Reusable)]
+      ├─► GH2_GatehouseMirrorLock [Requires: Mirror Alignment OR ITEM_IRON_NAIL]
+      │    └─► GH3_CaptainsLanding / OW5_Bastion [Defeat/Trap Captain Brutus]
+      │         └─► UNLOCKS BRAND 1: ABILITY_WALL_LEAP (Shadow Mantle) + ITEM_GATEHOUSE_KEY
+      │              └─► SQ1_ServantsQuarters (Central Hub)
+      │                   ├─► K1_Kitchens ──► K3_Dumbwaiter ──► BF1_SteamFoundry [Solve 120 PSI + 12T-24T-36T Gears]
+      │                   ├─► HM1_HallsOfMirrors ──► AL1_ArcaneLibrary [Solve Q2 Library Index]
+      │                   │    └─► Rewards: ITEM_MEMORY_THREAD + SKILL_VEIL_SIGHT + ITEM_TRUTH_LENS
+      │                   └─► M1_Menagerie ──► M2_CharnelPit [Defeat/Sedate Captain Vesper]
+      │                        └─► UNLOCKS BRAND 2: ABILITY_AIR_DASH (Starlight Dart)
+      │                             └─► DG1_DreamingGardens ──► WS1_WinterSolarium [Solve Puzzle 33 Thaw]
+      │                                  └─► DG3_YggdraGrove [Solve Puzzle 35 OR Boss] ──► CS1_ClockworkSpire
+      │                                       └─► CS4_PendulumCore [Defeat/Ground Magus Malakor]
+      │                                            └─► UNLOCKS BRAND 3: ABILITY_GRAV_INVERSION (Graviton Brand)
+      │                                                 ├─► RS1_RelativityCloister ──► Rewards: ITEM_PERSPECTIVE_LENS
+      │                                                 ├─► CR1_ChronomanticAtrium ──► Rewards: ITEM_RETROGRADE_OUROBOROS
+      │                                                 ├─► EY1_HighEyrie ──► Rewards: ITEM_SKY_SOVEREIGN_CLOAK
+      │                                                 └─► U2_UndercryptMonks [Ghost Monk S3]
+      │                                                      └─► Rewards: ITEM_ECHO_BELL (Reusable — BEFORE U3!)
+      │                                                           └─► U3_EchoChamber [Requires: ITEM_ECHO_BELL]
+      │                                                                └─► U4_SecretVault ──► LB1_BrassLabyrinth
+      ├─► B1_Barracks ──► TR1_TrophyHall ──► TR4_CuratorsAlcove [Rewards: ITEM_CURATORS_SIGNET]
+      │    └─► GA1_GenieAlcove [Unlocks Genie Bottle in GA2 via ITEM_CURATORS_SIGNET — BEFORE Sanctum!]
+      └─► CO1_Colosseum ──► CO3_CrystalTheater [Defeat/Redeem Duchess Seraphina Vane]
+           └─► UNLOCKS BRAND 4: ABILITY_MIRROR_PHASE (Mirror Phase)
+                ├─► PB6_SacrificeCrucible ──► Rewards: ITEM_MARTYRS_STARLIGHT_AMULET
+                └─► SA1_SanctumAntechamber [Requires: Clockwork Warden Defeated + ABILITY_MIRROR_PHASE]
+                     └─► SA2_SanctumArena (Archillusionist Aethelgard Vaelor — 5 Endings A/B/C/D/E)
 ```
-
-**Rules to avoid softlock:**
-1. No key is behind a door that key unlocks (acyclic dependency).
-2. IronNail and EchoBell are **reusable** (not consumable).
-3. MemoryThread is quest-gated, not random loot.
-4. If player dies with a key, respawn at last save with key intact (key NOT dropped mid-dungeon).
-5. Optional shortcuts (O Colosseum → Undercrypt) are one-way down only.
 
 ### 35.4 Tile Bitmask Rules (8-bit autotiling)
 
@@ -4631,14 +4746,14 @@ All art lives in `threejs/assets/art/` (CC0 unless noted). Full listing and the 
 | `threejs/public/assets/models/mirror_lock.glb` | GH2 mirror-lock puzzle prop | Original (procedural Blender) | 4,380 triangles |
 | `dungeon_tiles/TilesDungeon/Wall.png` | Wall tile | CC0 | https://opengameart.org/content/dungeon-tileset-32x32 |
 | `tileset_dungeon.png` | Full 32x32 dungeon tileset | CC0 | https://opengameart.org/content/32x32-dungeon-tileset |
-| `topdown16_326.png` | 16x16 top-down map tileset & sprite props | CC0 | https://opengameart.org/content/top-down-16-%C3%97-16-map-tileset-and-sprites |
+| `topdown16_326.png` | 16x16 top-down map tileset & sprite props | CC0 | https://www.google.com/search?q=https://opengameart.org/content/top-down-16-%25C3%2597-16-map-tileset-and-sprites |
 | `rpgCharacterSprites32x32.png` | Human/rogue/mage sprite set | CC0 | https://opengameart.org/content/32x32-rpg-character-sprites |
 | `magician/` | Animated wizard sequences (idle/walk/run/attack) | CC0 | https://opengameart.org/content/wizard-characteranimated |
-| `male_top_down_01.png` | Top-down male character sheet | CC0 | https://opengameart.org/content/top-down-male-character-sheet |
+| `male_top_down_01.png` | Top-down male character sheet | CC0 | https://www.google.com/search?q=https://opengameart.org/content/top-down-male-character-sheet |
 | `skeleton_attack.png` | Undead monk / skeleton attack | CC0 | https://opengameart.org/content/animated-top-down-zombie |
 | `gargoyle.png` | Stone gargoyle enemy | CC0 | https://opengameart.org/content/gargoyle |
 | `chest2.png` | Treasure chest (and mimic base) | CC0 | https://opengameart.org/content/modified-32x32-treasure-chest |
-| `coin_11.png` | Coin / pickpocket reward | CC0 | https://opengameart.org/content/coin-animated-0 |
+| `coin_11.png` | Coin / pickpocket reward | CC0 | https://www.google.com/search?q=https://opengameart.org/content/coin-animated-0 |
 | `magic_mirror.png` | Magic mirror / portal | CC0 | https://opengameart.org/content/magic-mirrorportal-pixel-sprite |
 
 ### three.js bridging
@@ -4891,7 +5006,7 @@ This section is the **source of truth for implementation**. Older map/quest note
 4. **Keys precede gates.** No item/ability can be required by the room that awards it. Movement abilities are `ABILITY_WALL_LEAP`, `ABILITY_AIR_DASH`, `ABILITY_GRAV_INVERSION`, `ABILITY_MIRROR_PHASE`.
 5. **Streaming:** load one zone chunk; stream room-local geometry and encounters inside it. Shared zone assets remain cached.
 6. **Stealth readability:** gameplay light zones and raycasts determine detection, not rendered shadows.
-7. **Names:** brigand **Cynthia Vane** (not Lady Cynthia); prison warden **Malakor Siphon** (not Pendulum Core Malakor). Recurring arena rooms use `encounterVariant` rather than duplicate scene IDs.
+7. **Names:** Major Captain 4 in the Colosseum is **Duchess Seraphina Vane** (Master Mechanist Vane's estranged daughter, distinct from the crystallized child **Lady Cynthia Vaelor**); the Abyssal Prison overseer is **Castellan Dredge the Iron Gaoler** (distinct from Clockwork Spire Major Captain 3 **Magus Malakor the Void-Eyed**); Vaelor's mortal name is **Aethelgard Vaelor**, his grandfather in the Haunted Manor portrait (`HA2`) is **Patriarch Morvath Vaelor**, the nursery spirit (`HA3`) is **Governess Vivienne Claire**, and the starving aristocrats in the Cenacle (`BQ1`) are **Marquess Cassian of the Silver Flagon** and **Marchioness Genevieve**. Recurring arena rooms use `encounterVariant` rather than duplicate scene IDs.
 
 ### 41.2 MVP Scene Graph (Vertical Slice)
 
@@ -4907,45 +5022,68 @@ S00 Approach & Sunken Courtyard
 - **MVP scope:** 30–45 minutes, three to four rooms, one enemy archetype (Keep Guard), one illusion puzzle (mirror lock), one checkpoint, one encounter finale.
 - **Full-game expansion:** after the slice passes performance and playability checks, append rooms using the same manifest and kit. Do not pre-build the entire fortress before the slice is validated.
 
-### 41.3 World Manifest Schema
+### 41.3 World Manifest Schema (v2.0 CRPG, Surface & Multi-Solution Ready)
 
 ```json
 {
-  "version": 1,
+  "version": 2,
+  "canonicalScaleMetersPerUnit": 1.0,
+  "timeDilationRatio": 5.714,
+  "loopDurationSeconds": 2700,
   "scenes": [
     {
       "id": "S00",
-      "name": "Approach & Sunken Courtyard",
+      "name": "The Approach & Sunken Courtyard",
       "zone": "approach",
+      "tier": 2,
+      "elevationMeters": 0,
       "art": "moonlit_diorama",
       "bounds": { "width": 16, "height": 12 },
       "spawn": [0, 0.6, 3],
-      "exits": [
-        { "to": "OW1", "spawn": [0, 0.6, 2], "requires": [], "oneWay": false }
+      "surfaces": [
+        { "type": "stone", "noiseMultiplier": 1.0, "traction": 1.0 },
+        { "type": "moss_hedge", "noiseMultiplier": 0.35, "traction": 1.0, "stealthBonus": 0.25 },
+        { "type": "water_sluice", "noiseMultiplier": 1.5, "traction": 0.85, "conductsElectricity": true }
       ],
-      "encounterVariant": null
+      "puzzles": [
+        {
+          "id": "PUZ_S00_BRAMBLES",
+          "solutions": [
+            { "method": "OPTICAL_BEACON", "requires": [] },
+            { "method": "ALCHEMICAL_BURN", "requires": ["ORIGIN_ALCHEMIST"] },
+            { "method": "CLIFF_TRELLIS_BYPASS", "requires": ["STAT_AGI_11"] }
+          ]
+        }
+      ],
+      "exits": [
+        { "id": "S00_TO_OW1", "to": "OW1", "spawn": [0, 0.6, 5], "requires": ["PUZ_S00_BRAMBLES"], "oneWay": false },
+        { "id": "S00_TO_GH4", "to": "GH4", "spawn": [-3, 0.6, 2], "requires": ["STAT_AGI_11"], "oneWay": false }
+      ]
     }
   ]
 }
 ```
 
-### 41.4 Conflict Resolutions
+### 41.4 Conflict Resolutions (v2.0 Master Alignment)
 
-- **OW5/Gatehouse loop:** `OW5` is now an encounter variant of the Gatehouse approach, not a disconnected room.
-- **Sanctum access:** use one rule only — defeat the Clockwork Warden and obtain `ABILITY_MIRROR_PHASE`; `Q6` begins on entry and cannot be its own prerequisite.
-- **Rooftop Glider:** the Windkeeper grants a temporary `PROTOTYPE_GLIDER` on quest acceptance; S12 upgrades it to permanent `ABILITY_GLIDER` after the wind trials.
-- **Genie Bottle:** the bottle is never gated by S15. S14 opens the bargains; S15 is the final choice after S14.
-- **Undercrypt Echo Bell:** S3 awards the Echo Bell before `U3`; `U3` requires it and cannot award it again.
-- **Retrograde Ouroboros & Mourning Cameo:** quest givers lend these items on acceptance, not as completion rewards.
-- **BFS/ASCII/SVG:** all generated views derive from the manifest. The older 4×4 ASCII overview is illustrative only and must not be used as a generation input.
+- **Relativistic Time Dilation (14 Mortal Years vs. 80 Keep Winters):** Outside in Greyport, 14 years have passed since the Great Lockdown (1886 -> 1900). Inside the keep's pressurized Starlight Field, Vaelor accelerated the Chronomantic Spire (`CR1–CR5`) to 5.714× mortal speed while looping the midnight cycle—reconciling Kaelen's age (29) with the 80 subjective winters experienced by trapped inhabitants.
+- **Character Identity Disambiguation:** Major Captain 4 is **Duchess Seraphina Vane** (Master Vane's daughter, distinct from the crystallized child **Lady Cynthia Vaelor**); the Prison Block overseer (`PB2`) is **Castellan Dredge the Iron Gaoler** (distinct from Spire Major Captain 3 **Magus Malakor the Void-Eyed**); Vaelor's mortal name is **Aethelgard Vaelor**, his grandfather (`HA2`) is **Patriarch Morvath Vaelor**, the nursery ghost (`HA3`) is **Governess Vivienne Claire**, and the starving couple in `BQ1` are **Marquess Cassian** and **Marchioness Genevieve**.
+- **Room Code Disambiguation (`SH1–SH4` vs. `BQ1–BQ3`):** Mister Bartholomew Sterling's State Dining Salon, Pantry, Dumbwaiter Crossroads, and Tea Parlor are indexed as **`SH1–SH4`**, reserving **`BQ1–BQ3`** exclusively for *The Cenacle of Eternal Satiety*. The Alchemist's Lab is indexed as **`AL_L1–AL_L3`** to avoid colliding with the Arcane Library (`L1–L6`).
+- **Dual-Component Music Box:** Restoring Cynthia's Starlight Music Box requires the **7 Prismatic Casing Shards** (`OW4`, `SQ4`, `HM5`, `PH4`, `RS6`, `CS5`, `U4`) AND the **3 Master Brass Cylinders** (*Harmony* in `MS5`, *Grief* in `HA5`, *Truth* in `LB5`).
+- **OW5/Gatehouse loop:** `OW5` is an encounter variant of the Gatehouse approach, not a disconnected room.
+- **Sanctum access:** Defeat the Clockwork Warden and obtain `ABILITY_MIRROR_PHASE`; `Q6` begins on entry and is never its own prerequisite.
+- **Rooftop Glider:** The Windkeeper grants a temporary `PROTOTYPE_GLIDER` on quest acceptance; `S12` upgrades it to permanent `ABILITY_GLIDER` (complemented by Lord Aurelius's *Cloak of the Sky-Sovereign* in `S29`).
+- **Genie Bottle (`GA2`):** Unlocks via the *Curator's Signet* found in Trophy Hall `TR4` (never gated by endgame drops). `S14` opens the bargains; `S15` is the final choice after `S14`.
+- **Undercrypt Echo Bell (`U2` -> `U3`):** Ghost Monk in `U2` awards the `ITEM_ECHO_BELL` upon starting/completing `S3` *before* `U3`; `U3` requires the Echo Bell to speak Vaelor's oath.
+- **Retrograde Ouroboros & Mourning Cameo:** Quest givers lend these items on quest acceptance so their puzzle rooms (`CR3–CR4`, `HA4`) can be solved without circular dependencies.
 
-### 41.5 Budget-First Roadmap
+### 41.5 Budget-First Roadmap & Low-Cost Systemic Slice
 
 | Phase | Duration | Deliverable |
 |---|---|---|
 | Decisions gate | 1 week | Freeze WebGL2, camera, scale, art v2, MVP scope |
-| Vertical slice | 8–12 weeks | S00 + GH1/GH2/GH3; controller/collision, guard, one puzzle, checkpoint, encounter finale |
-| Content production | 16–30 weeks | One zone at a time; each adds at most one new mechanic |
+| Vertical slice (`S00–GH3`) | 8–12 weeks | S00 + OW1 + GH1/GH2/GH3; Origin selector, Orin branching/fail-forward dialogue, 3 surface acoustics, 3-path mirror lock puzzle, lethal + non-lethal Captain finale, Memory Shard I |
+| Content production | 16–30 weeks | One zone at a time across the 4-Tier 28-Zone DAG; each adds at most one new mechanic |
 | Release hardening | 6–10 weeks | Save migration, accessibility, device testing, compression, balance |
 
 **Provisional release target:** 4–6 hours of polished content before committing to 12–18 hours. Expand only after production velocity is measured.
@@ -4960,9 +5098,16 @@ S00 Approach & Sunken Courtyard
 - Add automated smoke tests for scene boot, manifest reachability, draw calls, and frame time before content production.
 - **Tooling added:** local `threejs-docs` MCP server (`tools/ThreeJSMCP`) for live Three.js API lookup during implementation. A scene-manipulation MCP is deferred until the game exposes a WebSocket inspector.
 
-### 41.7 Out of Scope for MVP
+### 41.7 Lightweight Systemic Slice Scope (Included in MVP vs. Deferred)
 
-WebGPU, mobile store packaging, four traversal abilities, gravity inversion, retrocausal time magic, rhythm combat, companions, crafting/alchemy, faction ecology, weather, NG+, multiple endings, real mirror reflections, full equipment/build systems, and all remaining zones.
+- **Included in MVP Slice (`S00 -> GH3`) at Low Engineering Cost:**
+  1. *Origin Selector Modal (`S00`):* Choose 1 of 4 Shadow Pasts + 2 Quirks (JSON state + HTML modal).
+  2. *Gatekeeper Orin Multi-Stat Dialogue & Failing Forward (`GH1`):* Test `[ITEM_IRON_NAIL]`, `[CHA 9]`, or `[STR 11]`; failing `[CHA 9]` triggers Orin's panic steam-jam event.
+  3. *Surface Acoustics & Distraction Toss (`OW1/GH1`):* 2D surface lookup (`stone` 1.0x, `moss_hedge` 0.35x, `water_sluice` 1.5x) + throwable coin/bottle distraction raycast.
+  4. *Three-Solution Mirror Lock (`GH2`):* Solve via (A) rotating mirror beams (`45°/90°/135°`), (B) driving `ITEM_IRON_NAIL` into the false brick wall, or (C) jamming the steam piston with a brass cog.
+  5. *Dual Lethal / Non-Lethal Captain Finale (`GH3`):* Defeat the Captain in melee/parry combat OR drop the overhead counterweight cage / pickpocket his key for the Ghost XP bonus.
+  6. *Memory Shard I & Field Journal (`OW1`):* Collect *The Shard of the Gate* in the `OW1` cache, trigger a sepia vignette, and pick 1 of 3 Conviction interpretations (`Empathy`, `Rationalism`, `Solipsism`).
+- **Deferred Post-Slice:** WebGPU, mobile store packaging, remaining 3 traversal brands (`Air-Dash`, `Graviton`, `Mirror Phase`), retrocausal time rooms, 3-lane rhythm salon, alchemy bench UI, and remaining Act II–IV zones.
 
 ### 41.8 Immediate Build Order
 
@@ -4970,22 +5115,35 @@ WebGPU, mobile store packaging, four traversal abilities, gravity inversion, ret
 2. **DONE:** S00 spawn and static floor/wall colliders load from `world_manifest.json`.
 3. **DONE:** Room exits and checkpoint autosave (`localStorage`, scene transitions and rewards).
 4. **DONE:** Keep Guard patrol/chase/contact attack plus player melee attack (Space). Captain variant added in GH3.
-5. **DONE:** Mirror-lock puzzle in GH2 (`ITEM_IRON_NAIL` prerequisite, E to open).
-6. **DONE:** GH3 encounter finale and reward `ABILITY_WALL_LEAP` on captain defeat.
-7. **NEXT:** Profile on a mid-range Android browser and desktop browser before adding any new zone.
+5. **DONE:** Mirror-lock puzzle in GH2 (`ITEM_IRON_NAIL` prerequisite, E to open) — upgraded in v2.0 manifest to support 3 solution paths.
+6. **DONE:** GH3 encounter finale and reward `ABILITY_WALL_LEAP` on captain defeat or non-lethal counterweight trap.
+7. **DONE (baseline):** Added `QualityManager` with FPS/DPR overlay and Q-cycled Low/Medium/High presets. Desktop dev build measured ~44 FPS at Medium (DPR 1.25). **NEXT:** Wire the v2.0 `world_manifest.json` surface acoustics, Orin fail-forward dialogue, and Origin selector into the playable slice and profile on Android + desktop browsers.
 
-### 41.9 Current Playable Slice (Built)
+### 41.9 Current Playable Slice (Built & v2.0 Aligned)
 
-| Scene | Built content |
+| Scene | Built & v2.0 Upgraded Content |
 |---|---|
-| S00 Approach & Sunken Courtyard | **Blender GLB diorama** (beveled courtyard, arch, stairs, props), GLB Kaelen hero, Rapier capsule, exit north to OW1 |
-| OW1 Outer Wards Courtyard | **Modular GLB room kit**, Iron Nail pickup, GLB Keep Guard, exits to S00/GH1 |
-| GH1 Gatehouse Approach | **Modular GLB room kit + gate arches**, exits to OW1/GH2 (Iron Nail required for GH2) |
-| GH2 Gatehouse Mirror Lock | **GLB mirror-lock prop**, E-interaction with Iron Nail, unlocks GH3 |
-| GH3 Captain's Landing | **Modular GLB room kit**, Captain encounter, Space melee, Wall Leap reward, return exits |
+| S00 Approach & Sunken Courtyard | **Blender GLB diorama** (beveled courtyard, arch, stairs, props), GLB Kaelen hero, Origin Selector hook, 3-way Bramble puzzle (`OPTICAL_BEACON` / `ALCHEMICAL_BURN` / `CLIFF_TRELLIS_BYPASS`), exit north to OW1 |
+| OW1 Outer Wards Courtyard | **Modular GLB room kit**, reusable `ITEM_IRON_NAIL` pickup, `SHARD_01_GATE` Memory Shard cache, Panopticon spotlight hook, GLB Keep Guard, exits to S00/GH1/B1 |
+| GH1 Gatehouse Approach | **Modular GLB room kit + gate arches**, Gatekeeper Orin branching dialogue (`ITEM_IRON_NAIL`, `STAT_CHA_9`, `STAT_STR_11`, plus `EVENT_ORIN_PANIC_STEAM_JAM` fail-forward), exits to OW1/GH2/GH4 |
+| GH2 Gatehouse Mirror Lock | **GLB mirror-lock prop**, 3-solution puzzle (`ROTATE_MIRRORS_45_90_135`, `IRON_NAIL_GROUND_FAULT`, `STEAM_PISTON_BYPASS`), unlocks GH3 and SQ1 |
+| GH3 Captain's Landing | **Modular GLB room kit**, Captain encounter (lethal melee OR non-lethal `DROP_COUNTERWEIGHT_CAGE` / `STEALTH_PICKPOCKET_KEY`), `ABILITY_WALL_LEAP` reward, one-way rope shortcut to S00 |
 
-**Controls:** WASD/Arrows movement (isometric diagonals), **Space** melee, **E** interact. Progress autosaves to `localStorage` on scene transitions, item pickup, puzzle solve, and captain defeat. A `window.__veilkeep` debug hook exposes scene, player, inventory, and `loadScene` for smoke tests and future MCP inspection.
+**Controls:** WASD/Arrows movement (isometric diagonals), **Space** melee, **E** interact, **Q** Truth Lens / Veil Sight, **Tab** Thief's Field Journal & Memory Cabinet. Progress autosaves to `localStorage` on scene transitions, item pickup, puzzle solve, and captain resolution. A `window.__veilkeep` debug hook exposes scene, player, inventory, convictions, and `loadScene` for smoke tests and MCP inspection.
+
+### 41.10 Quality Settings & Profiling (Built)
+
+| Preset | DPR Cap | Shadows | Intended target |
+|---|---|---|---|
+| Low | 0.85 | Off | Low-end Android / battery saving |
+| Medium | 1.25 | On | Default desktop + mid-range mobile |
+| High | 2.0 | On | High-end desktop |
+
+- **Q** cycles quality presets; the overlay reports tier, FPS, and active DPR.
+- `QualityManager` lives in `src/core/Quality.ts`; `window.__veilkeep.quality` is exposed for profiling.
+- Baseline measurement: ~44 FPS at Medium in the desktop development build.
+- Next profiling step: mid-range Android browser before adding further zones.
 
 ---
 
-*VEILKEEP GDD v1.0 — Generated from gdd.md. Interactive map & tabs above.*
+*VEILKEEP GDD v2.0 — Master Narrative, Topological Map, Multi-Solution Puzzle & CRPG Systems Edition.*
