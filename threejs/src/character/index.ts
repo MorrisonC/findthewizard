@@ -2,3 +2,8 @@ export * from './MainCharacterRig';
 export * from './CombatAnimations';
 export * from './CombatController';
 export * from './MainCharacterLoader';
+export * from './WeaponArsenal';
+export * from './WeaponTrail';
+export * from './CombatParticles';
+export * from './EnemyCombatAI';
+export * from './BossVaelorEncounter';

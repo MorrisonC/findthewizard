@@ -8,6 +8,7 @@ class SoundFXManager {
   private initialized = false;
 
   private init(): AudioContext | null {
+    if (typeof window === 'undefined') return null;
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
@@ -30,35 +31,132 @@ class SoundFXManager {
   /**
    * Blade attack whoosh / slash
    */
-  public playSlash(): void {
+  public playSlash(tier: 1 | 2 | 3 = 1): void {
+    this.playComboSlash(tier);
+  }
+
+  /**
+   * Tier-scaled combo attack slash with escalating pitch, weight, and harmonic resonance
+   */
+  public playComboSlash(tier: 1 | 2 | 3 = 1): void {
     const ctx = this.init();
     if (!ctx) return;
     const now = ctx.currentTime;
 
-    // Filtered noise swoosh + downward pitch sweep
+    const startFreq = tier === 3 ? 680 : tier === 2 ? 520 : 390;
+    const endFreq = tier === 3 ? 50 : tier === 2 ? 80 : 100;
+    const dur = tier === 3 ? 0.26 : tier === 2 ? 0.18 : 0.14;
+    const volume = tier === 3 ? 0.35 : tier === 2 ? 0.26 : 0.2;
+
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     const filter = ctx.createBiquadFilter();
 
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(380, now);
-    osc.frequency.exponentialRampToValueAtTime(80, now + 0.14);
+    osc.type = tier === 3 ? 'sawtooth' : 'triangle';
+    osc.frequency.setValueAtTime(startFreq, now);
+    osc.frequency.exponentialRampToValueAtTime(endFreq, now + dur);
 
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(1800, now);
-    filter.frequency.exponentialRampToValueAtTime(200, now + 0.14);
+    filter.frequency.setValueAtTime(tier === 3 ? 3200 : 2200, now);
+    filter.frequency.exponentialRampToValueAtTime(150, now + dur);
+    if (tier === 3) filter.Q.setValueAtTime(3.5, now);
 
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.22, now + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    gain.gain.linearRampToValueAtTime(volume, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + dur + 0.02);
 
     osc.connect(filter);
     filter.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.16);
+    osc.stop(now + dur + 0.04);
+
+    // Extra low-end bass drop for heavy finisher
+    if (tier === 3) {
+      const sub = ctx.createOscillator();
+      const subGain = ctx.createGain();
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(120, now);
+      sub.frequency.exponentialRampToValueAtTime(38, now + 0.22);
+      subGain.gain.setValueAtTime(0.3, now);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+      sub.connect(subGain);
+      subGain.connect(ctx.destination);
+      sub.start(now);
+      sub.stop(now + 0.25);
+    }
   }
+
+  /**
+   * Ethereal phase dash / tumble swoosh for dodge roll
+   */
+  public playDodgeRoll(): void {
+    const ctx = this.init();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.exponentialRampToValueAtTime(90, now + 0.2);
+
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(900, now);
+    filter.frequency.exponentialRampToValueAtTime(220, now + 0.2);
+    filter.Q.setValueAtTime(1.8, now);
+
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.25, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.24);
+  }
+
+  /**
+   * Metallic buckler deflection + crystalline ward hum on shield block
+   */
+  public playShieldBlock(): void {
+    const ctx = this.init();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // Metallic ping
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(180, now + 0.18);
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+    // Harmonic crystalline resonance ring
+    const res = ctx.createOscillator();
+    const resGain = ctx.createGain();
+    res.type = 'sine';
+    res.frequency.setValueAtTime(880, now);
+    resGain.gain.setValueAtTime(0.18, now);
+    resGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    res.connect(resGain);
+    resGain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.22);
+    res.start(now);
+    res.stop(now + 0.3);
+  }
+
 
   /**
    * Flesh & armor impact thud when striking a guard

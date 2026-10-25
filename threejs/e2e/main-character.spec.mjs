@@ -40,6 +40,10 @@ await page.waitForTimeout(900);
 await page.keyboard.press('c'); await page.waitForTimeout(250); await shot('7-dodge');
 await page.waitForTimeout(800);
 await page.keyboard.press('v'); await page.waitForTimeout(350); await shot('8-cast');
+await page.waitForTimeout(800);
+await page.keyboard.press('t'); await page.waitForTimeout(400); await shot('9-glass-cleaver');
+await page.keyboard.press('t'); await page.waitForTimeout(400); await shot('10-void-rapier');
+await page.keyboard.press('x'); await page.waitForTimeout(200); await shot('11-shield-ward');
 
 console.log('MainCharacter logs:', logs);
 console.log('errors:', errors);

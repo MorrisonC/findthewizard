@@ -221,12 +221,7 @@ def build_visuals():
     # Arcane gauntlet ring marks SpellOrigin
     cone("SpellRing", "LeftHand", glow, 0.065, 0.065, 0.02, (0, -0.08, 0.04), segments=16)
 
-    # Hunter blade held in the right hand (blade axis = +Z in bind pose, points up when forearm is raised)
-    rot = (math.pi / 2, 0, 0)
-    cone("BladeGrip", "RightHand", leather, 0.02, 0.02, 0.2, (0, -0.05, 0), rot, 8)
-    box("BladeGuard", "RightHand", steel, (0.22, 0.05, 0.03), (0, -0.05, 0.11))
-    box("BladeEdge", "RightHand", blade, (0.05, 0.012, 0.9), (0, -0.05, 0.58))
-    cone("BladeTip", "RightHand", blade, 0.025, 0.0, 0.1, (0, -0.05, 1.08), rot, 4)
+    # Weapon is mounted dynamically to hand_r_socket in engine (HunterBlade, Cleaver, etc.)
 
     bpy.ops.object.select_all(action="DESELECT")
     for o in PARTS:

@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import type { MainCharacterRig } from './MainCharacterRig';
 import { COMBAT_TIMING, buildCombatClips, type ClipName, type CombatState, type StateTiming } from './CombatAnimations';
+import type { EquippedWeapon, EquippedShield } from './WeaponArsenal';
+import type { WeaponTrail } from './WeaponTrail';
+import type { CombatParticles } from './CombatParticles';
 
 export const CROSSFADE_SECONDS = 0.15;
 const INPUT_BUFFER_SECONDS = 0.35;
@@ -117,6 +120,29 @@ export class CombatController {
   private rootDelta = new THREE.Vector3();
   private _hitboxActive = false;
 
+  equippedWeapon?: EquippedWeapon;
+  equippedShield?: EquippedShield;
+  weaponTrail?: WeaponTrail;
+  combatParticles?: CombatParticles;
+
+  attachWeapon(weapon: EquippedWeapon): void {
+    this.equippedWeapon = weapon;
+    this.weaponTrail?.setWeapon(weapon);
+  }
+
+  attachShield(shield: EquippedShield): void {
+    this.equippedShield = shield;
+  }
+
+  attachWeaponTrail(trail: WeaponTrail): void {
+    this.weaponTrail = trail;
+    if (this.equippedWeapon) trail.setWeapon(this.equippedWeapon);
+  }
+
+  attachParticles(particles: CombatParticles): void {
+    this.combatParticles = particles;
+  }
+
   constructor(readonly rig: MainCharacterRig, callbacks: CombatCallbacks = {}, clips?: Partial<Record<ClipName, THREE.AnimationClip>>) {
     this.callbacks = callbacks;
     const procedural = buildCombatClips(rig.source === 'imported');
@@ -197,12 +223,17 @@ export class CombatController {
     }
     if (this.state === 'Block_Parry') {
       if (inWindow(this.blockTime / COMBAT_TIMING.Block_Parry.duration, COMBAT_TIMING.Block_Parry.parry)) {
+        this.equippedShield?.setWardActive(true, true);
+        this.combatParticles?.spawnParryBurst(this.rig.group.position, true);
         this.callbacks.onParry?.();
         return 'parried';
       }
+      this.equippedShield?.setWardActive(true, false);
+      this.combatParticles?.spawnParryBurst(this.rig.group.position, false);
       this.callbacks.onDamaged?.(hit.damage * BLOCK_DAMAGE_SCALE);
       return 'blocked';
     }
+    this.combatParticles?.spawnStaggerBurst(this.rig.group.position);
     this.callbacks.onDamaged?.(hit.damage);
     this.enter('Hit_Stagger');
     return 'hit';
@@ -256,6 +287,16 @@ export class CombatController {
         break;
     }
     this.updateHitbox();
+
+    if (this.state === 'Block_Parry') {
+      this.equippedShield?.setWardActive(true);
+    } else {
+      this.equippedShield?.setWardActive(false);
+    }
+    const comboTier = this.state === 'Heavy_Combo_Finisher' ? 3 : (this.state === 'Light_Attack_2' ? 2 : 1);
+    this.weaponTrail?.update(dt, this._hitboxActive, comboTier);
+    this.equippedWeapon?.pulseRunes(this._hitboxActive ? 3.0 : 1.2);
+    this.combatParticles?.update(dt);
   }
 
   // ---- internals -----------------------------------------------------------
@@ -335,6 +376,9 @@ export class CombatController {
 
   private applyDodgeMotion(n: number): void {
     const [a, b] = DODGE_MOVE_SPAN;
+    if (this.lastDodgeN < a && n >= a) {
+      this.combatParticles?.spawnDodgeDust(this.rig.group.position, this.dodgeDir);
+    }
     const f0 = smooth((this.lastDodgeN - a) / (b - a));
     const f1 = smooth((n - a) / (b - a));
     this.lastDodgeN = n;
@@ -383,5 +427,7 @@ export class CombatController {
   dispose(): void {
     this.mixer.stopAllAction();
     this.mixer.uncacheRoot(this.rig.group);
+    this.weaponTrail?.dispose();
+    this.combatParticles?.dispose();
   }
 }

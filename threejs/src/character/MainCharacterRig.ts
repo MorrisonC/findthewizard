@@ -274,6 +274,6 @@ export function bindImportedRig(
   if (weaponSocket !== made.weaponSocket) { made.weaponSocket.removeFromParent(); if (!authoredAnchor) weaponSocket.add(made.hitboxAnchor); }
   if (spellOrigin !== made.spellOrigin) made.spellOrigin.removeFromParent();
   return {
-    rig: { group, bones, skeleton, weaponSocket, spellOrigin, hitboxAnchor, importedClips: reClips, source: 'imported', bakedWeapon: !!authoredAnchor },
+    rig: { group, bones, skeleton, weaponSocket, spellOrigin, hitboxAnchor, importedClips: reClips, source: 'imported', bakedWeapon: !!existing('BakedWeaponMesh') },
   };
 }

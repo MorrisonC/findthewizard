@@ -229,7 +229,7 @@
     .enemy-hp-bar {
       position: absolute;
       width: 44px;
-      height: 5px;
+      height: 7px;
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(239, 68, 68, 0.7);
       border-radius: 2px;
@@ -239,15 +239,105 @@
       z-index: 95;
       transition: opacity 0.3s ease;
       opacity: 0;
+      display: flex;
+      flex-direction: column;
     }
     .enemy-hp-bar.visible {
       opacity: 1;
     }
     .enemy-hp-fill {
-      height: 100%;
+      height: 4px;
       background: linear-gradient(90deg, #ef4444, #dc2626);
       width: 100%;
       transition: width 0.15s ease-out;
+    }
+    .enemy-poise-fill {
+      height: 2px;
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+      width: 100%;
+      transition: width 0.1s ease-out;
+    }
+    /* Boss Health & Poise Top Header HUD */
+    .boss-hud-container {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      width: 520px;
+      max-width: 90vw;
+      background: rgba(10, 10, 22, 0.94);
+      border: 1px solid rgba(212, 175, 55, 0.65);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(129, 140, 248, 0.35);
+      border-radius: 8px;
+      padding: 10px 18px;
+      pointer-events: none;
+      z-index: 92;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .boss-hud-container.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .boss-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Cinzel', serif;
+    }
+    .boss-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: #f8fafc;
+      text-shadow: 0 0 8px rgba(129, 140, 248, 0.8);
+    }
+    .boss-subtitle {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #a5b4fc;
+      margin-left: auto;
+      text-transform: uppercase;
+    }
+    .boss-bar-wrap {
+      position: relative;
+      height: 10px;
+      background: rgba(30, 27, 75, 0.8);
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .boss-hp-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #6366f1, #ec4899, #ef4444);
+      box-shadow: 0 0 8px rgba(236, 72, 153, 0.6);
+      transition: width 0.15s ease-out;
+    }
+    .boss-phase-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 4px #fff;
+    }
+    .boss-poise-wrap {
+      height: 4px;
+      background: rgba(20, 20, 30, 0.8);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .boss-poise-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #facc15, #eab308);
+      box-shadow: 0 0 6px rgba(250, 204, 21, 0.7);
+      transition: width 0.1s linear;
     }
     /* Truth Lens Spectral Vignette */
     #hud-truth-lens {
@@ -1280,6 +1370,22 @@
     @keyframes parryReadyPulse { 0%,100% { box-shadow: 0 0 4px rgba(245,158,11,0.3); } 50% { box-shadow: 0 0 14px rgba(245,158,11,0.8); } }
     .parry-ready { animation: parryReadyPulse 1.5s ease-in-out infinite; border-color: rgba(245,158,11,0.9) !important; }
   </style>
+  <!-- Boss Health & Posture Header HUD -->
+  <div id="hud-boss-container" class="boss-hud-container">
+    <div class="boss-title-row">
+      <span class="boss-icon">👑</span>
+      <span id="boss-name" class="boss-name">ARCH-ILLUSIONIST VAELOR</span>
+      <span id="boss-subtitle" class="boss-subtitle">THE WEAVER OF MIRRORS &bull; PHASE 1</span>
+    </div>
+    <div class="boss-bar-wrap">
+      <div id="boss-hp-fill" class="boss-hp-fill"></div>
+      <div class="boss-phase-marker"></div>
+    </div>
+    <div class="boss-poise-wrap">
+      <div id="boss-poise-fill" class="boss-poise-fill"></div>
+    </div>
+  </div>
+
   <div id="hud-toast" class="hud-toast"></div>
   <div id="hud-autosave" style="position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);border:1px solid rgba(16,185,129,0.4);border-radius:6px;padding:4px 10px;font-size:11px;color:#10b981;font-family:'Cinzel',serif;letter-spacing:1px;opacity:0;transition:opacity 0.3s ease;pointer-events:none;z-index:60;">Saved</div>
   <div id="hud-combo" style="position:fixed;top:50%;right:24px;transform:translateY(-50%);background:rgba(15,23,42,0.85);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:8px 14px;font-family:'Cinzel',serif;color:#f59e0b;font-size:14px;font-weight:700;letter-spacing:1px;opacity:0;transition:opacity 0.2s ease;pointer-events:none;z-index:60;">
@@ -1588,6 +1694,7 @@
         Sprint: <kbd>Shift</kbd> &nbsp;|&nbsp; 
         Attack: <kbd>Space</kbd> &nbsp;|&nbsp; 
         Parry: <kbd>X</kbd> &nbsp;|&nbsp; 
+        Weapon: <kbd>T</kbd> &nbsp;|&nbsp; 
         Decoy: <kbd>R</kbd> &nbsp;|&nbsp; 
         Rewind: <kbd>B</kbd> (RS) &nbsp;|&nbsp; 
         Dash: <kbd>C</kbd> &nbsp;|&nbsp; 
