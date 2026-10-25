@@ -230,11 +230,9 @@
           "spawn": [
             0,
             0.6,
-            5
+            2
           ],
-          "requires": [
-            "PUZ_S00_BRAMBLES"
-          ],
+          "requires": [],
           "oneWay": false
         },
         {
@@ -267,7 +265,7 @@
       "spawn": [
         0,
         0.6,
-        5
+        2
       ],
       "pickups": [
         {
@@ -886,6 +884,1292 @@
         2
       ],
       "exits": []
+    },
+    {
+      "id": "CO1",
+      "name": "The Veil Colosseum",
+      "zone": "colosseum",
+      "tier": 3,
+      "elevationMeters": 8,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 20,
+        "height": 20
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "id": "CO1_TO_MH1",
+          "to": "MH1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "id": "CO1_TO_S00",
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "U1",
+      "name": "Undercrypt Entrance",
+      "zone": "undercrypt",
+      "tier": 2,
+      "elevationMeters": -4,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "U2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "U2",
+      "name": "Monk Tombs",
+      "zone": "undercrypt",
+      "tier": 2,
+      "elevationMeters": -4,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "U1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "U3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "U3",
+      "name": "Echo Chamber",
+      "zone": "undercrypt",
+      "tier": 2,
+      "elevationMeters": -4,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "U2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "U4",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [
+            "PUZZLE_ECHO_CHAMBER"
+          ],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "U4",
+      "name": "Secret Vault",
+      "zone": "undercrypt",
+      "tier": 2,
+      "elevationMeters": -4,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "U3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "TR1",
+      "name": "Trophy Hall Entrance",
+      "zone": "trophy",
+      "tier": 2,
+      "elevationMeters": 2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "TR2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "TR2",
+      "name": "Beast Row",
+      "zone": "trophy",
+      "tier": 2,
+      "elevationMeters": 2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "TR1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "TR3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "TR3",
+      "name": "The Slain Beast",
+      "zone": "trophy",
+      "tier": 2,
+      "elevationMeters": 2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "TR2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "TR4",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "TR4",
+      "name": "Curator's Alcove",
+      "zone": "trophy",
+      "tier": 2,
+      "elevationMeters": 2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "TR3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "U2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "AT1",
+      "name": "Star Chamber",
+      "zone": "astronomy",
+      "tier": 2,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "AT2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "AT2",
+      "name": "Constellation Floor",
+      "zone": "astronomy",
+      "tier": 2,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "AT1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "AT3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [
+            "PUZZLE_CONSTELLATION"
+          ],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "AT3",
+      "name": "Hidden Room",
+      "zone": "astronomy",
+      "tier": 2,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "AT2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "AL1",
+      "name": "Lab",
+      "zone": "alchemy",
+      "tier": 2,
+      "elevationMeters": 4,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "AL2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "AL2",
+      "name": "Storage",
+      "zone": "alchemy",
+      "tier": 2,
+      "elevationMeters": 4,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "AL1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "AL3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "AL3",
+      "name": "Vex Office",
+      "zone": "alchemy",
+      "tier": 2,
+      "elevationMeters": 4,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "AL2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "PB1",
+      "name": "Cell Row",
+      "zone": "prison",
+      "tier": 2,
+      "elevationMeters": -2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "PB2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "PB2",
+      "name": "Guard Post",
+      "zone": "prison",
+      "tier": 2,
+      "elevationMeters": -2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "PB1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "PB3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "PB3",
+      "name": "Warden Office",
+      "zone": "prison",
+      "tier": 2,
+      "elevationMeters": -2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "PB2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "PB4",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "PB4",
+      "name": "Escape Tunnel",
+      "zone": "prison",
+      "tier": 2,
+      "elevationMeters": -2,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "PB3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "RG1",
+      "name": "Terrace",
+      "zone": "rooftop",
+      "tier": 2,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RG2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RG2",
+      "name": "Wind Maze",
+      "zone": "rooftop",
+      "tier": 2,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RG1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RG3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RG3",
+      "name": "Glider Launch",
+      "zone": "rooftop",
+      "tier": 2,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RG2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RG4",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RG4",
+      "name": "Vista Point",
+      "zone": "rooftop",
+      "tier": 2,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RG3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "VR1",
+      "name": "Threshold",
+      "zone": "void",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "VR2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "VR2",
+      "name": "Dream Logic Room",
+      "zone": "void",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "VR1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "VR3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "VR3",
+      "name": "The Core",
+      "zone": "void",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "VR2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "RS1",
+      "name": "Entry Landing",
+      "zone": "relativity",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "OW1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RS2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RS2",
+      "name": "Double-Sided Stair",
+      "zone": "relativity",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RS1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RS3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RS3",
+      "name": "Wall-Floor Gallery",
+      "zone": "relativity",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RS2",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RS4",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RS4",
+      "name": "Perspective Hub",
+      "zone": "relativity",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RS3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RS5",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RS5",
+      "name": "Window Garden",
+      "zone": "relativity",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RS4",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "RS6",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
+    },
+    {
+      "id": "RS6",
+      "name": "The Dining Table",
+      "zone": "relativity",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 14,
+        "height": 14
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "to": "RS5",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
     }
   ],
   "macroZoneGraph28": [

@@ -18,8 +18,10 @@ npx serve .       # or python -m http.server 8000
 - Autosave to `localStorage` on transitions, item pickup, puzzle solve, and captain defeat.
 - Keep Guard and Captain patrol/chase/contact AI; Space melee; E interaction.
 - `window.__veilkeep` debug hook for smoke tests and future MCP inspection.
+- Zone music via `AudioManager` (Web Audio API) using open-source tracks in `public/audio/`.
 - S00 uses Blender-generated GLB diorama and Kaelen/Keep Guard character models instead of whitebox primitives.
 - OW1/GH1/GH2/GH3 use the modular Blender room kit (`room_shell.glb`, `gate_arch.glb`, `mirror_lock.glb`) instead of generic boxes.
+- HM1/BQ1/AG1/MH1/SAN1/CO1/U1-U4/TR1-TR4/AT1-AT3 all use the modular room kit or dedicated Blender GLBs.
 - `QualityManager` provides FPS/DPR overlay and Q-cycled Low/Medium/High presets (`src/core/Quality.ts`).
 
 **Controls:** WASD/Arrows, **Space** melee, **E** interact.

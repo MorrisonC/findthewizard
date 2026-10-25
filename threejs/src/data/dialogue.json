@@ -31,7 +31,7 @@
         "id": "SABLE_02A",
         "speaker": "Guildmaster Sable [via Starlight Raven]",
         "speakerTitle": "Shadow Syndicate Spymaster",
-        "text": "Dead? Veilkeep hasn't died in eighty winters—it has merely forgotten how to rot. Vaelor's wards hold the entire crag in an eternal, breathing dream. Walk softly, Kaelen. Step on the wrong cobblestone and the house will wake.",
+        "text": "Dead? Veilkeep hasn't died in eighty winters\u2014it has merely forgotten how to rot. Vaelor's wards hold the entire crag in an eternal, breathing dream. Walk softly, Kaelen. Step on the wrong cobblestone and the house will wake.",
         "choices": [
           {
             "text": "Where do I start?",
@@ -104,6 +104,11 @@
               "stat": "STR",
               "minVal": 11
             }
+          },
+          {
+            "text": "[Attempt a silver-tongued bluff: 'The relief watch is here, Orin.']",
+            "actionTrigger": "ORIN_BLUFF",
+            "actionPayload": "ORIN_BLUFF"
           }
         ]
       },
@@ -248,7 +253,7 @@
         "id": "BART_QUEST_OFFER",
         "speaker": "Mister Bartholomew Sterling",
         "speakerTitle": "Grand Butler of Veilkeep",
-        "text": "The brigands who ransacked the south pantry made off with the Duchess's Sterling Teapot, and young Cynthia's porcelain cup was taken to the Playhouse green room. Recover them. Execute the three-point afternoon tea service for Doctor Renatus, Maestro Niccolò, and Lady Eleanor. Do this, and the Grand Seneschal's Master Passkey to all twenty-seven fortress zones is yours.",
+        "text": "The brigands who ransacked the south pantry made off with the Duchess's Sterling Teapot, and young Cynthia's porcelain cup was taken to the Playhouse green room. Recover them. Execute the three-point afternoon tea service for Doctor Renatus, Maestro Niccol\u00f2, and Lady Eleanor. Do this, and the Grand Seneschal's Master Passkey to all twenty-seven fortress zones is yours.",
         "choices": [
           {
             "text": "I accept the service, Mister Sterling.",
@@ -391,7 +396,7 @@
         "id": "AURELIUS_PACT",
         "speaker": "Lord Aurelius the Sky-Sovereign",
         "speakerTitle": "Ancient Mythical Aether-Gryphon",
-        "text": "Boreas in C, Eurus in G, Notus in C, Zephyrus in E! Align the steam sliders to the celestial octave! Bring me the Solar Heart, and I will sweep Vaelor's false clouds from the sky! Wrap my golden mantle around your shoulders—take to the air!",
+        "text": "Boreas in C, Eurus in G, Notus in C, Zephyrus in E! Align the steam sliders to the celestial octave! Bring me the Solar Heart, and I will sweep Vaelor's false clouds from the sky! Wrap my golden mantle around your shoulders\u2014take to the air!",
         "choices": [
           {
             "text": "The sky shall be yours again, Sovereign.",
@@ -431,7 +436,7 @@
         "id": "ASTERION_FREED",
         "speaker": "Asterion the Liberated",
         "speakerTitle": "The Restored Guardian",
-        "text": "The roaring... it has ceased. For seventy winters Vaelor made me his brute, burying my compass in iron. You held the thread, shadow-walker. Take my labrys—when you stand before the deceiver, let him hear the brass horns of the labyrinth!",
+        "text": "The roaring... it has ceased. For seventy winters Vaelor made me his brute, burying my compass in iron. You held the thread, shadow-walker. Take my labrys\u2014when you stand before the deceiver, let him hear the brass horns of the labyrinth!",
         "choices": [
           {
             "text": "Rest now, Asterion. The labyrinth is open.",
@@ -547,19 +552,19 @@
         "text": "Hush now, Father. The music box has played its last turn. The sun has set, and the bed is warm. Master Voss... thank you for keeping your promise. The mirrors are quiet now. What will you do with my father's house?",
         "choices": [
           {
-            "text": "[ENDING A — True Dawn]: Release Cynthia, shatter the Heart, and let the fortress rest.",
+            "text": "[ENDING A \u2014 True Dawn]: Release Cynthia, shatter the Heart, and let the fortress rest.",
             "nextDialogueNodeId": "ENDING_A"
           },
           {
-            "text": "[ENDING B — Sovereign of Glass]: Claim the crown and rule the illusions yourself.",
+            "text": "[ENDING B \u2014 Sovereign of Glass]: Claim the crown and rule the illusions yourself.",
             "nextDialogueNodeId": "ENDING_B"
           },
           {
-            "text": "[ENDING C — Preserved Memory]: Seal the fortress in starlight amber as an eternal museum.",
+            "text": "[ENDING C \u2014 Preserved Memory]: Seal the fortress in starlight amber as an eternal museum.",
             "nextDialogueNodeId": "ENDING_C"
           },
           {
-            "text": "[ENDING D — Guild's Price]: Deliver the Heart of Mirrors to Sable for 3,000 moons.",
+            "text": "[ENDING D \u2014 Guild's Price]: Deliver the Heart of Mirrors to Sable for 3,000 moons.",
             "nextDialogueNodeId": "ENDING_D"
           }
         ]
@@ -785,7 +790,7 @@
         "text": "Come in, my handsome darling! Auntie Hazel has baked fresh hazelnut scones and poured piping-hot tea. Drink deep, and let Auntie tuck you into velvet slippers...",
         "choices": [
           {
-            "text": "[DEX 12 — Sleight of Hand]: Tip the drugged tea into the potted begonia and pretend to drink.",
+            "text": "[DEX 12 \u2014 Sleight of Hand]: Tip the drugged tea into the potted begonia and pretend to drink.",
             "nextDialogueNodeId": "HAZEL_SMOKE"
           },
           {

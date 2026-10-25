@@ -4744,6 +4744,10 @@ All art lives in `threejs/assets/art/` (CC0 unless noted). Full listing and the 
 | `threejs/public/assets/models/room_shell.glb` | Reusable beveled room shell for OW1/GH1/GH2/GH3 | Original (procedural Blender) | 11,044 triangles |
 | `threejs/public/assets/models/gate_arch.glb` | Exit gate arch | Original (procedural Blender) | 3,148 triangles |
 | `threejs/public/assets/models/mirror_lock.glb` | GH2 mirror-lock puzzle prop | Original (procedural Blender) | 4,380 triangles |
+| `threejs/public/assets/models/bq1_feast.glb` | Banquet of Eternal Satiety feast scene | Original (procedural Blender) | 1,256.9 KB |
+| `threejs/public/assets/models/ag1_tree.glb` | Ancient Bough tree scene | Original (procedural Blender) | 596.4 KB |
+| `threejs/public/assets/models/mh1_hearth.glb` | Mother Hazel's Hearth | Original (procedural Blender) | 877.3 KB |
+| `threejs/public/assets/models/san1_sanctum.glb` | Sanctum of the Glass Heart | Original (procedural Blender) | 362.5 KB |
 | `dungeon_tiles/TilesDungeon/Wall.png` | Wall tile | CC0 | https://opengameart.org/content/dungeon-tileset-32x32 |
 | `tileset_dungeon.png` | Full 32x32 dungeon tileset | CC0 | https://opengameart.org/content/32x32-dungeon-tileset |
 | `topdown16_326.png` | 16x16 top-down map tileset & sprite props | CC0 | https://www.google.com/search?q=https://opengameart.org/content/top-down-16-%25C3%2597-16-map-tileset-and-sprites |
@@ -5128,8 +5132,24 @@ S00 Approach & Sunken Courtyard
 | GH1 Gatehouse Approach | **Modular GLB room kit + gate arches**, Gatekeeper Orin branching dialogue (`ITEM_IRON_NAIL`, `STAT_CHA_9`, `STAT_STR_11`, plus `EVENT_ORIN_PANIC_STEAM_JAM` fail-forward), exits to OW1/GH2/GH4 |
 | GH2 Gatehouse Mirror Lock | **GLB mirror-lock prop**, 3-solution puzzle (`ROTATE_MIRRORS_45_90_135`, `IRON_NAIL_GROUND_FAULT`, `STEAM_PISTON_BYPASS`), unlocks GH3 and SQ1 |
 | GH3 Captain's Landing | **Modular GLB room kit**, Captain encounter (lethal melee OR non-lethal `DROP_COUNTERWEIGHT_CAGE` / `STEALTH_PICKPOCKET_KEY`), `ABILITY_WALL_LEAP` reward, one-way rope shortcut to S00 |
+| HM1 Halls of Mirrors | **GLB mirror props**, true-mirror puzzle, Mirror Wraith, portal, exits to GH3/BQ1 |
+| BQ1 Banquet of Satiety | **Blender feast scene**, candle lights, Lord Morvath NPC, feast-satiety puzzle, exit to AG1 |
+| AG1 Ancient Bough | **Blender tree scene**, Starlight Eye, Thorny Root Wall, tree guardian, exit to MH1 |
+| MH1 Mother Hazel's Hearth | **Blender hearth scene**, firebox light, kettle, Hazel NPC, exit to SAN1 |
+| SAN1 Sanctum of the Glass Heart | **Blender sanctum scene**, Glass Heart/Cynthia crystal, Vaelor boss, starlight portal |
+| U1-U4 Undercrypt | **Modular GLB room kit**, Echo Chamber mirror, undead guard, Secret Vault lore |
+| TR1-TR4 Trophy Hall | **Modular GLB room kit**, Curator guard, mimic chest prop, lore orb |
+| AT1-AT3 Astronomy Tower | **Modular GLB room kit**, telescope prop, constellation puzzle, star map reward |
+| AL1-AL3 Alchemist's Lab | **Modular GLB room kit**, crafting bench prop, brewing timing puzzle |
+| PB1-PB4 Prison Block | **Modular GLB room kit**, guard patrol, escape tunnel, Warden office |
+| RG1-RG4 Rooftop Gardens | **Modular GLB room kit**, wind cone prop, glider shortcut, vista point |
+| VR1-VR3 Void Realm | **Modular GLB room kit**, torus portal prop, dream-logic room, core return |
+| RS1-RS6 Relativity Cloister | **Modular GLB room kit**, torus portal prop, impossible stairways, dining table |
+| CO1 The Veil Colosseum | **Modular GLB room kit** scaled 1.4×, gate arch, Captain encounter, Wall Leap reward |
+| U1-U4 Undercrypt | **Modular GLB room kit**, Echo Chamber mirror prop, undead guard, Secret Vault lore |
 
-**Controls:** WASD/Arrows movement (isometric diagonals), **Space** melee, **E** interact, **Q** Truth Lens / Veil Sight, **Tab** Thief's Field Journal & Memory Cabinet. Progress autosaves to `localStorage` on scene transitions, item pickup, puzzle solve, and captain resolution. A `window.__veilkeep` debug hook exposes scene, player, inventory, convictions, and `loadScene` for smoke tests and MCP inspection.
+**Controls:** WASD/Arrows movement (isometric diagonals), **Space** melee, **E** interact, **Q** Truth Lens / Veil Sight, **Tab** Thief's Field Journal & Memory Cabinet, **T** distraction toss (coin/bottle), **Q** cycles quality presets. Touch devices use a virtual joystick + on-screen A/E/M/Q buttons. Progress autosaves to `localStorage` on scene transitions, item pickup, puzzle solve, and captain resolution. Manual save slots (3) are available in the pause menu. **C** opens the Alchemist's Bench crafting UI in Alchemist's Lab scenes. A `window.__veilkeep` debug hook exposes scene, player, stats, inventory, convictions, and `loadScene` for smoke tests and MCP inspection.
+- **Systems now implemented:** Origin selector (4 origins with stat/item modifiers), surface acoustics (footstep timing varies by `stone`, `moss_hedge`, `water_sluice`), Gatekeeper Orin fail-forward bluff (CHA 9) with steam-jam panic, `QualityManager` with FPS/DPR overlay, and a working distraction toss.
 
 ### 41.10 Quality Settings & Profiling (Built)
 
@@ -5141,8 +5161,29 @@ S00 Approach & Sunken Courtyard
 
 - **Q** cycles quality presets; the overlay reports tier, FPS, and active DPR.
 - `QualityManager` lives in `src/core/Quality.ts`; `window.__veilkeep.quality` is exposed for profiling.
-- Baseline measurement: ~44 FPS at Medium in the desktop development build.
+- Baseline measurement: ~44 FPS at Medium in the desktop development build (foreground). Headless Playwright measurements are throttled and are not representative of end-user performance.
 - Next profiling step: mid-range Android browser before adding further zones.
+
+### 41.11 Audio Integration (Built)
+
+- `src/core/AudioManager.ts` loads zone music from `public/audio/` based on the current scene ID.
+- `AudioManager` is instantiated per camera and plays zone music on `loadScene`.
+- `ensureStarted()` resumes the Web Audio context on first user interaction.
+- Zone track mapping covers all implemented scenes (S00, OW1, GH1-3, HM1, BQ1, AG1, MH1, SAN1, RC1, BT1, CO1, U1-4, TR1-4, AT1-3, AL1-3, PB1-4, RG1-4, VR1-3, RS1-6).
+- Downloaded open-source tracks live in `gdd/audio/` and a curated subset is mirrored to `threejs/public/audio/`.
+
+### 41.12 Crafting / Alchemy System (Built)
+
+- **UI:** Alchemist's Bench modal with recipe list and brew button, opened with **C** in AL1/AL2/AL3.
+- **Recipes:** Smoke Pellet x3, Starlight Vial, Focus Draught, Iron Nail x5.
+- **Mechanic:** Consumes reagents from inventory, adds result item, autosaves.
+- **Integration:** Crafting bench modal in `index.html`; logic in `main.ts` (`toggleCrafting`, `renderCraftingRecipes`, `brewRecipe`).
+
+### 41.13 Minimap HUD (Built)
+
+- **UI:** Always-on 150×150 canvas in the bottom-left corner showing the current room footprint.
+- **Rendering:** Player position (blue dot), exit points (green/amber dots based on requirement met), room boundary.
+- **Integration:** `drawMinimap()` called in the render loop; uses `exits` lookup and `playerState` position.
 
 ---
 

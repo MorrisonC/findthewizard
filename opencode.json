@@ -5,7 +5,7 @@
         "type": "local",
         "command": [
           "node",
-          "C:\\Development\\findthewizard\\tools\\ThreeJSMCP\\dist\\index.js"
+          "C:\\Tools\\ThreeJSMCP\\dist\\index.js"
         ]
       }
     }

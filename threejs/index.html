@@ -1158,9 +1158,26 @@
   <canvas id="game-canvas"></canvas>
 
   <div id="hud-truth-lens"></div>
+  <div id="hud-lowhp" style="position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle,transparent 50%,rgba(239,68,68,0.35) 100%);opacity:0;transition:opacity 0.3s ease;z-index:45;"></div>
+  <style>
+    @keyframes staRegenPulse { 0%,100% { box-shadow: 0 0 4px rgba(16,185,129,0.3); } 50% { box-shadow: 0 0 12px rgba(16,185,129,0.8); } }
+    .sta-regen { animation: staRegenPulse 1.2s ease-in-out infinite; }
+  </style>
+  <div id="hud-detection" style="position:fixed;top:80px;left:50%;transform:translateX(-50%);width:120px;height:6px;background:rgba(15,23,42,0.85);border:1px solid rgba(245,158,11,0.4);border-radius:3px;overflow:hidden;opacity:0;transition:opacity 0.2s ease;pointer-events:none;z-index:85;">
+    <div id="hud-detection-fill" style="height:100%;width:0%;background:linear-gradient(90deg,#f59e0b,#ef4444);transition:width 0.1s linear;"></div>
+  </div>
   <div id="hud-stealth-badge" class="stealth-badge"><span>👁️ SNEAKING (SILENT)</span></div>
   <div id="hud-parry-badge" class="parry-badge"><span>🛡️ HARMONIC PARRY ACTIVE</span></div>
+  <style>
+    @keyframes parryReadyPulse { 0%,100% { box-shadow: 0 0 4px rgba(245,158,11,0.3); } 50% { box-shadow: 0 0 14px rgba(245,158,11,0.8); } }
+    .parry-ready { animation: parryReadyPulse 1.5s ease-in-out infinite; border-color: rgba(245,158,11,0.9) !important; }
+  </style>
   <div id="hud-toast" class="hud-toast"></div>
+  <div id="hud-autosave" style="position:fixed;bottom:16px;right:16px;background:rgba(15,23,42,0.85);border:1px solid rgba(16,185,129,0.4);border-radius:6px;padding:4px 10px;font-size:11px;color:#10b981;font-family:'Cinzel',serif;letter-spacing:1px;opacity:0;transition:opacity 0.3s ease;pointer-events:none;z-index:60;">Saved</div>
+  <div id="hud-combo" style="position:fixed;top:50%;right:24px;transform:translateY(-50%);background:rgba(15,23,42,0.85);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:8px 14px;font-family:'Cinzel',serif;color:#f59e0b;font-size:14px;font-weight:700;letter-spacing:1px;opacity:0;transition:opacity 0.2s ease;pointer-events:none;z-index:60;">
+    <div>Combo x1</div>
+    <div style="height:3px;background:rgba(245,158,11,0.3);border-radius:2px;margin-top:4px;overflow:hidden;"><div id="hud-combo-timer" style="height:100%;width:100%;background:#f59e0b;transition:width 0.1s linear;"></div></div>
+  </div>
   <div id="hud-interact" class="hud-interact">
     <kbd>E</kbd> <span id="hud-interact-text">Interact</span>
   </div>
@@ -1448,6 +1465,7 @@
         Attack: <kbd>Space</kbd> &nbsp;|&nbsp; 
         Parry: <kbd>X</kbd> &nbsp;|&nbsp; 
         Decoy: <kbd>R</kbd> &nbsp;|&nbsp; 
+        Rewind: <kbd>B</kbd> (RS) &nbsp;|&nbsp; 
         Dash: <kbd>C</kbd> &nbsp;|&nbsp; 
         Dart: <kbd>V</kbd> &nbsp;|&nbsp; 
         Truth Lens: <kbd>Q</kbd> &nbsp;|&nbsp; 
@@ -1463,6 +1481,66 @@
     </div>
   </div>
 
+  <!-- Crafting Modal -->
+  <div id="hud-crafting-modal" class="inventory-modal" style="width: min(520px, 92vw);">
+    <div class="inv-header">
+      <div class="inv-title">Alchemist's Bench</div>
+      <button class="inv-close-btn" id="craft-close-btn">&times;</button>
+    </div>
+    <div id="craft-recipes" style="display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto;"></div>
+    <div class="inv-details">
+      <div class="inv-details-title" id="craft-details-title">Select a recipe</div>
+      <div id="craft-details-body">Click a recipe to see requirements and brew.</div>
+    </div>
+  </div>
+
+  <!-- Title Screen -->
+  <div id="title-screen" style="position:fixed;inset:0;background:radial-gradient(circle at center,#1e1b4b 0%,#09090b 100%);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;font-family:'Cinzel',serif;color:#f8fafc;">
+    <div style="font-size:48px;font-weight:700;color:#d4af37;letter-spacing:4px;text-shadow:0 0 30px rgba(212,175,55,0.5);">VEILKEEP</div>
+    <div style="font-size:14px;color:#94a3b8;letter-spacing:2px;">The Illusionist's Fortress</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:24px;">
+      <button id="title-new-game" style="background:#0284c7;border:1px solid #38bdf8;color:#fff;padding:12px 32px;border-radius:8px;font-family:'Cinzel',serif;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:1px;">New Game</button>
+      <button id="title-continue" style="background:rgba(30,41,59,0.85);border:1px solid rgba(212,175,55,0.6);color:#d4af37;padding:12px 32px;border-radius:8px;font-family:'Cinzel',serif;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:1px;">Continue</button>
+    </div>
+    <div style="font-size:11px;color:#64748b;margin-top:24px;">WASD Move | Space Attack | E Interact | M Map | Esc Menu</div>
+  </div>
+
+  <!-- Lore Codex Modal -->
+  <div id="hud-lore-codex-modal" class="inventory-modal" style="width: min(600px, 92vw); max-height: 80vh;">
+    <div class="inv-header">
+      <div class="inv-title">Lore Codex</div>
+      <button class="inv-close-btn" id="lore-codex-close-btn">&times;</button>
+    </div>
+    <div id="lore-codex-list" style="display:flex;flex-direction:column;gap:8px;max-height:50vh;overflow-y:auto;"></div>
+    <div class="inv-details">
+      <div class="inv-details-title" id="lore-codex-title">Select a discovered record</div>
+      <div id="lore-codex-body">Click a record to read its text.</div>
+    </div>
+  </div>
+
   <script type="module" src="/src/main.ts"></script>
+
+  <!-- Touch / mobile controls (shown on coarse-pointer devices) -->
+  <div id="touch-controls" style="position:fixed;inset:0;pointer-events:none;z-index:40;display:none;">
+    <div id="joystick" style="position:absolute;left:28px;bottom:90px;width:110px;height:110px;border-radius:50%;background:rgba(15,23,42,.55);border:1px solid rgba(212,175,55,.35);pointer-events:auto;touch-action:none;">
+      <div id="joystick-knob" style="position:absolute;left:50%;top:50%;width:46px;height:46px;margin-left:-23px;margin-top:-23px;border-radius:50%;background:rgba(212,175,55,.85);box-shadow:0 0 12px rgba(212,175,55,.6);"></div>
+    </div>
+    <div id="action-buttons" style="position:absolute;right:28px;bottom:90px;display:flex;flex-direction:column;gap:10px;pointer-events:auto;">
+      <button data-key=" " style="width:56px;height:56px;border-radius:50%;background:rgba(239,68,68,.85);color:#fff;border:none;font-weight:700;">A</button>
+      <button data-key="e" style="width:56px;height:56px;border-radius:50%;background:rgba(14,165,233,.85);color:#fff;border:none;font-weight:700;">E</button>
+      <button data-key="Tab" style="width:56px;height:56px;border-radius:50%;background:rgba(139,92,246,.85);color:#fff;border:none;font-weight:700;">M</button>
+      <button data-key="q" style="width:56px;height:56px;border-radius:50%;background:rgba(20,184,166,.85);color:#fff;border:none;font-weight:700;">Q</button>
+    </div>
+  </div>
+
+  <style>
+    @media (pointer: coarse) { #touch-controls { display: block !important; } }
+  </style>
+
+  <!-- Minimap HUD -->
+  <div id="hud-minimap-wrap" style="position:fixed;bottom:16px;left:16px;width:150px;height:150px;background:rgba(15,23,42,0.85);border:1px solid rgba(212,175,55,0.4);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.6);pointer-events:none;z-index:60;overflow:hidden;">
+    <canvas id="hud-minimap" width="150" height="150" style="display:block;"></canvas>
+    <div style="position:absolute;top:4px;left:8px;font-size:9px;font-family:'Cinzel',serif;color:#d4af37;letter-spacing:1px;pointer-events:none;">MINIMAP</div>
+  </div>
 </body>
 </html>

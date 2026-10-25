@@ -11,6 +11,9 @@ export default defineConfig({
   server: {
     port: 3000,
     open: false,
+    watch: {
+      ignored: ['**/public/audio/**'],
+    },
   },
   build: {
     target: 'es2022',

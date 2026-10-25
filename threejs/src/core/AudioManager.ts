@@ -1,0 +1,83 @@
+import * as THREE from 'three';
+
+const ZONE_TRACKS: Record<string, string> = {
+  S00: '/audio/dungeon002_0.ogg',
+  OW1: '/audio/dungeon002_0.ogg',
+  GH1: '/audio/dungeon_theme.mp3',
+  GH2: '/audio/dungeon_theme.mp3',
+  GH3: '/audio/dungeon_theme.mp3',
+  HM1: '/audio/dungeon_theme.mp3',
+  BQ1: '/audio/idle_chambers_silver_lining.mp3',
+  AG1: '/audio/dark_woods_in_game.ogg',
+  MH1: '/audio/apparitions_ball.ogg',
+  SAN1: '/audio/sinister_boss_appears.ogg',
+  RC1: '/audio/dark_woods_in_game.ogg',
+  BT1: '/audio/lonely_mournful_tune.ogg',
+  CO1: '/audio/spooky_dungeon.ogg',
+  U1: '/audio/ps2_horror_ambience.mp3',
+  U2: '/audio/ps2_horror_ambience.mp3',
+  U3: '/audio/ps2_horror_ambience.mp3',
+  U4: '/audio/ps2_horror_ambience.mp3',
+  TR1: '/audio/sinister_abode.ogg',
+  TR2: '/audio/sinister_abode.ogg',
+  TR3: '/audio/sinister_abode.ogg',
+  TR4: '/audio/sinister_abode.ogg',
+  AT1: '/audio/snowfall_loop.ogg',
+  AT2: '/audio/snowfall_loop.ogg',
+  AT3: '/audio/snowfall_loop.ogg',
+  AL1: '/audio/darkest_dungeon_v2.mp3',
+  AL2: '/audio/darkest_dungeon_v2.mp3',
+  AL3: '/audio/darkest_dungeon_v2.mp3',
+  PB1: '/audio/spooky_dungeon.ogg',
+  PB2: '/audio/spooky_dungeon.ogg',
+  PB3: '/audio/spooky_dungeon.ogg',
+  PB4: '/audio/spooky_dungeon.ogg',
+  RG1: '/audio/the_field_of_dreams.mp3',
+  RG2: '/audio/the_field_of_dreams.mp3',
+  RG3: '/audio/the_field_of_dreams.mp3',
+  RG4: '/audio/the_field_of_dreams.mp3',
+  VR1: '/audio/lonely_mournful_tune.ogg',
+  VR2: '/audio/lonely_mournful_tune.ogg',
+  VR3: '/audio/lonely_mournful_tune.ogg',
+  RS1: '/audio/dark_woods_in_game.ogg',
+  RS2: '/audio/dark_woods_in_game.ogg',
+  RS3: '/audio/dark_woods_in_game.ogg',
+  RS4: '/audio/dark_woods_in_game.ogg',
+  RS5: '/audio/dark_woods_in_game.ogg',
+  RS6: '/audio/dark_woods_in_game.ogg',
+};
+
+export class AudioManager {
+  private listener: THREE.AudioListener;
+  private music: THREE.Audio;
+  private currentUrl = '';
+  private started = false;
+
+  constructor(camera: THREE.Camera) {
+    this.listener = new THREE.AudioListener();
+    camera.add(this.listener);
+    this.music = new THREE.Audio(this.listener);
+    this.music.setLoop(true);
+    this.music.setVolume(0.35);
+  }
+
+  ensureStarted(): void {
+    if (this.started) return;
+    this.started = true;
+    if (this.listener.context.state === 'suspended') this.listener.context.resume().catch(() => {});
+  }
+
+  playZoneMusic(sceneId: string): void {
+    const url = ZONE_TRACKS[sceneId] || '/audio/dungeon002_0.ogg';
+    if (url === this.currentUrl) return;
+    this.currentUrl = url;
+    const loader = new THREE.AudioLoader();
+    loader.load(url, (buffer) => {
+      this.music.stop();
+      this.music.setBuffer(buffer);
+      this.music.play();
+    });
+  }
+
+  setVolume(v: number): void { this.music.setVolume(Math.max(0, Math.min(1, v))); }
+}
