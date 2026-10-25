@@ -793,5 +793,123 @@
       "key",
       "prison"
     ]
+  },
+  {
+    "id": "ITEM_GATEHOUSE_KEY",
+    "name": "Gatehouse Portcullis Key",
+    "category": "Quest",
+    "rarity": "Uncommon",
+    "description": "Heavy iron key carried by Gatekeeper Orin and the Barbican Captain.",
+    "flavorText": "Opens the inner barbican into the domestic quarters.",
+    "valueMoons": 50,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Unlocks the main Gatehouse portcullis.",
+    "tags": [
+      "key",
+      "quest"
+    ]
+  },
+  {
+    "id": "ITEM_VOLATILE_SULFUR_POUCH",
+    "name": "Volatile Sulfur Pouch",
+    "category": "Consumable",
+    "rarity": "Uncommon",
+    "description": "A thumbed leather pouch of Greyport brimstone, saltpetre and glass dust.",
+    "flavorText": "The Gutter-Alchemist never asks whether a lock wants to open. He asks whether it wants to burn.",
+    "valueMoons": 40,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Synthesises Acid Vials that melt Grade-3 brass locks silently.",
+    "tags": [
+      "alchemist",
+      "origin",
+      "tool",
+      "fire"
+    ]
+  },
+  {
+    "id": "ITEM_STOLEN_TABARD",
+    "name": "Stolen Guard Tabard",
+    "category": "Armor",
+    "rarity": "Uncommon",
+    "description": "A gatehouse tabard still smelling of rain, lamp oil and someone else's rank.",
+    "flavorText": "Nobody looks twice at a uniform. That is the entire trick.",
+    "valueMoons": 35,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Social Disguise: patrols treat Kaelen as a relief guard in plain sight.",
+    "tags": [
+      "charlatan",
+      "origin",
+      "disguise",
+      "stealth"
+    ]
+  },
+  {
+    "id": "ITEM_KNUCKLE_PLATE",
+    "name": "Dockside Knuckle Plate",
+    "category": "Weapon",
+    "rarity": "Uncommon",
+    "description": "Pitted brass over scarred knuckles, worn smooth by fourteen years of dockyard disputes.",
+    "flavorText": "Greyport has a long and distinguished tradition of arguing with fists.",
+    "valueMoons": 30,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "+25% stagger on heavy and unarmed strikes.",
+    "tags": [
+      "enforcer",
+      "origin",
+      "weapon",
+      "stagger"
+    ]
+  },
+  {
+    "id": "ITEM_RELIQUARY_LENS",
+    "name": "Occult Reliquary Lens",
+    "category": "Relic",
+    "rarity": "Rare",
+    "description": "A jeweller's loupe set in a bone frame, ground to see the seams in cursed things.",
+    "flavorText": "Every relic has a lie in it. The lens shows you which part is breathing.",
+    "valueMoons": 120,
+    "isConsumable": false,
+    "isKeyItem": true,
+    "maxStack": 1,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Reveals hidden doors and cursed relics within 8 m; halves curse penalties.",
+    "tags": [
+      "antiquarian",
+      "origin",
+      "tool",
+      "relic"
+    ]
+  },
+  {
+    "id": "ITEM_BRASS_COG",
+    "name": "Calibrated Brass Cog",
+    "category": "Relic",
+    "rarity": "Common",
+    "description": "A palm-sized foundry cog stamped with the Vane calibration mark.",
+    "flavorText": "A gear is only a promise that something, somewhere, will move exactly this much.",
+    "valueMoons": 25,
+    "isConsumable": false,
+    "isKeyItem": false,
+    "maxStack": 3,
+    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "effectDescription": "Jams boiler soot vents and drives the Gatehouse steam-piston bypass.",
+    "tags": [
+      "tool",
+      "puzzle",
+      "brass",
+      "foundry"
+    ]
   }
 ]

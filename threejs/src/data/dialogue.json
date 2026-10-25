@@ -98,7 +98,7 @@
             "requiredItemId": "relic_iron_nails"
           },
           {
-            "text": "You're an automaton, sentry. Step aside before I dismantle your spring.",
+            "text": "[STR 11] You're an automaton, sentry. Step aside before I dismantle your spring.",
             "nextDialogueNodeId": "ORIN_COMBAT",
             "requiredStat": {
               "stat": "STR",
@@ -106,7 +106,7 @@
             }
           },
           {
-            "text": "[Attempt a silver-tongued bluff: 'The relief watch is here, Orin.']",
+            "text": "[CHA 9] Attempt a silver-tongued bluff: 'The relief watch is here, Orin.'",
             "actionTrigger": "ORIN_BLUFF",
             "actionPayload": "ORIN_BLUFF"
           }
@@ -150,7 +150,7 @@
           {
             "text": "[Take Gatehouse Key and enter Servants' Quarters]",
             "actionTrigger": "GIVE_ITEM",
-            "actionPayload": "key_gatehouse"
+            "actionPayload": "ITEM_GATEHOUSE_KEY"
           }
         ]
       },

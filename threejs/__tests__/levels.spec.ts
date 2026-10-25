@@ -1,10 +1,11 @@
 /**
  * Phase-3 exhaustive level & scene verification suite.
  *
- *   npx playwright test threejs/__tests__/levels.spec.ts
+ *   cd threejs && npx playwright test __tests__/levels.spec.ts
+ *   # or: npm run test:levels
  *
- * For every scene the runtime knows about (the 50 entries in
- * `world_manifest.json` → `mvpVerticalSliceScenes`), this suite proves:
+ * For every scene in `world_manifest.json` → `mvpVerticalSliceScenes` (50
+ * entries: S00, OW1, GH1, GH2, GH3 and all built zones), this suite proves:
  *
  *   1. Scene boot & asset audit — `loadScene` succeeds, the room renders, and
  *      the console / network / shader pipeline stays clean.
@@ -120,6 +121,27 @@ async function grant(requirements: string[]): Promise<void> {
   }, requirements);
 }
 
+/**
+ * Full forensic dump for a failed transition: where the capsule actually is,
+ * what the renderer thinks, the last frames the game loop ran, and anything the
+ * page reported. Only assembled when an assertion is about to fail.
+ */
+async function failureContext(label: string, expected?: { x: number; y: number; z: number }): Promise<string> {
+  const state = await page.evaluate(() => {
+    const v = (window as any).__veilkeep;
+    const body = v.physics.playerBody.translation();
+    return {
+      scene: v.scene,
+      playerState: { x: v.playerState.x, y: v.playerState.y, z: v.playerState.z },
+      playerMesh: { x: v.playerMesh?.position?.x, y: v.player?.position?.y, z: v.player?.position?.z },
+      body: { x: body.x, y: body.y, z: body.z },
+      diagnostics: v.getDiagnostics(),
+      trace: ((window as any).__frameTrace ?? []).slice(-24),
+    };
+  });
+  return JSON.stringify({ label, expected, ...state, recentConsole: consoleErrors.slice(-5), recentPageErrors: pageErrors.slice(-5) }, null, 2);
+}
+
 async function requirementsMet(requirements: string[]): Promise<boolean> {
   return page.evaluate((reqs) => {
     const v = window.__veilkeep;
@@ -156,6 +178,30 @@ test.beforeAll(async ({ browser }) => {
   await page.waitForFunction(() => window.__veilkeep?.qa !== undefined, null, { timeout: 30_000 });
   await page.evaluate(() => window.__veilkeep.autoplay.stop());
   await page.waitForTimeout(400);
+
+  // Ring buffer of the last frames the game loop ran. Cheap, and the only way
+  // to see whether a teleport was applied and then reverted by the loop.
+  await page.evaluate(() => {
+    const w = window as any;
+    w.__frameTrace = [];
+    const tick = () => {
+      const v = w.__veilkeep;
+      if (v) {
+        const body = v.physics.playerBody.translation();
+        w.__frameTrace.push({
+          scene: v.scene,
+          sx: +v.playerState.x.toFixed(2),
+          sz: +v.playerState.z.toFixed(2),
+          bx: +body.x.toFixed(2),
+          by: +body.y.toFixed(2),
+          bz: +body.z.toFixed(2),
+        });
+        if (w.__frameTrace.length > 240) w.__frameTrace.shift();
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
 
   runtimeSceneIds = await page.evaluate(() => window.__veilkeep.qa.sceneIds());
 });
@@ -233,9 +279,14 @@ test.describe('exit integrity', () => {
           await page.waitForTimeout(450);
           expect(await page.evaluate(() => window.__veilkeep.scene), `${label} opened without ${exit.requires.join('+')}`).toBe(id);
           expectCleanSince(from, `${label} locked`);
+
+          // Step back to the authored spawn before granting. A door opens the
+          // instant its requirements are met, so granting while the capsule is
+          // still standing in the trigger transitions on the very next frame and
+          // the explicit approach below would start inside the destination room.
+          await loadScene(id);
         }
 
-        // --- unlocked side: granting the prerequisites must open it.
         await grant(exit.requires);
         const from = mark();
         await page.evaluate(({ x, z }) => window.__veilkeep.qa.teleport(x, z), exit);
@@ -248,10 +299,23 @@ test.describe('exit integrity', () => {
           .toBe(exit.to);
 
         const expected = exit.spawn ?? (await page.evaluate((scene) => window.__veilkeep.qa.spawnFor(scene), exit.to));
+        // Let the destination run a couple of frames before sampling: the
+        // assertion is about where the player *settles*, not about the single
+        // frame in which `loadScene` applied the spawn.
+        await page.evaluate(
+          () => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))),
+        );
         const pos = await page.evaluate(() => window.__veilkeep.getDiagnostics().playerPos);
-        expect(Math.abs(pos.x - expected.x), `${label} spawn x mismatch (${pos.x} vs ${expected.x})`).toBeLessThan(0.75);
-        expect(Math.abs(pos.z - expected.z), `${label} spawn z mismatch (${pos.z} vs ${expected.z})`).toBeLessThan(0.75);
-        expect(pos.y, `${label} landed below the floor`).toBeGreaterThan(-1.0);
+        const atSpawn =
+          Math.abs(pos.x - expected.x) < 0.75 &&
+          Math.abs(pos.z - expected.z) < 0.75 &&
+          pos.y > -1.0;
+        if (!atSpawn) {
+          throw new Error(
+            `${label} did not arrive at its spawn (got x=${pos.x} y=${pos.y} z=${pos.z}, ` +
+              `expected x=${expected.x} y=${expected.y} z=${expected.z})\n${await failureContext(label, expected)}`,
+          );
+        }
 
         const diag = await page.evaluate(() => window.__veilkeep.getDiagnostics());
         expect(diag.drawCalls, `${label} destination rendered nothing`).toBeGreaterThan(0);

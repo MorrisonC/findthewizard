@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "source": "GDD 5b.1 - The Shadow Past Origin & Trait System",
+  "maxTraits": 2,
+  "baseStats": { "STR": 10, "AGI": 10, "VIT": 10, "INT": 10, "CHA": 10, "LCK": 10 },
+  "origins": [
+    {
+      "id": "ORIGIN_ALCHEMIST",
+      "label": "Gutter-Alchemist of Greyport",
+      "desc": "+2 INT, +1 LCK, -1 STR; volatile sulfur pouch",
+      "statMods": { "INT": 2, "LCK": 1, "STR": -1 },
+      "tag": "Alchemist",
+      "startingItems": ["ITEM_VOLATILE_SULFUR_POUCH"],
+      "flags": { "autoIdentifyPotions": true, "chemicalSabotage": true },
+      "passive": "Auto-identifies potions, poisons and boiler PSI pressures; synthesises Acid Vials to melt Grade-3 brass locks silently.",
+      "puzzleMethod": "ALCHEMICAL_BURN"
+    },
+    {
+      "id": "ORIGIN_CHARLATAN",
+      "label": "Velvet-Tongued Confidence Man",
+      "desc": "+2 CHA, +1 AGI, -1 VIT; social disguise",
+      "statMods": { "CHA": 2, "AGI": 1, "VIT": -1 },
+      "tag": "Charlatan",
+      "startingItems": ["ITEM_STOLEN_TABARD"],
+      "flags": { "socialDisguise": true },
+      "passive": "Social Disguise Stealth: stolen Guard Tabards, Monk Robes and Footman Tailcoats let Kaelen walk past patrols in plain sight.",
+      "puzzleMethod": null
+    },
+    {
+      "id": "ORIGIN_ENFORCER",
+      "label": "Dockside Pit-Cutthroat",
+      "desc": "+2 STR, +1 VIT, -1 CHA; stagger bonus",
+      "statMods": { "STR": 2, "VIT": 1, "CHA": -1 },
+      "tag": "Enforcer",
+      "startingItems": ["ITEM_KNUCKLE_PLATE"],
+      "flags": { "staggerBonus": 0.25 },
+      "passive": "Heavy and unarmed strikes deal +25% stagger; intimidates minor brigands into surrendering their coin purses without combat.",
+      "puzzleMethod": null
+    },
+    {
+      "id": "ORIGIN_ANTIQUARIAN",
+      "label": "Occult Reliquary Fence",
+      "desc": "+2 LCK, +1 INT, -1 AGI; curse penalty reduction",
+      "statMods": { "LCK": 2, "INT": 1, "AGI": -1 },
+      "tag": "Antiquarian",
+      "startingItems": ["ITEM_RELIQUARY_LENS"],
+      "flags": { "cursePenaltyReduction": 0.5, "hiddenDoorSense": 8 },
+      "passive": "Senses hidden doors and cursed relics within 8 m; halves Max HP/STA penalties from Liber Cutis and Genie Bargains.",
+      "puzzleMethod": null
+    }
+  ],
+  "traits": [
+    {
+      "id": "TRAIT_COMPULSIVE_MAGPIE",
+      "label": "Compulsive Magpie",
+      "desc": "+25% Silver Moons and gem find, but passing within 2.5 m of unlooted gilded items triggers an [INT 11] impulse check.",
+      "flags": { "lootBonus": 0.25, "impulseCheckStat": "INT", "impulseCheckMin": 11 }
+    },
+    {
+      "id": "TRAIT_GLASS_EYED_SKEPTIC",
+      "label": "Glass-Eyed Skeptic",
+      "desc": "+30% Magic/Illusion Resist and passive shimmer on false walls, but cannot receive Chapel blessings.",
+      "flags": { "illusionResist": 0.3, "blocksBlessings": true }
+    },
+    {
+      "id": "TRAIT_CLOCKWORK_EAR",
+      "label": "Clockwork Ear",
+      "desc": "+20% wider timing windows on lockpicking, parrying and rhythm trials, but +50% sonic/stagger damage taken.",
+      "flags": { "timingWindowBonus": 0.2, "sonicDamageTaken": 0.5 }
+    },
+    {
+      "id": "TRAIT_CLAUSTROPHILE",
+      "label": "Claustrophile of the Vents",
+      "desc": "+30% crouch speed and +2 STA/s regen in vents and darkness, but -10% Dodge in brightly lit open arenas.",
+      "flags": { "ventSpeedBonus": 0.3, "ventStaminaRegen": 2, "brightArenaDodgePenalty": 0.1 }
+    }
+  ]
+}

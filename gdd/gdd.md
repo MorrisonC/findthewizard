@@ -4554,8 +4554,15 @@ Convention: bit0 = North, bit1 = East, bit2 = South, bit3 = West, bit4 = NE diag
 | `illusionDepth` | int | 0–3 | Number of illusion layers (false walls / pointless rooms) |
 | `nightMode` | bool | 0/1 | Enemies +15% detection, add extra patrols |
 | `gravityStates` | int | 0–2 | Number of relativity gravity directions used |
-| `trophyWallArt` | float 0–1 | density of Trophy Hall murals | Cosmetic only |
-| `geniePresence` | float 0–1 | Chance Genie Bottle is in a hidden room | one per run |
+| `trophyWallArt` | float | 0–1 | Density of Trophy Hall murals (cosmetic only) |
+| `geniePresence` | float | 0–1 | Chance the Genie Bottle sits in a hidden room (one per run) |
+| `wingScale` | float | 1.0–4.0 | Multiplier on the room template footprint (§43.2) |
+| `podDensity` | float | 0.0–1.0 | Fraction of room sectors that receive an encounter pod (§43.3) |
+| `podBudget` | int | 2–10 | Maximum cost of simultaneously active pods in a room (§34.1) |
+| `verticality` | int | 0–3 | Number of stacked elevation tiers in the room |
+| `chasmRatio` | float | 0.0–0.30 | Fraction of floor plate replaced by chasm |
+| `sightlineBias` | float | 0.0–1.0 | 0 = open arena, 1 = pillar-dense sightline maze |
+| `lightPools` | int | 0–6 | Authored gameplay light zones for stealth readability (§41.1 rule 6) |
 
 ### 35.6 Room Categorization Tags (for Engine Spawning)
 
@@ -4572,6 +4579,14 @@ Convention: bit0 = North, bit1 = East, bit2 = South, bit3 = West, bit4 = NE diag
 | `Z.Save` | Manual save / rest | Servants Q., Chapel, Rooftop |
 | `Z.Boss` | Boss arena | Sanctum, CS4 Warden Arena |
 | `Z.Ascend` | Vertical traversal | Clockwork Spire |
+| `Z.Macro` | Macro-tile connector between wings | Grand Corridor, Gatehouse Vent |
+| `Z.Pod` | Encounter-pod sector; no boss, pods wake on sector entry | OW1 west arcade, B1 bunk row |
+| `Z.Corridor.Grand` | Long-axis corridor with buttress bays | GH1, PB4 |
+| `Z.Arena.Pillar` | Pillar-dense arena with ring choke | CO1, GH3, PB2 |
+| `Z.Crypt.Split` | Multi-elevation crypt with cross-level sightlines | U1, RS2 |
+| `Z.Chasm` | Chasm and bridge traversal; falling is a mechanic | VR1, VR2 |
+| `Z.Cathedral` | 8 m clerestory hall with arcades | AG1, U2 |
+| `Z.Vertical.Split` | Stacked floors inside one footprint | Spiral Ascent, RS2 |
 
 ### 33.6 Supplemental Systems balancing (Alchemy, Genie, Companion, NG+)
 
@@ -4814,7 +4829,7 @@ Scene
 - All repeated walls/floors use `THREE.InstancedMesh` to keep one draw call per material.
 - Coordinate system: +Y up, +Z forward. Grid unit = 1 tile = 1 metre (see §41 canonical scale).
 - Chunked loading: preload room adjacency (adjacency matrix §35.1) and instantiate only the chunk on transition.
-- Memory: dispose geometry, material, and textures on room leave (`geo.dispose()`, `mat.dispose()`, `tex.dispose()`).
+- Memory: rooms are cached per session in `sceneGroups` (see §43.6). Textures are owned by `MaterialLibrary` and live for the session; geometry and cloned materials are disposed only when a room is evicted from the 6-room LRU, never on every transition. The Phase 3 suite measures this: `renderer.info.memory` must stay within 1.5x of the first sample after 15 transitions.
 
 ### 38.3 Physics & Collision (Rapier3D / cannon-es)
 
@@ -5237,6 +5252,550 @@ Five previously-interaction-less extended zones now have pickups and puzzles:
 - **RC1 (Relativity Cloister):** Iron Nail Bundle pickup; Anchor the Relativity Cloister puzzle (gated on nails).
 
 All five zones also received chapter dossier entries, exit triggers, quest text, and quest journal objectives.
+
+## 42. Asset & Integration Manifest (Production Contract)
+
+Sections 42-46 turn the design above into an executable production contract: what assets must exist, at
+what size, with which rigs and clips, in which rooms, fed by which data tables, verified by which gates.
+The exhaustive, file-by-file checklist lives in **`docs/ASSET_AND_INTEGRATION_MANIFEST.md`**. This section
+defines the rules that checklist must satisfy, so the two cannot drift: if a rule here changes, the
+manifest is regenerated against it.
+
+### 42.1 Asset classes and counts
+
+| Class | Count | Source of truth | Target path | Status |
+|---|---|---|---|---|
+| Playable character | 1 mesh + 4 origin variants | GDD 3, 5b.1 | `public/assets/models/characters/` | 1 mesh shipped |
+| NPCs | 47 entries (48 named) | GDD 13 | `public/assets/models/characters/` | 0 shipped |
+| Enemies and bosses | 31 + Vaelor | GDD 14, 14b, 34.1 | `public/assets/models/enemies/` | 1 shipped (Keep Guard) |
+| Modular kit pieces | 50 | GDD 42.6, 43.2 | `public/assets/models/environment/` | 1 legacy shell |
+| Props and destructibles | 16 | GDD 42.6 | `public/assets/models/props/` | 5 shipped as scene GLBs |
+| Light fixtures | 5 | GDD 42.6 | `public/assets/models/props/` | 0 |
+| PBR surfaces | 17 sets + 1 HDRI | GDD 42.5 | `public/assets/textures/pbr/` | 18 staged (CC0) |
+| Text and data tables | 6 new files | GDD 45 | `src/data/` | 5 existing tables |
+| Room templates | 16 | GDD 43.2 | procedural assembler | 1 legacy shell |
+
+Nothing in this table is optional. A class with a zero in the Status column is a Phase 3 deliverable,
+not a nice-to-have.
+
+### 42.2 Units, axes, pivots and node suffixes
+
+- **1 unit = 1 metre**, +Y up, +Z forward (GDD 38.2, 41.1). Characters face +Z at rest.
+- **Pivots.** Characters and props: floor centre between the feet. Tiles: grid centre. Walls: floor
+  centre of the wall face. Doors: hinge edge, floor level. Any pivot more than 1 cm off the floor plane
+  fails validation.
+- **Grid.** Floors snap on 1 m; walls sit on tile edges; the macro-tile is 4 m x 4 m.
+- **Node suffixes** are the import contract, matched case-insensitively by the validator:
+
+| Suffix | Meaning | Consumer |
+|---|---|---|
+| `-col` | static collision hull, never rendered | `addGenericColliders()` |
+| `-nav` | walkable surface seeding the path grid | `Pathfinder` obstacle raster |
+| `-break` | destructible, swaps to a debris variant | encounter system |
+| `-fx` | VFX anchor, never rendered | `EventBus` effects |
+| `-lgt` | light origin plus colour metadata | `Engine` light rig |
+| `-pod` | encounter pod anchor (GDD 43.3) | encounter director |
+
+A GLB whose collision is authored as renderable geometry is rejected: collision must be a separate
+`-col` node so the visual mesh can be LOD-swapped without changing the physics hull.
+
+### 42.3 Budgets
+
+| Class | Triangles | Materials | Joints | Texture |
+|---|---|---|---|---|
+| Player | 3,000 | 2 | 23 | 1024 atlas |
+| NPC | 2,500 | 2 | 23 | 1024 atlas |
+| Fodder / Striker | 1,800 | 2 | 23 | 512 |
+| Tank | 2,800 | 2 | 26 | 1024 |
+| Elite | 4,000 | 2 | 32 | 1024 |
+| Boss | 9,000 | 3 | 40 | 2048 |
+| Kit piece | 100-800 | 1 | - | shared trim atlas |
+| Room (Wing) | 140,000 | 6 | - | 2048 trim |
+| Room (Arena) | 180,000 | 6 | - | 2048 trim |
+
+Two material slots per character is a hard rule, not a target. The shipped Kaelen and Keep Guard GLBs
+use seven materials each (one per flat colour), which costs seven draw calls per instance and forces a
+material clone per scene. Collapsing them into one atlas plus one trim sheet is the single highest-value
+fix in the character pipeline (tracked as `VK-P4-001`).
+
+### 42.4 Surface library
+
+Seventeen CC0 PBR sets and one night HDRI are staged under `public/assets/textures/pbr/`, indexed by
+`src/data/pbr_materials.json` and loaded through `MaterialLibrary.pbrMaterial(slug)`. `metresCovered` is
+the world size of one UV tile; the loader derives `texture.repeat` from it, so a 4 m slab always shows
+one tile per 4 m regardless of mesh size.
+
+| Slug | Role | metres | Use |
+|---|---|---|---|
+| `courtyard_cobble` | floor | 3.0 | Approach, Outer Wards |
+| `dungeon_slab` | floor | 4.0 | Corridors, Undercrypt |
+| `castle_floor_broken` | floor | 3.0 | Ruined chapel, crypt |
+| `sanctum_marble` | floor | 4.0 | Sanctum, boss dais |
+| `parlour_parquet` | floor | 2.0 | Dollhouse, banquet, salon |
+| `planks_weathered` | wood | 2.0 | Crates, doors, bridges |
+| `wall_ashlar` | wall | 3.0 | Fortress ashlar |
+| `wall_brick_medieval` | wall | 2.5 | Gatehouse, barracks |
+| `wall_plaster_aged` | wall | 3.0 | Interior parlours |
+| `metal_plate_rusted` | metal | 2.0 | Clockwork Spire, boilers |
+| `bronze_eroded` | metal | 1.0 | Sconces, statuary, trim |
+| `copper_dirty` | metal | 1.5 | Steam conduits |
+| `gold_gilt` | metal | 0.75 | Antique gold accent |
+| `fabric_wool_red` | cloth | 1.0 | Banners, drapes, runners |
+| `roof_clay_tiles` | roof | 2.0 | Keep and gatehouse roofs |
+| `ground_gravel` | ground | 4.0 | Courtyard soil |
+| `snow_trodden` | ground | 3.0 | Winter Gauntlet |
+| `night_sky_moon` | HDRI | - | PMREM environment and backdrop |
+
+Palette discipline: the surfaces are neutral-to-cold by design so scene tinting stays in the shader, not
+in the texture. No surface may be re-tinted above 15% saturation shift without an art pass, and gold,
+copper and amethyst remain the only warm accents (GDD 19, 40.3).
+
+### 42.5 Definition of done (Phase 1)
+
+1. `docs/ASSET_AND_INTEGRATION_MANIFEST.md` lists every asset class above with counts, budgets and paths.
+2. Every staged surface is indexed and loadable, and every advertised map exists on disk.
+3. `npm test` fails if a model, map or rig contract regresses.
+4. No asset is referenced by a path that does not exist in `public/`.
+
+---
+
+## 43. Diablo-Scale Modular Dungeon Architecture
+
+The playable slice currently builds every room from one 12.35 m shell (`room_shell.glb`, 11,044 tris, 10
+materials) cloned per scene. That is a single-screen box: it reads as a stage, not a fortress. This
+section scales the architecture up by roughly an order of magnitude in floor area while keeping the
+combat maths of GDD 34 exactly intact.
+
+### 43.1 Invariants that scaling must not break
+
+1. **One metre, one tile.** Grid and camera never change (GDD 41.1 rule 1).
+2. **Exits stay explicit data.** The 108 directed exits in `doorGraph.ts` remain authoritative; a bigger
+   room does not create implied connectivity.
+3. **No mandatory one-way dead ends** (GDD 41.1 rule 3).
+4. **Keys precede gates** (GDD 41.1 rule 4).
+5. **Encounter budget is per pod, not per room.** This is the rule that makes scale safe (43.3).
+6. **The player can always see the next decision.** At 35 deg isometric, no sightline may exceed 24 m
+   without a silhouette break (pillar, arch, elevation change or fog gate).
+
+### 43.2 Room templates
+
+Sixteen templates replace the single shell. Footprint is the floor plate in metres; macro-tiles are 4 m
+squares of the kit.
+
+| Template | Footprint | Macro-tiles | Pods | Used by |
+|---|---|---|---|---|
+| `Approach_Terrace` | 32 x 24 | 8 x 6 | 2-3 | S00, OW1, RG1-RG4 |
+| `Grand_Corridor` | 10 x 32 | 2 x 8 | 1-2 | GH1, PB4 |
+| `Hub_Sanctum` | 20 x 20 | 5 x 5 | 1-2 | U4, AT3 |
+| `Pillar_Hall_Arena` | 40 x 40 | 10 x 10 | 3-4 | CO1, GH3, PB2, CO3 |
+| `Split_Level_Crypt` | 32 x 28 | 8 x 7 | 2-3 | U1, RS2 |
+| `Ritual_Chamber_Boss` | 40 x 32 | 10 x 8 | 1 (boss) | SAN1, VR3 |
+| `Chasm_Bridge_Gauntlet` | 24 x 40 | 6 x 10 | 1-2 | VR1, VR2 |
+| `Cathedral_Nave` | 28 x 40 | 7 x 10 | 3-4 | AG1, U2 |
+| `Cloister_Gallery` | 24 x 24 | 6 x 6 | 2 | B1, RC1, U3, RS1, RS3-RS5, CR1, AT2 |
+| `Banquet_Long_Hall` | 20 x 40 | 5 x 10 | 2-3 | SQ1, BQ1, RS6, MS3 |
+| `Spiral_Ascent` | 16 x 16, 24 m tall | 4 x 4 per ring | 2 | GH4, BT1, AT1 |
+| `Menagerie_Cages` | 28 x 24 | 7 x 6 | 2-3 | PB1, PB3 |
+| `Mirror_Maze_Wing` | 32 x 32 | 8 x 8 | 2-3 | HM1, GH2 |
+| `Gallery_Portrait_Hall` | 32 x 24 | 8 x 6 | 2-3 | TR1-TR4 |
+| `Boiler_Core_Industrial` | 28 x 24 | 7 x 6 | 2-3 | AL1-AL3 |
+| `Dollhouse_Miniature` | 12 x 12 | 3 x 3 | 1 (boss) | MH1 |
+
+Tactical content per template, mapped onto GDD 34.2's cover/sightline/hazard/choke vocabulary:
+
+| Template | Cover nodes | Sight lines | Hazards | Choke points |
+|---|---|---|---|---|
+| `Approach_Terrace` | Statues, broken arcade, hedge rows | 12-18 m across the courtyard | Tripwires, hidden pegs | Barbican gate, stair mouth |
+| `Grand_Corridor` | Buttress bays, door reveals | 24 m down the axis | Falling debris from the vault | Both ends, mid arch |
+| `Hub_Sanctum` | Dais corners, altar, pillars | 8-10 m radial | Ritual floor glyph (slows) | Four archways |
+| `Pillar_Hall_Arena` | Pillar clusters, sand mounds | 6-9 m between pillars | Sand trap, illusion fire | Ring edge, center ring |
+| `Split_Level_Crypt` | Tombs, balustrades | Cross-level diagonals | Falling debris, rats | Single stairwell per level |
+| `Ritual_Chamber_Boss` | Dais tiers, throne, pillars | 10-14 m to the throne | Arena seal, phase hazards | Entry arch, dais steps |
+| `Chasm_Bridge_Gauntlet` | Bridge rails, broken spans | 20 m along the chasm | Chasm fall, wind gusts | Bridge mouths |
+| `Cathedral_Nave` | Arcade piers, pew rows | 24 m to the altar | Falling masonry, candle fire | Nave door, transept |
+| `Cloister_Gallery` | Column arcade, benches | 6-8 m across the garth | Slippery garth, ivy | Four corner arches |
+| `Banquet_Long_Hall` | Table rows, sideboards | 18 m down the table | Spilled wine, candle fire | Doorway, head of table |
+| `Spiral_Ascent` | Newel posts, landings | 4-6 m per ring, vertical stack | Fall from ring edge | Ring mouths |
+| `Menagerie_Cages` | Cages, bone piles | Parallel cage corridors | Slick floor, cage bars | Cage thresholds |
+| `Mirror_Maze_Wing` | Mirror frames, plinths | False lines, 4-6 m true | Mirror shard traps | Mirror lock door |
+| `Gallery_Portrait_Hall` | Plinths, portrait bays | 10-14 m down the gallery | Swinging frames, tripwires | Gallery ends |
+| `Boiler_Core_Industrial` | Boilers, catwalk supports | 8-12 m through steam | Steam vents, pressure bursts | Catwalk junctions |
+| `Dollhouse_Miniature` | Furniture at 3x scale | 3-4 m (forced perspective) | Sugar-glass floor, kettle steam | Doorway, hearth |
+
+### 43.3 Encounter pods
+
+A pod is a localized cluster of enemies with its own trigger, leash and budget. Pods are what let a 40 m
+hall feel vast without pulling the entire hall at once, and they are the mechanism that preserves the
+GDD 34 encounter maths at the new scale.
+
+**Schema** (lands in `src/data/encounters/pods.json`):
+
+```json
+{
+  "id": "OW1_POD_B",
+  "sceneId": "OW1",
+  "sector": "west_arcade",
+  "anchor": [-8, 0, -2],
+  "triggerRadius": 7.0,
+  "leashRadius": 14.0,
+  "budgetCost": 3,
+  "composition": ["archer_guard", "keep_guard"],
+  "waves": [{ "delayMs": 0, "spawn": ["archer_guard", "keep_guard"] }],
+  "aggroMode": "pod",
+  "requires": [],
+  "navRegion": "OW1_WEST"
+}
+```
+
+**Rules.**
+
+1. **Pod budget, not room budget.** A regular room holds at most 6 cost of *active* pods at once; an
+   arena holds at most 10 per wave (GDD 34.1). A room may contain many more pods than that as long as
+   they are not simultaneously active.
+2. **No cross-pod aggro.** Waking a pod never wakes a neighbour. Line of sight to a *sleeping* pod does
+   not pull it; only entering its trigger radius, or an explicit alarm event, does.
+3. **Leash discipline.** A pod chases at most `leashRadius` from its anchor, then returns and resets to
+   60% HP. Leash radii of adjacent pods may not overlap by more than 4 m.
+4. **Trigger spacing.** Pod anchors are at least 8 m apart. A door or fog gate always sits between two
+   pods that are more than one room apart.
+5. **Sector gating.** Pods wake on sector entry (`Z.Pod` sectors authored in the room data), never on
+   room entry, except boss pods which wake on the arena seal.
+6. **Boss pods** use `aggroMode: "room"`, seal the exits, and are the only pods allowed to exceed the
+   wave cap.
+7. **Alarm propagation** is explicit: a guard that sees the player may raise `alarm` on its own pod and
+   the *next* pod along the authored `alarmChain`, never the whole room.
+
+### 43.4 Encounter preservation matrix
+
+The GDD 34.1 budgets are preserved verbatim; scaling changes only where the fight happens.
+
+| Zone | Template | Wave 1 | Wave 2 | Boss | Cap |
+|---|---|---|---|---|---|
+| Outer Wards | `Approach_Terrace` | 2 Fodder | - | - | 2 |
+| Barracks | `Cloister_Gallery` | 3 Fodder + 1 Controller | 1 Tank + 2 Strikers | - | 6 |
+| Menagerie | `Menagerie_Cages` | 2 Controllers + 1 Striker | 1 Elite | - | 6 |
+| Undercrypt | `Split_Level_Crypt` | 4 Fodder + 1 Tank | 2 Strikers + 2 Fodder | - | 6 |
+| Colosseum | `Pillar_Hall_Arena` | 3 Fodder | 1 Controller + 2 Strikers | 1 Elite | 6 |
+| Clockwork Spire | `Spiral_Ascent` | 1 Tank + 1 Striker | - | Warden (Elite) | 6 |
+| Sanctum | `Ritual_Chamber_Boss` | - | - | Vaelor (4 phases) | 10 |
+| Prison Block | `Menagerie_Cages` | 3 Fodder | 1 Elite | Dredge (Elite) | 6 |
+| Boiler Core | `Boiler_Core_Industrial` | 2 Tank | 1 Elite + 2 Strikers | - | 6 |
+| Trophy Hall | `Gallery_Portrait_Hall` | 1 Controller + 2 Strikers | 1 Elite | - | 6 |
+
+### 43.5 Navigation, collision and sightlines
+
+- **Collision.** Kit pieces ship `-col` hulls; the assembler calls `PhysicsWorld.addStaticBox()` per hull.
+  No collider is derived from render geometry.
+- **Navigation.** `-nav` surfaces rasterise into the path grid used by `findPath()`, inflated by the
+  0.35 m agent radius. Unreachable nav islands fail the room build.
+- **Vertical links** are explicit: a ramp, stair or traversal brand. The path grid treats a height
+  change greater than 0.45 m without one as blocked.
+- **Sightlines.** Every room must have at least one sightline break per 12 m of open floor. This is what
+  keeps 40 m halls readable at 35 deg isometric and keeps ranged pods from shooting across the map.
+- **Fog gates** are geometry plus a volume: they hide the next room's population until the player
+  crosses, which is the streaming boundary and the aggro boundary at once.
+
+### 43.6 Streaming, memory and the disposal policy
+
+Section 38.2 previously claimed rooms are disposed on leave. They are not: `sceneGroups` caches every
+room built this session, and the Phase 3 memory test measured a stable `356 geometries / 4 textures`
+across 15 transitions precisely because nothing is disposed (tracked as `VK-P3-011`). At single-room
+scale that is acceptable; at Diablo scale it is not, because one Arena room can cost 180k tris.
+
+The policy for scaled rooms is therefore:
+
+1. **Cache by wing, not by room.** A wing is the set of rooms reachable without a load boundary.
+2. **LRU of 6 rooms.** Evicting a room disposes its geometry and its cloned materials, never the shared
+   surface textures (those are owned by `MaterialLibrary` and live for the session).
+3. **Textures are never disposed mid-session.** They are shared across rooms and cheap relative to
+   geometry churn.
+4. **Instanced kit pieces** are disposed as a batch per room; `InstancedMesh.dispose()` plus a
+   `geometry.dispose()` per unique geometry.
+5. **The memory test becomes a budget test**: after 15 transitions across scaled rooms,
+   `renderer.info.memory.geometries` must stay within 1.5x of the first sample, and
+   `renderer.info.render.calls` must stay under 80.
+
+### 43.7 Room acceptance checklist
+
+1. Perimeter closed except at authored doors; no gap wider than 0.1 m.
+2. Every walkable surface has `-nav`; every blocker has `-col`.
+3. Pod count and composition within the 43.4 budget.
+4. No pod anchor within 8 m of another; leash overlap <= 4 m.
+5. At least one sightline break per 12 m of open floor.
+6. Draw calls <= 80, triangles within the 42.3 room budget.
+7. Spawn point is inside nav, at least 1.5 m from any door trigger.
+8. Exits match `doorGraph.ts` exactly; no inferred connectivity.
+9. Boot test: zero `console.error`, zero `pageerror`, zero 4xx asset requests.
+10. Physics test: player stays above `y = -1.0` for 60 ticks.
+
+---
+
+## 44. Rigging and Animation Standard
+
+### 44.1 Rig classes
+
+| Class | Joints | Used by |
+|---|---|---|
+| `RIG_Humanoid` | 23 | player, origins, most NPCs, humanoid enemies |
+| `RIG_Quadruped` | 26 | hounds, beasts, Byakko, Barnaby, Aurelius |
+| `RIG_Construct` | 26 | gargoyles, soldiers, wardens, Asterion |
+| `RIG_Spectral` | 19 | wraiths, ghosts, poltergeists, Vivienne |
+| `RIG_Arboreal` | 34 | Yggdra, Ancient Bough |
+
+All rigs are single-skin, Y-up, +Z forward, bind pose = rest pose. Bone names are lowercase snake_case and
+identical across every rig of the same class, so retargeting is a name remap rather than a bake.
+
+### 44.2 Canonical humanoid hierarchy
+
+```
+root
+  pelvis
+    spine_01
+      spine_02
+        spine_03
+          neck
+            head
+          clavicle_l -> upperarm_l -> forearm_l -> hand_l
+          clavicle_r -> upperarm_r -> forearm_r -> hand_r
+    thigh_l -> calf_l -> foot_l -> toe_l
+    thigh_r -> calf_r -> foot_r -> toe_r
+```
+
+Quadrupeds add `neck_01/neck_02`, `jaw`, `tail_01..03` and replace hands/feet with `paw_f_*` / `paw_h_*`.
+Spectrals drop feet and toes and add `tatter_01..03` under the pelvis. Constructs replace clavicles with
+`hip_l/r` pistons and add a `boiler` bone under `spine_02` for steam VFX. The arboreal rig is a trunk
+chain of four, a crown, a face bone, three bough chains of three and three root chains of three.
+
+### 44.3 Sockets
+
+| Socket | Parent | Holds |
+|---|---|---|
+| `socket_hand_r` | `hand_r` | weapon, tool, lantern |
+| `socket_hand_l` | `hand_l` | off-hand, shield, second blade |
+| `socket_staff` | `hand_r` | staff grip offset |
+| `socket_spell_origin` | `spine_03` | cast VFX origin |
+| `socket_chest` | `spine_02` | clasp, amulet, plate |
+| `socket_back` | `spine_03` | sheathed weapon, tank, cloak |
+| `socket_head` | `head` | lens, hat, crown |
+| `socket_fx_ground` | `root` | decals, summon circles |
+
+Sockets are empty exported nodes. A missing socket is a hard import error, not a silent no-op.
+
+### 44.4 Clip library
+
+Authored at 30 fps; the engine resolves clips by name, never index.
+
+| Clip | Frames | Loop | Root motion | Notes |
+|---|---|---|---|---|
+| `Idle` | 90 | yes | none | 3 s breathing loop |
+| `Walk` | 32 | yes | in-place | 2 steps |
+| `Run` | 24 | yes | in-place | 2 steps |
+| `Attack_Primary` | 36 | no | none | 20f wind-up / 4f active / 12f recovery |
+| `Attack_Secondary` | 42 | no | none | heavy or thrown |
+| `Cast` | 48 | no | none | VFX at frame 30 |
+| `Hit_React` | 12 | no | none | additive, upper body |
+| `Stagger` | 24 | no | none | full body, interrupts |
+| `Death` | 45 | no | none | holds last frame |
+| `Dodge` | 20 | no | in-place | i-frames 4-12, player only |
+| `Interact` | 30 | no | none | levers, chests, dialogue |
+| `Talk` | 60 | yes | none | NPC ambient |
+| `Gesture_A` / `Gesture_B` | 40 / 40 | no | none | NPC punctuation |
+| `Phase_Shift` | 60 | no | none | boss only, 2 s invulnerable |
+
+Required subsets: the player needs all of the above except `Talk`; NPCs need `Idle`, `Walk`, `Talk`,
+`Gesture_A`, `Gesture_B`; enemies need `Idle`, `Walk`, `Attack_Primary`, `Hit_React`, `Stagger`, `Death`
+plus `Run` and `Attack_Secondary` for Strikers; bosses add `Phase_Shift` per phase.
+
+### 44.5 Telegraph-to-clip mapping
+
+The wind-up numbers in GDD 34.3 are the contract. At 30 fps they convert as follows, and the clip's
+wind-up section must be authored to match exactly.
+
+| Move | Wind-up | Active | Recovery | Clip frames (wind/active/recovery) |
+|---|---|---|---|---|
+| Guard Sweeping Strike | 650 ms | 120 ms | 420 ms | 20 / 4 / 12 |
+| Gargoyle Slam | 1100 ms | 180 ms | 700 ms | 33 / 5 / 21 |
+| Warden Gear Toss | 900 ms | 160 ms | 600 ms | 27 / 5 / 18 |
+| Beast Charge | 800 ms | 240 ms | 900 ms | 24 / 7 / 27 |
+| Wraith Split-Tele | 200 ms | 90 ms | 250 ms | 6 / 3 / 8 |
+| Archer Spotlight | 500 ms | 80 ms | 400 ms | 15 / 2 / 12 |
+| Colosseum Beast Leap | 1000 ms | 200 ms | 800 ms | 30 / 6 / 24 |
+| Vaelor Arcane Barrage | 1200 ms | 300 ms | 900 ms | 36 / 9 / 27 |
+| Vaelor Reflection Slash | 400 ms | 200 ms | 550 ms | 12 / 6 / 17 |
+
+A clip that does not match its row fails validation: gameplay timing must never depend on an animator's
+sense of rhythm.
+
+### 44.6 Export contract
+
+- One GLB per entity, Draco-compressed, textures external.
+- Exactly one skin; joints ordered by hierarchy depth.
+- Animation tracks named `<Clip>` with no armature prefix.
+- `scene.name` equals the mesh name; the armature node is `RIG_<Class>`.
+- Max 4 influences per vertex; no bone scale animation; no negative scale.
+- Origin at floor centre, forward +Z, height in metres.
+
+### 44.7 Retargeting
+
+Clips retarget by bone-name remap within a rig class, never by baking between classes. Cross-class
+retargeting (humanoid to quadruped) is forbidden; author a new clip. Shared clips are limited to
+`Idle`, `Hit_React`, `Stagger`, `Death` and `Phase_Shift`, and even those must be re-timed for the new
+silhouette.
+
+---
+
+## 45. Text, Localization and Lore Data Model
+
+### 45.1 Domains and files
+
+| Domain | File | Contents | Target |
+|---|---|---|---|
+| UI | `src/data/texts/ui.json` | HUD, menus, tooltips, buttons, errors | 180 keys |
+| Barks | `src/data/texts/barks.json` | combat and ambient lines | 32 entities x 6-16 |
+| Lore | `src/data/texts/lore.json` | codex, enemy lore, item flavour, journal | 120 entries |
+| Wizard | `src/data/texts/ask_wizard.json` | prompt/response bank | 64 entries, 8 topics |
+| Enemies | `src/data/enemies/bestiary.json` | 32 stat blocks from GDD 14/34.1 | 32 |
+| Encounters | `src/data/encounters/pods.json` | pods per scene | 1-6 per scene |
+
+The existing tables (`dialogue.json`, `items.json`, `puzzles.json`, `quests.json`, `zones.json`,
+`world_manifest.json`) stay authoritative for their domains and are not duplicated.
+
+### 45.2 Entry schema
+
+```json
+{
+  "key": "ui.hud.health",
+  "text": "Vitality {current}/{max}",
+  "context": "HUD, bottom-left, always visible",
+  "tokens": ["current", "max"],
+  "maxChars": 24,
+  "speaker": null,
+  "gddRef": "16"
+}
+```
+
+Rules: `{token}` interpolation only, no HTML, no printf. Plurals are declared per entry as a `plural` object with `one` and `other` forms, selected by `{count}`. Every entry
+carries a `gddRef` so a lore claim can be traced to the design section that authorises it.
+
+### 45.3 Key grammar
+
+`<domain>.<subject>.<id>` - for example `ui.hud.health`, `bark.guard.aggro.01`,
+`lore.byakko.entry_02`, `wizard.prompt.mirrors.01`. Keys are stable forever; changing one is a data
+migration, not an edit.
+
+### 45.4 Barks
+
+```json
+{
+  "entityId": "keep_guard",
+  "barks": {
+    "aggro": ["Halt! In the Master's name!", "You there - stand and be counted."],
+    "hurt": ["Agh - the ribs...", "You'll pay for that."],
+    "death": ["The Master... sees...", "Cold... so cold..."],
+    "alert": ["Alarm! Alarm on the west stair!"],
+    "idle": ["Nothing on the parapet. Nothing all night.", "Eighty winters of this."]
+  },
+  "cooldownMs": 9000,
+  "priority": ["alert", "aggro", "hurt", "death", "idle"]
+}
+```
+
+Six lines minimum per entity, sixteen maximum, ninety characters maximum per line. A bark never names a
+mechanic the player has not been taught, and a death line never repeats for the same corpse.
+
+### 45.5 "Ask the Wizard" bank
+
+The framing device of the game is asking the wizard a question and receiving a diegetic, unreliable
+answer. Entries are state-gated so the bank doubles as a hint system.
+
+```json
+{
+  "id": "wizard.mirrors.01",
+  "topic": "mirrors",
+  "prompt": "Why do the mirrors in the east hall show me a different coat?",
+  "answer": "Because a coat is a story you tell about your shoulders, and glass is a better liar than you are.",
+  "requires": { "scene": "HM1", "flag": "PUZZLE_TRUE_MIRROR" },
+  "gddRef": "11",
+  "tone": "wry"
+}
+```
+
+Eight topics of eight entries: `keep`, `mirrors`, `memory`, `steam`, `beasts`, `wizard`, `kaelen`,
+`ending`. No answer may contradict GDD 41.4.
+
+### 45.6 Coverage gates
+
+| Domain | Gate |
+|---|---|
+| UI | no literal English strings in UI components (bundle grep) |
+| Barks | 32 / 32 entities covered |
+| NPCs | 47 / 47 with a greeting and at least three topics |
+| Items | 39 / 39 with description and flavour |
+| Lore | 120 entries, each with a `gddRef` |
+| Wizard | 64 entries across 8 topics |
+| Localization | missing key falls back to English, logs once, never throws |
+
+---
+
+## 46. Automated Asset Pipeline and Verification
+
+### 46.1 Pipeline layout
+
+```
+tools/asset_pipeline/
+  fetch_surfaces.py          # ambientCG CC0 download + downsample + index (done)
+  generate_meshes.py         # kit pieces, props, character/enemy meshes
+  generate_rigs_and_anims.py # armatures, weights, baked clip NLA tracks
+  generate_texts.py          # ui/barks/lore/wizard/bestiary/pods JSON
+  build_rooms.py             # assembles the 16 templates from the kit
+  validate_assets.py         # GLB, rig, budget and suffix validation
+  manifest_report.py         # writes the coverage table back into the manifest doc
+```
+
+Existing generators (`build_veilkeep_room_kit.py`, `build_s00_courtyard.py`,
+`blender_gen_*.py`, `export_s00_batched.py`) are the reference implementations for material
+naming (`VK_*`), bevel treatment and export settings, and are superseded piece by piece rather than
+rewritten.
+
+### 46.2 Generation order
+
+1. Surfaces (`fetch_surfaces.py`) - already run, idempotent, CC0.
+2. Kit meshes (`generate_meshes.py`) - deterministic from seed 83, same seed as the legacy kit.
+3. Character and enemy meshes - one script invocation per entity class.
+4. Rigs and clips (`generate_rigs_and_anims.py`) - bones first, then weights, then clips baked to NLA.
+5. Rooms (`build_rooms.py`) - requires kit + surfaces + pods.
+6. Texts (`generate_texts.py`) - independent of geometry, may run any time.
+
+Every script is idempotent: re-running overwrites its outputs and never appends. Every script writes a
+`*.report.json` next to its output so the validator can diff budgets without re-parsing GLBs.
+
+### 46.3 Verification gates
+
+| Gate | Command | Threshold |
+|---|---|---|
+| Type check | `npx tsc --noEmit` | 0 errors |
+| Unit tests | `npm test` | all pass |
+| Asset contract | `python tools/asset_pipeline/validate_assets.py` | 0 violations |
+| Surface kit | `npm test -- assetManifest` | every map on disk |
+| World data | `npm run validate:world` | P0 = 0, P1 = 0 |
+| Scene boot and exits | `npm run test:levels` | 102 / 102 |
+| Autoplay regression | `npm run e2e:autoplay` | 50 scenes, 4 endings |
+| Build | `npm run build` | 0 errors, bundle within budget |
+
+The Phase 3 suite already asserts the parts that matter for scaled rooms: zero console errors, zero
+page errors, zero 4xx asset requests, no shader errors, floor stability over 60 physics ticks, every
+exit locked and unlocked, and bounded memory over 15 transitions. Scaled rooms inherit those assertions
+plus the 43.7 checklist.
+
+### 46.4 Definition of done (Phases 2-4)
+
+1. All 50 scenes built from the 16 templates, within the 42.3 room budgets.
+2. 31 enemies plus Vaelor rigged, clipped and spawning from pods that respect GDD 34.1.
+3. 47 NPC entries rigged and placed, each with dialogue and barks.
+4. Every surface bound through `MaterialLibrary`; no untextured geometry in the shipped build.
+5. Text domains complete and 100% externalized.
+6. `npm test`, `validate_assets.py`, `validate:world`, `test:levels`, `e2e:autoplay` and `npm run build`
+   all green in one run.
 
 ---
 

@@ -7,10 +7,16 @@ node_modules/
 dist/
 build/
 
-# Testing & tool caches
+# Testing & test caches
 .playwright-mcp/
 coverage/
+test-results/
+playwright-report/
 *.log
+
+# Python caches (gdd/build.py, tools/asset_pipeline/*.py)
+__pycache__/
+*.py[cod]
 
 # OS & Editor files
 .DS_Store

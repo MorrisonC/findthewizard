@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "source": "GDD 5 (Non-Lethal / Sabotage Boss Resolutions) and GDD 42 integration table",
+  "note": "Every human encounter has a non-lethal Thief Tradecraft takedown worth 100% of the lethal reward. Non-human bosses (illusion, beast, construct, spectral) have no non-lethal resolution: the API reports `not-available` rather than inventing one.",
+  "encounters": [
+    {
+      "id": "ENC_GH3_CAPTAIN",
+      "sceneId": "GH3",
+      "name": "Barbican Captain",
+      "human": true,
+      "anchor": [2.8, 0.4],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [
+        { "method": "DROP_COUNTERWEIGHT_CAGE", "requires": ["STAT_STR_10"] },
+        { "method": "STEALTH_PICKPOCKET_KEY", "requires": ["STAT_AGI_10"] }
+      ],
+      "rewards": ["ABILITY_WALL_LEAP", "ITEM_GATEHOUSE_KEY"],
+      "questId": "Q_BARBICAN_CAPTAIN"
+    },
+    {
+      "id": "ENC_CO1_MAJOR_CAPTAIN",
+      "sceneId": "CO1",
+      "name": "Major Captain of the Colosseum",
+      "human": true,
+      "anchor": [0, 0],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [
+        { "method": "DROP_COUNTERWEIGHT_CAGE", "requires": ["STAT_STR_10"] },
+        { "method": "STEALTH_PICKPOCKET_KEY", "requires": ["STAT_AGI_10"] }
+      ],
+      "rewards": ["ITEM_ARENA_TOKEN"],
+      "questId": "Q_BARBICAN_CAPTAIN"
+    },
+    {
+      "id": "ENC_PB2_DREDGE",
+      "sceneId": "PB2",
+      "name": "Castellan Dredge the Iron Gaoler",
+      "human": true,
+      "anchor": [0, 0],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [
+        { "method": "EMERGENCY_PRISONER_CLAMP", "requires": ["SKILL_LOCKPICK_3"] }
+      ],
+      "rewards": ["ITEM_PRISON_KEYRING"],
+      "questId": null
+    },
+    {
+      "id": "ENC_CO3_SERAPHINA",
+      "sceneId": "CO3",
+      "name": "Duchess Seraphina Vane",
+      "human": true,
+      "anchor": [0, 0],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [
+        {
+          "method": "SHATTER_VANITY_MIRRORS",
+          "requires": ["ITEM_TRUTH_LENS", "STAT_CHA_14"]
+        }
+      ],
+      "rewards": ["ABILITY_MIRROR_PHASE"],
+      "questId": null
+    },
+    {
+      "id": "ENC_MH1_HAZEL",
+      "sceneId": "MH1",
+      "name": "Mother Hazel",
+      "human": false,
+      "anchor": [0, 0],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [],
+      "rewards": ["ITEM_HEARTH_EMBER"],
+      "questId": null
+    },
+    {
+      "id": "ENC_AG1_YGGDRA",
+      "sceneId": "AG1",
+      "name": "Yggdra the Star-Weeper",
+      "human": false,
+      "anchor": [0, 0],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [],
+      "rewards": ["ABILITY_STARLIGHT_DASH"],
+      "questId": null
+    },
+    {
+      "id": "ENC_SAN1_VAELOR",
+      "sceneId": "SAN1",
+      "name": "Archillusionist Vaelor",
+      "human": false,
+      "anchor": [0, -3.2],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [],
+      "rewards": ["ITEM_HEART_OF_MIRRORS"],
+      "questId": "Q_HOLLOW_GLASS"
+    },
+    {
+      "id": "ENC_VR3_DREAM_DESCENT",
+      "sceneId": "VR3",
+      "name": "The Dream Descent",
+      "human": false,
+      "anchor": [0, 0],
+      "lethal": { "method": "MELEE_PARRY", "requires": [] },
+      "nonLethal": [],
+      "rewards": ["ITEM_DREAM_EMBER"],
+      "questId": "Q_DREAM_DESCENT"
+    }
+  ]
+}

@@ -97,6 +97,80 @@ npm run e2e:autoplay:mobile    # same bot on a 390x844 touch viewport (Android W
 npm run e2e:autoplay:pacifist  # ghost traversal, zero kills
 ```
 
+## Level & scene verification suite
+
+`__tests__/levels.spec.ts` is the exhaustive Playwright pass over the world: it
+boots the real game, visits **all 50 scenes** and walks **every one of the 108
+doors** in the runtime graph. It reads the live tables through
+`window.__veilkeep` (`exits`, `qa.sceneIds/spawnFor/boundsFor/teleport/
+stepPhysics`) rather than re-importing `doorGraph.ts`, so it can never drift
+from what the game actually uses.
+
+```bash
+npm run dev -- --port 5199 --strictPort   # terminal 1
+npm run test:levels                       # terminal 2, from threejs/
+```
+
+Per scene it asserts: `loadScene(id)` succeeds and the room renders
+(`drawCalls > 0`), zero `console.error`, zero uncaught `pageerror`, zero 4xx
+asset responses, zero `WebGLProgram` shader errors, the authored spawn is inside
+the room bounds, and the capsule is still above `y = -1.0` after 60 gravity
+ticks. Per door it asserts the door holds while locked, opens once its
+requirements are granted, transitions to `exit.to`, lands within 0.75 m of the
+destination spawn, and that the destination renders. Finally it runs 15
+consecutive room transitions (`S00 -> OW1 -> GH1 -> GH2 -> GH3 -> S00` x3) and
+requires `renderer.info.memory` to stay flat (measured: 356 geometries / 4
+textures, unchanged).
+
+Run it from `threejs/`. The root-level form
+(`npx playwright test threejs/__tests__/levels.spec.ts`) picks up a different
+`@playwright/test` instance from the npx cache, which rejects the spec's
+`beforeAll`. A failing arrival prints the last 24 game-loop frames (scene,
+`playerState`, capsule translation) plus diagnostics, which is how the one
+harness race in this suite was found (see `BUGS.md`, `VK-P3-010`).
+
+
+## Assets & surfaces
+
+The production asset contract is GDD §42–46, with the file-by-file checklist in
+[`../docs/ASSET_AND_INTEGRATION_MANIFEST.md`](../docs/ASSET_AND_INTEGRATION_MANIFEST.md).
+This prototype ships only part of it; what is staged today:
+
+| What | Where | Status |
+| --- | --- | --- |
+| PBR surface kit (17 sets + 1 HDRI) | `public/assets/textures/pbr/` | staged, not yet bound to geometry |
+| Surface index (slug, role, `metresCovered`, map paths) | `src/data/pbr_materials.json` | generated, imported by code and tests |
+| Lazy PBR loader | `src/core/MaterialLibrary.ts` | ready, unused by `buildGenericScene` |
+| Model inventory (2 rigged + 7 environment GLBs) | `public/assets/models/` | in use |
+| Provenance and licence table (all CC0) | `public/assets/textures/pbr/CREDITS.md` | — |
+
+```ts
+import { pbrMaterial } from './src/core/MaterialLibrary';
+
+// metresCovered drives texture.repeat, so a 4 m slab tiles once per 4 m
+const slab = await pbrMaterial('dungeon_slab', { repeat: 1 });
+mesh.material = slab;
+```
+
+- `pbrMaterial(slug, { repeat, tint, anisotropy })` caches one material per
+  (slug, repeat, tint, anisotropy) tuple; `disposePbrCache()` releases everything.
+- `color` maps load as sRGB, `normal`/`roughness`/`ao` as linear (`NoColorSpace`).
+- Metalness comes from the entry's role (`metal` = 0.9, everything else 0).
+- Unknown slugs throw instead of silently rendering untextured.
+
+Surfaces are **not** wired into rooms yet — `buildGenericScene()` still clones the
+flat `VK_*` materials from `room_shell.glb`, so `renderer.info.memory.textures`
+stays at 4 (tracked as `VK-P4-002` in `../BUGS.md`).
+
+`tests/assetManifest.test.ts` guards the contract: index integrity, every
+advertised map present on disk at the indexed byte size, HDRI presence, material
+assembly, unknown-slug rejection, GLB parse, rig/clip sets and triangle budgets.
+
+To re-download the surface kit (idempotent, CC0, needs Python + Pillow):
+
+```bash
+python ../tools/asset_pipeline/fetch_surfaces.py
+```
 
 ## How it maps to the GDD
 

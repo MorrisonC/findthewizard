@@ -119,6 +119,12 @@ def parse_blocks(lines):
             i += 1
         if para:
             blocks.append(('p', ' '.join(para)))
+        else:
+            # Unrecognised line: prose containing a pipe that is not a table row, or a
+            # malformed table header. Consume it as a paragraph so parsing always advances
+            # instead of spinning forever on the same index.
+            blocks.append(('p', line.strip()))
+            i += 1
     return blocks
 
 def render_blocks(blocks):

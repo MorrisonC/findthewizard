@@ -203,6 +203,8 @@
       "puzzles": [
         {
           "id": "PUZ_S00_BRAMBLES",
+          "anchor": [0, -2],
+          "runtimePuzzleId": "PUZZLE_S00_BRAMBLES",
           "solutions": [
             {
               "method": "OPTICAL_BEACON",
@@ -271,9 +273,9 @@
         {
           "id": "ITEM_IRON_NAIL",
           "position": [
-            -4,
+            2,
             0.5,
-            -2
+            -1
           ],
           "reusable": true
         },
@@ -301,6 +303,8 @@
       "puzzles": [
         {
           "id": "PUZ_38_PANOPTICON_GAZE",
+          "anchor": [-2, 3],
+          "runtimePuzzleId": "PUZZLE_PANOPTICON_GAZE",
           "solutions": [
             {
               "method": "TRUTHFUL_STATUE_SHIELD_REFLECT",
@@ -449,6 +453,8 @@
       "puzzles": [
         {
           "id": "PUZ_GH2_MIRROR_LOCK",
+          "anchor": [0, -2.5],
+          "runtimePuzzleId": "PUZZLE_MIRROR_LOCK",
           "solutions": [
             {
               "method": "ROTATE_MIRRORS_45_90_135",
