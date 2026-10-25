@@ -172972,7 +172972,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/s00_courtyard.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/s00_courtyard.glb').then((g) => g.scene),
 
 
 
@@ -173062,7 +173062,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/kaelen.glb').then((g) => { kaelenAnimations = g.animations || []; return g.scene; }),
+  gltfLoader.loadAsync('assets/models/kaelen.glb').then((g) => { kaelenAnimations = g.animations || []; return g.scene; }),
 
 
 
@@ -173152,7 +173152,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/keep_guard.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/keep_guard.glb').then((g) => g.scene),
 
 
 
@@ -173242,7 +173242,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/room_shell.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/room_shell.glb').then((g) => g.scene),
 
 
 
@@ -173332,7 +173332,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/gate_arch.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/gate_arch.glb').then((g) => g.scene),
 
 
 
@@ -173422,7 +173422,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/mirror_lock.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/mirror_lock.glb').then((g) => g.scene),
 
 
 
@@ -173512,7 +173512,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/bq1_feast.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/bq1_feast.glb').then((g) => g.scene),
 
 
 
@@ -173602,7 +173602,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/ag1_tree.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/ag1_tree.glb').then((g) => g.scene),
 
 
 
@@ -173692,7 +173692,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/mh1_hearth.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/mh1_hearth.glb').then((g) => g.scene),
 
 
 
@@ -173782,7 +173782,7 @@ const [
 
 
 
-  gltfLoader.loadAsync('/assets/models/san1_sanctum.glb').then((g) => g.scene),
+  gltfLoader.loadAsync('assets/models/san1_sanctum.glb').then((g) => g.scene),
 
 
 
