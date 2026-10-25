@@ -16,4 +16,7 @@ coverage/
 .DS_Store
 Thumbs.db
 .vscode/
+!.vscode/
+.vscode/*
+!.vscode/tasks.json
 .idea/

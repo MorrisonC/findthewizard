@@ -54,6 +54,49 @@ npm run dev            # or: npx vite preview --port 4173 && BASE=http://localho
 node e2e/autobattler.spec.mjs
 ```
 
+## Autoplay bot
+
+`src/systems/AutoplayController.ts` is the QA autopilot. It is pure logic behind a
+narrow `AutoplayHost` interface, so it can be unit-tested with a fake host and
+driven in the browser through one thin adapter in `main.ts`. It never forks
+movement: navigation still goes through `autoNavigate` / `findPath`, and
+combat, dialogue and interaction call the same game functions the player does.
+
+Boot it with the HUD button (**🤖 Autoplay**) or from the URL:
+
+```bash
+http://localhost:3000/?autoplay=1&speed=4               # full campaign
+http://localhost:3000/?autoplay=1&speed=8&mode=mvp_slice # S00 -> OW1 -> GH1 -> GH2 -> GH3 -> SQ1
+```
+
+`?autoplay=1` skips the title screen and origin selector (defaulting to
+`ORIGIN_ALCHEMIST`) and starts the bot immediately. `speed=` is clamped to 1–8
+and scales both travel and the interaction/dialogue cadence. `mode=` accepts
+`mvp_slice`, `full_campaign` (default), `pacifist_shadowhand` (ghost: lethal
+`clear` tasks are satisfied by evasion, no blade drawn) and `all_quests`.
+
+```js
+const bot = window.__veilkeep.autoplay;
+bot.start({ mode: 'full_campaign', speedMultiplier: 4 });
+bot.pause(); bot.resume();
+bot.stepToScene('GH2');
+bot.solveCurrentRoom();
+bot.getStatus();   // { running, currentGoal, visitedScenes, solvedPuzzles,
+                   //   completedQuests, stuckTicks, lastError }
+bot.bugsFound;     // watchdog P1 records with exact (x, y, z)
+```
+
+The watchdog files a `P1 Navigation/Collider Bug` (deduped per scene + rounded
+position + goal) when the capsule moves less than 0.05 m for 90 consecutive
+ticks while trying to reach a goal, then nudges and re-paths. Every record is
+appended to `BUGS.md` by the web end-to-end run.
+
+```bash
+npm run e2e:autoplay           # 50/50 rooms at ?autoplay=1&speed=4, all 4 endings
+npm run e2e:autoplay:mobile    # same bot on a 390x844 touch viewport (Android WebView)
+npm run e2e:autoplay:pacifist  # ghost traversal, zero kills
+```
+
 
 ## How it maps to the GDD
 

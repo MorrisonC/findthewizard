@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Game in Browser",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"threejs",
+				"run",
+				"dev",
+				"--",
+				"--open"
+			],
+			"isBackground": true
+		}
+	]
+}

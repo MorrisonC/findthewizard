@@ -1,9 +1,10 @@
 # BUGS.md — VEILKEEP QA / Autoplay / Visual Verification Tracker
 
 **Repository:** `findthewizard` (VEILKEEP)
-**Phase:** 1 — repository audit · `window.__veilkeep` hook surface · static graph/manifest validation · boot hygiene
+**Phases:** 1 — repository audit · `window.__veilkeep` hook surface · static graph/manifest validation · boot hygiene
+2 — deterministic full-game autoplay bot (`window.__veilkeep.autoplay`), hands-free on Web and Android
 **Platforms in scope:** Web (Three.js / WebGL2 desktop) · Android (mobile viewport, touch, Capacitor WebView)
-**Baseline commit:** `f65b9fc` — every Phase-1 fix below is an uncommitted working-tree change
+**Baseline commit:** `f65b9fc` — every fix below is an uncommitted working-tree change
 **Last updated:** 2026-10-24
 
 ---

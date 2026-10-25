@@ -15,7 +15,8 @@
     "e2e:boot": "node e2e/boot.spec.mjs",
     "e2e:autoplay": "node e2e/autoplay.spec.mjs",
     "e2e:autoplay:mobile": "node e2e/autoplay-mobile.spec.mjs",
-    "e2e:autoplay:pacifist": "node e2e/autoplay-pacifist.spec.mjs"
+    "e2e:autoplay:pacifist": "node e2e/autoplay-pacifist.spec.mjs",
+    "test:levels": "playwright test __tests__/levels.spec.ts"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.21.0",
