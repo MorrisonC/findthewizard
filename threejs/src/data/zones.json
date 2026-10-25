@@ -62,8 +62,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_outer.ogg",
-      "combatMusicStem": "/assets/audio/combat_outer.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_outer.ogg",
+      "combatMusicStem": "assets/audio/combat_outer.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [
@@ -78,7 +78,7 @@
       "H1"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene00_approach.jpg"
+    "mockupImagePath": "assets/art/concept/scene00_approach.jpg"
   },
   {
     "id": "gate",
@@ -143,8 +143,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_gate.ogg",
-      "combatMusicStem": "/assets/audio/combat_gate.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_gate.ogg",
+      "combatMusicStem": "assets/audio/combat_gate.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -155,7 +155,7 @@
       "Q1"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_gate.jpg"
+    "mockupImagePath": "assets/art/concept/scene_gate.jpg"
   },
   {
     "id": "servants",
@@ -244,8 +244,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_servants.ogg",
-      "combatMusicStem": "/assets/audio/combat_servants.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_servants.ogg",
+      "combatMusicStem": "assets/audio/combat_servants.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -255,7 +255,7 @@
       "S27"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_servants.jpg"
+    "mockupImagePath": "assets/art/concept/scene_servants.jpg"
   },
   {
     "id": "kitchen",
@@ -332,8 +332,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_kitchen.ogg",
-      "combatMusicStem": "/assets/audio/combat_kitchen.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_kitchen.ogg",
+      "combatMusicStem": "assets/audio/combat_kitchen.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -342,7 +342,7 @@
     ],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_kitchen.jpg"
+    "mockupImagePath": "assets/art/concept/scene_kitchen.jpg"
   },
   {
     "id": "barracks",
@@ -407,15 +407,15 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_barracks.ogg",
-      "combatMusicStem": "/assets/audio/combat_barracks.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_barracks.ogg",
+      "combatMusicStem": "assets/audio/combat_barracks.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_barracks.jpg"
+    "mockupImagePath": "assets/art/concept/scene_barracks.jpg"
   },
   {
     "id": "prison",
@@ -468,8 +468,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_prison.ogg",
-      "combatMusicStem": "/assets/audio/combat_prison.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_prison.ogg",
+      "combatMusicStem": "assets/audio/combat_prison.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -479,7 +479,7 @@
     ],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_prison.jpg"
+    "mockupImagePath": "assets/art/concept/scene_prison.jpg"
   },
   {
     "id": "mirrors",
@@ -556,15 +556,15 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_mirrors.ogg",
-      "combatMusicStem": "/assets/audio/combat_mirrors.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_mirrors.ogg",
+      "combatMusicStem": "assets/audio/combat_mirrors.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_mirrors.jpg"
+    "mockupImagePath": "assets/art/concept/scene_mirrors.jpg"
   },
   {
     "id": "menagerie",
@@ -629,8 +629,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_menagerie.ogg",
-      "combatMusicStem": "/assets/audio/combat_menagerie.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_menagerie.ogg",
+      "combatMusicStem": "assets/audio/combat_menagerie.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -639,7 +639,7 @@
       "Q3"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_menagerie.jpg"
+    "mockupImagePath": "assets/art/concept/scene_menagerie.jpg"
   },
   {
     "id": "gardens",
@@ -716,8 +716,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_gardens.ogg",
-      "combatMusicStem": "/assets/audio/combat_gardens.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_gardens.ogg",
+      "combatMusicStem": "assets/audio/combat_gardens.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -726,7 +726,7 @@
       "H3"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_gardens.jpg"
+    "mockupImagePath": "assets/art/concept/scene_gardens.jpg"
   },
   {
     "id": "library",
@@ -803,8 +803,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_library.ogg",
-      "combatMusicStem": "/assets/audio/combat_library.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_library.ogg",
+      "combatMusicStem": "assets/audio/combat_library.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -814,7 +814,7 @@
       "H2"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_library.jpg"
+    "mockupImagePath": "assets/art/concept/scene_library.jpg"
   },
   {
     "id": "crypt",
@@ -915,8 +915,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_crypt.ogg",
-      "combatMusicStem": "/assets/audio/combat_crypt.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_crypt.ogg",
+      "combatMusicStem": "assets/audio/combat_crypt.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -925,7 +925,7 @@
     ],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_crypt.jpg"
+    "mockupImagePath": "assets/art/concept/scene_crypt.jpg"
   },
   {
     "id": "chapel",
@@ -966,8 +966,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_chapel.ogg",
-      "combatMusicStem": "/assets/audio/combat_chapel.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_chapel.ogg",
+      "combatMusicStem": "assets/audio/combat_chapel.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -978,7 +978,7 @@
       "S26"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_chapel.jpg"
+    "mockupImagePath": "assets/art/concept/scene_chapel.jpg"
   },
   {
     "id": "trophy",
@@ -1055,15 +1055,15 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_trophy.ogg",
-      "combatMusicStem": "/assets/audio/combat_trophy.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_trophy.ogg",
+      "combatMusicStem": "assets/audio/combat_trophy.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_trophy.jpg"
+    "mockupImagePath": "assets/art/concept/scene_trophy.jpg"
   },
   {
     "id": "clock",
@@ -1176,8 +1176,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_clock.ogg",
-      "combatMusicStem": "/assets/audio/combat_clock.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_clock.ogg",
+      "combatMusicStem": "assets/audio/combat_clock.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -1188,7 +1188,7 @@
       "Q5"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_clock.jpg"
+    "mockupImagePath": "assets/art/concept/scene_clock.jpg"
   },
   {
     "id": "colosseum",
@@ -1265,15 +1265,15 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_colosseum.ogg",
-      "combatMusicStem": "/assets/audio/combat_colosseum.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_colosseum.ogg",
+      "combatMusicStem": "assets/audio/combat_colosseum.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_colosseum.jpg"
+    "mockupImagePath": "assets/art/concept/scene_colosseum.jpg"
   },
   {
     "id": "relativity",
@@ -1326,8 +1326,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_relativity.ogg",
-      "combatMusicStem": "/assets/audio/combat_relativity.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_relativity.ogg",
+      "combatMusicStem": "assets/audio/combat_relativity.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -1336,7 +1336,7 @@
     ],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_relativity.jpg"
+    "mockupImagePath": "assets/art/concept/scene_relativity.jpg"
   },
   {
     "id": "sanctum",
@@ -1401,8 +1401,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_sanctum.ogg",
-      "combatMusicStem": "/assets/audio/combat_sanctum.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_sanctum.ogg",
+      "combatMusicStem": "assets/audio/combat_sanctum.ogg",
       "reverbDecaySeconds": 1.5
     },
     "hazards": [],
@@ -1411,7 +1411,7 @@
       "Q6"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_sanctum.jpg"
+    "mockupImagePath": "assets/art/concept/scene_sanctum.jpg"
   },
   {
     "id": "playhouse",
@@ -1464,8 +1464,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_playhouse.ogg",
-      "combatMusicStem": "/assets/audio/combat_playhouse.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_playhouse.ogg",
+      "combatMusicStem": "assets/audio/combat_playhouse.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
@@ -1476,7 +1476,7 @@
     ],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_playhouse.jpg"
+    "mockupImagePath": "assets/art/concept/scene_playhouse.jpg"
   },
   {
     "id": "enclave",
@@ -1529,8 +1529,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_enclave.ogg",
-      "combatMusicStem": "/assets/audio/combat_enclave.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_enclave.ogg",
+      "combatMusicStem": "assets/audio/combat_enclave.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
@@ -1539,7 +1539,7 @@
       "S22"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_enclave.jpg"
+    "mockupImagePath": "assets/art/concept/scene_enclave.jpg"
   },
   {
     "id": "foundry",
@@ -1604,8 +1604,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_foundry.ogg",
-      "combatMusicStem": "/assets/audio/combat_foundry.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_foundry.ogg",
+      "combatMusicStem": "assets/audio/combat_foundry.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [
@@ -1619,7 +1619,7 @@
       "S18"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_foundry.jpg"
+    "mockupImagePath": "assets/art/concept/scene_foundry.jpg"
   },
   {
     "id": "refectory",
@@ -1672,8 +1672,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_refectory.ogg",
-      "combatMusicStem": "/assets/audio/combat_refectory.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_refectory.ogg",
+      "combatMusicStem": "assets/audio/combat_refectory.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
@@ -1684,7 +1684,7 @@
       "S21"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_refectory.jpg"
+    "mockupImagePath": "assets/art/concept/scene_refectory.jpg"
   },
   {
     "id": "columbarium",
@@ -1737,15 +1737,15 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_columbarium.ogg",
-      "combatMusicStem": "/assets/audio/combat_columbarium.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_columbarium.ogg",
+      "combatMusicStem": "assets/audio/combat_columbarium.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_columbarium.jpg"
+    "mockupImagePath": "assets/art/concept/scene_columbarium.jpg"
   },
   {
     "id": "chronomancy",
@@ -1798,15 +1798,15 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_chronomancy.ogg",
-      "combatMusicStem": "/assets/audio/combat_chronomancy.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_chronomancy.ogg",
+      "combatMusicStem": "assets/audio/combat_chronomancy.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_chronomancy.jpg"
+    "mockupImagePath": "assets/art/concept/scene_chronomancy.jpg"
   },
   {
     "id": "conservatory",
@@ -1859,15 +1859,15 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_conservatory.ogg",
-      "combatMusicStem": "/assets/audio/combat_conservatory.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_conservatory.ogg",
+      "combatMusicStem": "assets/audio/combat_conservatory.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_conservatory.jpg"
+    "mockupImagePath": "assets/art/concept/scene_conservatory.jpg"
   },
   {
     "id": "haunted",
@@ -1920,8 +1920,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_haunted.ogg",
-      "combatMusicStem": "/assets/audio/combat_haunted.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_haunted.ogg",
+      "combatMusicStem": "assets/audio/combat_haunted.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
@@ -1932,7 +1932,7 @@
       "H4"
     ],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_haunted.jpg"
+    "mockupImagePath": "assets/art/concept/scene_haunted.jpg"
   },
   {
     "id": "eyrie",
@@ -1985,8 +1985,8 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_eyrie.ogg",
-      "combatMusicStem": "/assets/audio/combat_eyrie.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_eyrie.ogg",
+      "combatMusicStem": "assets/audio/combat_eyrie.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
@@ -1995,7 +1995,7 @@
     ],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_eyrie.jpg"
+    "mockupImagePath": "assets/art/concept/scene_eyrie.jpg"
   },
   {
     "id": "labyrinth",
@@ -2048,14 +2048,14 @@
       "fogFar": 45
     },
     "audio": {
-      "ambientMusicTrack": "/assets/audio/ambience_labyrinth.ogg",
-      "combatMusicStem": "/assets/audio/combat_labyrinth.ogg",
+      "ambientMusicTrack": "assets/audio/ambience_labyrinth.ogg",
+      "combatMusicStem": "assets/audio/combat_labyrinth.ogg",
       "reverbDecaySeconds": 2.2
     },
     "hazards": [],
     "puzzleIds": [],
     "questIds": [],
     "npcIds": [],
-    "mockupImagePath": "/assets/art/concept/scene_labyrinth.jpg"
+    "mockupImagePath": "assets/art/concept/scene_labyrinth.jpg"
   }
 ]

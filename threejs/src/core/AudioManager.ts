@@ -1,52 +1,52 @@
 import * as THREE from 'three';
 
-const FALLBACK_TRACK = '/audio/dungeon002_0.ogg';
+const FALLBACK_TRACK = 'audio/dungeon002_0.ogg';
 
 const ZONE_TRACKS: Record<string, string> = {
-  S00: '/audio/dungeon002_0.ogg',
-  OW1: '/audio/dungeon002_0.ogg',
-  GH1: '/audio/dungeon_theme.mp3',
-  GH2: '/audio/dungeon_theme.mp3',
-  GH3: '/audio/dungeon_theme.mp3',
-  HM1: '/audio/dungeon_theme.mp3',
-  BQ1: '/audio/idle_chambers_silver_lining.mp3',
-  AG1: '/audio/dark_woods_in_game.ogg',
-  MH1: '/audio/apparitions_ball.ogg',
-  SAN1: '/audio/sinister_boss_appears.ogg',
-  RC1: '/audio/dark_woods_in_game.ogg',
-  BT1: '/audio/apparitions_ball_piano.ogg',
-  CO1: '/audio/spooky_dungeon.ogg',
-  U1: '/audio/ps2_horror_ambience.mp3',
-  U2: '/audio/ps2_horror_ambience.mp3',
-  U3: '/audio/ps2_horror_ambience.mp3',
-  U4: '/audio/ps2_horror_ambience.mp3',
-  TR1: '/audio/sinister_abode.ogg',
-  TR2: '/audio/sinister_abode.ogg',
-  TR3: '/audio/sinister_abode.ogg',
-  TR4: '/audio/sinister_abode.ogg',
-  AT1: '/audio/snowfall_loop.ogg',
-  AT2: '/audio/snowfall_loop.ogg',
-  AT3: '/audio/snowfall_loop.ogg',
-  AL1: '/audio/darkest_dungeon_v2.mp3',
-  AL2: '/audio/darkest_dungeon_v2.mp3',
-  AL3: '/audio/darkest_dungeon_v2.mp3',
-  PB1: '/audio/spooky_dungeon.ogg',
-  PB2: '/audio/spooky_dungeon.ogg',
-  PB3: '/audio/spooky_dungeon.ogg',
-  PB4: '/audio/spooky_dungeon.ogg',
-  RG1: '/audio/snowfall_loop.ogg',
-  RG2: '/audio/snowfall_loop.ogg',
-  RG3: '/audio/snowfall_loop.ogg',
-  RG4: '/audio/snowfall_loop.ogg',
-  VR1: '/audio/apparitions_ball_piano.ogg',
-  VR2: '/audio/apparitions_ball_piano.ogg',
-  VR3: '/audio/apparitions_ball_piano.ogg',
-  RS1: '/audio/dark_woods_in_game.ogg',
-  RS2: '/audio/dark_woods_in_game.ogg',
-  RS3: '/audio/dark_woods_in_game.ogg',
-  RS4: '/audio/dark_woods_in_game.ogg',
-  RS5: '/audio/dark_woods_in_game.ogg',
-  RS6: '/audio/dark_woods_in_game.ogg',
+  S00: 'audio/dungeon002_0.ogg',
+  OW1: 'audio/dungeon002_0.ogg',
+  GH1: 'audio/dungeon_theme.mp3',
+  GH2: 'audio/dungeon_theme.mp3',
+  GH3: 'audio/dungeon_theme.mp3',
+  HM1: 'audio/dungeon_theme.mp3',
+  BQ1: 'audio/idle_chambers_silver_lining.mp3',
+  AG1: 'audio/dark_woods_in_game.ogg',
+  MH1: 'audio/apparitions_ball.ogg',
+  SAN1: 'audio/sinister_boss_appears.ogg',
+  RC1: 'audio/dark_woods_in_game.ogg',
+  BT1: 'audio/apparitions_ball_piano.ogg',
+  CO1: 'audio/spooky_dungeon.ogg',
+  U1: 'audio/ps2_horror_ambience.mp3',
+  U2: 'audio/ps2_horror_ambience.mp3',
+  U3: 'audio/ps2_horror_ambience.mp3',
+  U4: 'audio/ps2_horror_ambience.mp3',
+  TR1: 'audio/sinister_abode.ogg',
+  TR2: 'audio/sinister_abode.ogg',
+  TR3: 'audio/sinister_abode.ogg',
+  TR4: 'audio/sinister_abode.ogg',
+  AT1: 'audio/snowfall_loop.ogg',
+  AT2: 'audio/snowfall_loop.ogg',
+  AT3: 'audio/snowfall_loop.ogg',
+  AL1: 'audio/darkest_dungeon_v2.mp3',
+  AL2: 'audio/darkest_dungeon_v2.mp3',
+  AL3: 'audio/darkest_dungeon_v2.mp3',
+  PB1: 'audio/spooky_dungeon.ogg',
+  PB2: 'audio/spooky_dungeon.ogg',
+  PB3: 'audio/spooky_dungeon.ogg',
+  PB4: 'audio/spooky_dungeon.ogg',
+  RG1: 'audio/snowfall_loop.ogg',
+  RG2: 'audio/snowfall_loop.ogg',
+  RG3: 'audio/snowfall_loop.ogg',
+  RG4: 'audio/snowfall_loop.ogg',
+  VR1: 'audio/apparitions_ball_piano.ogg',
+  VR2: 'audio/apparitions_ball_piano.ogg',
+  VR3: 'audio/apparitions_ball_piano.ogg',
+  RS1: 'audio/dark_woods_in_game.ogg',
+  RS2: 'audio/dark_woods_in_game.ogg',
+  RS3: 'audio/dark_woods_in_game.ogg',
+  RS4: 'audio/dark_woods_in_game.ogg',
+  RS5: 'audio/dark_woods_in_game.ogg',
+  RS6: 'audio/dark_woods_in_game.ogg',
 };
 
 export class AudioManager {
@@ -71,7 +71,8 @@ export class AudioManager {
   }
 
   playZoneMusic(sceneId: string): void {
-    const url = ZONE_TRACKS[sceneId] || FALLBACK_TRACK;
+    const rawUrl = ZONE_TRACKS[sceneId] || FALLBACK_TRACK;
+    const url = rawUrl.startsWith('/') ? rawUrl.slice(1) : rawUrl;
     if (url === this.currentUrl) return;
     this.currentUrl = url;
     this.loadTrack(url, true);
@@ -79,9 +80,10 @@ export class AudioManager {
 
   /** A missing or undecodable track must never break a room transition. */
   private loadTrack(url: string, allowFallback: boolean): void {
+    const sanitizedUrl = url.startsWith('/') ? url.slice(1) : url;
     const loader = new THREE.AudioLoader();
     loader.load(
-      url,
+      sanitizedUrl,
       (buffer) => {
         this.music.stop();
         this.music.setBuffer(buffer);
@@ -89,11 +91,11 @@ export class AudioManager {
       },
       undefined,
       () => {
-        if (!this.failedUrls.has(url)) {
-          this.failedUrls.add(url);
-          console.warn(`[audio] could not load ${url}${allowFallback ? '; using fallback track' : ''}`);
+        if (!this.failedUrls.has(sanitizedUrl)) {
+          this.failedUrls.add(sanitizedUrl);
+          console.warn(`[audio] could not load ${sanitizedUrl}${allowFallback ? '; using fallback track' : ''}`);
         }
-        if (allowFallback && url !== FALLBACK_TRACK) {
+        if (allowFallback && sanitizedUrl !== FALLBACK_TRACK) {
           this.currentUrl = FALLBACK_TRACK;
           this.loadTrack(FALLBACK_TRACK, false);
         }
