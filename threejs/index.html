@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VEILKEEP — Action-RPG Three.js Engine</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2309090b'/%3E%3Cpath d='M8 24V11l8-5 8 5v13' fill='none' stroke='%23d4af37' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='3.2' fill='%2338bdf8'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -1069,6 +1070,113 @@
       margin-top: 2px;
     }
 
+    /* Auto-Battler Panel */
+    .autoplay-toggle {
+      position: absolute;
+      left: 24px;
+      top: 296px;
+      z-index: 30;
+      pointer-events: auto;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      background: linear-gradient(160deg, rgba(12, 17, 34, 0.94), rgba(9, 9, 11, 0.96));
+      color: #f4e6bd;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+    }
+    .autoplay-toggle:hover {
+      border-color: rgba(212, 175, 55, 0.9);
+      transform: translateY(-1px);
+    }
+    .autoplay-toggle.active {
+      border-color: rgba(74, 222, 128, 0.8);
+      color: #bbf7d0;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 18px rgba(74, 222, 128, 0.25);
+    }
+    .autobattler-panel {
+      position: absolute;
+      left: 24px;
+      top: 168px;
+      width: 288px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: linear-gradient(160deg, rgba(12, 17, 34, 0.92), rgba(9, 9, 11, 0.94));
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+      font-family: 'Cinzel', serif;
+      color: #e2e8f0;
+      pointer-events: none;
+      opacity: 0.55;
+      transition: opacity 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .autobattler-panel.active {
+      opacity: 1;
+      border-color: rgba(56, 189, 248, 0.75);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 22px rgba(56, 189, 248, 0.22);
+    }
+    .autobattler-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .autobattler-title {
+      font-size: 11px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+    }
+    .autobattler-state {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+    }
+    .autobattler-panel.active .autobattler-state {
+      background: rgba(56, 189, 248, 0.22);
+      color: #e0f2fe;
+    }
+    .autobattler-scene {
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.5px;
+    }
+    .autobattler-bar {
+      margin-top: 8px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+    }
+    .autobattler-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0ea5e9, #38bdf8, #a5f3fc);
+      transition: width 220ms ease;
+    }
+    .autobattler-task {
+      margin-top: 7px;
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: #94a3b8;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
     /* Ending Epilogue Modal */
     .ending-modal {
       display: none;
@@ -1408,6 +1516,10 @@
     </div>
 
     <div class="ending-epilogue-scroll" id="ending-epilogue-scroll"></div>
+
+    <div style="display: flex; justify-content: center; margin-top: 18px;">
+      <button class="inv-close-btn" id="ending-close-btn" style="position: static; font-size: 13px; padding: 8px 18px; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.5); background: rgba(30, 41, 59, 0.85); color: #d4af37; cursor: pointer; font-family: 'Cinzel', serif; letter-spacing: 1px;">Close Epilogue</button>
+    </div>
   </div>
 
   <div class="hud-layer">
@@ -1457,6 +1569,18 @@
       </div>
     </div>
 
+    <div class="autobattler-panel" id="hud-autobattler">
+      <div class="autobattler-head">
+        <span class="autobattler-title">⚙ Auto-Battler</span>
+        <span class="autobattler-state" id="auto-state-label">OFFLINE</span>
+      </div>
+      <div class="autobattler-scene" id="auto-scene-label">S00 · 1/50</div>
+      <div class="autobattler-bar"><div class="autobattler-bar-fill" id="auto-bar-fill"></div></div>
+      <div class="autobattler-task" id="auto-task-label">Press P to engage the automaton.</div>
+    </div>
+
+    <button class="autoplay-toggle" id="autoplay-toggle" type="button" title="Play the game hands-free">🤖 Autoplay</button>
+
     <div class="hud-bottom">
       <div class="controls-hint">
         Move: <kbd>WASD</kbd> &nbsp;|&nbsp; 
@@ -1473,6 +1597,7 @@
         Folio: <kbd>I</kbd> &nbsp;|&nbsp; 
         Journal: <kbd>J</kbd> &nbsp;|&nbsp; 
         Map: <kbd>M</kbd> &nbsp;|&nbsp; 
+        Auto-Battler: <kbd>P</kbd> &nbsp;|&nbsp; 
         Menu: <kbd>Esc</kbd>
       </div>
       <div class="hud-card" style="font-size: 12px; color: #d4af37">

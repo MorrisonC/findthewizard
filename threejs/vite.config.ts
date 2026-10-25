@@ -19,5 +19,13 @@ export default defineConfig({
     target: 'es2022',
     assetsInlineLimit: 0,
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three'],
+          rapier: ['@dimforge/rapier3d-compat'],
+        },
+      },
+    },
   },
 });

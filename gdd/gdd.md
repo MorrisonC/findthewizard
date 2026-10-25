@@ -5146,6 +5146,9 @@ S00 Approach & Sunken Courtyard
 | VR1-VR3 Void Realm | **Modular GLB room kit**, torus portal prop, dream-logic room, core return |
 | RS1-RS6 Relativity Cloister | **Modular GLB room kit**, torus portal prop, impossible stairways, dining table |
 | CO1 The Veil Colosseum | **Modular GLB room kit** scaled 1.4×, gate arch, Captain encounter, Wall Leap reward |
+| CO3 Crystal Theater | **Modular GLB room kit** scaled 1.4x, purple-tinted, gate arch, Crystal Mirror puzzle (requires Mirror Phase), Duchess Seraphina's lore |
+| CR1 Chronomantic Scriptorium | **Modular GLB room kit** scaled 1.4x, teal-tinted, gate arch, Retrocausal Portcullis puzzle (requires Tachyon Phial), Retrograde Ouroboros reward |
+| MS3 Gilded Music Salon | **Modular GLB room kit** scaled 1.4x, gold-tinted, gate arch, Resonant Harmonies puzzle (requires Glass-Armonica Mallet), Score of the Unbroken Chord reward |
 | U1-U4 Undercrypt | **Modular GLB room kit**, Echo Chamber mirror prop, undead guard, Secret Vault lore |
 
 **Controls:** WASD/Arrows movement (isometric diagonals), **Space** melee, **E** interact, **Q** Truth Lens / Veil Sight, **Tab** Thief's Field Journal & Memory Cabinet, **T** distraction toss (coin/bottle), **Q** cycles quality presets. Touch devices use a virtual joystick + on-screen A/E/M/Q buttons. Progress autosaves to `localStorage` on scene transitions, item pickup, puzzle solve, and captain resolution. Manual save slots (3) are available in the pause menu. **C** opens the Alchemist's Bench crafting UI in Alchemist's Lab scenes. A `window.__veilkeep` debug hook exposes scene, player, stats, inventory, convictions, and `loadScene` for smoke tests and MCP inspection.
@@ -5184,6 +5187,56 @@ S00 Approach & Sunken Courtyard
 - **UI:** Always-on 150×150 canvas in the bottom-left corner showing the current room footprint.
 - **Rendering:** Player position (blue dot), exit points (green/amber dots based on requirement met), room boundary.
 - **Integration:** `drawMinimap()` called in the render loop; uses `exits` lookup and `playerState` position.
+
+### 41.14 Crystal Theater Zone (Built)
+
+- **Scene:** CO3 - Crystal Theater, connected to CO1 (Veil Colosseum) and S00.
+- **Theme:** A crystalline theater where Duchess Seraphina Vane performs phantasmal plays.
+- **Puzzle:** "Unveil Crystal Theater" requires Mirror Phase ability (acquired from True Mirror in HM1).
+- **Lore:** Duchess Seraphina's Playbill - warns about the Crystal Mirror showing truth, not future.
+- **Integration:** Scene setup in main.ts, exits defined, quest objective added, lore object added.
+
+### 41.15 Additional Lore Objects (Built)
+
+- **PB1:** Warden's Logbook - three centuries of prison records
+- **RG1:** Gardener's Almanac - starlight peppers and backward wind cones
+- **TR1:** Curator's Catalogue - trophy collection including mimic chest warning
+
+### 41.19 Gilded Music Salon Zone (Built)
+
+- **Scene:** MS3 - Parquet of Resonant Harmonies, connected to S00.
+- **Theme:** A 3-lane rhythm floor of glass-armonica keys. Strike the lanes in harmony to break the stasis.
+- **Puzzle:** "Perform Resonant Harmonies" requires Glass-Armonica Mallet; grants Score of the Unbroken Chord.
+- **Pickup:** Glass-Armonica Mallet (ITEM_GLASS_MALLET).
+- **Integration:** Scene setup in main.ts, exits defined, quest objective added, chapter dossier entry added.
+
+### 41.18 Chronomantic Scriptorium Zone (Built)
+
+- **Scene:** CR1 - Chronomantic Scriptorium (Threshold of Backward Rain), connected to S00.
+- **Theme:** A sanctuary of inverted entropy. Rain falls upward, clocks run backward.
+- **Puzzle:** "Solve Retrocausal Portcullis" requires Tachyon Phial; grants Retrograde Ouroboros on solve.
+- **Pickup:** Tachyon Phial (ITEM_TACHYON_PHIAL).
+- **Integration:** Scene setup in main.ts, exits defined (CR1 to S00 one-way), quest objective added, chapter dossier entry added.
+
+### 41.17 Code Splitting & Bundle Optimization (Built)
+
+- **Vite manualChunks:** Vendor libraries split into separate chunks for better caching and parallel loading.
+  - `three` chunk: three.js (~533 KB)
+  - `rapier` chunk: Rapier3D WASM (~4.3 MB, inherent to compat package)
+  - `index` chunk: Application code (~318 KB, down from 5.18 MB monolithic bundle)
+- **Impact:** Main application bundle reduced from 5.18 MB to 318 KB; vendors cached independently by browsers.
+
+### 41.16 Extended Zone Interactions (Built)
+
+Five previously-interaction-less extended zones now have pickups and puzzles:
+
+- **GH1 (Gatehouse Exterior):** Captain's Patrol Ledger pickup; Clear Gatehouse Exterior puzzle (gated on ledger).
+- **GH4 (Vent Passage):** Vent Grate Key pickup; Ascend the Vent Passage puzzle (gated on key).
+- **SQ1 (Servants Quarters):** Servant's Diary pickup; Uncover the Servant Secret puzzle (gated on diary).
+- **B1 (Barracks Hall):** Barracks Armory Key pickup; Raid the Barracks Armory puzzle (gated on key).
+- **RC1 (Relativity Cloister):** Iron Nail Bundle pickup; Anchor the Relativity Cloister puzzle (gated on nails).
+
+All five zones also received chapter dossier entries, exit triggers, quest text, and quest journal objectives.
 
 ---
 

@@ -17,8 +17,14 @@ def inline(text):
     t = re.sub(r'`([^`]+)`', lambda m: '<code>' + m.group(1) + '</code>', t)
     # images
     t = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', lambda m: '<span class="art-card"><img src="%s" alt="%s" loading="lazy">%s</span>' % (m.group(2), m.group(1), ('<span class="art-caption">%s</span>' % m.group(1)) if m.group(1) else ''), t)
-    # links
-    t = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', lambda m: '<a href="%s">%s</a>' % (m.group(2), m.group(1)), t)
+    # links (handle balanced parentheses in URLs)
+    def _link_repl(m):
+        url = m.group(2)
+        text = m.group(1)
+        if url.startswith('http://') or url.startswith('https://'):
+            return '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>' % (url, text)
+        return '<a href="%s">%s</a>' % (url, text)
+    t = re.sub(r'\[([^\]]+)\]\(([^)]+(?:\([^)]*\)[^)]*)*)\)', _link_repl, t)
     # bold
     t = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', t)
     # italic
@@ -247,7 +253,7 @@ __BODY__
 </div>
 <script>
 const rooms = {
- outer:{name:"Outer Wards & Sunken Barbican Courtyard",img:"assets/scene00_approach.png",desc:"Terraced mountain approach and sunken courtyard carved into the red-rock foundation beneath the imposing terracotta fortress. Features photophobic aether-bramble bushes with retracting starlight thorns, deceptive shadow sentry traps, and the dry moat waterwheel siphon winch to breach the barbican.",npcs:"—",puzzle:"Statue Riddle & Photophobic Bramble Alignment",loot:"Cache: Clockwork Tension Lockpick, Grappling Hook, 50 moons, Sun-Blessed Consecration Oil"},
+ outer:{name:"Outer Wards & Sunken Barbican Courtyard",img:"assets/scene00_approach_sunken.png",desc:"Terraced mountain approach and sunken courtyard carved into the red-rock foundation beneath the imposing terracotta fortress. Features photophobic aether-bramble bushes with retracting starlight thorns, deceptive shadow sentry traps, and the dry moat waterwheel siphon winch to breach the barbican.",npcs:"—",puzzle:"Statue Riddle & Photophobic Bramble Alignment",loot:"Cache: Clockwork Tension Lockpick, Grappling Hook, 50 moons, Sun-Blessed Consecration Oil"},
  gate:{name:"Gatehouse",img:"assets/gameplay_mockup.jpg",desc:"Lift-gate puzzle: align mirror beams. Guard captain mini-boss (optional). Bypass via vent (climbing 2).",npcs:"Gatekeeper Orin",puzzle:"Mirror Alignment",loot:"Gatehouse Key, Iron Nails x3"},
  servants:{name:"Servants' Quarters & Banquet Salon",img:"assets/scene_servants_hub.jpg",desc:"Hub for peaceful NPCs. Presided over with Victorian decorum by Grand Butler Mister Bartholomew Sterling and maid Lira. Features heated copper steam radiators, the grand dining table, and a secret dumbwaiter network.",npcs:"Mister Bartholomew Sterling, Lira, Hesta, Pim",puzzle:"—",loot:"The Grand Seneschal's Master Passkey, Sterling's Silver Pocket Watch, Bartholomew's Imperial Earl Grey"},
  kitchen:{name:"Kitchens",img:"assets/scene_servants_hub.jpg",desc:"Food prep. Cook Hesta's 'Missing Spice' quest. Hidden passage to Undercrypt via dumbwaiter (climbing 3).",npcs:"Cook Hesta",puzzle:"Dumbwaiter Climb",loot:"Starlight Vial recipe"},

@@ -924,6 +924,17 @@
           ],
           "requires": [],
           "oneWay": true
+        },
+        {
+          "id": "CO1_TO_CO3",
+          "to": "CO3",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
         }
       ]
     },
@@ -2160,6 +2171,110 @@
           "oneWay": false
         },
         {
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "CO3",
+      "name": "Crystal Theater",
+      "zone": "colosseum",
+      "tier": 3,
+      "elevationMeters": 10,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 18,
+        "height": 18
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "id": "CO3_TO_CO1",
+          "to": "CO1",
+          "spawn": [
+            0,
+            0.6,
+            2
+          ],
+          "requires": [],
+          "oneWay": false
+        },
+        {
+          "id": "CO3_TO_S00",
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "CR1",
+      "name": "Chronomantic Scriptorium",
+      "zone": "chronomancy",
+      "tier": 3,
+      "elevationMeters": 12,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 18,
+        "height": 18
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "id": "CR1_TO_S00",
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": true
+        }
+      ]
+    },
+    {
+      "id": "MS3",
+      "name": "Parquet of Resonant Harmonies",
+      "zone": "music",
+      "tier": 3,
+      "elevationMeters": 8,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 18,
+        "height": 18
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "id": "MS3_TO_S00",
           "to": "S00",
           "spawn": [
             0,

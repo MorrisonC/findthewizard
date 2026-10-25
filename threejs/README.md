@@ -24,7 +24,36 @@ npx serve .       # or python -m http.server 8000
 - HM1/BQ1/AG1/MH1/SAN1/CO1/U1-U4/TR1-TR4/AT1-AT3 all use the modular room kit or dedicated Blender GLBs.
 - `QualityManager` provides FPS/DPR overlay and Q-cycled Low/Medium/High presets (`src/core/Quality.ts`).
 
-**Controls:** WASD/Arrows, **Space** melee, **E** interact.
+**Controls:** WASD/Arrows, **Space** melee, **E** interact, **P** auto-battler.
+
+## Auto-Battler
+
+Press **P** (or `window.__veilkeep.auto.enable()`) to hand the wheel to the
+automaton. It plans a route through the fortress door graph, walks it with grid
+A*, solves the puzzles, fights every hostile, advances the scripted dialogues,
+and stops at the courtyard finale. Press **P** again to take control back at any
+moment — the automaton never touches the save file, so a manual save and an
+automated run are interchangeable.
+
+- `src/data/doorGraph.ts` — the only door table. `FORTRESS_EXITS` is what the
+  runtime uses, so a route can never disagree with what the player can walk
+  through.
+- `src/autobattler/Campaign.ts` — the 61-task campaign table, gate-aware route
+  planner, and progress predicates (`nextGoal`, `nextPendingTask`, `taskReady`).
+- `src/autobattler/Pathfinder.ts` — A* over the live Rapier static boxes with
+  line-of-sight smoothing and door approach points.
+- The HUD panel under the vitals card shows state, current scene, task, and
+  overall progress. `window.__veilkeep.auto` exposes the same data plus
+  `toggle()` / `enable()` / `disable()` for tests.
+
+End-to-end proof (boots Chrome, starts a fresh profile, presses P, and waits for
+all 50 scenes and 61 tasks):
+
+```bash
+npm run dev            # or: npx vite preview --port 4173 && BASE=http://localhost:4173 ...
+node e2e/autobattler.spec.mjs
+```
+
 
 ## How it maps to the GDD
 

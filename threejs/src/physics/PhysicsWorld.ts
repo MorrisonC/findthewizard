@@ -2,6 +2,16 @@ import RAPIER from '@dimforge/rapier3d-compat';
 
 export type Vec3 = { x: number; y: number; z: number };
 
+/** Axis-aligned static box, mirrored out for grid pathfinding. */
+export interface StaticBox {
+  x: number;
+  y: number;
+  z: number;
+  hx: number;
+  hy: number;
+  hz: number;
+}
+
 /**
  * Rapier-backed world for the vertical slice.
  * Owns static dungeon colliders and a kinematic capsule player.
@@ -12,6 +22,7 @@ export class RapierPhysics {
   private playerCollider: RAPIER.Collider;
   private controller: RAPIER.KinematicCharacterController;
   private staticColliders: RAPIER.Collider[] = [];
+  private staticBoxes: StaticBox[] = [];
 
   private constructor(spawn: Vec3) {
     this.world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
@@ -42,6 +53,48 @@ export class RapierPhysics {
       .setTranslation(x, y, z)
       .setFriction(0.6);
     this.staticColliders.push(this.world.createCollider(desc));
+    this.staticBoxes.push({ x, y, z, hx: halfX, hy: halfY, hz: halfZ });
+  }
+
+  /** Read-only copy of the static boxes, used by the auto-battler pathfinder. */
+  getStaticBoxes(): readonly StaticBox[] {
+    return this.staticBoxes;
+  }
+
+  /**
+   * Capsule-width clearance probe between two points.
+   *
+   * Three parallel rays are cast at chest height (centre, and ±0.28m across the
+   * travel direction) which approximates a swept capsule. Returns false when
+   * anything solid blocks the segment, so the autoplay bot can tell a walkable
+   * doorway from a chasm, ledge or closed portcullis.
+   */
+  probeClearance(from: Vec3, to: Vec3): boolean {
+    const dx = to.x - from.x;
+    const dz = to.z - from.z;
+    const dist = Math.hypot(dx, dz);
+    if (dist < 1e-4) return true;
+
+    const dir = { x: dx / dist, y: 0, z: dz / dist };
+    const perp = { x: -dir.z, z: dir.x };
+    const y = from.y + 0.55;
+
+    try {
+      for (const offset of [0, 0.28, -0.28]) {
+        const origin = { x: from.x + perp.x * offset, y, z: from.z + perp.z * offset };
+        const ray = new RAPIER.Ray(origin, dir);
+        const hit = this.world.castRay(ray, dist, true, undefined, undefined, this.playerCollider);
+        if (!hit) continue;
+        const toi = (hit as unknown as { timeOfImpact?: number; toi?: number }).timeOfImpact
+          ?? (hit as unknown as { toi?: number }).toi
+          ?? 0;
+        if (toi < dist - 0.05) return false;
+      }
+    } catch {
+      // Never let a physics-API mismatch break gameplay: assume walkable.
+      return true;
+    }
+    return true;
   }
 
   clearStatic(): void {
@@ -49,6 +102,7 @@ export class RapierPhysics {
       this.world.removeCollider(collider, false);
     }
     this.staticColliders = [];
+    this.staticBoxes = [];
   }
 
   teleportPlayer(spawn: Vec3): void {

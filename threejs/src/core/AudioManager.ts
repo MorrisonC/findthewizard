@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+const FALLBACK_TRACK = '/audio/dungeon002_0.ogg';
+
 const ZONE_TRACKS: Record<string, string> = {
   S00: '/audio/dungeon002_0.ogg',
   OW1: '/audio/dungeon002_0.ogg',
@@ -12,7 +14,7 @@ const ZONE_TRACKS: Record<string, string> = {
   MH1: '/audio/apparitions_ball.ogg',
   SAN1: '/audio/sinister_boss_appears.ogg',
   RC1: '/audio/dark_woods_in_game.ogg',
-  BT1: '/audio/lonely_mournful_tune.ogg',
+  BT1: '/audio/apparitions_ball_piano.ogg',
   CO1: '/audio/spooky_dungeon.ogg',
   U1: '/audio/ps2_horror_ambience.mp3',
   U2: '/audio/ps2_horror_ambience.mp3',
@@ -32,13 +34,13 @@ const ZONE_TRACKS: Record<string, string> = {
   PB2: '/audio/spooky_dungeon.ogg',
   PB3: '/audio/spooky_dungeon.ogg',
   PB4: '/audio/spooky_dungeon.ogg',
-  RG1: '/audio/the_field_of_dreams.mp3',
-  RG2: '/audio/the_field_of_dreams.mp3',
-  RG3: '/audio/the_field_of_dreams.mp3',
-  RG4: '/audio/the_field_of_dreams.mp3',
-  VR1: '/audio/lonely_mournful_tune.ogg',
-  VR2: '/audio/lonely_mournful_tune.ogg',
-  VR3: '/audio/lonely_mournful_tune.ogg',
+  RG1: '/audio/snowfall_loop.ogg',
+  RG2: '/audio/snowfall_loop.ogg',
+  RG3: '/audio/snowfall_loop.ogg',
+  RG4: '/audio/snowfall_loop.ogg',
+  VR1: '/audio/apparitions_ball_piano.ogg',
+  VR2: '/audio/apparitions_ball_piano.ogg',
+  VR3: '/audio/apparitions_ball_piano.ogg',
   RS1: '/audio/dark_woods_in_game.ogg',
   RS2: '/audio/dark_woods_in_game.ogg',
   RS3: '/audio/dark_woods_in_game.ogg',
@@ -52,6 +54,7 @@ export class AudioManager {
   private music: THREE.Audio;
   private currentUrl = '';
   private started = false;
+  private failedUrls = new Set<string>();
 
   constructor(camera: THREE.Camera) {
     this.listener = new THREE.AudioListener();
@@ -68,15 +71,34 @@ export class AudioManager {
   }
 
   playZoneMusic(sceneId: string): void {
-    const url = ZONE_TRACKS[sceneId] || '/audio/dungeon002_0.ogg';
+    const url = ZONE_TRACKS[sceneId] || FALLBACK_TRACK;
     if (url === this.currentUrl) return;
     this.currentUrl = url;
+    this.loadTrack(url, true);
+  }
+
+  /** A missing or undecodable track must never break a room transition. */
+  private loadTrack(url: string, allowFallback: boolean): void {
     const loader = new THREE.AudioLoader();
-    loader.load(url, (buffer) => {
-      this.music.stop();
-      this.music.setBuffer(buffer);
-      this.music.play();
-    });
+    loader.load(
+      url,
+      (buffer) => {
+        this.music.stop();
+        this.music.setBuffer(buffer);
+        this.music.play();
+      },
+      undefined,
+      () => {
+        if (!this.failedUrls.has(url)) {
+          this.failedUrls.add(url);
+          console.warn(`[audio] could not load ${url}${allowFallback ? '; using fallback track' : ''}`);
+        }
+        if (allowFallback && url !== FALLBACK_TRACK) {
+          this.currentUrl = FALLBACK_TRACK;
+          this.loadTrack(FALLBACK_TRACK, false);
+        }
+      },
+    );
   }
 
   setVolume(v: number): void { this.music.setVolume(Math.max(0, Math.min(1, v))); }
