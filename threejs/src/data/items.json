@@ -805,7 +805,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Unlocks the main Gatehouse portcullis.",
     "tags": [
       "key",
@@ -823,7 +823,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Synthesises Acid Vials that melt Grade-3 brass locks silently.",
     "tags": [
       "alchemist",
@@ -843,7 +843,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Social Disguise: patrols treat Kaelen as a relief guard in plain sight.",
     "tags": [
       "charlatan",
@@ -863,7 +863,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "+25% stagger on heavy and unarmed strikes.",
     "tags": [
       "enforcer",
@@ -883,7 +883,7 @@
     "isConsumable": false,
     "isKeyItem": true,
     "maxStack": 1,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Reveals hidden doors and cursed relics within 8 m; halves curse penalties.",
     "tags": [
       "antiquarian",
@@ -903,7 +903,7 @@
     "isConsumable": false,
     "isKeyItem": false,
     "maxStack": 3,
-    "iconPath": "/assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+    "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
     "effectDescription": "Jams boiler soot vents and drives the Gatehouse steam-piston bypass.",
     "tags": [
       "tool",
