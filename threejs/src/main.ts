@@ -9697,7 +9697,7 @@ function autoTick(dt: number): void {
 // Main character: Blender-authored rigged + animated GLB (procedural fallback if missing).
 const mainChar = await spawnMainCharacter({
   scene: engine.scene,
-  urls: ['/assets/models/main_character.glb'],
+  urls: ['assets/models/main_character.glb'],
   callbacks: {
     onHitboxOpen: (state) => {
       const weaponMult = mainChar?.equippedWeapon?.def.damageMultiplier ?? 1;

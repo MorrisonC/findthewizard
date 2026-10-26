@@ -6,7 +6,7 @@ import { equipWeapon, equipShield, type WeaponId, type EquippedWeapon, type Equi
 import { WeaponTrail } from './WeaponTrail';
 import { CombatParticles } from './CombatParticles';
 
-export const MAIN_CHARACTER_URLS = ['/assets/models/main_character.glb', '/assets/models/main_character.fbx'];
+export const MAIN_CHARACTER_URLS = ['assets/models/main_character.glb', 'assets/models/main_character.fbx'];
 
 export interface SpawnOptions {
   scene?: THREE.Object3D;

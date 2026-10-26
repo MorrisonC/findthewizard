@@ -138,7 +138,8 @@ export async function pbrMaterial(slug: string, options: PbrMaterialOptions = {}
       const texKey = `${slug}|${kind}`;
       let tex = textureCache.get(texKey);
       if (!tex) {
-        tex = await sharedLoader.loadAsync(url);
+        const sanitizedUrl = url.startsWith('/') ? url.slice(1) : url;
+        tex = await sharedLoader.loadAsync(sanitizedUrl);
         textureCache.set(texKey, tex);
       }
       maps[kind] = tex;

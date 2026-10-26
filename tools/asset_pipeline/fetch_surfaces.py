@@ -147,7 +147,7 @@ def stage_material(slug, asset_id, role, metres, note):
                 image = image.resize((target, target), Image.LANCZOS)
             filename = f"{kind}.jpg"
             image.save(os.path.join(out_dir, filename), quality=92, optimize=True)
-            record["maps"][kind] = f"/assets/textures/pbr/{slug}/{filename}"
+            record["maps"][kind] = f"assets/textures/pbr/{slug}/{filename}"
 
     size = sum(os.path.getsize(os.path.join(out_dir, f)) for f in os.listdir(out_dir))
     record["bytes"] = size
@@ -180,7 +180,7 @@ def stage_hdri():
         "displayName": asset.get("displayName"),
         "note": note,
         "sourceUrl": asset.get("shortLink"),
-        "path": f"/assets/textures/pbr/{slug}/{filename}",
+        "path": f"assets/textures/pbr/{slug}/{filename}",
         "bytes": size,
     }
 
