@@ -6,9 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "build": "vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "test:e2e": "playwright test",
     "test": "vitest run",
+    "typecheck": "tsc --noEmit",
     "validate:world": "node --experimental-strip-types --no-warnings scripts/validate-world.mjs",
     "e2e": "node e2e/autobattler.spec.mjs",
     "e2e:qa": "node e2e/qa-hooks.spec.mjs",

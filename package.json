@@ -1,0 +1,13 @@
+{
+  "name": "findthewizard-root",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix threejs run dev",
+    "build": "npm --prefix threejs run build",
+    "preview": "npm --prefix threejs run preview",
+    "test": "npm --prefix threejs run test",
+    "test:e2e": "npm --prefix threejs run test:e2e"
+  }
+}

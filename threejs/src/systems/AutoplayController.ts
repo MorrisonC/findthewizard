@@ -28,7 +28,7 @@ import {
   type AutoProgressState,
   type AutoTask,
 } from '../autobattler/Campaign';
-import { doorApproachPoint, findPath, type ObstacleRect, type Point } from '../autobattler/Pathfinder';
+import { DEFAULT_BOUNDS, doorApproachPoint, findPath, type Bounds, type ObstacleRect, type Point } from '../autobattler/Pathfinder';
 
 // ---------------------------------------------------------------- public API
 
@@ -108,6 +108,7 @@ export interface AutoplayHost {
 
   /** Drop the current path and slide sideways for a moment. */
   nudge(): void;
+  getBounds?(): Bounds;
   setSpeedMultiplier(multiplier: number): void;
   toast(message: string): void;
   questState(): { active: string[]; completed: string[]; total: number };
@@ -510,7 +511,8 @@ export class AutoplayController {
     const target: Point = { x, z };
     if (Math.hypot(x - from.x, z - from.z) <= 0.35) return true;
 
-    const path = findPath({ x: from.x, z: from.z }, target, this.host.getObstacles());
+    const bounds = this.host.getBounds?.() ?? DEFAULT_BOUNDS;
+    const path = findPath({ x: from.x, z: from.z }, target, this.host.getObstacles(), bounds);
     if (path.length > 0) return true;
 
     // No walkable route: a ledge, chasm, gravity rune or portcullis is in the way.

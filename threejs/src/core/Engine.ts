@@ -23,7 +23,7 @@ export class GameEngine {
   constructor(config: EngineConfig) {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color('#090d16');
-    this.scene.fog = new THREE.FogExp2('#090d16', 0.02);
+    this.scene.fog = new THREE.FogExp2('#090d16', 0.009);
 
     const aspect = window.innerWidth / window.innerHeight;
     this.cameraRig = new IsometricCameraRig({ aspect, viewSize: 16 });
@@ -49,19 +49,19 @@ export class GameEngine {
 
   private setupLighting(): void {
     // Edward Hopper cinematic lighting: cool navy ambient + warm directional key light
-    const ambientLight = new THREE.AmbientLight(new THREE.Color('#1e293b'), 0.5);
+    const ambientLight = new THREE.AmbientLight(new THREE.Color('#1e293b'), 0.55);
     this.scene.add(ambientLight);
 
     const keyLight = new THREE.DirectionalLight(new THREE.Color('#fef08a'), 1.8);
-    keyLight.position.set(16, 28, 18);
+    keyLight.position.set(32, 48, 36);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
     keyLight.shadow.camera.near = 0.5;
-    keyLight.shadow.camera.far = 80;
+    keyLight.shadow.camera.far = 160;
     keyLight.shadow.bias = -0.0005;
 
-    const d = 15;
+    const d = 48;
     keyLight.shadow.camera.left = -d;
     keyLight.shadow.camera.right = d;
     keyLight.shadow.camera.top = d;
@@ -71,7 +71,7 @@ export class GameEngine {
 
     // Subtle blue rim light from opposite angle
     const rimLight = new THREE.DirectionalLight(new THREE.Color('#38bdf8'), 0.6);
-    rimLight.position.set(-15, 12, -15);
+    rimLight.position.set(-28, 20, -28);
     this.scene.add(rimLight);
   }
 

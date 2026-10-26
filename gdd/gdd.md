@@ -5384,43 +5384,43 @@ squares of the kit.
 
 | Template | Footprint | Macro-tiles | Pods | Used by |
 |---|---|---|---|---|
-| `Approach_Terrace` | 32 x 24 | 8 x 6 | 2-3 | S00, OW1, RG1-RG4 |
-| `Grand_Corridor` | 10 x 32 | 2 x 8 | 1-2 | GH1, PB4 |
-| `Hub_Sanctum` | 20 x 20 | 5 x 5 | 1-2 | U4, AT3 |
-| `Pillar_Hall_Arena` | 40 x 40 | 10 x 10 | 3-4 | CO1, GH3, PB2, CO3 |
-| `Split_Level_Crypt` | 32 x 28 | 8 x 7 | 2-3 | U1, RS2 |
-| `Ritual_Chamber_Boss` | 40 x 32 | 10 x 8 | 1 (boss) | SAN1, VR3 |
-| `Chasm_Bridge_Gauntlet` | 24 x 40 | 6 x 10 | 1-2 | VR1, VR2 |
-| `Cathedral_Nave` | 28 x 40 | 7 x 10 | 3-4 | AG1, U2 |
-| `Cloister_Gallery` | 24 x 24 | 6 x 6 | 2 | B1, RC1, U3, RS1, RS3-RS5, CR1, AT2 |
-| `Banquet_Long_Hall` | 20 x 40 | 5 x 10 | 2-3 | SQ1, BQ1, RS6, MS3 |
-| `Spiral_Ascent` | 16 x 16, 24 m tall | 4 x 4 per ring | 2 | GH4, BT1, AT1 |
-| `Menagerie_Cages` | 28 x 24 | 7 x 6 | 2-3 | PB1, PB3 |
-| `Mirror_Maze_Wing` | 32 x 32 | 8 x 8 | 2-3 | HM1, GH2 |
-| `Gallery_Portrait_Hall` | 32 x 24 | 8 x 6 | 2-3 | TR1-TR4 |
-| `Boiler_Core_Industrial` | 28 x 24 | 7 x 6 | 2-3 | AL1-AL3 |
-| `Dollhouse_Miniature` | 12 x 12 | 3 x 3 | 1 (boss) | MH1 |
+| `Approach_Courtyard` | 140 x 120 | 35 x 30 | 4-6 | S00, OW1, RG1-RG4 |
+| `Grand_Corridor` | 30 x 80 | 7 x 20 | 2-3 | GH1, PB4 |
+| `Hub_Sanctum` | 60 x 60 | 15 x 15 | 2-3 | U4, AT3 |
+| `Pillar_Hall_Colosseum` | 100 x 100 | 25 x 25 | 4-6 | CO1, GH3, PB2, CO3 |
+| `Split_Level_Crypt` | 80 x 80 | 20 x 20 | 3-4 | U1, RS2 |
+| `Ritual_Chamber_Boss` | 120 x 120 | 30 x 30 | 2 (phases) | SAN1, VR3 |
+| `Chasm_Bridge_Gauntlet` | 60 x 100 | 15 x 25 | 3-4 | VR1, VR2 |
+| `Cathedral_Nave` | 120 x 120 | 30 x 30 | 4-5 | AG1, U2 |
+| `Cloister_Gallery` | 70 x 70 | 17 x 17 | 2-3 | B1, RC1, U3, RS1, RS3-RS5, CR1, AT2 |
+| `Banquet_Grand_Hall` | 100 x 100 | 25 x 25 | 3-5 | SQ1, BQ1, RS6, MS3 |
+| `Spiral_Ascent` | 40 x 40, 50 m tall | 10 x 10 per ring | 2-3 | GH4, BT1, AT1 |
+| `Menagerie_Cages` | 70 x 70 | 17 x 17 | 3-4 | PB1, PB3 |
+| `Mirror_Maze_Wing` | 100 x 100 | 25 x 25 | 3-4 | HM1, GH2 |
+| `Gallery_Portrait_Hall` | 80 x 70 | 20 x 17 | 3-4 | TR1-TR4 |
+| `Boiler_Core_Industrial` | 80 x 70 | 20 x 17 | 3-4 | AL1-AL3 |
+| `Witch_Homestead_Compound` | 80 x 80 | 20 x 20 | 2-3 | MH1 (Cottage, hearth, sunken cellar/basement, outdoor herb garden, combat glade) |
 
 Tactical content per template, mapped onto GDD 34.2's cover/sightline/hazard/choke vocabulary:
 
 | Template | Cover nodes | Sight lines | Hazards | Choke points |
 |---|---|---|---|---|
-| `Approach_Terrace` | Statues, broken arcade, hedge rows | 12-18 m across the courtyard | Tripwires, hidden pegs | Barbican gate, stair mouth |
-| `Grand_Corridor` | Buttress bays, door reveals | 24 m down the axis | Falling debris from the vault | Both ends, mid arch |
-| `Hub_Sanctum` | Dais corners, altar, pillars | 8-10 m radial | Ritual floor glyph (slows) | Four archways |
-| `Pillar_Hall_Arena` | Pillar clusters, sand mounds | 6-9 m between pillars | Sand trap, illusion fire | Ring edge, center ring |
-| `Split_Level_Crypt` | Tombs, balustrades | Cross-level diagonals | Falling debris, rats | Single stairwell per level |
-| `Ritual_Chamber_Boss` | Dais tiers, throne, pillars | 10-14 m to the throne | Arena seal, phase hazards | Entry arch, dais steps |
-| `Chasm_Bridge_Gauntlet` | Bridge rails, broken spans | 20 m along the chasm | Chasm fall, wind gusts | Bridge mouths |
-| `Cathedral_Nave` | Arcade piers, pew rows | 24 m to the altar | Falling masonry, candle fire | Nave door, transept |
-| `Cloister_Gallery` | Column arcade, benches | 6-8 m across the garth | Slippery garth, ivy | Four corner arches |
-| `Banquet_Long_Hall` | Table rows, sideboards | 18 m down the table | Spilled wine, candle fire | Doorway, head of table |
-| `Spiral_Ascent` | Newel posts, landings | 4-6 m per ring, vertical stack | Fall from ring edge | Ring mouths |
-| `Menagerie_Cages` | Cages, bone piles | Parallel cage corridors | Slick floor, cage bars | Cage thresholds |
-| `Mirror_Maze_Wing` | Mirror frames, plinths | False lines, 4-6 m true | Mirror shard traps | Mirror lock door |
-| `Gallery_Portrait_Hall` | Plinths, portrait bays | 10-14 m down the gallery | Swinging frames, tripwires | Gallery ends |
-| `Boiler_Core_Industrial` | Boilers, catwalk supports | 8-12 m through steam | Steam vents, pressure bursts | Catwalk junctions |
-| `Dollhouse_Miniature` | Furniture at 3x scale | 3-4 m (forced perspective) | Sugar-glass floor, kettle steam | Doorway, hearth |
+| `Approach_Courtyard` | Statues, broken arcade, hedge rows, fountain basin | 25-40 m across the courtyard | Tripwires, hidden pegs, bramble thorns | Barbican gate, grand stair mouth |
+| `Grand_Corridor` | Buttress bays, door reveals, fallen stone blocks | 35-50 m down the axis | Falling debris from the vault, steam vents | Both ends, mid arch |
+| `Hub_Sanctum` | Dais corners, altar, grand pillars | 20-30 m radial | Ritual floor glyph (slows) | Four monumental archways |
+| `Pillar_Hall_Colosseum` | Pillar clusters, sand mounds, barrier ruins | 20-35 m between pillars | Sand trap, illusion fire, arena pitfalls | Ring edge, center ring |
+| `Split_Level_Crypt` | Tombs, balustrades, sarcophagi | Cross-level diagonals (25-35 m) | Falling debris, rats, bone caltrops | Dual stairwells per level |
+| `Ritual_Chamber_Boss` | Dais tiers, throne, floating mirror monoliths | 30-45 m to the throne | Arena seal, phase hazards, starlight beams | Entry arch, dais steps |
+| `Chasm_Bridge_Gauntlet` | Bridge rails, broken spans, watch posts | 40-60 m along the chasm | Chasm fall, wind gusts, falling spikes | Bridge mouths, midpoint bastions |
+| `Cathedral_Nave` | Arcade piers, pew rows, ancient tree roots | 45-60 m to the altar | Falling masonry, starlight fire | Nave door, transept crossway |
+| `Cloister_Gallery` | Column arcade, stone benches, herb plots | 20-30 m across the garth | Slippery garth, creeping ivy | Four corner arches |
+| `Banquet_Grand_Hall` | Long feast table rows, sideboards, buffet tiers | 35-50 m down the hall | Spilled wine, grease fire, shattered crystal | Double doorways, dais podium |
+| `Spiral_Ascent` | Newel posts, landings, buttress alcoves | 12-18 m per ring, vertical stack | Fall from ring edge, steam vents | Ring mouths, landing thresholds |
+| `Menagerie_Cages` | Iron cages, bone piles, holding pens | Parallel cage corridors (20-30 m) | Slick floor, cage bars, venom puddles | Cage thresholds, central corridor |
+| `Mirror_Maze_Wing` | Monumental mirror frames, plinths, glass walls | False reflections, 15-25 m true corridors | Mirror shard traps, illusion reflections | Mirror lock gates |
+| `Gallery_Portrait_Hall` | Plinths, portrait bays, marble busts | 30-40 m down the gallery | Swinging frames, tripwires, falling portraits | Gallery ends |
+| `Boiler_Core_Industrial` | Copper boilers, catwalk supports, pipe bundles | 25-35 m through steam | High-pressure steam vents, scalding pipes | Catwalk junctions |
+| `Witch_Homestead_Compound` | Cottage exterior/interior, cellar curb, garden beds | 20-35 m across the compound | Boiling kettle steam, nightshade spores, sugar-glass traps | Cottage doorway, garden gateposts, cellar hatch |
 
 ### 43.3 Encounter pods
 

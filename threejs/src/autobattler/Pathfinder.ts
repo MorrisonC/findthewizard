@@ -141,6 +141,20 @@ export function findPath(
   if (Math.hypot(goal.x - start.x, goal.z - start.z) <= arriveRadius) return [];
   if (hasLineOfSight(start, goal, obstacles, radius)) return [{ x: goal.x, z: goal.z }];
 
+  if (
+    start.x < bounds.minX || start.x > bounds.maxX ||
+    goal.x < bounds.minX || goal.x > bounds.maxX ||
+    start.z < bounds.minZ || start.z > bounds.maxZ ||
+    goal.z < bounds.minZ || goal.z > bounds.maxZ
+  ) {
+    bounds = {
+      minX: Math.min(bounds.minX, start.x - 1, goal.x - 1),
+      maxX: Math.max(bounds.maxX, start.x + 1, goal.x + 1),
+      minZ: Math.min(bounds.minZ, start.z - 1, goal.z - 1),
+      maxZ: Math.max(bounds.maxZ, start.z + 1, goal.z + 1),
+    };
+  }
+
   const blocked = (x: number, z: number): boolean => isBlockedAt(x, z, obstacles, radius);
   const { nx, nz } = cellCount(bounds, cell);
   const startCell = nearestWalkableCell(start, bounds, cell, blocked);

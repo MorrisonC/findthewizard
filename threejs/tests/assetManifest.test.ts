@@ -153,6 +153,24 @@ describe('Model inventory matches the integration manifest', () => {
     }
   });
 
+  it('keeps all NPC and boss characters inside their bone, clip, and budget contracts', () => {
+    const characters: Array<{ file: string; clips: string[]; minJoints: number; maxTris: number }> = [
+      { file: 'vaelor.glb', clips: ['Idle', 'Cast', 'Phase2_Invert', 'Hit', 'Death'], minJoints: 10, maxTris: 6000 },
+      { file: 'starlight_raven.glb', clips: ['Idle', 'Flap_Caw'], minJoints: 10, maxTris: 3000 },
+      { file: 'mirror_wraith.glb', clips: ['Idle', 'Attack', 'Hit', 'Death'], minJoints: 6, maxTris: 4000 },
+      { file: 'mother_hazel.glb', clips: ['Idle', 'Talk'], minJoints: 10, maxTris: 4000 },
+      { file: 'gatekeeper_orin.glb', clips: ['Idle', 'Talk', 'Walk'], minJoints: 12, maxTris: 5000 },
+    ];
+    for (const char of characters) {
+      const summary = readGlb(path.join(MODELS, char.file));
+      expect(summary.joints, `${char.file} joint count`).toBeGreaterThanOrEqual(char.minJoints);
+      for (const clip of char.clips) {
+        expect(summary.animations, `${char.file} is missing clip ${clip}`).toContain(clip);
+      }
+      expect(summary.tris, `${char.file} tri budget`).toBeLessThanOrEqual(char.maxTris);
+    }
+  });
+
   it('keeps environment pieces inside the per-piece triangle budget', () => {
     const budgets: Record<string, number> = {
       'room_shell.glb': 15_000,

@@ -26,7 +26,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { FORTRESS_EXITS } from '../src/data/doorGraph';
 
-const BASE = process.env.BASE || 'http://localhost:5199';
+const BASE = process.env.BASE || 'http://localhost:4173';
 
 // The repo drives the locally installed Chrome (the bundled headless shell is
 // not installed in this environment), matching the `e2e/*.spec.mjs` scripts.

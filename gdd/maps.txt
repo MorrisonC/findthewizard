@@ -1,5 +1,8 @@
 ### Fortress Overview (16 zones)
 
+> **Spatial Scale:** Macro Cartography where 1 tile (`.` / `#`) represents a **5m to 10m** sector grid.
+> **Zone Sizing:** Grand Courtyards & Sanctums span 100m–140m; compounds (such as Mother Hazel's Witch Homestead) feature multi-structure layouts (cottage, sunken cellar/basement, enchanted outdoor herb garden, combat glade).
+
 ```
 
  ############  ############  ############  ############

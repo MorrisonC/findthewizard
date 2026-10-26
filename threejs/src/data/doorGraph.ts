@@ -22,48 +22,66 @@ export interface DoorDef {
 
 export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
   S00: [
-    { x: 0, z: -4.8, to: 'OW1', requires: [] },
-    { x: 5.0, z: 0, to: 'CR1', requires: [] },
-    { x: -5.0, z: 0, to: 'MS3', requires: [] },
-    { x: 4.6, z: -3.4, to: 'VR1', requires: [] },
-    { x: -4.6, z: -3.4, to: 'RS1', requires: [] },
-    { x: -4.6, z: 3.4, to: 'RC1', requires: [] },
+    { x: 0, z: -5.0, to: 'OW1', requires: [] },
   ],
   OW1: [
     { x: 0, z: 5.0, to: 'S00', requires: [] },
     { x: 0, z: -5.0, to: 'GH1', requires: [] },
     { x: 5.0, z: 0, to: 'B1', requires: [] },
     { x: -5.0, z: 0, to: 'SQ1', requires: [] },
-    { x: -4.6, z: -3.4, to: 'U1', requires: [] },
-    { x: 4.6, z: -3.4, to: 'TR1', requires: [] },
-    { x: -4.6, z: 3.4, to: 'AT1', requires: [] },
-    { x: 4.6, z: 3.4, to: 'AL1', requires: [] },
   ],
   GH1: [
     { x: 0, z: 5.0, to: 'OW1', requires: [] },
     { x: 0, z: -5.0, to: 'GH2', requires: ['ITEM_IRON_NAIL'] },
-    { x: -4.6, z: -3.4, to: 'GH4', requires: [] },
-    { x: 4.6, z: -3.4, to: 'BT1', requires: [] },
-    { x: -4.6, z: 3.4, to: 'PB1', requires: [] },
-    { x: 4.6, z: 3.4, to: 'RG1', requires: [] },
+    { x: -5.0, z: 0, to: 'GH4', requires: [] },
+    { x: 5.0, z: 0, to: 'BT1', requires: [] },
   ],
   GH2: [
     { x: 0, z: 5.0, to: 'GH1', requires: [] },
     { x: 0, z: -5.0, to: 'GH3', requires: ['PUZZLE_MIRROR_LOCK'] },
+    { x: -5.0, z: 0, to: 'PB1', requires: [] },
+    { x: 5.0, z: 0, to: 'RG1', requires: [] },
   ],
   GH3: [
     { x: 0, z: 5.0, to: 'GH2', requires: [] },
     { x: 0, z: -5.0, to: 'HM1', requires: [] },
+    { x: -5.0, z: 0, to: 'VR1', requires: [] },
+    { x: 5.0, z: 0, to: 'RS1', requires: [] },
   ],
-  GH4: [{ x: 0, z: 5.0, to: 'GH1', requires: [] }],
-  SQ1: [{ x: 0, z: 5.0, to: 'GH1', requires: [] }],
-  B1: [{ x: 0, z: 5.0, to: 'OW1', requires: [] }],
-  RC1: [{ x: 0, z: 5.0, to: 'S00', requires: [] }],
-  CR1: [{ x: 0, z: 5.0, to: 'S00', requires: [] }],
-  MS3: [{ x: 0, z: 5.0, to: 'S00', requires: [] }],
+  GH4: [
+    { x: 5.0, z: 0, to: 'GH1', requires: [] },
+    { x: 0, z: -5.0, to: 'AT1', requires: [] },
+  ],
+  SQ1: [
+    { x: 5.0, z: 0, to: 'OW1', requires: [] },
+    { x: 0, z: -5.0, to: 'U1', requires: [] },
+    { x: -5.0, z: 0, to: 'MS3', requires: [] },
+  ],
+  B1: [
+    { x: -5.0, z: 0, to: 'OW1', requires: [] },
+    { x: 0, z: -5.0, to: 'TR1', requires: [] },
+    { x: 5.0, z: 0, to: 'CR1', requires: [] },
+  ],
+  BT1: [
+    { x: -5.0, z: 0, to: 'GH1', requires: [] },
+    { x: 0, z: -5.0, to: 'AL1', requires: [] },
+  ],
+  RC1: [
+    { x: -5.0, z: 0, to: 'HM1', requires: [] },
+    { x: 0, z: 5.0, to: 'S00', requires: [] },
+  ],
+  CR1: [
+    { x: -5.0, z: 0, to: 'B1', requires: [] },
+    { x: 0, z: 5.0, to: 'S00', requires: [] },
+  ],
+  MS3: [
+    { x: 5.0, z: 0, to: 'SQ1', requires: [] },
+    { x: 0, z: 5.0, to: 'S00', requires: [] },
+  ],
   HM1: [
     { x: 0, z: 5.0, to: 'GH3', requires: [] },
     { x: 0, z: -5.0, to: 'BQ1', requires: ['PUZZLE_TRUE_MIRROR'] },
+    { x: 5.0, z: 0, to: 'RC1', requires: [] },
   ],
   BQ1: [
     { x: 0, z: 5.0, to: 'HM1', requires: [] },
@@ -76,23 +94,22 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
   MH1: [
     { x: 0, z: 5.0, to: 'AG1', requires: [] },
     { x: 0, z: -5.0, to: 'SAN1', requires: ['PUZZLE_HOSPITALITY_GAMBIT'] },
-    { x: -4.6, z: 3.4, to: 'CO1', requires: [] },
+    { x: -5.0, z: 0, to: 'CO1', requires: [] },
   ],
   SAN1: [
     { x: 0, z: 5.0, to: 'MH1', requires: [] },
     { x: 0, z: -5.0, to: 'S00', requires: ['PUZZLE_HOLLOW_GLASS'] },
   ],
-  BT1: [{ x: 0, z: 5.0, to: 'OW1', requires: [] }],
   CO1: [
-    { x: 0, z: 5.0, to: 'MH1', requires: [] },
-    { x: 4.6, z: -3.4, to: 'CO3', requires: [] },
+    { x: 5.0, z: 0, to: 'MH1', requires: [] },
+    { x: 0, z: -5.0, to: 'CO3', requires: [] },
   ],
   CO3: [
     { x: 0, z: 5.0, to: 'CO1', requires: [] },
     { x: 0, z: -5.0, to: 'S00', requires: [] },
   ],
   U1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'SQ1', requires: [] },
     { x: 0, z: -5.0, to: 'U2', requires: [] },
   ],
   U2: [
@@ -108,7 +125,7 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
     { x: 0, z: -5.0, to: 'S00', requires: [] },
   ],
   TR1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'B1', requires: [] },
     { x: 0, z: -5.0, to: 'TR2', requires: [] },
   ],
   TR2: [
@@ -124,7 +141,7 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
     { x: 0, z: -5.0, to: 'U2', requires: [] },
   ],
   AT1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'GH4', requires: [] },
     { x: 0, z: -5.0, to: 'AT2', requires: [] },
   ],
   AT2: [
@@ -136,7 +153,7 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
     { x: 0, z: -5.0, to: 'S00', requires: [] },
   ],
   AL1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'BT1', requires: [] },
     { x: 0, z: -5.0, to: 'AL2', requires: [] },
   ],
   AL2: [
@@ -148,7 +165,7 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
     { x: 0, z: -5.0, to: 'S00', requires: [] },
   ],
   PB1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'GH2', requires: [] },
     { x: 0, z: -5.0, to: 'PB2', requires: [] },
   ],
   PB2: [
@@ -164,7 +181,7 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
     { x: 0, z: -5.0, to: 'S00', requires: [] },
   ],
   RG1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'GH2', requires: [] },
     { x: 0, z: -5.0, to: 'RG2', requires: [] },
   ],
   RG2: [
@@ -180,7 +197,7 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
     { x: 0, z: -5.0, to: 'S00', requires: [] },
   ],
   VR1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'GH3', requires: [] },
     { x: 0, z: -5.0, to: 'VR2', requires: [] },
   ],
   VR2: [
@@ -192,7 +209,7 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
     { x: 0, z: -5.0, to: 'S00', requires: [] },
   ],
   RS1: [
-    { x: 0, z: 5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'GH3', requires: [] },
     { x: 0, z: -5.0, to: 'RS2', requires: [] },
   ],
   RS2: [
