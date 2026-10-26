@@ -12,10 +12,10 @@
       "note": "Outer Wards / Approach courtyard cobble",
       "sourceUrl": "https://ambientcg.com/a/PavingStones051",
       "maps": {
-        "color": "/assets/textures/pbr/courtyard_cobble/color.jpg",
-        "normal": "/assets/textures/pbr/courtyard_cobble/normal.jpg",
-        "roughness": "/assets/textures/pbr/courtyard_cobble/roughness.jpg",
-        "ao": "/assets/textures/pbr/courtyard_cobble/ao.jpg"
+        "color": "assets/textures/pbr/courtyard_cobble/color.jpg",
+        "normal": "assets/textures/pbr/courtyard_cobble/normal.jpg",
+        "roughness": "assets/textures/pbr/courtyard_cobble/roughness.jpg",
+        "ao": "assets/textures/pbr/courtyard_cobble/ao.jpg"
       },
       "bytes": 1161970
     },
@@ -27,10 +27,10 @@
       "note": "Undercrypt and corridor slabs",
       "sourceUrl": "https://ambientcg.com/a/PavingStones127",
       "maps": {
-        "color": "/assets/textures/pbr/dungeon_slab/color.jpg",
-        "normal": "/assets/textures/pbr/dungeon_slab/normal.jpg",
-        "roughness": "/assets/textures/pbr/dungeon_slab/roughness.jpg",
-        "ao": "/assets/textures/pbr/dungeon_slab/ao.jpg"
+        "color": "assets/textures/pbr/dungeon_slab/color.jpg",
+        "normal": "assets/textures/pbr/dungeon_slab/normal.jpg",
+        "roughness": "assets/textures/pbr/dungeon_slab/roughness.jpg",
+        "ao": "assets/textures/pbr/dungeon_slab/ao.jpg"
       },
       "bytes": 889214
     },
@@ -42,10 +42,10 @@
       "note": "Ruined chapel / crypt flagstones",
       "sourceUrl": "https://ambientcg.com/a/Tiles130",
       "maps": {
-        "color": "/assets/textures/pbr/castle_floor_broken/color.jpg",
-        "normal": "/assets/textures/pbr/castle_floor_broken/normal.jpg",
-        "roughness": "/assets/textures/pbr/castle_floor_broken/roughness.jpg",
-        "ao": "/assets/textures/pbr/castle_floor_broken/ao.jpg"
+        "color": "assets/textures/pbr/castle_floor_broken/color.jpg",
+        "normal": "assets/textures/pbr/castle_floor_broken/normal.jpg",
+        "roughness": "assets/textures/pbr/castle_floor_broken/roughness.jpg",
+        "ao": "assets/textures/pbr/castle_floor_broken/ao.jpg"
       },
       "bytes": 426910
     },
@@ -57,9 +57,9 @@
       "note": "Sanctum inlay, polished dark marble",
       "sourceUrl": "https://ambientcg.com/a/Marble006",
       "maps": {
-        "color": "/assets/textures/pbr/sanctum_marble/color.jpg",
-        "normal": "/assets/textures/pbr/sanctum_marble/normal.jpg",
-        "roughness": "/assets/textures/pbr/sanctum_marble/roughness.jpg"
+        "color": "assets/textures/pbr/sanctum_marble/color.jpg",
+        "normal": "assets/textures/pbr/sanctum_marble/normal.jpg",
+        "roughness": "assets/textures/pbr/sanctum_marble/roughness.jpg"
       },
       "bytes": 465713
     },
@@ -71,9 +71,9 @@
       "note": "Gilded Dollhouse / banquet parquet",
       "sourceUrl": "https://ambientcg.com/a/Wood051",
       "maps": {
-        "color": "/assets/textures/pbr/parlour_parquet/color.jpg",
-        "normal": "/assets/textures/pbr/parlour_parquet/normal.jpg",
-        "roughness": "/assets/textures/pbr/parlour_parquet/roughness.jpg"
+        "color": "assets/textures/pbr/parlour_parquet/color.jpg",
+        "normal": "assets/textures/pbr/parlour_parquet/normal.jpg",
+        "roughness": "assets/textures/pbr/parlour_parquet/roughness.jpg"
       },
       "bytes": 523345
     },
@@ -85,10 +85,10 @@
       "note": "Crates, shutters, doors, scaffolding",
       "sourceUrl": "https://ambientcg.com/a/Planks037A",
       "maps": {
-        "color": "/assets/textures/pbr/planks_weathered/color.jpg",
-        "normal": "/assets/textures/pbr/planks_weathered/normal.jpg",
-        "roughness": "/assets/textures/pbr/planks_weathered/roughness.jpg",
-        "ao": "/assets/textures/pbr/planks_weathered/ao.jpg"
+        "color": "assets/textures/pbr/planks_weathered/color.jpg",
+        "normal": "assets/textures/pbr/planks_weathered/normal.jpg",
+        "roughness": "assets/textures/pbr/planks_weathered/roughness.jpg",
+        "ao": "assets/textures/pbr/planks_weathered/ao.jpg"
       },
       "bytes": 488350
     },
@@ -100,10 +100,10 @@
       "note": "Fortress ashlar, cold grey",
       "sourceUrl": "https://ambientcg.com/a/Bricks066",
       "maps": {
-        "color": "/assets/textures/pbr/wall_ashlar/color.jpg",
-        "normal": "/assets/textures/pbr/wall_ashlar/normal.jpg",
-        "roughness": "/assets/textures/pbr/wall_ashlar/roughness.jpg",
-        "ao": "/assets/textures/pbr/wall_ashlar/ao.jpg"
+        "color": "assets/textures/pbr/wall_ashlar/color.jpg",
+        "normal": "assets/textures/pbr/wall_ashlar/normal.jpg",
+        "roughness": "assets/textures/pbr/wall_ashlar/roughness.jpg",
+        "ao": "assets/textures/pbr/wall_ashlar/ao.jpg"
       },
       "bytes": 761265
     },
@@ -115,10 +115,10 @@
       "note": "Gatehouse and barracks brick",
       "sourceUrl": "https://ambientcg.com/a/Bricks094",
       "maps": {
-        "color": "/assets/textures/pbr/wall_brick_medieval/color.jpg",
-        "normal": "/assets/textures/pbr/wall_brick_medieval/normal.jpg",
-        "roughness": "/assets/textures/pbr/wall_brick_medieval/roughness.jpg",
-        "ao": "/assets/textures/pbr/wall_brick_medieval/ao.jpg"
+        "color": "assets/textures/pbr/wall_brick_medieval/color.jpg",
+        "normal": "assets/textures/pbr/wall_brick_medieval/normal.jpg",
+        "roughness": "assets/textures/pbr/wall_brick_medieval/roughness.jpg",
+        "ao": "assets/textures/pbr/wall_brick_medieval/ao.jpg"
       },
       "bytes": 559802
     },
@@ -130,10 +130,10 @@
       "note": "Interior parlour plaster",
       "sourceUrl": "https://ambientcg.com/a/Plaster007",
       "maps": {
-        "color": "/assets/textures/pbr/wall_plaster_aged/color.jpg",
-        "normal": "/assets/textures/pbr/wall_plaster_aged/normal.jpg",
-        "roughness": "/assets/textures/pbr/wall_plaster_aged/roughness.jpg",
-        "ao": "/assets/textures/pbr/wall_plaster_aged/ao.jpg"
+        "color": "assets/textures/pbr/wall_plaster_aged/color.jpg",
+        "normal": "assets/textures/pbr/wall_plaster_aged/normal.jpg",
+        "roughness": "assets/textures/pbr/wall_plaster_aged/roughness.jpg",
+        "ao": "assets/textures/pbr/wall_plaster_aged/ao.jpg"
       },
       "bytes": 788552
     },
@@ -145,10 +145,10 @@
       "note": "Clockwork Spire plating, boiler rooms",
       "sourceUrl": "https://ambientcg.com/a/MetalPlates013",
       "maps": {
-        "color": "/assets/textures/pbr/metal_plate_rusted/color.jpg",
-        "normal": "/assets/textures/pbr/metal_plate_rusted/normal.jpg",
-        "roughness": "/assets/textures/pbr/metal_plate_rusted/roughness.jpg",
-        "ao": "/assets/textures/pbr/metal_plate_rusted/ao.jpg"
+        "color": "assets/textures/pbr/metal_plate_rusted/color.jpg",
+        "normal": "assets/textures/pbr/metal_plate_rusted/normal.jpg",
+        "roughness": "assets/textures/pbr/metal_plate_rusted/roughness.jpg",
+        "ao": "assets/textures/pbr/metal_plate_rusted/ao.jpg"
       },
       "bytes": 563389
     },
@@ -160,9 +160,9 @@
       "note": "Sconces, statuary, door furniture",
       "sourceUrl": "https://ambientcg.com/a/Metal017",
       "maps": {
-        "color": "/assets/textures/pbr/bronze_eroded/color.jpg",
-        "normal": "/assets/textures/pbr/bronze_eroded/normal.jpg",
-        "roughness": "/assets/textures/pbr/bronze_eroded/roughness.jpg"
+        "color": "assets/textures/pbr/bronze_eroded/color.jpg",
+        "normal": "assets/textures/pbr/bronze_eroded/normal.jpg",
+        "roughness": "assets/textures/pbr/bronze_eroded/roughness.jpg"
       },
       "bytes": 597994
     },
@@ -174,9 +174,9 @@
       "note": "Steam conduits and pressure vessels",
       "sourceUrl": "https://ambientcg.com/a/Metal047B",
       "maps": {
-        "color": "/assets/textures/pbr/copper_dirty/color.jpg",
-        "normal": "/assets/textures/pbr/copper_dirty/normal.jpg",
-        "roughness": "/assets/textures/pbr/copper_dirty/roughness.jpg"
+        "color": "assets/textures/pbr/copper_dirty/color.jpg",
+        "normal": "assets/textures/pbr/copper_dirty/normal.jpg",
+        "roughness": "assets/textures/pbr/copper_dirty/roughness.jpg"
       },
       "bytes": 577125
     },
@@ -188,9 +188,9 @@
       "note": "Antique gold trim (#d4af37 accent)",
       "sourceUrl": "https://ambientcg.com/a/Metal048C",
       "maps": {
-        "color": "/assets/textures/pbr/gold_gilt/color.jpg",
-        "normal": "/assets/textures/pbr/gold_gilt/normal.jpg",
-        "roughness": "/assets/textures/pbr/gold_gilt/roughness.jpg"
+        "color": "assets/textures/pbr/gold_gilt/color.jpg",
+        "normal": "assets/textures/pbr/gold_gilt/normal.jpg",
+        "roughness": "assets/textures/pbr/gold_gilt/roughness.jpg"
       },
       "bytes": 264223
     },
@@ -202,10 +202,10 @@
       "note": "Banners, drapes, carpet runners",
       "sourceUrl": "https://ambientcg.com/a/Fabric085",
       "maps": {
-        "color": "/assets/textures/pbr/fabric_wool_red/color.jpg",
-        "normal": "/assets/textures/pbr/fabric_wool_red/normal.jpg",
-        "roughness": "/assets/textures/pbr/fabric_wool_red/roughness.jpg",
-        "ao": "/assets/textures/pbr/fabric_wool_red/ao.jpg"
+        "color": "assets/textures/pbr/fabric_wool_red/color.jpg",
+        "normal": "assets/textures/pbr/fabric_wool_red/normal.jpg",
+        "roughness": "assets/textures/pbr/fabric_wool_red/roughness.jpg",
+        "ao": "assets/textures/pbr/fabric_wool_red/ao.jpg"
       },
       "bytes": 1074766
     },
@@ -217,10 +217,10 @@
       "note": "Keep and gatehouse roofs",
       "sourceUrl": "https://ambientcg.com/a/RoofingTiles014B",
       "maps": {
-        "color": "/assets/textures/pbr/roof_clay_tiles/color.jpg",
-        "normal": "/assets/textures/pbr/roof_clay_tiles/normal.jpg",
-        "roughness": "/assets/textures/pbr/roof_clay_tiles/roughness.jpg",
-        "ao": "/assets/textures/pbr/roof_clay_tiles/ao.jpg"
+        "color": "assets/textures/pbr/roof_clay_tiles/color.jpg",
+        "normal": "assets/textures/pbr/roof_clay_tiles/normal.jpg",
+        "roughness": "assets/textures/pbr/roof_clay_tiles/roughness.jpg",
+        "ao": "assets/textures/pbr/roof_clay_tiles/ao.jpg"
       },
       "bytes": 571926
     },
@@ -232,10 +232,10 @@
       "note": "Courtyard soil, gravel paths",
       "sourceUrl": "https://ambientcg.com/a/Ground110",
       "maps": {
-        "color": "/assets/textures/pbr/ground_gravel/color.jpg",
-        "normal": "/assets/textures/pbr/ground_gravel/normal.jpg",
-        "roughness": "/assets/textures/pbr/ground_gravel/roughness.jpg",
-        "ao": "/assets/textures/pbr/ground_gravel/ao.jpg"
+        "color": "assets/textures/pbr/ground_gravel/color.jpg",
+        "normal": "assets/textures/pbr/ground_gravel/normal.jpg",
+        "roughness": "assets/textures/pbr/ground_gravel/roughness.jpg",
+        "ao": "assets/textures/pbr/ground_gravel/ao.jpg"
       },
       "bytes": 1354150
     },
@@ -247,10 +247,10 @@
       "note": "Winter Gauntlet snowdrifts",
       "sourceUrl": "https://ambientcg.com/a/Snow013",
       "maps": {
-        "color": "/assets/textures/pbr/snow_trodden/color.jpg",
-        "normal": "/assets/textures/pbr/snow_trodden/normal.jpg",
-        "roughness": "/assets/textures/pbr/snow_trodden/roughness.jpg",
-        "ao": "/assets/textures/pbr/snow_trodden/ao.jpg"
+        "color": "assets/textures/pbr/snow_trodden/color.jpg",
+        "normal": "assets/textures/pbr/snow_trodden/normal.jpg",
+        "roughness": "assets/textures/pbr/snow_trodden/roughness.jpg",
+        "ao": "assets/textures/pbr/snow_trodden/ao.jpg"
       },
       "bytes": 824691
     }
@@ -261,7 +261,7 @@
       "displayName": "Night Sky HDRI 003",
       "note": "HDRI night sky with moon for PMREM backdrop",
       "sourceUrl": "https://ambientcg.com/a/NightSkyHDRI003",
-      "path": "/assets/textures/pbr/night_sky_moon/sky_1k.exr",
+      "path": "assets/textures/pbr/night_sky_moon/sky_1k.exr",
       "bytes": 1694181
     }
   }
