@@ -912,4 +912,77 @@
       "foundry"
     ]
   }
+,
+{
+  "id": "ITEM_ORRERY_LENS",
+  "name": "Orrery Lens",
+  "category": "Quest",
+  "rarity": "Uncommon",
+  "description": "A lens from the planetary orrery.",
+  "flavorText": "Brings the heavens into focus.",
+  "valueMoons": 50,
+  "isConsumable": false,
+  "isKeyItem": true,
+  "maxStack": 1,
+  "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+  "effectDescription": "Unlocks the Planetary Watcher chamber.",
+  "tags": [
+    "key",
+    "quest"
+  ]
+},
+{
+  "id": "ITEM_TUMBLING_KEY",
+  "name": "Tumbling Key",
+  "category": "Quest",
+  "rarity": "Uncommon",
+  "description": "A key that tumbles through gravity.",
+  "flavorText": "Falls upward in the chamber.",
+  "valueMoons": 50,
+  "isConsumable": false,
+  "isKeyItem": true,
+  "maxStack": 1,
+  "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+  "effectDescription": "Unlocks the Tumbling Chamber.",
+  "tags": [
+    "key",
+    "quest"
+  ]
+},
+{
+  "id": "ITEM_JESTER_MASK",
+  "name": "Jester's Mask",
+  "category": "Quest",
+  "rarity": "Uncommon",
+  "description": "A mask of the jester's court.",
+  "flavorText": "Laughter hides the truth.",
+  "valueMoons": 50,
+  "isConsumable": false,
+  "isKeyItem": true,
+  "maxStack": 1,
+  "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+  "effectDescription": "Grants entry to Jester's Court.",
+  "tags": [
+    "key",
+    "quest"
+  ]
+},
+{
+  "id": "ITEM_LABYRINTH_KEY",
+  "name": "Labyrinth Key",
+  "category": "Quest",
+  "rarity": "Uncommon",
+  "description": "A key to the arcane hedge maze.",
+  "flavorText": "Finds the center.",
+  "valueMoons": 50,
+  "isConsumable": false,
+  "isKeyItem": true,
+  "maxStack": 1,
+  "iconPath": "assets/art/concept/item_sprites_sheet_1792799839861.jpg",
+  "effectDescription": "Unlocks the Arcane Hedge Maze.",
+  "tags": [
+    "key",
+    "quest"
+  ]
+}
 ]

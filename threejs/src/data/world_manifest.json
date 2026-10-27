@@ -2287,6 +2287,37 @@
           "oneWay": true
         }
       ]
+    },
+    {
+      "id": "WR1",
+      "name": "Wayfarer's Rest",
+      "zone": "town",
+      "tier": 2,
+      "elevationMeters": 0,
+      "art": "moonlit_diorama",
+      "model": "assets/models/room_shell.glb",
+      "bounds": {
+        "width": 70,
+        "height": 70
+      },
+      "spawn": [
+        0,
+        0.6,
+        2
+      ],
+      "exits": [
+        {
+          "id": "WR1_TO_S00",
+          "to": "S00",
+          "spawn": [
+            0,
+            0.6,
+            3
+          ],
+          "requires": [],
+          "oneWay": false
+        }
+      ]
     }
   ],
   "macroZoneGraph28": [

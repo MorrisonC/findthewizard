@@ -8,13 +8,12 @@ import { RapierPhysics } from './physics/PhysicsWorld';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { spawnMainCharacter, type WeaponId } from './character';
+import { loadPlayerCharacter } from './character/PlayerCharacter';
 import { SoundFX } from './core/SoundFX';
 import worldManifest from './data/world_manifest.json';
 import itemsData from './data/items.json';
 import questsData from './data/quests.json';
-
 import puzzlesData from './data/puzzles.json';
-
 import zonesData from './data/zones.json';
 
 import dialogueData from './data/dialogue.json';
@@ -40,25 +39,30 @@ import {
   type AutoProgressState,
 
 } from './autobattler/Campaign';
+
 import { doorApproachPoint, findPath, type ObstacleRect } from './autobattler/Pathfinder';
+
 import { AutoplayController, type AutoplayHost, type AutoplayMode } from './systems/AutoplayController';
 import { QuestPuzzleRuntime } from './systems/QuestPuzzleRuntime';
+import { ItemPickupFactory } from './systems/ItemPickupFactory';
+import { EnemyFactory } from './systems/EnemyFactory';
+import { NpcFactory } from './systems/NpcFactory';
+import { PuzzleFactory } from './systems/PuzzleFactory';
+import { DoorFactory } from './systems/DoorFactory';
 console.log('⚔️ VEILKEEP Initialized with:');
-
 console.log(`- ${itemsData.length} items`);
 console.log(`- ${questsData.length} quests (7 Main, 31 Side, 4 Hidden)`);
+
 console.log(`- ${puzzlesData.length} illusionist puzzles`);
 console.log(`- ${zonesData.length} fortress zones`);
 const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
-
 // ---------- QA runtime error capture ----------
 /** Ring buffer of runtime failures, surfaced through __veilkeep.getDiagnostics(). */
+
 const runtimeErrors: string[] = [];
 const MAX_RUNTIME_ERRORS = 50;
 function describeError(value: unknown): string {
-
   if (value instanceof Error) return `${value.name}: ${value.message}`;
-
   if (typeof value === 'string') return value;
 
   try {
@@ -288,6 +292,7 @@ function hideInteractPrompt(): void {
 }
 
 let recentPopupTime = 0;
+
 let recentPopupCount = 0;
 
 function spawnDamagePopup(pos: { x: number; y: number; z: number }, text: string, isCrit = false): void {
@@ -295,46 +300,45 @@ function spawnDamagePopup(pos: { x: number; y: number; z: number }, text: string
 
   const now = performance.now();
   if (now - recentPopupTime < 160) {
+
     recentPopupCount++;
   } else {
     recentPopupCount = 0;
   }
   recentPopupTime = now;
-
   // Differentiate status banners (COUNTER HIT!, GUARD BROKEN!, etc.) from numeric HP damage
   const isStatus = isCrit || text.includes('!') || !text.includes('HP');
 
   // Status banners float visibly higher above the character so they never overlap numeric damage
   const heightOffset = isStatus ? 1.45 : 0.82;
+
   const tempV = new THREE.Vector3(pos.x, pos.y + heightOffset, pos.z);
   tempV.project(engine.cameraRig.camera);
-
   // Apply subtle vertical stacking and horizontal stagger to prevent overlapping popups
   const staggerY = recentPopupCount * 22;
+
   const jitterX = (Math.random() - 0.5) * 16;
   const x = (tempV.x * 0.5 + 0.5) * window.innerWidth + jitterX;
   const y = (-(tempV.y * 0.5) + 0.5) * window.innerHeight - staggerY;
-
   const el = document.createElement('div');
   el.className = `damage-popup ${isStatus ? 'status-popup' : ''}`;
+
   el.textContent = text;
   el.style.left = `${Math.round(x)}px`;
   el.style.top = `${Math.round(y)}px`;
-
   if (isStatus) {
     el.style.color = '#fbbf24';
+
     el.style.fontSize = '18px';
   } else if (isCrit) {
     el.style.color = '#f59e0b';
     el.style.fontSize = '20px';
   }
-
   damageContainer.appendChild(el);
   setTimeout(() => el.remove(), 850);
+
 }
-
 function flashMesh(group: THREE.Group, colorHex: number, durationMs = 140): void {
-
   const originals: { mat: THREE.MeshStandardMaterial; emissive: THREE.Color; intensity: number }[] = [];
 
   group.traverse((node) => {
@@ -369,7 +373,7 @@ function flashMesh(group: THREE.Group, colorHex: number, durationMs = 140): void
 
 type Spawn = { x: number; y: number; z: number };
 
-type SceneId = 'S00' | 'OW1' | 'GH1' | 'B1' | 'SQ1' | 'GH2' | 'GH3' | 'GH4' | 'HM1' | 'BQ1' | 'AG1' | 'MH1' | 'SAN1' | 'RC1' | 'BT1' | 'CO1' | 'CO3' | 'U1' | 'U2' | 'U3' | 'U4' | 'TR1' | 'TR2' | 'TR3' | 'TR4' | 'AT1' | 'AT2' | 'AT3' | 'AL1' | 'AL2' | 'AL3' | 'PB1' | 'PB2' | 'PB3' | 'PB4' | 'RG1' | 'RG2' | 'RG3' | 'RG4' | 'VR1' | 'VR2' | 'VR3' | 'RS1' | 'RS2' | 'RS3' | 'RS4' | 'RS5' | 'RS6' | 'CR1' | 'MS3';
+type SceneId = 'S00' | 'OW1' | 'GH1' | 'B1' | 'SQ1' | 'GH2' | 'GH3' | 'GH4' | 'HM1' | 'BQ1' | 'AG1' | 'MH1' | 'SAN1' | 'RC1' | 'BT1' | 'CO1' | 'CO3' | 'U1' | 'U2' | 'U3' | 'U4' | 'TR1' | 'TR2' | 'TR3' | 'TR4' | 'AT1' | 'AT2' | 'AT3' | 'AL1' | 'AL2' | 'AL3' | 'PB1' | 'PB2' | 'PB3' | 'PB4' | 'RG1' | 'RG2' | 'RG3' | 'RG4' | 'VR1' | 'VR2' | 'VR3' | 'RS1' | 'RS2' | 'RS3' | 'RS4' | 'RS5' | 'RS6' | 'CR1' | 'MS3' | 'OW9' | 'RC9' | 'JC1' | 'MZ1' | 'WR1';
 
 type GuardState = 'patrol' | 'chase' | 'dead';
 
@@ -410,7 +414,9 @@ interface Guard {
   alertEl?: HTMLDivElement;
 
   detection?: number;
+
   poise?: number;
+
   maxPoise?: number;
   poiseRegenTimer?: number;
   isStunned?: boolean;
@@ -421,9 +427,7 @@ interface Guard {
   actions?: Record<string, THREE.AnimationAction>;
   currentAction?: string;
 }
-
 /**
-
  * Every hostile instantiated anywhere in the fortress. Scene builders used to
 
  * keep block-scoped `guard` / `captain` locals (U2/U4/TR1-4/PB1-4/CO1), so
@@ -520,7 +524,7 @@ const playerOrigin = {
 
 // ---------- Quest, puzzle and encounter runtime ----------
 
-const questPickupMeshes: { id: string; mesh: THREE.Mesh }[] = [];
+const questPickupMeshes: { id: string; mesh: THREE.Group }[] = [];
 
 const questRuntime = new QuestPuzzleRuntime({
 
@@ -897,11 +901,11 @@ function renderQuestObjectives(): void {
   });
 
 }
+
 questCloseBtn?.addEventListener('click', () => {
+
   if (isQuestLogOpen) toggleQuestLog();
-
 });
-
 hudQuestCard?.addEventListener('click', () => {
 
   toggleQuestLog();
@@ -1019,31 +1023,31 @@ const SCENE_DOSSIER: Record<SceneId, SceneDossierEntry> = {
     desc: 'Guard quarters with steam-heated radiator pipes. Combat-heavy; an armory holds rare illusion-bane reagents.',
 
     hazards: 'Guard patrols. Combat encounters.',
+
     isCleansed: () => solvedPuzzles.has('PUZZLE_BARRACKS_RAID'),
+
   },
   SQ1: {
     chapter: 'Chapter 2: The Servants Hall',
     subtitle: 'Servants Quarters Main Hall',
     desc: 'Hub of the servant district. NPCs, quests, rumors, and a save point. A hearth mantle hides a servant diary.',
-
     hazards: 'None. Safe hub.',
     isCleansed: () => solvedPuzzles.has('PUZZLE_SERVANT_SECRET'),
+
   },
 HM1: {
     chapter: 'Chapter 2: Hall of Mirrors',
     subtitle: 'The Glass Gallery',
     desc: 'A kaleidoscopic labyrinth of silver mirrors inhabited by a phasing Mirror Wraith. The True Mirror conceals a hidden portal.',
-
     hazards: 'Phasing Mirror Wraith & reflective mirror bolts.',
     isCleansed: () => solvedPuzzles.has('PUZZLE_TRUE_MIRROR'),
+
   },
   BQ1: {
     chapter: 'Chapter 3: The Cenacle',
     subtitle: 'The Cenacle of Eternal Satiety',
     desc: 'A grand banquet hall hosting an unending Victorian feast. Aristocrats chew cold fireplace ash under Nozick\'s phantom satiety glamour.',
-
     hazards: 'Gastronomic phantom glamour. Requires Truth Lens or Tantalus Goblet.',
-
     isCleansed: () => solvedPuzzles.has('PUZZLE_FEAST_SATIETY'),
 
   },
@@ -1127,24 +1131,24 @@ HM1: {
     desc: 'A 3-lane rhythm floor of glass-armonica keys. Strike the lanes in harmony to break the stasis.',
 
     hazards: 'Dissonant resonance. Requires Glass-Armonica Mallet.',
+
     isCleansed: () => solvedPuzzles.has('PUZZLE_RESONANT_HARMONIES'),
+
   },
 BT1: {
     chapter: 'Secret Spire: The Aeolian Baffles',
     subtitle: 'The Aeolian Bell Tower',
     desc: 'A windswept Victorian bell tower housing giant bronze acoustic baffles. Ringing the Echo Bell harmonizes the gale-force chime resonance.',
-
     hazards: 'Gale dissonance & resonant shockwaves.',
     isCleansed: () => solvedPuzzles.has('PUZZLE_AEOLIAN_CHIME'),
+
   },
   CO1: {
     chapter: 'Act IV: The Veil Colosseum',
     subtitle: 'The Veil Colosseum',
     desc: 'An illusionist arena with silent bulb-headed spectators, combat gauntlets, and puzzle-trials. Hidden passage leads to the Undercrypt.',
     hazards: 'Colosseum Beast and arena waves.',
-
     isCleansed: () => solvedPuzzles.has('PUZZLE_HOLLOW_GLASS'),
-
   },
 
   CO3: {
@@ -1170,15 +1174,15 @@ BT1: {
   U4: { chapter: 'Undercrypt', subtitle: 'Secret Vault', desc: 'True backstory and Heart hint.', hazards: 'None.', isCleansed: () => true },
 
   TR1: { chapter: 'Trophy Hall', subtitle: 'Gallery Entrance', desc: 'Mounted beasts line the walls; Curator greets.', hazards: 'Mimic chests.', isCleansed: () => true },
+
   TR2: { chapter: 'Trophy Hall', subtitle: 'Beast Row', desc: 'Five trophies; examine each.', hazards: 'Mimic chests.', isCleansed: () => true },
+
   TR3: { chapter: 'Trophy Hall', subtitle: 'The Slain Beast', desc: 'Hidden passage behind largest trophy.', hazards: 'Mimic chests.', isCleansed: () => true },
   TR4: { chapter: 'Trophy Hall', subtitle: 'Curator\'s Alcove', desc: 'Confront Curator; lore reveal.', hazards: 'None.', isCleansed: () => true },
   AT1: { chapter: 'Astronomy Tower', subtitle: 'Star Chamber', desc: 'Telescope and star-map floor.', hazards: 'None.', isCleansed: () => true },
   AT2: { chapter: 'Astronomy Tower', subtitle: 'Constellation Floor', desc: 'Align telescope to 3 constellations.', hazards: 'Puzzle.', isCleansed: () => solvedPuzzles.has('PUZZLE_CONSTELLATION') },
   AT3: { chapter: 'Astronomy Tower', subtitle: 'Hidden Room', desc: 'Star map reveals secret doors at night.', hazards: 'None.', isCleansed: () => true },
-
   AL1: { chapter: 'Alchemist\'s Lab', subtitle: 'Lab', desc: 'Brewing bench and reagents.', hazards: 'Unstable experiments.', isCleansed: () => true },
-
   AL2: { chapter: 'Alchemist\'s Lab', subtitle: 'Storage', desc: 'Explosive reagents.', hazards: 'Explosions.', isCleansed: () => true },
 
   AL3: { chapter: 'Alchemist\'s Lab', subtitle: 'Vex Office', desc: 'Recipes and crafting.', hazards: 'None.', isCleansed: () => true },
@@ -1217,12 +1221,17 @@ BT1: {
 
   RS6: { chapter: 'Relativity Cloister', subtitle: 'The Dining Table', desc: 'The Diner sits eternally.', hazards: 'None.', isCleansed: () => true },
 
-};
+  OW9: { chapter: 'Outer Wards', subtitle: 'Planetary Watcher OW9', desc: 'Orrery of planetary motion.', hazards: 'None.', isCleansed: () => true },
 
-const ORDERED_SCENES: SceneId[] = ['S00', 'OW1', 'GH1', 'GH2', 'GH3', 'HM1', 'BQ1', 'AG1', 'MH1', 'SAN1', 'RC1', 'BT1', 'CO1', 'CO3', 'U1', 'U2', 'U3', 'U4', 'TR1', 'TR2', 'TR3', 'TR4', 'AT1', 'AT2', 'AT3', 'AL1', 'AL2', 'AL3', 'PB1', 'PB2', 'PB3', 'PB4', 'RG1', 'RG2', 'RG3', 'RG4', 'VR1', 'VR2', 'VR3', 'RS1', 'RS2', 'RS3', 'RS4', 'RS5', 'RS6'];
+  RC9: { chapter: 'Relativity Cloister', subtitle: 'Tumbling Chamber RC9', desc: 'A tumbling gravity chamber.', hazards: 'None.', isCleansed: () => true },
+
+  JC1: { chapter: 'Jester Court', subtitle: "Jester's Court JC1", desc: 'A court of jesters.', hazards: 'None.', isCleansed: () => true },
+  MZ1: { chapter: 'Hedge Maze', subtitle: 'Arcane Hedge Maze MZ1', desc: 'A labyrinthine hedge maze.', hazards: 'None.', isCleansed: () => true },
+  WR1: { chapter: 'Wayfarer\'s Rest', subtitle: "Wayfarer's Rest", desc: 'A town of rest.', hazards: 'None.', isCleansed: () => true },
+};
+const ORDERED_SCENES: SceneId[] = ['S00', 'OW1', 'GH1', 'GH2', 'GH3', 'HM1', 'BQ1', 'AG1', 'MH1', 'SAN1', 'RC1', 'BT1', 'CO1', 'CO3', 'U1', 'U2', 'U3', 'U4', 'TR1', 'TR2', 'TR3', 'TR4', 'AT1', 'AT2', 'AT3', 'AL1', 'AL2', 'AL3', 'PB1', 'PB2', 'PB3', 'PB4', 'RG1', 'RG2', 'RG3', 'RG4', 'VR1', 'VR2', 'VR3', 'RS1', 'RS2', 'RS3', 'RS4', 'RS5', 'RS6', 'OW9', 'RC9', 'JC1', 'MZ1', 'WR1'];
 
 function toggleMap(): void {
-
   isMapOpen = !isMapOpen;
 
   if (!mapModal) return;
@@ -1492,7 +1501,9 @@ function castMirrorDecoy(): void {
 // Spell 2: Shadow Step / Smoke Dash ([C])
 
 function castShadowStep(): void {
+
   if (playerState.fp < 15) {
+
     showToast('Insufficient Focus Points (Requires 15 FP)');
     SoundFX.playLocked();
     return;
@@ -1510,11 +1521,11 @@ function castShadowStep(): void {
   flashMesh(playerMesh, 0x7c3aed, 220);
   showToast('Spell: Shadow Step');
 }
-
 // Spell 3: Glass Dart ([V])
-
 function spawnGlassDartProjectile(originPos?: THREE.Vector3, shootDir?: THREE.Vector3): void {
+
   const geom = new THREE.ConeGeometry(0.08, 0.45, 6);
+
   geom.rotateX(Math.PI / 2);
   const mat = new THREE.MeshStandardMaterial({
     color: 0x67e8f9,
@@ -1538,9 +1549,9 @@ function spawnGlassDartProjectile(originPos?: THREE.Vector3, shootDir?: THREE.Ve
     maxDist: 9.0
   });
 }
-
 function castGlassDart(): void {
   if (playerState.fp < 15) {
+
     showToast('Insufficient Focus Points (Requires 15 FP)');
     SoundFX.playLocked();
     return;
@@ -1555,9 +1566,7 @@ function castGlassDart(): void {
   }
   showToast('Spell: Glass Dart');
 }
-
 // 3D Echo Bell Rings
-
 const echoRings: { mesh: THREE.Mesh; scale: number; opacity: number }[] = [];
 
 function triggerEchoBellRing(origin: THREE.Vector3): void {
@@ -2885,7 +2894,9 @@ const loreObjects: LoreObject[] = [
     id: 'LORE_PB1',
 
     sceneId: 'PB1',
+
     name: "Warden's Logbook",
+
     pos: { x: 2.0, y: 0.5, z: -1.0 },
     title: "Archival Record - The Abyssal Prison",
     text: "Warden Malakor's logbook, entries spanning three centuries:\n\n'Day 1: The first prisoner arrived. He claimed to be a mirror-maker. He said the mirrors in the fortress were not reflections but windows. I had him locked in the deepest cell.\n\nDay 400: The mirror-maker is dead, but his mirrors still show things that are not there. The guards refuse to patrol past Cell 7.\n\nDay 1200: I have become what I guarded against. The cold iron keyring burns in my hand, and I can hear the mirrors whispering my name. I am no longer the warden. I am the prisoner.'",
@@ -2901,18 +2912,18 @@ const loreObjects: LoreObject[] = [
   {
     id: 'LORE_TR1',
     sceneId: 'TR1',
-
     name: "Curator's Catalogue",
     pos: { x: 1.0, y: 0.5, z: 0.0 },
+
     title: "Archival Record - The Trophy Hall",
     text: "A curator's catalogue of the fortress's collected trophies:\n\n'Item 1: The Glass Heart of Cynthia (on loan from the Sanctum). Item 2: The Captain's Halberd (recovered from the Gatehouse). Item 3: The Warden's Keyring (confiscated). Item 4: The Starlight Lens (donated by Astromancer Zephyra).\n\nNOTE: Item 7 (The Mimic Chest) has been reclassified from 'Decorative' to 'Active Threat' after it consumed a junior curator. Please do not open. Please do not touch. Please do not look at it for too long. It is watching.'",
   },
   {
     id: 'LORE_CR1',
     sceneId: 'CR1',
-
     name: "Archivist Aurelia's Inverted Journal",
     pos: { x: 0, y: 0.5, z: -2.0 },
+
     title: "Archival Record - The Chronomantic Scriptorium",
     text: "Lady Aurelia the Inverted's journal, written in reverse chronology:\\n\\n'I have already told you the answer to the bridge. You will ask me tomorrow. I am writing this yesterday.\\n\\nThe portcullis does not lock forward. It locks backward. To unlock it, you must present the ending before the beginning. The ash is the memory of the fire. The fire is the memory of the spark. Deposit the Ouroboros, reverse-ignite the braziers, and turn the key against the clock. Only then will the vault remember that it was always open.'",
   },
@@ -3183,9 +3194,7 @@ function openLore(obj: LoreObject): void {
   isLoreOpen = true;
 }
 function closeLore(): void {
-
   loreModal?.classList.remove('visible');
-
   isLoreOpen = false;
 
 }
@@ -3249,18 +3258,20 @@ function tryParry(): void {
   parryBadge?.classList.add('active');
 
     const cState = mainChar?.combat.state ?? 'Light_Attack_1';
-    const tier: 1 | 2 | 3 = cState === 'Heavy_Combo_Finisher' ? 3 : (cState === 'Light_Attack_2' ? 2 : 1);
-    SoundFX.playComboSlash(tier);
 
+    const tier: 1 | 2 | 3 = cState === 'Heavy_Combo_Finisher' ? 3 : (cState === 'Light_Attack_2' ? 2 : 1);
+
+    SoundFX.playComboSlash(tier);
   mainChar.combat.setBlock(true);
   setTimeout(() => mainChar.combat.setBlock(false), 350);
 
   flashMesh(playerMesh, 0xf59e0b, 160);
-
 }
 
 const magicalBushes: {
+
   mesh: THREE.Group;
+
   mat: THREE.MeshStandardMaterial;
   mixer?: THREE.AnimationMixer;
   idleAction?: THREE.AnimationAction;
@@ -3269,14 +3280,12 @@ const magicalBushes: {
   originalScale: THREE.Vector3;
   targetScale: THREE.Vector3;
 }[] = [];
-
 let quality: QualityManager;
-
 const engine = new GameEngine({
+
   canvas,
 
   onRender: () => { quality.frame(); drawMinimap(); },
-
   onUpdate: (dt) => {
 
     const steamDps = questRuntime.hazardDamageAt(currentSceneId, playerState.x, playerState.z);
@@ -3296,13 +3305,13 @@ const engine = new GameEngine({
     }
 
   if (typeof playerMixer !== 'undefined' && playerMixer) playerMixer.update(dt);
+
   if (ravenMixer) ravenMixer.update(dt);
+
   if (orinMixer) orinMixer.update(dt);
   if (hazelMixer) hazelMixer.update(dt);
   mainChar.combat.update(dt);
-
     // Pause movement during dialogue, inventory, quest log, lore archival, or pause menu
-
     playerState.surfaceNoise = currentSceneId === 'GH2' ? 0.35 : currentSceneId === 'OW1' ? 0.85 : 1.0;
 
     let moveX = 0;
@@ -3320,10 +3329,10 @@ const engine = new GameEngine({
       if (playerState.keys.d) { moveX += 1; moveZ -= 1; }
 
     }
+
     if (autoEnabled) autoTick(dt);
 
     else if (autoplayController.running) autoplayController.tick(dt);
-
     if (autoEnabled || autoplayController.running) {
 
       moveX = autoInput.x;
@@ -3401,10 +3410,10 @@ const engine = new GameEngine({
     // Sprinting & Stamina Regeneration Loop
 
     const isMoving = moveX !== 0 || moveZ !== 0;
+
     mainChar.combat.setMove(moveX, moveZ, !!playerState.keys.shift && playerState.stamina > 2);
 
     if (playerMixer) {
-
       if (!isMoving) playPlayerAnim('Idle');
 
       else if (playerState.keys.shift && playerState.stamina > 2) playPlayerAnim('Run');
@@ -3424,14 +3433,14 @@ const engine = new GameEngine({
     } else {
 
       playerState.isSprinting = false;
+
       playerState.speed = autoEnabled ? 8.6 : (playerState.isSneaking ? 3.2 : 5.5);
+
       playerState.stamina = Math.min(playerState.maxStamina, playerState.stamina + 20 * dt);
     }
     if (staFill) {
       staFill.style.width = `${Math.round((playerState.stamina / playerState.maxStamina) * 100)}%`;
-
       if (playerState.stamina <= 0) {
-
         staFill.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
 
         staFill.classList.remove('sta-regen');
@@ -3529,10 +3538,12 @@ const engine = new GameEngine({
           spawnDamagePopup(g.mesh.position, '-20 HP');
 
           g.hpBarTimer = 3.5;
+
           if (g.hp > 0) playGuardAnim(g, 'Hit');
 
           if (g.isWraith && g.hp > 0) {
             const spots = [
+
               new THREE.Vector3(-3.5, 1.1, -1.0),
               new THREE.Vector3(3.5, 1.1, -1.0),
               new THREE.Vector3(-2.5, 1.1, 2.5),
@@ -3545,14 +3556,12 @@ const engine = new GameEngine({
             flashMesh(g.mesh, 0xc084fc, 250);
             spawnDamagePopup(g.mesh.position, 'TELEPORT!', true);
           }
-
           if (g.hp <= 0) {
             g.state = 'dead';
+
             playGuardAnim(g, 'Death');
             g.mesh.parent?.remove(g.mesh);
-
             if (g === vaelorBoss) {
-
               solvedPuzzles.add('PUZZLE_HOLLOW_GLASS');
 
               abilities.add('ABILITY_GRAVITON_INVERSION');
@@ -3636,7 +3645,9 @@ const engine = new GameEngine({
       let hit = false;
 
       if (playerDist < 0.85) {
+
         hit = true;
+
         const outcome = mainChar ? mainChar.combat.receiveHit({ damage: 14, kind: 'spell' }) : (parryTimer > 0 ? 'parried' : 'hit');
         if (outcome === 'evaded') {
           spawnDamagePopup(playerMesh.position, 'EVADED!', true);
@@ -3666,9 +3677,7 @@ const engine = new GameEngine({
           if (playerHP <= 0) respawn();
         }
       }
-
       if (hit || ep.distTraveled >= ep.maxDist) {
-
         engine.scene.remove(ep.mesh);
 
         ep.mesh.geometry.dispose();
@@ -3682,7 +3691,9 @@ const engine = new GameEngine({
     }
 
     const rootMotion = mainChar ? mainChar.combat.consumeRootMotion() : new THREE.Vector3();
+
     const isBusy = mainChar ? mainChar.combat.busy : false;
+
     let nextPos = { x: playerState.x, y: 0.6, z: playerState.z };
     let deltaX = rootMotion.x;
     let deltaZ = rootMotion.z;
@@ -3692,9 +3703,7 @@ const engine = new GameEngine({
       deltaZ += (moveZ / len) * playerState.speed * dt * autoplaySpeedScale;
     }
     nextPos = physics.movePlayer(deltaX, deltaZ);
-
     playerState.x = nextPos.x;
-
     playerState.z = nextPos.z;
 
     // Record position history for retrocausal rewind (Relativity Cloister)
@@ -3842,11 +3851,11 @@ const engine = new GameEngine({
     while (yawDiff > Math.PI) yawDiff -= Math.PI * 2;
 
     if (!mainChar || !mainChar.combat.busy) {
+
       playerMesh.rotation.y += yawDiff * Math.min(1, 16 * dt);
+
     }
-
     // Attack lunge decay & positioning
-
     attackLungeOffset = THREE.MathUtils.lerp(attackLungeOffset, 0, 10 * dt);
 
     const lungeX = Math.sin(playerMesh.rotation.y) * attackLungeOffset;
@@ -3874,7 +3883,9 @@ const engine = new GameEngine({
     }
 
     for (const bush of magicalBushes) {
+
       if (currentSceneId !== 'S00') continue;
+
       if (bush.mixer) {
         bush.mixer.update(dt);
       }
@@ -3906,9 +3917,7 @@ const engine = new GameEngine({
       }
       bush.mesh.scale.lerp(bush.targetScale, 0.08);
     }
-
     // Interaction Proximity Detection
-
     let hasPrompt = false;
 
     if (!hasPrompt) hasPrompt = updateQuestRuntimePrompt();
@@ -4382,15 +4391,17 @@ const engine = new GameEngine({
       if (d < 1.8) { showInteractPrompt("Pick up Captain's Patrol Ledger"); hasPrompt = true; }
 
     }
+
     if (!hasPrompt && currentSceneId === 'GH1' && !solvedPuzzles.has('PUZZLE_GATEHOUSE_EXTERIOR')) {
+
       const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
       if (d < 2.5) { showInteractPrompt(inventory.has('ITEM_CAPTAIN_LEDGER') ? "Clear Gatehouse Exterior" : "Gatehouse Exterior (Requires Captain's Patrol Ledger)"); hasPrompt = true; }
     }
     // GH4
     if (!hasPrompt && currentSceneId === 'GH4' && !inventory.has('ITEM_VENT_KEY')) {
-
       const d = Math.hypot(1 - playerState.x, 0 - playerState.z);
       if (d < 1.8) { showInteractPrompt("Pick up Vent Grate Key"); hasPrompt = true; }
+
     }
     if (!hasPrompt && currentSceneId === 'GH4' && !solvedPuzzles.has('PUZZLE_VENT_ASCENT')) {
       const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
@@ -4434,9 +4445,9 @@ const engine = new GameEngine({
     }
     // MS3
     if (!hasPrompt && currentSceneId === 'MS3' && !inventory.has('ITEM_GLASS_MALLET')) {
-
       const d = Math.hypot(2 - playerState.x, -1 - playerState.z);
       if (d < 1.8) { showInteractPrompt("Pick up Glass-Armonica Mallet"); hasPrompt = true; }
+
     }
     if (!hasPrompt && currentSceneId === 'MS3' && !solvedPuzzles.has('PUZZLE_RESONANT_HARMONIES')) {
       const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
@@ -4444,9 +4455,9 @@ const engine = new GameEngine({
     }
     if (!hasPrompt) hideInteractPrompt();
     // Rotate Cynthia's Dodecahedron crystal in SAN1
-
     if (currentSceneId === 'SAN1' && cynthiaCrystal) {
       cynthiaCrystal.rotation.y += 0.8 * dt;
+
     }
     for (const g of activeGuards) updateGuard(g, dt);
     // Update detection meter HUD
@@ -4455,9 +4466,7 @@ const engine = new GameEngine({
     if (detEl && detFill) {
       const guards = activeGuards.filter((g) => g.sceneId === currentSceneId && g.state !== 'dead');
       const maxDet = guards.reduce((m, g) => Math.max(m, g.detection || 0), 0);
-
       detFill.style.width = (maxDet * 100) + '%';
-
       detEl.style.opacity = maxDet > 0.05 ? '1' : '0';
 
     }
@@ -4487,7 +4496,9 @@ new THREE.TextureLoader().load(ASSETS.CONCEPT.SCENE00_APPROACH_SUNKEN, (tex) => 
 });
 
 // ---------- S00 authored courtyard ----------
+
 const s00Group = new THREE.Group();
+
 const gltfLoader = new GLTFLoader();
 let kaelenAnimations: THREE.AnimationClip[] = [];
 let brambleAnimations: THREE.AnimationClip[] = [];
@@ -4497,16 +4508,16 @@ let ravenAnimations: THREE.AnimationClip[] = [];
 let wraithAnimations: THREE.AnimationClip[] = [];
 let hazelAnimations: THREE.AnimationClip[] = [];
 let orinAnimations: THREE.AnimationClip[] = [];
-
 let ravenMixer: THREE.AnimationMixer | null = null;
 let ravenActions: Record<string, THREE.AnimationAction> = {};
+
 let orinMixer: THREE.AnimationMixer | null = null;
 let orinActions: Record<string, THREE.AnimationAction> = {};
 let hazelMixer: THREE.AnimationMixer | null = null;
 let hazelActions: Record<string, THREE.AnimationAction> = {};
-
 const [
   courtyardScene,
+
   kaelenModel,
   guardModel,
   roomShellModel,
@@ -4580,9 +4591,10 @@ const [
   gltfLoader.loadAsync('assets/models/steampunk_boiler.glb').then((g) => g.scene),
   gltfLoader.loadAsync('assets/models/starlight_planter.glb').then((g) => g.scene),
 ]);
-
+void gateArchModel;
 [
   archivalLecternModel,
+
   patrolDeskModel,
   ventGrateModel,
   servantHearthModel,
@@ -4610,9 +4622,9 @@ const [
     }
   });
 });
-
 courtyardScene.traverse((node) => {
   // The GLB contains decorative thorn/veil meshes; hide those and keep the
+
   // interactive photophobic bushes below as the single source of truth.
   if (node.name.includes('Thorn') || node.name.includes('Veil')) node.visible = false;
   if (node instanceof THREE.Mesh) {
@@ -4620,16 +4632,16 @@ courtyardScene.traverse((node) => {
     node.receiveShadow = true;
   }
 });
-
 s00Group.add(courtyardScene);
-
 function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
+
   const bushInstance = SkeletonUtils.clone(brambleModel) as THREE.Group;
+
   bushInstance.position.set(x, 0.05, z);
   bushInstance.scale.setScalar(scaleMultiplier);
-
   let coreMat: THREE.MeshStandardMaterial | undefined;
   bushInstance.traverse((node) => {
+
     if (node instanceof THREE.Mesh) {
       node.castShadow = true;
       node.receiveShadow = true;
@@ -4641,13 +4653,13 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
       }
     }
   });
-
   let mixer: THREE.AnimationMixer | undefined;
   let idleAction: THREE.AnimationAction | undefined;
-  let retractAction: THREE.AnimationAction | undefined;
 
+  let retractAction: THREE.AnimationAction | undefined;
   if (brambleAnimations.length > 0) {
     mixer = new THREE.AnimationMixer(bushInstance);
+
     const idleClip = THREE.AnimationClip.findByName(brambleAnimations, 'Idle');
     const retractClip = THREE.AnimationClip.findByName(brambleAnimations, 'Retract');
     if (idleClip) {
@@ -4660,11 +4672,11 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
       retractAction.clampWhenFinished = true;
     }
   }
-
   s00Group.add(bushInstance);
-
   const origScale = new THREE.Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier);
+
   magicalBushes.push({
+
     mesh: bushInstance,
     mat: coreMat ?? new THREE.MeshStandardMaterial({ color: 0x4c1d95, emissive: 0x7c3aed }),
     mixer,
@@ -4675,9 +4687,7 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
     targetScale: origScale.clone(),
   });
 }
-
 createMagicalBush(-2.2, -1.8, 1.2);
-
 createMagicalBush(2.2, -1.8, 1.2);
 
 createMagicalBush(-3.5, 0.5, 0.9);
@@ -4689,18 +4699,20 @@ createMagicalBush(-1.2, 0.8, 0.7);
 createMagicalBush(1.2, 0.8, 0.7);
 
 function addS00Colliders(): void {
+
   addGenericColliders();
+
 }
-
-
 // ---------- Interactive NPC Entities ----------
-
 let ravenMesh: THREE.Group | null = null;
+
 
 let orinMesh: THREE.Group | null = null;
 
 function createStarlightRaven(): THREE.Group {
+
   const group = SkeletonUtils.clone(ravenModel) as THREE.Group;
+
   group.position.set(-2.5, 0.9, -4.8);
   group.scale.setScalar(1.2);
   group.traverse((node) => {
@@ -4709,9 +4721,9 @@ function createStarlightRaven(): THREE.Group {
       node.receiveShadow = true;
     }
   });
-
   if (ravenAnimations.length > 0) {
     ravenMixer = new THREE.AnimationMixer(group);
+
     for (const clip of ravenAnimations) {
       ravenActions[clip.name] = ravenMixer.clipAction(clip);
     }
@@ -4719,16 +4731,14 @@ function createStarlightRaven(): THREE.Group {
       ravenActions['Idle'].play();
     }
   }
-
   const ravenLight = new THREE.PointLight(0x38bdf8, 1.4, 4);
   ravenLight.position.set(0, 0.35, 0.2);
-  group.add(ravenLight);
 
+  group.add(ravenLight);
   return group;
 }
 
 ravenMesh = createStarlightRaven();
-
 s00Group.add(ravenMesh);
 
 // ---------- Generic manifest rooms ----------
@@ -4737,7 +4747,7 @@ const sceneGroups = new Map<SceneId, THREE.Group>([['S00', s00Group]]);
 
 let activeGroup: THREE.Group = s00Group;
 
-let ironNailMesh: THREE.Mesh | null = null;
+let ironNailMesh: THREE.Group | null = null;
 
 let mirrorMesh: THREE.Group | null = null;
 
@@ -4798,15 +4808,15 @@ function createLoreOrb(obj: LoreObject): THREE.Group {
   g.position.set(obj.pos.x, 0, obj.pos.z);
 
   const lectern = archivalLecternModel.clone();
-  lectern.position.set(0, 0, 0);
-  g.add(lectern);
 
+  lectern.position.set(0, 0, 0);
+
+  g.add(lectern);
   const orbGroup = new THREE.Group();
   orbGroup.name = 'LoreOrbMesh';
+
   orbGroup.position.set(0, 1.25, 0);
-
   const orbMat = new THREE.MeshStandardMaterial({
-
     color: 0xf59e0b,
 
     emissive: 0xd4af37,
@@ -4842,7 +4852,9 @@ function createLoreOrb(obj: LoreObject): THREE.Group {
 s00Group.add(createLoreOrb(loreObjects[0]));
 
 function makeGuardMesh(color: number): THREE.Group {
+
   const mesh = SkeletonUtils.clone(guardModel) as THREE.Group;
+
   mesh.traverse((node) => {
     if (node instanceof THREE.Mesh) {
       node.castShadow = true;
@@ -4857,9 +4869,9 @@ function makeGuardMesh(color: number): THREE.Group {
   });
   return mesh;
 }
-
 function playGuardAnim(g: Guard, name: string): void {
   if (!g.mixer || !g.actions || !g.actions[name]) return;
+
   if (g.currentAction === name) return;
   const nextAction = g.actions[name];
   if (g.currentAction && g.actions[g.currentAction]) {
@@ -4868,14 +4880,3254 @@ function playGuardAnim(g: Guard, name: string): void {
   nextAction.reset().fadeIn(0.2).play();
   g.currentAction = name;
 }
+function wrapAsGuard(handle: unknown, sceneId: SceneId, x: number, z: number, captainFlag = false, hp = 100): Guard {
+  const h = handle as { group: THREE.Group; mesh?: THREE.Group; mixer?: THREE.AnimationMixer | null; actions?: Record<string, THREE.AnimationAction>; update?: (dt: number) => void };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const mesh = (h.mesh ?? h.group) as THREE.Group;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  mesh.position.set(x, 0.6, z);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  mesh.traverse((node) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (node instanceof THREE.Mesh) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      node.castShadow = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      node.receiveShadow = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const guard: Guard = {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    sceneId,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    mesh,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    hp,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    maxHp: hp,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    patrol: [new THREE.Vector3(x, 0, z), new THREE.Vector3(x + 1.5, 0, z)],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    patrolIndex: 0,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    state: 'patrol',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    cooldown: 0,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    speed: 2.2,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    captain: captainFlag,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    poise: 40,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    maxPoise: 40,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    poiseRegenTimer: 0,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    stunTimer: 0,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    windupTimer: 0,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    detection: 0,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    mixer: h.mixer ?? undefined,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    actions: h.actions ?? undefined,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  wrapperHandles.set(guard, h);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  return guard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const wrapperHandles = new Map<Guard, unknown>();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function createGuard(sceneId: SceneId, x: number, z: number, captainFlag = false): Guard {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const mesh = makeGuardMesh(captainFlag ? 0xb91c1c : 0x7f1d1d);
+
   mesh.position.set(x, 0.6, z);
   const hp = captainFlag ? 80 : 40;
-
   let mixer: THREE.AnimationMixer | undefined;
   const actions: Record<string, THREE.AnimationAction> = {};
+
   if (guardAnimations.length > 0) {
     mixer = new THREE.AnimationMixer(mesh);
     for (const clip of guardAnimations) {
@@ -4885,9 +8137,9 @@ function createGuard(sceneId: SceneId, x: number, z: number, captainFlag = false
       actions['Idle'].play();
     }
   }
-
   // Floating enemy HP bar DOM elements
   const barEl = document.createElement('div');
+
   barEl.className = 'enemy-hp-bar';
   const fillEl = document.createElement('div');
   fillEl.className = 'enemy-hp-fill';
@@ -4896,9 +8148,9 @@ function createGuard(sceneId: SceneId, x: number, z: number, captainFlag = false
   poiseEl.className = 'enemy-poise-fill';
   barEl.appendChild(poiseEl);
   damageContainer?.appendChild(barEl);
-
   const guard: Guard = {
     sceneId,
+
     mesh,
     hp,
     maxHp: hp,
@@ -4930,13 +8182,13 @@ function createGuard(sceneId: SceneId, x: number, z: number, captainFlag = false
       return el;
     })(),
   };
-
   activeGuards.push(guard);
   return guard;
-}
 
+}
 function createMirrorWraith(sceneId: SceneId, x: number, z: number): Guard {
   const mesh = SkeletonUtils.clone(wraithModel) as THREE.Group;
+
   mesh.position.set(x, 1.1, z);
   mesh.scale.setScalar(1.15);
   mesh.traverse((node) => {
@@ -4945,9 +8197,9 @@ function createMirrorWraith(sceneId: SceneId, x: number, z: number): Guard {
       node.receiveShadow = true;
     }
   });
-
   let mixer: THREE.AnimationMixer | undefined;
   const actions: Record<string, THREE.AnimationAction> = {};
+
   if (wraithAnimations.length > 0) {
     mixer = new THREE.AnimationMixer(mesh);
     for (const clip of wraithAnimations) {
@@ -4957,21 +8209,21 @@ function createMirrorWraith(sceneId: SceneId, x: number, z: number): Guard {
       actions['Idle'].play();
     }
   }
-
   const wraithLight = new THREE.PointLight(0xa855f7, 1.8, 6);
   wraithLight.position.set(0, 0.8, 0);
-  mesh.add(wraithLight);
 
+  mesh.add(wraithLight);
   const barEl = document.createElement('div');
   barEl.className = 'enemy-hp-bar';
+
   const fillEl = document.createElement('div');
   fillEl.className = 'enemy-hp-fill';
   fillEl.style.background = 'linear-gradient(90deg, #a855f7, #6366f1)';
   barEl.appendChild(fillEl);
   damageContainer?.appendChild(barEl);
-
   const wraithGuard: Guard = {
     sceneId,
+
     mesh,
     hp: 60,
     maxHp: 60,
@@ -4997,13 +8249,13 @@ function createMirrorWraith(sceneId: SceneId, x: number, z: number): Guard {
       return el;
     })(),
   };
-
   activeGuards.push(wraithGuard);
   return wraithGuard;
-}
 
+}
 function createBossVaelor(sceneId: SceneId, x: number, z: number): Guard {
   const mesh = SkeletonUtils.clone(vaelorModel) as THREE.Group;
+
   mesh.position.set(x, 1.2, z);
   mesh.scale.setScalar(1.25);
   mesh.traverse((node) => {
@@ -5012,9 +8264,9 @@ function createBossVaelor(sceneId: SceneId, x: number, z: number): Guard {
       node.receiveShadow = true;
     }
   });
-
   let mixer: THREE.AnimationMixer | undefined;
   const actions: Record<string, THREE.AnimationAction> = {};
+
   if (vaelorAnimations.length > 0) {
     mixer = new THREE.AnimationMixer(mesh);
     for (const clip of vaelorAnimations) {
@@ -5024,21 +8276,21 @@ function createBossVaelor(sceneId: SceneId, x: number, z: number): Guard {
       actions['Idle'].play();
     }
   }
-
   const bossLight = new THREE.PointLight(0x818cf8, 2.5, 8);
   bossLight.position.set(0, 1.0, 0);
-  mesh.add(bossLight);
 
+  mesh.add(bossLight);
   const barEl = document.createElement('div');
   barEl.className = 'enemy-hp-bar boss-hp-bar';
+
   const fillEl = document.createElement('div');
   fillEl.className = 'enemy-hp-fill';
   fillEl.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
   barEl.appendChild(fillEl);
   damageContainer?.appendChild(barEl);
-
   const bossGuard: Guard = {
     sceneId,
+
     mesh,
     hp: 120,
     maxHp: 120,
@@ -5064,20 +8316,20 @@ function createBossVaelor(sceneId: SceneId, x: number, z: number): Guard {
       return el;
     })(),
   };
-
   activeGuards.push(bossGuard);
   return bossGuard;
-}
 
+}
 function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?: ExitTrigger[]): THREE.Group {
   const floorGroup = new THREE.Group();
-  floorGroup.name = 'ModularTiledFloor';
 
+  floorGroup.name = 'ModularTiledFloor';
   const totalW = gridX * 12.0;
   const totalD = gridZ * 12.0;
 
   // Single foundation base slab below the entire arena
   const slabGeo = new THREE.BoxGeometry(totalW + 0.35, 0.56, totalD + 0.35);
+
   const slabMat = new THREE.MeshStandardMaterial({
     color: 0x090d16,
     roughness: 0.9,
@@ -5087,18 +8339,18 @@ function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?:
   slab.position.set(0, -0.28, 0);
   slab.receiveShadow = true;
   floorGroup.add(slab);
-
   // Tile the 7 floor submeshes across the grid
   for (let gx = 0; gx < gridX; gx++) {
+
     for (let gz = 0; gz < gridZ; gz++) {
       const posX = (gx - (gridX - 1) / 2) * 12.0;
       const posZ = (gz - (gridZ - 1) / 2) * 12.0;
-
       const tile = roomShellModel.clone();
       tile.position.set(posX, 0, posZ);
 
       tile.traverse((node) => {
         if (node instanceof THREE.Mesh) {
+
           // Hide outer rim/wall meshes on all tiled floor units so interior has zero seams!
           if (
             node.name.includes('BlueBlack') ||
@@ -5122,20 +8374,20 @@ function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?:
           }
         }
       });
-
       floorGroup.add(tile);
     }
-  }
 
+  }
   // Outer perimeter rims & coping along outer boundaries
   const halfW = totalW / 2;
-  const halfD = totalD / 2;
 
+  const halfD = totalD / 2;
   const rimColor = tintColor ? new THREE.Color(tintColor).multiplyScalar(0.65).getHex() : 0x1e293b;
   const copingColor = tintColor ? new THREE.Color(tintColor).multiplyScalar(0.85).getHex() : 0x334155;
 
   const rimMat = new THREE.MeshStandardMaterial({
     color: rimColor,
+
     roughness: 0.8,
     metalness: 0.2,
   });
@@ -5144,42 +8396,42 @@ function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?:
     roughness: 0.65,
     metalness: 0.25,
   });
-
   const activeExits = roomExits ?? (currentBuildingSceneId ? exits[currentBuildingSceneId] : undefined);
   const hasNorthGate = activeExits ? activeExits.some((e) => e.z <= -4.0) : true;
+
   const hasSouthGate = activeExits ? activeExits.some((e) => e.z >= 4.0) : true;
   const hasEastGate = activeExits ? activeExits.some((e) => e.x >= 4.0) : false;
   const hasWestGate = activeExits ? activeExits.some((e) => e.x <= -4.0) : false;
-
   const gateOpeningHalf = 2.0;
-
   // West outer boundary kerbs
+
   if (hasWestGate) {
+
     const westSegLen = halfD - gateOpeningHalf;
     if (westSegLen > 0) {
       const westGeo = new THREE.BoxGeometry(0.36, 0.45, westSegLen);
       const westCopingGeo = new THREE.BoxGeometry(0.44, 0.12, westSegLen);
       const westOffset = gateOpeningHalf + westSegLen / 2;
-
       const wNorthRim = new THREE.Mesh(westGeo, rimMat);
       wNorthRim.position.set(-halfW + 0.18, 0.15, -westOffset);
+
       wNorthRim.castShadow = true;
       wNorthRim.receiveShadow = true;
       floorGroup.add(wNorthRim);
-
       const wNorthCoping = new THREE.Mesh(westCopingGeo, copingMat);
       wNorthCoping.position.set(-halfW + 0.18, 0.42, -westOffset);
+
       wNorthCoping.castShadow = true;
       floorGroup.add(wNorthCoping);
-
       const wSouthRim = new THREE.Mesh(westGeo, rimMat);
       wSouthRim.position.set(-halfW + 0.18, 0.15, westOffset);
+
       wSouthRim.castShadow = true;
       wSouthRim.receiveShadow = true;
       floorGroup.add(wSouthRim);
-
       const wSouthCoping = new THREE.Mesh(westCopingGeo, copingMat);
       wSouthCoping.position.set(-halfW + 0.18, 0.42, westOffset);
+
       wSouthCoping.castShadow = true;
       floorGroup.add(wSouthCoping);
     }
@@ -5191,41 +8443,41 @@ function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?:
     westRim.castShadow = true;
     westRim.receiveShadow = true;
     floorGroup.add(westRim);
-
     const westCoping = new THREE.Mesh(sideCopingGeo, copingMat);
     westCoping.position.set(-halfW + 0.18, 0.42, 0);
+
     westCoping.castShadow = true;
     westCoping.receiveShadow = true;
     floorGroup.add(westCoping);
   }
-
   // East outer boundary kerbs
   if (hasEastGate) {
+
     const eastSegLen = halfD - gateOpeningHalf;
     if (eastSegLen > 0) {
       const eastGeo = new THREE.BoxGeometry(0.36, 0.45, eastSegLen);
       const eastCopingGeo = new THREE.BoxGeometry(0.44, 0.12, eastSegLen);
       const eastOffset = gateOpeningHalf + eastSegLen / 2;
-
       const eNorthRim = new THREE.Mesh(eastGeo, rimMat);
       eNorthRim.position.set(halfW - 0.18, 0.15, -eastOffset);
+
       eNorthRim.castShadow = true;
       eNorthRim.receiveShadow = true;
       floorGroup.add(eNorthRim);
-
       const eNorthCoping = new THREE.Mesh(eastCopingGeo, copingMat);
       eNorthCoping.position.set(halfW - 0.18, 0.42, -eastOffset);
+
       eNorthCoping.castShadow = true;
       floorGroup.add(eNorthCoping);
-
       const eSouthRim = new THREE.Mesh(eastGeo, rimMat);
       eSouthRim.position.set(halfW - 0.18, 0.15, eastOffset);
+
       eSouthRim.castShadow = true;
       eSouthRim.receiveShadow = true;
       floorGroup.add(eSouthRim);
-
       const eSouthCoping = new THREE.Mesh(eastCopingGeo, copingMat);
       eSouthCoping.position.set(halfW - 0.18, 0.42, eastOffset);
+
       eSouthCoping.castShadow = true;
       floorGroup.add(eSouthCoping);
     }
@@ -5237,108 +8489,108 @@ function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?:
     eastRim.castShadow = true;
     eastRim.receiveShadow = true;
     floorGroup.add(eastRim);
-
     const eastCoping = new THREE.Mesh(sideCopingGeo, copingMat);
     eastCoping.position.set(halfW - 0.18, 0.42, 0);
+
     eastCoping.castShadow = true;
     eastCoping.receiveShadow = true;
     floorGroup.add(eastCoping);
   }
-
   // North outer boundary kerbs
   if (hasNorthGate) {
+
     const segLength = halfW - gateOpeningHalf;
     if (segLength > 0) {
       const northSouthGeo = new THREE.BoxGeometry(segLength, 0.45, 0.36);
       const northSouthCopingGeo = new THREE.BoxGeometry(segLength, 0.12, 0.44);
       const segOffset = gateOpeningHalf + segLength / 2;
-
       const nwRim = new THREE.Mesh(northSouthGeo, rimMat);
       nwRim.position.set(-segOffset, 0.15, -halfD + 0.18);
+
       nwRim.castShadow = true;
       nwRim.receiveShadow = true;
       floorGroup.add(nwRim);
-
       const nwCoping = new THREE.Mesh(northSouthCopingGeo, copingMat);
       nwCoping.position.set(-segOffset, 0.42, -halfD + 0.18);
+
       nwCoping.castShadow = true;
       floorGroup.add(nwCoping);
-
       const neRim = new THREE.Mesh(northSouthGeo, rimMat);
       neRim.position.set(segOffset, 0.15, -halfD + 0.18);
+
       neRim.castShadow = true;
       neRim.receiveShadow = true;
       floorGroup.add(neRim);
-
       const neCoping = new THREE.Mesh(northSouthCopingGeo, copingMat);
       neCoping.position.set(segOffset, 0.42, -halfD + 0.18);
+
       neCoping.castShadow = true;
       floorGroup.add(neCoping);
     }
   } else {
     const fullGeo = new THREE.BoxGeometry(totalW, 0.45, 0.36);
     const fullCopingGeo = new THREE.BoxGeometry(totalW, 0.12, 0.44);
-
     const nRim = new THREE.Mesh(fullGeo, rimMat);
     nRim.position.set(0, 0.15, -halfD + 0.18);
+
     nRim.castShadow = true;
     nRim.receiveShadow = true;
     floorGroup.add(nRim);
-
     const nCoping = new THREE.Mesh(fullCopingGeo, copingMat);
     nCoping.position.set(0, 0.42, -halfD + 0.18);
+
     nCoping.castShadow = true;
     floorGroup.add(nCoping);
   }
-
   // South outer boundary kerbs
   if (hasSouthGate) {
+
     const segLength = halfW - gateOpeningHalf;
     if (segLength > 0) {
       const northSouthGeo = new THREE.BoxGeometry(segLength, 0.45, 0.36);
       const northSouthCopingGeo = new THREE.BoxGeometry(segLength, 0.12, 0.44);
       const segOffset = gateOpeningHalf + segLength / 2;
-
       const swRim = new THREE.Mesh(northSouthGeo, rimMat);
       swRim.position.set(-segOffset, 0.15, halfD - 0.18);
+
       swRim.castShadow = true;
       swRim.receiveShadow = true;
       floorGroup.add(swRim);
-
       const swCoping = new THREE.Mesh(northSouthCopingGeo, copingMat);
       swCoping.position.set(-segOffset, 0.42, halfD - 0.18);
+
       swCoping.castShadow = true;
       floorGroup.add(swCoping);
-
       const seRim = new THREE.Mesh(northSouthGeo, rimMat);
       seRim.position.set(segOffset, 0.15, halfD - 0.18);
+
       seRim.castShadow = true;
       seRim.receiveShadow = true;
       floorGroup.add(seRim);
-
       const seCoping = new THREE.Mesh(northSouthCopingGeo, copingMat);
       seCoping.position.set(segOffset, 0.42, halfD - 0.18);
+
       seCoping.castShadow = true;
       floorGroup.add(seCoping);
     }
   } else {
     const fullGeo = new THREE.BoxGeometry(totalW, 0.45, 0.36);
     const fullCopingGeo = new THREE.BoxGeometry(totalW, 0.12, 0.44);
-
     const sRim = new THREE.Mesh(fullGeo, rimMat);
     sRim.position.set(0, 0.15, halfD - 0.18);
+
     sRim.castShadow = true;
     sRim.receiveShadow = true;
     floorGroup.add(sRim);
-
     const sCoping = new THREE.Mesh(fullCopingGeo, copingMat);
     sCoping.position.set(0, 0.42, halfD - 0.18);
+
     sCoping.castShadow = true;
     floorGroup.add(sCoping);
   }
-
   // 4 Corner Buttress Plinths
   const pillarGeo = new THREE.BoxGeometry(0.72, 0.9, 0.72);
+
   const pillarCapGeo = new THREE.BoxGeometry(0.82, 0.18, 0.82);
   const corners = [
     [-halfW + 0.36, -halfD + 0.36],
@@ -5352,199 +8604,844 @@ function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?:
     pillar.castShadow = true;
     pillar.receiveShadow = true;
     floorGroup.add(pillar);
-
     const cap = new THREE.Mesh(pillarCapGeo, copingMat);
     cap.position.set(cx, 0.95, cz);
+
     cap.castShadow = true;
     floorGroup.add(cap);
   }
-
   return floorGroup;
 }
 
 // Expand S00 Courtyard into a full 36x36m modular arena with perimeter walls & north gate
 const s00Floor = buildModularFloor(3, 3, 0x1e293b, exits['S00']);
+
 s00Group.add(s00Floor);
+void DoorFactory.spawn('gate', { x: 0, y: 0, z: -17.5 }).then((h) => {
+  const s00NorthGate = h.group;
 
-const s00NorthGate = gateArchModel.clone();
-s00NorthGate.position.set(0, 0, -17.5);
-s00NorthGate.scale.setScalar(1.2);
-s00NorthGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-s00Group.add(s00NorthGate);
-
+  s00NorthGate.scale.setScalar(1.2);
+  s00NorthGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+  s00Group.add(s00NorthGate);
+  void h.open();
+});
 let currentBuildingSceneId: SceneId | null = null;
-
 function buildGenericScene(id: SceneId): THREE.Group {
-  currentBuildingSceneId = id;
-  const group = new THREE.Group();
 
+  currentBuildingSceneId = id;
+
+  const group = new THREE.Group();
   const isCustomCompound = id === 'MH1' || id === 'SAN1' || id === 'BQ1' || id === 'AG1';
   const isExtendedHall = id === 'CO1' || id === 'CO3';
+
   const gateZ = isCustomCompound ? 5.5 : (isExtendedHall ? 23.5 : 17.5);
   const gateX = isCustomCompound ? 5.5 : 17.5;
   const gateScale = isCustomCompound ? 0.95 : 1.2;
-
   const roomExits = exits[id] ?? [];
   const northExit = roomExits.find((e) => e.z <= -4.0);
+
   const southExit = roomExits.find((e) => e.z >= 4.0);
   const eastExit = roomExits.find((e) => e.x >= 4.0);
   const westExit = roomExits.find((e) => e.x <= -4.0);
-
   if (northExit) {
-    const northGate = gateArchModel.clone();
-    northGate.position.set(0, 0, -gateZ);
-    northGate.scale.setScalar(gateScale);
-    northGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-    group.add(northGate);
-  }
+    void DoorFactory.spawn('gate', { x: 0, y: 0, z: -gateZ }).then((h) => {
 
+      const northGate = h.group;
+      northGate.scale.setScalar(gateScale);
+      northGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+      group.add(northGate);
+      if (requirementsMet(northExit.requires)) void h.open();
+    });
+  }
   if (southExit) {
-    const southGate = gateArchModel.clone();
-    southGate.position.set(0, 0, gateZ);
-    southGate.scale.setScalar(gateScale);
-    southGate.rotation.y = Math.PI;
-    southGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-    group.add(southGate);
-  }
+    void DoorFactory.spawn('gate', { x: 0, y: 0, z: gateZ }).then((h) => {
 
+      const southGate = h.group;
+      southGate.scale.setScalar(gateScale);
+      southGate.rotation.y = Math.PI;
+      southGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+      group.add(southGate);
+      if (requirementsMet(southExit.requires)) void h.open();
+    });
+  }
   if (eastExit) {
-    const eastGate = gateArchModel.clone();
-    eastGate.position.set(gateX, 0, 0);
-    eastGate.scale.setScalar(gateScale);
-    eastGate.rotation.y = -Math.PI / 2;
-    eastGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-    group.add(eastGate);
-  }
+    void DoorFactory.spawn('gate', { x: gateX, y: 0, z: 0 }).then((h) => {
 
+      const eastGate = h.group;
+      eastGate.scale.setScalar(gateScale);
+      eastGate.rotation.y = -Math.PI / 2;
+      eastGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+      group.add(eastGate);
+      if (requirementsMet(eastExit.requires)) void h.open();
+    });
+  }
   if (westExit) {
-    const westGate = gateArchModel.clone();
-    westGate.position.set(-gateX, 0, 0);
-    westGate.scale.setScalar(gateScale);
-    westGate.rotation.y = Math.PI / 2;
-    westGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-    group.add(westGate);
-  }
+    void DoorFactory.spawn('gate', { x: -gateX, y: 0, z: 0 }).then((h) => {
 
+      const westGate = h.group;
+      westGate.scale.setScalar(gateScale);
+      westGate.rotation.y = Math.PI / 2;
+      westGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+      group.add(westGate);
+      if (requirementsMet(westExit.requires)) void h.open();
+    });
+  }
   if (id === 'OW1') {
     const shell = buildModularFloor(3, 3, 0x89a0aa);
+
     group.add(shell);
-
-    ironNailMesh = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.5, 0.15), new THREE.MeshStandardMaterial({ color: 0xd4af37, emissive: 0xd4af37, emissiveIntensity: 0.7 }));
-
-    ironNailMesh.position.set(2, 0.5, -1);
-
-    group.add(ironNailMesh);
-
     questPickupMeshes.length = 0;
+    // ItemPickupFactory-driven pickups (GLB models instead of whitebox primitives).
 
-    if (ironNailMesh) questPickupMeshes.push({ id: 'ITEM_IRON_NAIL', mesh: ironNailMesh });
+    void ItemPickupFactory.spawn('ITEM_IRON_NAIL', { x: 2, y: 0.5, z: -1 }).then((h) => {
 
-    const brassCogMesh = new THREE.Mesh(
-
-      new THREE.TorusGeometry(0.22, 0.08, 8, 16),
-
-      new THREE.MeshStandardMaterial({ color: 0xb08d57, emissive: 0x6b4f1d, emissiveIntensity: 0.7 }),
-
-    );
-
-    brassCogMesh.position.set(3, 0.5, 2);
-
-    brassCogMesh.rotation.x = Math.PI / 2;
-
-    group.add(brassCogMesh);
-
-    questPickupMeshes.push({ id: 'ITEM_BRASS_COG', mesh: brassCogMesh });
-
-    const memoryShardMesh = new THREE.Mesh(
-
-      new THREE.OctahedronGeometry(0.24),
-
-      new THREE.MeshStandardMaterial({ color: 0xbfdbfe, emissive: 0x3b82f6, emissiveIntensity: 0.9, transparent: true, opacity: 0.85 }),
-
-    );
-
-    memoryShardMesh.position.set(6, 0.7, -4);
-
-    group.add(memoryShardMesh);
-
-    questPickupMeshes.push({ id: 'SHARD_01_GATE', mesh: memoryShardMesh });
-
-    // Gatekeeper Orin
-    orinMesh = SkeletonUtils.clone(orinModel) as THREE.Group;
-    orinMesh.position.set(-2.2, 0.6, -1.8);
-    orinMesh.scale.setScalar(1.05);
-    orinMesh.traverse((node) => {
-      if (node instanceof THREE.Mesh) {
-        node.castShadow = true;
-        node.receiveShadow = true;
-      }
+      ironNailMesh = h.group;
+      group.add(h.group);
+      questPickupMeshes.push({ id: 'ITEM_IRON_NAIL', mesh: h.group });
     });
-    if (orinAnimations.length > 0) {
-      orinMixer = new THREE.AnimationMixer(orinMesh);
-      for (const clip of orinAnimations) {
-        orinActions[clip.name] = orinMixer.clipAction(clip);
-      }
+    void ItemPickupFactory.spawn('ITEM_BRASS_COG', { x: 3, y: 0.5, z: 2 }).then((h) => {
+      h.group.rotation.x = Math.PI / 2;
+
+      group.add(h.group);
+      questPickupMeshes.push({ id: 'ITEM_BRASS_COG', mesh: h.group });
+    });
+    void ItemPickupFactory.spawn('SHARD_01_GATE', { x: 6, y: 0.7, z: -4 }).then((h) => {
+      group.add(h.group);
+
+      questPickupMeshes.push({ id: 'SHARD_01_GATE', mesh: h.group });
+    });
+    // Gatekeeper Orin (GLB via NpcFactory, fallback to primitive clone)
+    void NpcFactory.spawn('orin', { x: -2.2, y: 0.6, z: -1.8 }).then((h) => {
+
+      orinMesh = h.group;
+      orinMesh.scale.setScalar(1.05);
+      orinMesh.traverse((node) => {
+        if (node instanceof THREE.Mesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      });
+      orinMixer = h.mixer;
+      orinActions = h.actions;
       if (orinActions['Idle']) {
         orinActions['Idle'].play();
       }
-    }
-    const orinLight = new THREE.PointLight(0x38bdf8, 1.0, 3.5);
-    orinLight.position.set(0, 1.2, 0);
-    orinMesh.add(orinLight);
-    group.add(orinMesh);
-
+      const orinLight = new THREE.PointLight(0x38bdf8, 1.0, 3.5);
+      orinLight.position.set(0, 1.2, 0);
+      orinMesh.add(orinLight);
+      group.add(orinMesh);
+    }).catch(() => {
+      orinMesh = SkeletonUtils.clone(orinModel) as THREE.Group;
+      orinMesh.position.set(-2.2, 0.6, -1.8);
+      orinMesh.scale.setScalar(1.05);
+      orinMesh.traverse((node) => {
+        if (node instanceof THREE.Mesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      });
+      if (orinAnimations.length > 0) {
+        orinMixer = new THREE.AnimationMixer(orinMesh);
+        for (const clip of orinAnimations) {
+          orinActions[clip.name] = orinMixer.clipAction(clip);
+        }
+        if (orinActions['Idle']) {
+          orinActions['Idle'].play();
+        }
+      }
+      const orinLight = new THREE.PointLight(0x38bdf8, 1.0, 3.5);
+      orinLight.position.set(0, 1.2, 0);
+      orinMesh.add(orinLight);
+      group.add(orinMesh);
+    });
     // OW1 Duke Vaelor's Despatch Lore Orb
-
     group.add(createLoreOrb(loreObjects[1]));
 
     const boilerOW1 = steampunkBoilerModel.clone();
+
     boilerOW1.position.set(-6, 0, -4);
+
     group.add(boilerOW1);
-
     guard = createGuard('OW1', 1.2, -2.2);
-
     group.add(guard.mesh);
 
   } else if (id === 'GH2') {
+
     const shell = buildModularFloor(3, 3, 0x7f96b5);
+
     group.add(shell);
+    // Mirror puzzle (GLB via PuzzleFactory, fallback to primitive clone)
+    void PuzzleFactory.spawn('mirror_lock', { x: 0, y: 0.1, z: -2.5 }).then((h) => {
 
-    mirrorMesh = mirrorLockModel.clone();
-    mirrorMesh.position.set(0, 0.1, -2.5);
-    mirrorMesh.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-    group.add(mirrorMesh);
-
+      mirrorMesh = h.group;
+      mirrorMesh.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+      group.add(mirrorMesh);
+    }).catch(() => {
+      mirrorMesh = mirrorLockModel.clone();
+      mirrorMesh.position.set(0, 0.1, -2.5);
+      mirrorMesh.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+      group.add(mirrorMesh);
+    });
     const boilerGH2 = steampunkBoilerModel.clone();
     boilerGH2.position.set(6, 0, -4);
-    group.add(boilerGH2);
 
+    group.add(boilerGH2);
     // GH2 Garrison Daguerreotype Lore Orb
     group.add(createLoreOrb(loreObjects[2]));
 
   } else if (id === 'GH3') {
     const shell = buildModularFloor(3, 3, 0x9a86aa);
-    group.add(shell);
 
+    group.add(shell);
     const deskGH3 = patrolDeskModel.clone();
     deskGH3.position.set(-4, 0, -2);
-    group.add(deskGH3);
 
+    group.add(deskGH3);
     const boilerGH3 = steampunkBoilerModel.clone();
     boilerGH3.position.set(6, 0, -4);
-    group.add(boilerGH3);
 
-    captain = createGuard('GH3', 0, -2.2, true);
-    group.add(captain.mesh);
+    group.add(boilerGH3);
+    // Captain (GLB via EnemyFactory, fallback to primitive guard)
+    void EnemyFactory.spawn('ENC_GH3_CAPTAIN', 'GH3', { x: 0, y: 1.2, z: -2.2 }).then((h) => {
+
+      captain = wrapAsGuard(h, 'GH3', 0, -2.2, true, 120);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      group.add(h.group);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      activeGuards.push(captain);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }).catch(() => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      captain = createGuard('GH3', 0, -2.2, true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      group.add(captain.mesh);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     const gh3Lore = loreObjects.find((l) => l.sceneId === 'GH3');
     if (gh3Lore) group.add(createLoreOrb(gh3Lore));
 
   } else if (id === 'HM1') {
     const shell = buildModularFloor(3, 3, 0x6d28d9);
+
     group.add(shell);
-
     const mirrorL = mirrorLockModel.clone();
-
     mirrorL.position.set(-4.5, 0.1, 0);
 
     mirrorL.rotation.y = Math.PI / 2;
@@ -5778,7 +9675,9 @@ function buildGenericScene(id: SceneId): THREE.Group {
     group.add(createLoreOrb(loreObjects[4]));
 
   } else if (id === 'MH1') {
+
     // Mother Hazel's Hearth & Witch Compound (Cottage, hearth, sunken cellar, outdoor herb garden, combat glade)
+
     const hearthScene = mh1HearthModel.clone();
     hearthScene.traverse((node) => {
       if (node instanceof THREE.Mesh) {
@@ -5835,9 +9734,7 @@ function buildGenericScene(id: SceneId): THREE.Group {
     hazelMesh.add(hazelLight);
     group.add(hazelMesh);
     group.add(createLoreOrb(loreObjects[5]));
-
   } else if (id === 'SAN1') {
-
     // The Sanctum of the Glass Heart: Blender-sculpted Crystalline Throne & Multifaceted Glass Heart
 
     const sanctumScene = san1SanctumModel.clone();
@@ -5924,12 +9821,641 @@ function buildGenericScene(id: SceneId): THREE.Group {
 
     group.add(starlightPortalMesh);
 
-    vaelorBoss = createBossVaelor('SAN1', 0, -3.2);
+    // Vaelor boss (GLB via EnemyFactory, fallback to primitive boss)
 
-    group.add(vaelorBoss.mesh);
+    void EnemyFactory.spawn('ENC_SAN1_VAELOR', 'SAN1', { x: 0, y: 1.2, z: -3.2 }).then((h) => {
+
+      vaelorBoss = wrapAsGuard(h, 'SAN1', 0, -3.2, true, 260);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      group.add(h.group);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      activeGuards.push(vaelorBoss);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }).catch(() => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      vaelorBoss = createBossVaelor('SAN1', 0, -3.2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      group.add(vaelorBoss.mesh);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     group.add(createLoreOrb(loreObjects[6]));
-
   } else if (id === 'CO1') {
 
     const shell = buildModularFloor(3, 4, 0x6b3f2a);
@@ -5949,111 +10475,1092 @@ function buildGenericScene(id: SceneId): THREE.Group {
     group.add(shell);
 
     const mirror = crystalTheaterMirrorModel.clone();
-    mirror.position.set(0, 0, -3.0);
-    group.add(mirror);
 
+    mirror.position.set(0, 0, -3.0);
+
+    group.add(mirror);
     const co3Lore = loreObjects.find((l) => l.sceneId === 'CO3');
     if (co3Lore) group.add(createLoreOrb(co3Lore));
 
   } else if (id === 'GH1') {
-
     const shell = buildModularFloor(3, 3, 0x8b5a2b);
+
     group.add(shell);
 
     const desk = patrolDeskModel.clone();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     desk.position.set(2, 0, -1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     group.add(desk);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    void PuzzleFactory.spawn('alchemist_bench', { x: -3, y: 0, z: 1 }).then((p) => group.add(p.group)).catch(() => {});
     const boiler = steampunkBoilerModel.clone();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     boiler.position.set(-6, 0, -4);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     group.add(boiler);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    void PuzzleFactory.spawn('portcullis_gears', { x: 3, y: 0, z: -1 }).then((p) => group.add(p.group)).catch(() => {});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const gh1Lore = loreObjects.find((l) => l.sceneId === 'GH1');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     if (gh1Lore) group.add(createLoreOrb(gh1Lore));
 
   } else if (id === 'GH4') {
     const shell = buildModularFloor(3, 3, 0x4a4a4a);
-    group.add(shell);
 
+    group.add(shell);
     const vent = ventGrateModel.clone();
     vent.position.set(0, 0, 0);
-    group.add(vent);
 
+    group.add(vent);
     const boiler = steampunkBoilerModel.clone();
     boiler.position.set(-6, 0, -4);
-    group.add(boiler);
 
+    group.add(boiler);
     const gh4Lore = loreObjects.find((l) => l.sceneId === 'GH4') ?? loreObjects.find((l) => l.sceneId === 'GH2');
     if (gh4Lore) group.add(createLoreOrb(gh4Lore));
 
   } else if (id === 'SQ1') {
     const shell = buildModularFloor(3, 3, 0xc9a227);
-    group.add(shell);
 
+    group.add(shell);
     const hearth = servantHearthModel.clone();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     hearth.position.set(-2, 0, 1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     group.add(hearth);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    void NpcFactory.spawn('npc_steward_sterling', { x: 2, y: 0.6, z: -1 }).then((n) => group.add(n.group)).catch(() => {});
     const sq1Lore = loreObjects.find((l) => l.sceneId === 'SQ1');
     if (sq1Lore) group.add(createLoreOrb(sq1Lore));
 
   } else if (id === 'B1') {
     const shell = buildModularFloor(3, 3, 0x7a2e2e);
-    group.add(shell);
 
+    group.add(shell);
     const armory = barracksArmoryModel.clone();
     armory.position.set(0, 0, -2);
-    group.add(armory);
 
+    group.add(armory);
     const b1Lore = loreObjects.find((l) => l.sceneId === 'B1');
     if (b1Lore) group.add(createLoreOrb(b1Lore));
 
   } else if (id === 'RC1') {
     const shell = buildModularFloor(3, 3, 0x2e5a7a);
-    group.add(shell);
 
+    group.add(shell);
     const escher = escherAnchorModel.clone();
     escher.position.set(0, 0, -1.5);
-    group.add(escher);
 
+    group.add(escher);
     const rc1Lore = loreObjects.find((l) => l.sceneId === 'RC1');
     if (rc1Lore) group.add(createLoreOrb(rc1Lore));
 
   } else if (id === 'CR1') {
     const shell = buildModularFloor(3, 3, 0x2e7a6a);
-    group.add(shell);
 
+    group.add(shell);
     const astrolabe = chronomanticAstrolabeModel.clone();
     astrolabe.position.set(0, 0, -1.5);
-    group.add(astrolabe);
 
+    group.add(astrolabe);
     const cr1Lore = loreObjects.find((l) => l.sceneId === 'CR1');
     if (cr1Lore) group.add(createLoreOrb(cr1Lore));
 
   } else if (id === 'MS3') {
     const shell = buildModularFloor(3, 3, 0xc9a227);
-    group.add(shell);
 
+    group.add(shell);
     const armonica = glassArmonicaModel.clone();
     armonica.position.set(0, 0, -1.5);
-    group.add(armonica);
 
+    group.add(armonica);
     const ms3Lore = loreObjects.find((l) => l.sceneId === 'MS3');
     if (ms3Lore) group.add(createLoreOrb(ms3Lore));
 
   } else if (id === 'BT1') {
     const shell = buildModularFloor(3, 3, 0x4a4a5a);
-    group.add(shell);
 
+    group.add(shell);
     const belfry = aeolianBelfryModel.clone();
     belfry.position.set(0, 0, -2.0);
-    group.add(belfry);
 
+    group.add(belfry);
     const bt1Lore = loreObjects.find((l) => l.sceneId === 'BT1');
     if (bt1Lore) group.add(createLoreOrb(bt1Lore));
 
   } else if (id === 'U1' || id === 'U2' || id === 'U3' || id === 'U4') {
     const shell = buildModularFloor(3, 3, 0x2b2b3a);
+
     group.add(shell);
     if (id === 'U3') {
       mirrorMesh = mirrorLockModel.clone();
@@ -6067,16 +11574,14 @@ function buildGenericScene(id: SceneId): THREE.Group {
     }
     if (id === 'U2' || id === 'U4') {
       const guard = createGuard(id, 0, -2, false);
-
       group.add(guard.mesh);
-
     }
 
     const uLore = loreObjects.find((l) => l.sceneId === id) ?? (id === 'U4' ? loreObjects[8] : undefined);
+
     if (uLore) {
 
       group.add(createLoreOrb(uLore));
-
     }
 
   } else if (id === 'TR1' || id === 'TR2' || id === 'TR3' || id === 'TR4') {
@@ -6086,24 +11591,26 @@ function buildGenericScene(id: SceneId): THREE.Group {
     group.add(shell);
 
     const chest = mimicChestModel.clone();
+
     chest.position.set(0, 0, -2.0);
+
     group.add(chest);
-
     const curator = createGuard(id, 0, -2, false);
-
     group.add(curator.mesh);
 
     const trLore = loreObjects.find((l) => l.sceneId === id) ?? loreObjects[9];
+
     if (trLore) group.add(createLoreOrb(trLore));
 
   } else if (id === 'AT1' || id === 'AT2' || id === 'AT3') {
-
     const shell = buildModularFloor(3, 3, 0x1e2a4a);
 
     group.add(shell);
 
     if (id === 'AT3') {
+
       const starmap = starmapPedestalModel.clone();
+
       starmap.position.set(0, 0, -2.0);
       group.add(starmap);
     } else {
@@ -6111,104 +11618,104 @@ function buildGenericScene(id: SceneId): THREE.Group {
       telescope.position.set(0, 0, -2.0);
       group.add(telescope);
     }
-
     const atLore = loreObjects.find((l) => l.sceneId === id) ?? loreObjects[10];
     if (atLore) group.add(createLoreOrb(atLore));
 
   } else if (id === 'AL1' || id === 'AL2' || id === 'AL3') {
-
     const shell = buildModularFloor(3, 3, 0x3a5a2b);
 
     group.add(shell);
 
     const bench = alchemistBenchModel.clone();
-    bench.position.set(0, 0, -2.0);
-    group.add(bench);
 
+    bench.position.set(0, 0, -2.0);
+
+    group.add(bench);
     const alLore = loreObjects.find((l) => l.sceneId === id) ?? loreObjects[11];
     if (alLore) group.add(createLoreOrb(alLore));
 
   } else if (id === 'RG1' || id === 'RG2' || id === 'RG3' || id === 'RG4') {
-
     const shell = buildModularFloor(3, 3, 0x3a5a2b);
 
     group.add(shell);
 
     const anemometer = rooftopAnemometerModel.clone();
-    anemometer.position.set(0, 0, -2.0);
-    group.add(anemometer);
 
+    anemometer.position.set(0, 0, -2.0);
+
+    group.add(anemometer);
     const planterL = starlightPlanterModel.clone();
     planterL.position.set(-6, 0, -4);
-    group.add(planterL);
 
+    group.add(planterL);
     const planterR = starlightPlanterModel.clone();
     planterR.position.set(6, 0, -4);
-    group.add(planterR);
 
+    group.add(planterR);
     const rgLore = loreObjects.find((l) => l.sceneId === id) ?? loreObjects[13];
     if (rgLore) group.add(createLoreOrb(rgLore));
 
   } else if (id === 'VR1' || id === 'VR2' || id === 'VR3') {
-
     const shell = buildModularFloor(3, 3, 0x1e1b4b);
 
     group.add(shell);
 
     const rift = voidRiftAnchorModel.clone();
-    rift.position.set(0, 0, -2.0);
-    group.add(rift);
 
+    rift.position.set(0, 0, -2.0);
+
+    group.add(rift);
     const vrLore = loreObjects.find((l) => l.sceneId === id) ?? loreObjects[14];
     if (vrLore) group.add(createLoreOrb(vrLore));
 
   } else if (id === 'RS1' || id === 'RS2' || id === 'RS3' || id === 'RS4' || id === 'RS5' || id === 'RS6') {
-
     const shell = buildModularFloor(3, 3, 0x4a3a5a);
 
     group.add(shell);
 
     const escher = escherAnchorModel.clone();
-    escher.position.set(0, 0, -2.0);
-    group.add(escher);
 
+    escher.position.set(0, 0, -2.0);
+
+    group.add(escher);
     const rsLore = loreObjects.find((l) => l.sceneId === id) ?? loreObjects[15];
     if (rsLore) group.add(createLoreOrb(rsLore));
 
   } else if (id === 'PB1' || id === 'PB2' || id === 'PB3' || id === 'PB4') {
-
     const shell = buildModularFloor(3, 3, 0x3a3a3a);
 
     group.add(shell);
 
     const wardenDesk = wardenDeskModel.clone();
+
     wardenDesk.position.set(-3.5, 0, -2.0);
+
     group.add(wardenDesk);
-
     const guard = createGuard(id, 0, -2, false);
-
     group.add(guard.mesh);
 
     const pbLore = loreObjects.find((l) => l.sceneId === id) ?? loreObjects[12];
+
     if (pbLore) group.add(createLoreOrb(pbLore));
 
   } else {
-
     const shell = buildModularFloor(3, 3);
 
     group.add(shell);
 
     const genericLore = loreObjects.find((l) => l.sceneId === id);
+
     if (genericLore) group.add(createLoreOrb(genericLore));
 
   }
-
   return group;
 
 }
 
 function getRoomHalfExtents(sceneId: SceneId | string): { hw: number; hh: number; isExpanded: boolean } {
+
   const isCustomCompound = sceneId === 'MH1' || sceneId === 'SAN1' || sceneId === 'BQ1' || sceneId === 'AG1';
+
   const isExtendedHall = sceneId === 'CO1' || sceneId === 'CO3';
   if (isCustomCompound) {
     const b = sceneById.get(sceneId as SceneId)?.bounds ?? { width: 12, height: 12 };
@@ -6216,9 +11723,9 @@ function getRoomHalfExtents(sceneId: SceneId | string): { hw: number; hh: number
   }
   return { hw: 18.0, hh: isExtendedHall ? 24.0 : 18.0, isExpanded: true };
 }
-
 function getEffectiveDoorPos(sceneId: SceneId | string, door: { x: number; z: number }): { x: number; z: number } {
   const { hw, hh, isExpanded } = getRoomHalfExtents(sceneId);
+
   if (!isExpanded) {
     return { x: door.x, z: door.z };
   }
@@ -6226,7 +11733,6 @@ function getEffectiveDoorPos(sceneId: SceneId | string, door: { x: number; z: nu
   let effZ = door.z;
   if (door.z <= -4.0) effZ = -hh + 1.0;
   else if (door.z >= 4.0) effZ = hh - 1.0;
-
   if (door.x >= 4.0) effX = hw - 1.0;
   else if (door.x <= -4.0) effX = -hw + 1.0;
 
@@ -6235,19 +11741,20 @@ function getEffectiveDoorPos(sceneId: SceneId | string, door: { x: number; z: nu
 
 function getTransitionSpawn(
   fromSceneId: SceneId | string,
+
   toSceneId: SceneId | string,
   explicitSpawn?: Partial<Spawn>,
 ): Partial<Spawn> {
   const { hw: toHw, hh: toHh, isExpanded: toExpanded } = getRoomHalfExtents(toSceneId);
-
   // Transitioning into S00 (courtyard)
   if (toSceneId === 'S00') {
+
     if (fromSceneId === 'OW1') return { x: 0, y: 0.6, z: -14.8 };
     return explicitSpawn ?? { x: 0, y: 0.6, z: 2.0 };
   }
-
   // Transitioning into an expanded room
   if (toExpanded) {
+
     const reverseDoor = (FORTRESS_EXITS[toSceneId] ?? []).find((d) => d.to === fromSceneId);
     if (reverseDoor) {
       if (reverseDoor.z >= 4.0) {
@@ -6265,7 +11772,6 @@ function getTransitionSpawn(
     }
     return { x: 0, y: 0.6, z: toHh - 3.2 };
   }
-
   return explicitSpawn ?? {};
 }
 
@@ -6277,6 +11783,7 @@ function addGenericColliders(): void {
 
   if (!isExpanded) {
     physics.addStaticBox(0.25, 3, hh + 0.5, -hw - 0.25, 3, 0);
+
     physics.addStaticBox(0.25, 3, hh + 0.5, hw + 0.25, 3, 0);
     physics.addStaticBox(hw + 0.5, 3, 0.25, 0, 3, hh + 0.25);
     physics.addStaticBox(hw + 0.5, 3, 0.25, 0, 3, -hh - 0.25);
@@ -6286,16 +11793,16 @@ function addGenericColliders(): void {
     const southExit = roomExits.find((e) => e.z >= 4.0);
     const eastExit = roomExits.find((e) => e.x >= 4.0);
     const westExit = roomExits.find((e) => e.x <= -4.0);
-
     const northPassable = !!northExit && requirementsMet(northExit.requires);
     const southPassable = !!southExit && requirementsMet(southExit.requires);
+
     const eastPassable = !!eastExit && requirementsMet(eastExit.requires);
     const westPassable = !!westExit && requirementsMet(westExit.requires);
-
     const gateOpeningHalf = 2.0;
-
     // North wall
+
     if (northExit && northPassable) {
+
       const segW = (hw - gateOpeningHalf) / 2;
       const segCenter = gateOpeningHalf + segW;
       physics.addStaticBox(segW, 3, 0.25, -segCenter, 3, -hh - 0.25);
@@ -6312,9 +11819,9 @@ function addGenericColliders(): void {
         physics.addStaticBox(gateOpeningHalf + 0.5, 3, 0.35, eff.x, 3, eff.z);
       }
     }
-
     // South wall
     if (southExit && southPassable) {
+
       const segW = (hw - gateOpeningHalf) / 2;
       const segCenter = gateOpeningHalf + segW;
       physics.addStaticBox(segW, 3, 0.25, -segCenter, 3, hh + 0.25);
@@ -6330,9 +11837,9 @@ function addGenericColliders(): void {
         physics.addStaticBox(gateOpeningHalf + 0.5, 3, 0.35, eff.x, 3, eff.z);
       }
     }
-
     // East wall
     if (eastExit && eastPassable) {
+
       const segH = (hh - gateOpeningHalf) / 2;
       const segCenter = gateOpeningHalf + segH;
       physics.addStaticBox(0.25, 3, segH, hw + 0.25, 3, -segCenter);
@@ -6347,9 +11854,9 @@ function addGenericColliders(): void {
         physics.addStaticBox(0.35, 3, gateOpeningHalf + 0.5, eff.x, 3, eff.z);
       }
     }
-
     // West wall
     if (westExit && westPassable) {
+
       const segH = (hh - gateOpeningHalf) / 2;
       const segCenter = gateOpeningHalf + segH;
       physics.addStaticBox(0.25, 3, segH, -hw - 0.25, 3, -segCenter);
@@ -6366,18 +11873,16 @@ function addGenericColliders(): void {
     }
   }
 }
-
 function refreshRoomColliders(): void {
   physics.clearStatic();
+
   if (currentSceneId === 'S00') {
     addS00Colliders();
   } else {
     addGenericColliders();
   }
 }
-
 function requirementsMet(requires: string[]): boolean {
-
   return requires.every((req) => {
 
     if (req.startsWith('ITEM_')) return inventory.has(req);
@@ -6435,7 +11940,9 @@ function updateHUD(): void {
     else if (currentSceneId === 'TR1' || currentSceneId === 'TR2' || currentSceneId === 'TR3' || currentSceneId === 'TR4') hudQuest.textContent = 'S8 — The Hunter\'s Lie';
 
     else if (currentSceneId === 'AT1' || currentSceneId === 'AT2' || currentSceneId === 'AT3') hudQuest.textContent = 'S9 — The Star That Lies';
+
     else if (currentSceneId === 'AL1' || currentSceneId === 'AL2' || currentSceneId === 'AL3') hudQuest.textContent = 'S10 — The Unstable Formula';
+
     else if (currentSceneId === 'RG1' || currentSceneId === 'RG2' || currentSceneId === 'RG3' || currentSceneId === 'RG4') hudQuest.textContent = 'S12 — The Wind\'s Secret';
     else if (currentSceneId === 'VR1' || currentSceneId === 'VR2' || currentSceneId === 'VR3') hudQuest.textContent = 'S13 — The Dreamer\'s Descent';
     else if (currentSceneId === 'RS1' || currentSceneId === 'RS2' || currentSceneId === 'RS3' || currentSceneId === 'RS4' || currentSceneId === 'RS5' || currentSceneId === 'RS6') hudQuest.textContent = 'S6 — The Stair That Remembers';
@@ -6443,9 +11950,7 @@ function updateHUD(): void {
     else hudQuest.textContent = 'Q0 — Infiltrate Fortress Barbican';
   }
   if (hpFill) hpFill.style.width = `${Math.max(0, playerHP)}%`;
-
   if (lowHpOverlay) lowHpOverlay.style.opacity = playerHP < 30 ? '1' : '0';
-
   if (hudMapSubtitle) hudMapSubtitle.textContent = `${discoveredScenes.size} / ${CAMPAIGN_ORDER.length} Explored`;
 
   if (mapDiscoveryBadge) mapDiscoveryBadge.textContent = `${discoveredScenes.size} / ${CAMPAIGN_ORDER.length} Explored`;
@@ -6671,12 +12176,14 @@ function respawn(): void {
 }
 
 function updateGuard(g: Guard, dt: number): void {
+
   if (g.mixer) {
+
     g.mixer.update(dt);
   }
-
   if (g.state === 'dead' || g.sceneId !== currentSceneId) {
     if (g.hpBarEl) g.hpBarEl.classList.remove('visible');
+
     if (g.alertEl) g.alertEl.style.opacity = '0';
     return;
   }
@@ -6705,9 +12212,7 @@ function updateGuard(g: Guard, dt: number): void {
   if (g.poiseFillEl) {
     g.poiseFillEl.style.width = Math.max(0, ((g.poise || 0) / (g.maxPoise || 45)) * 100) + '%';
   }
-
   // Update floating HP bar position over guard head
-
   if (g.hpBarEl && g.hpFillEl) {
 
     if (g.hpBarTimer && g.hpBarTimer > 0) {
@@ -6803,17 +12308,19 @@ function updateGuard(g: Guard, dt: number): void {
     g.mesh.position.y = 1.1 + Math.sin(Date.now() * 0.0035) * 0.18;
 
     if (g.state === 'chase' && targetDist < 9.0 && g.cooldown <= 0) {
+
       if (g.actions?.['Attack']) g.actions['Attack'].reset().play();
+
       shootMirrorBolt(new THREE.Vector3(g.mesh.position.x, 1.0, g.mesh.position.z), new THREE.Vector3(targetX, 0.8, targetZ));
       g.cooldown = 3.2;
     }
-
   }
-
   if (g.state === 'chase') {
 
     if (targetDist > 0.85) {
+
       playGuardAnim(g, g.actions?.['Walk'] ? 'Walk' : 'Idle');
+
       g.windupTimer = 0;
       if (g.alertEl && g.alertEl.textContent === '⚔️') {
         g.alertEl.textContent = '!';
@@ -6915,19 +12422,17 @@ function updateGuard(g: Guard, dt: number): void {
       g.mesh.position.z += (pdz / pd) * g.speed * 0.55 * dt;
     }
   }
-
 }
-
 function tryAttack(): void {
+
   // Swing animation is driven by the combat controller; damage resolves when its hitbox window opens.
+
   mainChar.combat.setAimYaw(playerMesh.rotation.y);
   mainChar.combat.pressAttack();
 }
 let pendingMeleeMult = 1;
 function resolveMeleeHits(): void {
-
   SoundFX.playSlash();
-
   attackLungeOffset = 0.28;
 
   const targets = activeGuards.filter((g) => g.state !== 'dead' && g.sceneId === currentSceneId);
@@ -6961,10 +12466,10 @@ function resolveMeleeHits(): void {
         spawnDamagePopup(g.mesh.position, 'CRITICAL! -80 HP', true);
 
         showToast('Master Thief: Lethal Backstab Executed!');
+
         mainChar?.combatParticles?.spawnHitSparks(g.mesh.position, { x: Math.sin(playerMesh.rotation.y), y: 0, z: Math.cos(playerMesh.rotation.y) }, true, 0xf59e0b);
 
       } else {
-
         comboCount++;
 
         comboTimer = 2.0;
@@ -6976,13 +12481,15 @@ function resolveMeleeHits(): void {
         const isCrit = Math.random() < critChance;
 
         let finalDmg = Math.round(25 * pendingMeleeMult * comboMult * (isCrit ? 2 : 1));
+
         const weaponColor = mainChar?.equippedWeapon?.def.trailColor ?? 0x38bdf8;
+
         const attackDir = { x: Math.sin(playerMesh.rotation.y), y: 0, z: Math.cos(playerMesh.rotation.y) };
         const cState = mainChar?.combat.state ?? 'Light_Attack_1';
         const isFinisher = cState === 'Heavy_Combo_Finisher' || isCrit;
-
         if (g.isStunned) {
           finalDmg = Math.round(finalDmg * 2.2);
+
           g.hp -= finalDmg;
           SoundFX.playCriticalHit();
           cameraShake = 0.35;
@@ -6999,9 +12506,9 @@ function resolveMeleeHits(): void {
           const poiseDmg = (tier === 3 ? 40 : (tier === 2 ? 22 : 15)) * (isCrit ? 1.5 : 1);
           g.poise = Math.max(0, (g.poise || (g.maxPoise || 45)) - poiseDmg);
           g.poiseRegenTimer = 2.5;
-
           if (isCrit) {
             SoundFX.playCriticalHit();
+
             spawnDamagePopup(g.mesh.position, '-' + finalDmg + ' HP (CRIT!)', true);
             flashMesh(g.mesh, 0xfbbf24, 300);
             cameraShake = 0.2;
@@ -7011,11 +12518,11 @@ function resolveMeleeHits(): void {
             cameraShake = 0.12;
             SoundFX.playHit();
           }
-
           mainChar?.combatParticles?.spawnHitSparks(g.mesh.position, attackDir, isFinisher, weaponColor);
-
           if (g.poise <= 0) {
+
             g.isStunned = true;
+
             g.stunTimer = 2.5;
             g.windupTimer = 0;
             SoundFX.playGlassShatter();
@@ -7031,9 +12538,7 @@ function resolveMeleeHits(): void {
           }
         }
       }
-
       // Stagger knockback away from player
-
       const kx = Math.sin(playerMesh.rotation.y) * 0.38;
 
       const kz = Math.cos(playerMesh.rotation.y) * 0.38;
@@ -7043,10 +12548,12 @@ function resolveMeleeHits(): void {
       g.mesh.position.z += kz;
 
       g.hpBarTimer = 3.5;
+
       if (g.hp > 0) playGuardAnim(g, 'Hit');
 
       // Boss Vaelor Phase 2 Shift at 50% HP
       if (g === vaelorBoss && g.hp <= 60 && !vaelorPhase2Triggered && g.hp > 0) {
+
         vaelorPhase2Triggered = true;
         if (vaelorBoss.actions?.['Phase2_Invert']) {
           vaelorBoss.actions['Phase2_Invert'].reset().play();
@@ -7058,9 +12565,9 @@ function resolveMeleeHits(): void {
         g.mesh.position.set(0, 1.2, -3.2);
         flashMesh(g.mesh, 0xf59e0b, 500);
       }
-
       // Mirror Wraith / Boss Dimensional Teleport on Hit
       if (g.isWraith && g.hp > 0) {
+
         const spots = [
           new THREE.Vector3(-3.5, 1.1, -1.0),
           new THREE.Vector3(3.5, 1.1, -1.0),
@@ -7074,14 +12581,12 @@ function resolveMeleeHits(): void {
         flashMesh(g.mesh, 0xc084fc, 250);
         spawnDamagePopup(g.mesh.position, 'TELEPORT!', true);
       }
-
       if (g.hp <= 0) {
         g.state = 'dead';
+
         playGuardAnim(g, 'Death');
         g.mesh.parent?.remove(g.mesh);
-
         if (g === vaelorBoss) {
-
           solvedPuzzles.add('PUZZLE_HOLLOW_GLASS');
 
           abilities.add('ABILITY_GRAVITON_INVERSION');
@@ -7477,7 +12982,9 @@ function interactQuestRuntime(): boolean {
   const puzzle = questRuntime.puzzleAt(currentSceneId, playerState.x, playerState.z, 2.2);
 
   if (puzzle && !puzzle.solved) {
+
     if (autoEnabled || autoplayController.running) {
+
       const solution = puzzle.solutions.find((s) => s.available);
       if (solution) {
         const result = questRuntime.attempt(puzzle.id, solution.method);
@@ -7496,9 +13003,7 @@ function interactQuestRuntime(): boolean {
     openPuzzlePanel(puzzle.id);
     return true;
   }
-
   const pickup = questRuntime.pickupAt(currentSceneId, playerState.x, playerState.z, 1.9);
-
   if (pickup && !questRuntime.pickupCollected(pickup.id)) {
 
     const collected = questRuntime.collectPickup(pickup.id);
@@ -7564,7 +13069,9 @@ function interact(skipLore = false): void {
   }
 
   // S00 Starlight Raven
+
   if (currentSceneId === 'S00' && ravenMesh) {
+
     const d = Math.hypot(ravenMesh.position.x - playerState.x, ravenMesh.position.z - playerState.z);
     if (d < 2.5) {
       if (activeDialogue) {
@@ -7576,9 +13083,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // OW1 Gatekeeper Orin
   if (currentSceneId === 'OW1' && orinMesh) {
+
     const d = Math.hypot(orinMesh.position.x - playerState.x, orinMesh.position.z - playerState.z);
     if (d < 2.5) {
       if (activeDialogue) {
@@ -7590,9 +13097,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // OW1 Iron Nail
   if (currentSceneId === 'OW1' && !inventory.has('ITEM_IRON_NAIL')) {
+
     const d = Math.hypot(2 - playerState.x, -1 - playerState.z);
     if (d < 2.5) {
       inventory.add('ITEM_IRON_NAIL');
@@ -7606,9 +13113,7 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // GH2 Mirror Lock
-
   if (currentSceneId === 'GH2' && mirrorMesh && mirrorMesh.visible) {
 
     const d = Math.hypot(mirrorMesh.position.x - playerState.x, mirrorMesh.position.z - playerState.z);
@@ -8182,7 +13687,9 @@ function interact(skipLore = false): void {
         saveCheckpoint();
 
       } else {
+
         SoundFX.playLocked();
+
         showToast('Locked: Requires Mirror Phase');
       }
       return;
@@ -8199,9 +13706,7 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // HM1 True Mirror
-
   if (currentSceneId === 'HM1' && trueMirrorMesh && trueMirrorMesh.visible) {
 
     const d = Math.hypot(trueMirrorMesh.position.x - playerState.x, trueMirrorMesh.position.z - playerState.z);
@@ -8357,7 +13862,9 @@ function interact(skipLore = false): void {
       const d = Math.hypot(hazelMesh.position.x - playerState.x, hazelMesh.position.z - playerState.z);
 
       if (d < 2.5) {
+
         if (activeDialogue) {
+
           closeDialogue();
         } else {
           if (hazelActions['Talk']) hazelActions['Talk'].reset().play();
@@ -8365,9 +13872,7 @@ function interact(skipLore = false): void {
         }
         return;
       }
-
     }
-
     if (kettleMesh && !solvedPuzzles.has('PUZZLE_HOSPITALITY_GAMBIT')) {
 
       const d = Math.hypot(kettleMesh.position.x - playerState.x, kettleMesh.position.z - playerState.z);
@@ -8427,7 +13932,9 @@ function interact(skipLore = false): void {
   }
 
   // GH1 Gatehouse Exterior - Clear the gatehouse
+
   if (currentSceneId === 'GH1' && !solvedPuzzles.has('PUZZLE_GATEHOUSE_EXTERIOR')) {
+
     const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
     if (d < 2.5) {
       if (inventory.has('ITEM_CAPTAIN_LEDGER')) {
@@ -8437,9 +13944,9 @@ function interact(skipLore = false): void {
         showToast('Puzzle Solved: Gatehouse Exterior Cleared!');
         saveCheckpoint();
       } else {
-
         SoundFX.playLocked();
         showToast("Locked: Requires Captain's Patrol Ledger");
+
       }
       return;
     }
@@ -8455,9 +13962,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // GH4 Vent Passage - Ascend the vent
   if (currentSceneId === 'GH4' && !solvedPuzzles.has('PUZZLE_VENT_ASCENT')) {
+
     const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
     if (d < 2.5) {
       if (inventory.has('ITEM_VENT_KEY')) {
@@ -8467,9 +13974,9 @@ function interact(skipLore = false): void {
         showToast('Puzzle Solved: Vent Ascent Cleared!');
         saveCheckpoint();
       } else {
-
         SoundFX.playLocked();
         showToast("Locked: Requires Vent Grate Key");
+
       }
       return;
     }
@@ -8485,9 +13992,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // SQ1 Servants Quarters - Uncover the servant's secret
   if (currentSceneId === 'SQ1' && !solvedPuzzles.has('PUZZLE_SERVANT_SECRET')) {
+
     const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
     if (d < 2.5) {
       if (inventory.has('ITEM_SERVANT_DIARY')) {
@@ -8497,9 +14004,9 @@ function interact(skipLore = false): void {
         showToast('Puzzle Solved: Servant Secret Uncovered!');
         saveCheckpoint();
       } else {
-
         SoundFX.playLocked();
         showToast("Locked: Requires Servant's Diary");
+
       }
       return;
     }
@@ -8515,9 +14022,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // B1 Barracks Hall - Raid the barracks armory
   if (currentSceneId === 'B1' && !solvedPuzzles.has('PUZZLE_BARRACKS_RAID')) {
+
     const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
     if (d < 2.5) {
       if (inventory.has('ITEM_ARMORY_KEY')) {
@@ -8527,9 +14034,9 @@ function interact(skipLore = false): void {
         showToast('Puzzle Solved: Barracks Armory Raided!');
         saveCheckpoint();
       } else {
-
         SoundFX.playLocked();
         showToast("Locked: Requires Barracks Armory Key");
+
       }
       return;
     }
@@ -8545,9 +14052,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // RC1 Relativity Cloister - Anchor the cloister
   if (currentSceneId === 'RC1' && !solvedPuzzles.has('PUZZLE_RELATIVITY_ANCHOR')) {
+
     const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
     if (d < 2.5) {
       if (inventory.has('ITEM_IRON_NAILS')) {
@@ -8557,9 +14064,9 @@ function interact(skipLore = false): void {
         showToast('Puzzle Solved: Relativity Cloister Anchored!');
         saveCheckpoint();
       } else {
-
         SoundFX.playLocked();
         showToast("Locked: Requires Iron Nail Bundle");
+
       }
       return;
     }
@@ -8575,9 +14082,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // CR1 Chronomantic Scriptorium - Solve retrocausal portcullis
   if (currentSceneId === 'CR1' && !solvedPuzzles.has('PUZZLE_RETROCAUSAL_PORTCULLIS')) {
+
     const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
     if (d < 2.5) {
       if (inventory.has('ITEM_TACHYON_PHIAL')) {
@@ -8587,9 +14094,9 @@ function interact(skipLore = false): void {
         cameraShake = 0.3;
         showToast('Puzzle Solved: Retrocausal Portcullis Unlocked!');
         showToast('Acquired: Retrograde Ouroboros');
-
         saveCheckpoint();
       } else {
+
         SoundFX.playLocked();
         showToast("Locked: Requires Tachyon Phial");
       }
@@ -8607,9 +14114,9 @@ function interact(skipLore = false): void {
       return;
     }
   }
-
   // MS3 Music Salon - Cadence of Resonant Harmonies
   if (currentSceneId === 'MS3' && !solvedPuzzles.has('PUZZLE_RESONANT_HARMONIES')) {
+
     const d = Math.hypot(0 - playerState.x, 0 - playerState.z);
     if (d < 2.5) {
       if (inventory.has('ITEM_GLASS_MALLET')) {
@@ -8619,9 +14126,9 @@ function interact(skipLore = false): void {
         cameraShake = 0.3;
         showToast('Puzzle Solved: Resonant Harmonies Restored!');
         showToast('Acquired: Score of the Unbroken Chord');
-
         saveCheckpoint();
       } else {
+
         SoundFX.playLocked();
         showToast("Locked: Requires Glass-Armonica Mallet");
       }
@@ -8639,9 +14146,7 @@ function interact(skipLore = false): void {
         } else {
           showToast('Cynthia Trapped in the Glass Heart! Defeat Archillusionist Vaelor!');
         }
-
         return;
-
       }
 
     }
@@ -8774,8 +14279,13 @@ function applyOrigin(id: string, applyLoadout = true): void {
 
   localStorage.setItem('veilkeep.origin.v1', id);
 
-}
+  // Phase 2 GLB integration: load origin-aware player model (async, non-blocking).
 
+  void loadPlayerCharacter(id)
+
+    .then((pc) => { (window as any).__playerCharacter = pc; })
+    .catch((err) => console.warn('[PlayerCharacter] load failed', err));
+}
 /** Apply up to `maxTraits` Kleptomaniac Quirks (GDD 5b.1). */
 
 function applyTraits(ids: string[]): string[] {
@@ -8835,18 +14345,20 @@ function throwDistraction(): void {
 }
 
 function checkExits(): void {
+
   if (exitCooldown > 0) return;
 
   for (const exit of exits[currentSceneId]) {
     // The automaton only commits to the door its route chose; otherwise it
+
     // would be yanked through any side door it happens to walk past.
     if (autoEnabled && autoExitTarget !== exit.to) continue;
-
     const doorPos = getEffectiveDoorPos(currentSceneId, exit);
     const d = Math.hypot(doorPos.x - playerState.x, doorPos.z - playerState.z);
 
     if (d < 1.8) {
       if (requirementsMet(exit.requires)) {
+
         exitCooldown = 1.5;
         const spawn = getTransitionSpawn(currentSceneId, exit.to, exit.spawn);
         loadScene(exit.to, spawn);
@@ -8867,15 +14379,15 @@ function checkExits(): void {
           playerState.x = doorPos.x - 0.3;
           clamped = true;
         }
-
         if (clamped) {
           const py = playerMesh.position.y || 0.6;
+
           physics.teleportPlayer({ x: playerState.x, y: py, z: playerState.z });
           playerMesh.position.set(playerState.x, py, playerState.z);
         }
-
         if (lockedMessageCooldown <= 0) {
           const reqLabels = exit.requires.map(r =>
+
             r === 'ITEM_IRON_NAIL' ? 'Iron Nail'
             : r === 'PUZZLE_MIRROR_LOCK' ? 'Mirror Lock'
             : r === 'PUZZLE_TRUE_MIRROR' ? 'True Mirror Cleansed'
@@ -8891,9 +14403,7 @@ function checkExits(): void {
         return;
       }
     }
-
   }
-
 }
 
 // ---------- Auto-battler runtime ----------
@@ -8983,7 +14493,9 @@ function autoNavigate(tx: number, tz: number, arriveRadius: number, dt: number):
   const targetChanged = !autoPathTarget || Math.hypot(autoPathTarget.x - tx, autoPathTarget.z - tz) > 0.35;
 
   if (autoRepathTimer <= 0 || targetChanged) {
+
     const { hw, hh } = getRoomHalfExtents(currentSceneId);
+
     const bounds = { minX: -hw + 0.5, maxX: hw - 0.5, minZ: -hh + 0.5, maxZ: hh - 0.5 };
     autoPath = findPath(
       { x: playerState.x, z: playerState.z },
@@ -8991,14 +14503,12 @@ function autoNavigate(tx: number, tz: number, arriveRadius: number, dt: number):
       autoObstacles(),
       bounds,
     );
-
     autoPathTarget = { x: tx, z: tz };
-
     autoRepathTimer = 0.45;
+
   }
 
   while (autoPath.length > 0) {
-
     const head = autoPath[0];
 
     if (Math.hypot(head.x - playerState.x, head.z - playerState.z) > 0.22) break;
@@ -9353,8 +14863,9 @@ function toggleAutoBattler(force?: boolean): void {
 
 }
 
-function autoOnSceneEnter(id: SceneId): void {
+(window as any).toggleAutoBattler = toggleAutoBattler;
 
+function autoOnSceneEnter(id: SceneId): void {
   autoVisited.add(id);
 
   autoRoute = [];
@@ -9400,8 +14911,8 @@ function autoTick(dt: number): void {
   if (!autoEnabled) return;
 
   autoHudTimer -= dt;
-
   if (autoHudTimer <= 0) {
+
 
     autoHudTimer = 0.2;
 
@@ -9684,18 +15195,20 @@ function autoTick(dt: number): void {
   if (arrived) {
 
     // Trigger radius is 1.8, but the door point itself sits near or inside the wall
+
     // collider; nudge straight at it for the final centimetres.
 
     autoNavigate(effDoor.x, effDoor.z, 0.1, dt);
-
   }
+
 
 }
 
 // Player hero
-
 // Main character: Blender-authored rigged + animated GLB (procedural fallback if missing).
+
 const mainChar = await spawnMainCharacter({
+
   scene: engine.scene,
   urls: ['assets/models/main_character.glb'],
   callbacks: {
@@ -9711,9 +15224,9 @@ const mainChar = await spawnMainCharacter({
   },
 });
 const playerMesh = mainChar.rig.group;
-
 const WEAPON_CYCLE: WeaponId[] = ['hunter_blade', 'glass_cleaver', 'void_rapier', 'sun_staff'];
 let currentWeaponIdx = 0;
+
 function cycleNextWeapon(): void {
   if (!mainChar) return;
   currentWeaponIdx = (currentWeaponIdx + 1) % WEAPON_CYCLE.length;
@@ -9723,9 +15236,7 @@ function cycleNextWeapon(): void {
   flashMesh(playerMesh, equipped.def.trailColor, 200);
   showToast('Equipped: ' + equipped.def.name + ' (' + equipped.def.damageMultiplier + 'x Dmg)');
 }
-
   // Animation mixer for Kaelen (rigged GLB)
-
   const playerMixer = new THREE.AnimationMixer(playerMesh);
 
   let playerCurrentAnim = 'Idle';
@@ -9735,10 +15246,10 @@ function cycleNextWeapon(): void {
   function playPlayerAnim(name: string): void {
 
     if (mainChar) return; // CombatController owns the player's animation now
+
     if (playerCurrentAnim === name) return;
 
     const clip = (kaelenAnimations || []).find((c) => c.name === name);
-
     if (!clip) return;
 
     const action = playerMixer.clipAction(clip);
@@ -9748,7 +15259,9 @@ function cycleNextWeapon(): void {
     action.reset().fadeIn(0.15).play();
 
     playerCurrentAction = action;
+
     playerCurrentAnim = name;
+
   }
   const idleClip = (kaelenAnimations || []).find((c) => c.name === 'Idle');
   if (idleClip && !mainChar) playerMixer.clipAction(idleClip).play();
@@ -9763,9 +15276,7 @@ playerMesh.add(playerLight);
 // Controls
 canvas.addEventListener('contextmenu', (e) => {
   e.preventDefault();
-
   tryParry();
-
 });
 
 canvas.addEventListener('mousedown', (e) => {
@@ -9957,13 +15468,13 @@ window.addEventListener('keydown', (e) => {
   }
 
     if (k === 't') {
+
       e.preventDefault();
+
       cycleNextWeapon();
       return;
     }
-
   // Movement keys
-
   if (k === 'w' || k === 'arrowup') playerState.keys.w = true;
 
   if (k === 's' || k === 'arrowdown') playerState.keys.s = true;
@@ -10126,8 +15637,10 @@ const autoplayQueryValue = (autoplayParams.get('autoplay') ?? '').toLowerCase();
 
 const autoplayRequested = autoplayQueryValue === '1' || autoplayQueryValue === 'true' || autoplayQueryValue === 'yes';
 
-function autoplayQuerySpeed(): number {
+const autobattleQueryValue = (autoplayParams.get('autobattle') ?? '').toLowerCase();
 
+const autobattleRequested = autobattleQueryValue === '1' || autobattleQueryValue === 'true' || autobattleQueryValue === 'yes';
+function autoplayQuerySpeed(): number {
   const raw = Number(autoplayParams.get('speed') ?? '1');
 
   return Number.isFinite(raw) && raw > 0 ? raw : 1;
@@ -10172,7 +15685,7 @@ const titlePromise = new Promise<void>((resolve) => {
 
   if (contBtn) contBtn.addEventListener('click', dismissTitle);
 
-  if (startingNewRun || autoplayRequested) dismissTitle();
+  if (startingNewRun || autoplayRequested || autobattleRequested) dismissTitle();
 
   else if (!hadSaveAtBoot && contBtn) contBtn.style.display = 'none';
 
@@ -10276,8 +15789,9 @@ titlePromise.then(() => {
 
     if (autoplayRequested) startAutoplayFromQuery();
 
-  };
+    if (autobattleRequested) toggleAutoBattler(true);
 
+  };
   if (savedOrigin) {
 
     applyOrigin(savedOrigin, !restoredFromSave);
@@ -10288,7 +15802,7 @@ titlePromise.then(() => {
 
   }
 
-  if (autoplayRequested) {
+  if (autoplayRequested || autobattleRequested) {
 
     // Hands-free boot: no human is present to choose an origin.
 
@@ -10669,7 +16183,9 @@ function getDiagnostics(): {
     boundsFor: (id: string) => sceneById.get(id as SceneId)?.bounds ?? null,
 
     teleport: (x: number, z: number, y = 0.6) => {
+
       const matchDoor = (exits[currentSceneId] ?? []).find((d) => Math.hypot(d.x - x, d.z - z) < 0.6);
+
       const target = matchDoor ? getEffectiveDoorPos(currentSceneId, matchDoor) : { x, z };
       physics.teleportPlayer({ x: target.x, y, z: target.z });
       playerState.x = target.x;
@@ -10677,13 +16193,11 @@ function getDiagnostics(): {
       playerMesh.position.set(target.x, y, target.z);
       exitCooldown = 0;
     },
-
     refreshColliders: () => {
       refreshRoomColliders();
+
     },
-
     stepPhysics: (ticks: number) => {
-
       let pos = physics.movePlayer(0, 0);
 
       for (let i = 1; i < ticks; i++) pos = physics.movePlayer(0, 0);
@@ -10929,17 +16443,17 @@ function getDiagnostics(): {
     },
 
     showEnding: (type?: string) => {
+
       openEndingModal();
+
       if (type) renderEndingEpilogue(type);
     },
-
     closeEnding: () => {
       isEndingModalOpen = false;
+
       if (endingModal) endingModal.style.display = 'none';
     },
-
     isEndingOpen: () => isEndingModalOpen,
-
   },
 
   auto: {
@@ -11049,12 +16563,12 @@ const autoplayHost: AutoplayHost = {
   },
 
   getBounds: () => {
+
     const { hw, hh } = getRoomHalfExtents(currentSceneId);
+
     return { minX: -hw + 0.5, maxX: hw - 0.5, minZ: -hh + 0.5, maxZ: hh - 0.5 };
   },
-
   sceneExists: (id) => sceneById.has(id as SceneId),
-
   setInput: (x, z) => { autoInput = { x, z }; },
 
   navigate: (x, z, radius, dt) => autoNavigate(x, z, radius, dt),
@@ -11102,16 +16616,16 @@ const autoplayHost: AutoplayHost = {
   markCleared: (sceneId) => autoCleared.add(sceneId as SceneId),
 
   markVisited: (sceneId) => { autoVisited.add(sceneId as SceneId); },
+
   probeClearance: (from, to) => physics.probeClearance(from, to),
+
   nudge: () => {
     autoNudgeUntil = performance.now() + 500;
     autoPath = [];
-
     autoPathTarget = null;
     autoRepathTimer = 0;
 
   },
-
   setSpeedMultiplier: (multiplier) => { autoplaySpeedScale = multiplier; },
 
   toast: (message) => showToast(message),
@@ -11177,4 +16691,3 @@ function startAutoplayFromQuery(): void {
 }
 
 syncAutoplayButton();
-

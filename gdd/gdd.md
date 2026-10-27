@@ -170,7 +170,7 @@ Inspired by the systemic conflict between magic and technology in [Arcanum: Of S
 
 ### 2. Reconciling the Timeline: The 14-Year vs. 80-Winter Relativistic Dilation
 Why is Kaelen Voss 29 years old (having fled the keep 14 years ago in 1886), while inhabitants inside the keep speak of **80 winters** of captivity?
-- **The Chronomantic Overclock:** When Vaelor tore the mountain into the sky in **1886** (14 mortal years before the present year **1900**), he discovered that even crystal stasis could not completely halt Cynthia's *Hollow Glass* disease. Desperate to buy centuries of research time before her heart beat its last, Vaelor sealed the **Chronomantic Scriptorium** (`CR1–CR5`) and accelerated the keep's internal temporal field to **5.714× mortal speed** while resetting the household's domestic clock every midnight.
+- **The Chronomantic Overclock:** When Vaelor tore the mountain into the sky in **1886** (14 mortal years before the present year **1900**), he discovered that even crystal stasis could not completely halt Cynthia's *Hollow Glass* disease. Desperate to buy centuries of research time before her heart beat its last, Vaelor sealed the **Chronomantic Scriptorium** (`CR1–CR5`) and accelerated the keep's internal temporal field to **5.714�— mortal speed** while resetting the household's domestic clock every midnight.
 - **Dual Temporal Reality:** To Kaelen and Guildmaster Sable down in Greyport, **14 mortal years** have elapsed. To Gatekeeper Orin, Butler Bartholomew, Lady Eleanor, and Lord Byakko trapped inside the pressurized Starlight Veil, **80 subjective winters** of repeating midnight loops have ground away their sanity.
 
 ### 3. Kaelen's Hidden Complicity: "The First Fracture"
@@ -1232,6 +1232,11 @@ Every screen of the world is listed below with its contents and transitions. The
 - **SQ4 Diary Room (secret)** — Servant's diary (Vaelor's daughter). Requires lockpick 3. Exits: W→SQ1.
 - **SQ5 Rest Room** — Save/rest, food buffs. Exits: S→SQ1.
 
+**The Aether-Skiff Hangar & Air-Pirate Dock (AP1)**
+
+- **AP1 Hangar Bay** — A concealed mooring bay carved into the fortress's upper cliff face, where a smuggler's steam-driven air-skiff is docked. Rival air-pirates (the Brass Corsairs) have breached the hangar and are looting the skiff's cargo. A pitched battle erupts: Kaelen must fight through 3-4 air-pirate raiders (armed with pneumatic harpoon grapples and steam-pistols) to secure the skiff and its starlight-fuel reserves. The pirates' captain, Captain Rook, dual-wields a steam-pistol and a cutlass; defeating him yields the *Brass Corsair's Signet* (unlocks black-market trade) and the skiff's *Aether-Compass* (fast-travel item). The hangar's ceiling crane can be used to drop cargo crates on pirates (environmental kill). Exits: S→SQ1 (via vent), E→AP2.
+- **AP2 Rook's Cabin (hidden)** — The captain's quarters aboard the moored skiff. Contains Rook's logbook (lore), 2x Tachyon Phials, and the *Sky-Courier Flight Whistle* (summons an aether-pigeon for fast travel). Requires lockpick 2. Exits: W→AP1.
+
 **Kitchens**
 - **K1 Kitchen Main** — Cook Hesta (S1). High-pressure steam kettles. Exits: W→SQ1, D→K3.
 - **K2 Pantry** — Starlight pepper (belief puzzle hint). Exits: S→K1.
@@ -1660,7 +1665,7 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
 | The Séance of Shifting Shadows | Haunted Chambers (HA4) | Poltergeist parrying & spirit mirror reflection | Align authentic childhood relics, strike Echo Bell, and shatter false mirrors with Truth Lens |
 | The Aeolian Tempest Harmony | High Eyrie (EY3) | Acoustic wind-baffle tuning | Tune 4 bronze wind-harps with Echo Bell to harmonize with storm and unseal Lord Aurelius |
 | The Clew of Shifting Corridors | Brass Labyrinth (LB2–LB4) | 8-beat steam rhythm navigation & acoustic stealth | Anchor Starlight Clew to 3 bollards, move on steam beats, evade blind Minotaur's acoustic hearing |
-| The Hydraulic Siphon Matrix | Prison Block (PB3/PB5) | Shifting 3×3 cage grid & pressure valve balancing | Equalize valves to 180 PSI, form central mid-level bridge across siphon trench, and bypass arc lights |
+| The Hydraulic Siphon Matrix | Prison Block (PB3/PB5) | Shifting 3�—3 cage grid & pressure valve balancing | Equalize valves to 180 PSI, form central mid-level bridge across siphon trench, and bypass arc lights |
 | The Cryo-Prism Octagram | Menagerie (M4) | Cryogenic steam pressure balancing & starlight refraction alignment | Equalize 8 cryo-valves to 90 PSI, align 4 prism lenses through frost mist, and sever cage resonance chimes |
 | The Dermal Cipher & Blood-Siphon Lectern | Arcane Library (L5) | Anatomical skin stanza decoding, blood tithe sacrifice & vocal riddle | Decode 4 skin stanzas with ghost-light, donate blood tithe into lectern, and answer 3 riddles of mortality |
 | The Glacial Hearth & Permafrost Trap Network | Winter Solarium (WS1) | Snowdrift trap disarming, steam radiator bypass & rafter flue venting | Disarm 4 cryo-plates & 3 tripwires, pick 4 radiator lockboxes, and vent steam to thaw room |
@@ -1810,9 +1815,9 @@ Rather than serving as flat decorative props, the oil paintings, vintage circus 
   - **The Cascade Payoff:** If freed, Asterion lets out a cathartic roar as the brass mask retracts, restoring his humanity and granting him as an ally for Sanctum Boss Phase 2. The labyrinth walls lock into a permanent open thoroughfare, and the Architect's Master Vault (`LB5`) unseals.
   - **Loot & Reward:** Solves Puzzle 29, completes S30, and rewards **Ariadne's Starlight Clew**, **The Minotaur's Brass Labrys**, and **Asterion's Gilded Horn**.
 - **The Hydraulic Siphon Matrix (The Siphon Warden's Lockout — PB3 & PB5):**
-  - **Concept & Narrative Context:** In the subterranean gaol (`PB3`), nine hanging isolation cells form a shifting 3×3 matrix suspended over an electrified starlight siphon trench. Castellan Dredge has decoupled the hydraulic balance to isolate the deep oubliette (`PB5`) where Eldrin the Star-Carver is drained. To reach Eldrin, Kaelen must manipulate the three high-pressure manifold levers (`Valve Alpha`, `Valve Beta`, `Valve Gamma`) on the observation catwalk while evading sweeping starlight searchlights that trigger an automatic alarm and electrified floor grids.
+  - **Concept & Narrative Context:** In the subterranean gaol (`PB3`), nine hanging isolation cells form a shifting 3�—3 matrix suspended over an electrified starlight siphon trench. Castellan Dredge has decoupled the hydraulic balance to isolate the deep oubliette (`PB5`) where Eldrin the Star-Carver is drained. To reach Eldrin, Kaelen must manipulate the three high-pressure manifold levers (`Valve Alpha`, `Valve Beta`, `Valve Gamma`) on the observation catwalk while evading sweeping starlight searchlights that trigger an automatic alarm and electrified floor grids.
   - **The Mechanics:**
-    - The 3×3 cage grid starts in a staggered configuration (Cell elevations: High, Mid, Low). Only cells at 'Mid' elevation form a walkable stepping-stone bridge; cells at 'Low' are submerged in lethal starlight acid; cells at 'High' are blocked by ceiling spikes.
+    - The 3�—3 cage grid starts in a staggered configuration (Cell elevations: High, Mid, Low). Only cells at 'Mid' elevation form a walkable stepping-stone bridge; cells at 'Low' are submerged in lethal starlight acid; cells at 'High' are blocked by ceiling spikes.
     - Each lever shifts hydraulic fluid between connected tanks:
       - `Valve Alpha` inverts the elevation of Row 1 and Column 3.
       - `Valve Beta` rotates the elevations of the 4 outer corner cages clockwise.
@@ -2556,7 +2561,7 @@ Touch-first design with optional gamepad/keyboard. Virtual joystick (left), acti
 **Style (v2):** **Moonlit Painterly Diorama** — stylized low/mid-poly 3D architecture with painterly materials, beveled silhouettes, soft shadows, fog, and selective emissive accents. Rendered in Three.js with ACES tone mapping, ambient occlusion (baked or SSAO), and restrained bloom. The look targets Bastion/Death's Door/Monument Valley atmosphere rather than retro pixel art. The original QFG4 influence remains in mood, composition, and painterly backgrounds, **not** in low-resolution pixel rendering.
 - **Color Palette:** Deep night purples (`#141826`, `#3a2f6b`), cold cobblestone slates (`#2a304a`), luminous starlight cyan (`#6dd39a`, `#52c5ff`), antique gold trim (`#d4af37`), warm torchlight amber, and burnished industrial copper (`#c87d4a`).
 - **Geometry & Materials:** Modular beveled meshes, restrained PBR (`roughness` 0.6–0.9, low `metalness` except copper/brass), baked AO in recesses, subtle color variation per tile/prop, and fog to blend distant geometry. No visible pixel grids in final art.
-- **Legacy Pixel Assets:** 16×16/32×32 tilesets and sprite sheets are **whitebox/prototype placeholders only**. They may be used for layout validation and unit tests, but not as final shipped art.
+- **Legacy Pixel Assets:** 16�—16/32�—32 tilesets and sprite sheets are **whitebox/prototype placeholders only**. They may be used for layout validation and unit tests, but not as final shipped art.
 
 **Audio:** Orchestral-ambient score; illusion cues (glass chimes, reversed whispers); guard footsteps positional; dynamic music ramps on detection.
 
@@ -2574,7 +2579,7 @@ Touch-first design with optional gamepad/keyboard. Virtual joystick (left), acti
 
 ## 20. Blueprints (Technical)
 
-**Three.js Architecture:** Rendering via `THREE.WebGLRenderer` (WebGL2 baseline; WebGPU is a later optional upgrade) using a fixed isometric `THREE.OrthographicCamera` (35.264° elevation, 45° yaw). Modular ES Modules / TypeScript services: `GameState`, `InventoryManager`, `QuestLog`, `AudioManager` (Web Audio API), `SaveManager` (IndexedDB via localforage). Player and NPCs are stylized low/mid-poly 3D entities with state machines; pixel sprites are whitebox-only. Illusion objects register with an `IllusionBus` event bus. Mirrors use authored diorama tricks or low-resolution shared render targets, not per-mirror planar reflection on low-end devices. One world unit = 1 metre; a typical dungeon tile is 1 m × 1 m.
+**Three.js Architecture:** Rendering via `THREE.WebGLRenderer` (WebGL2 baseline; WebGPU is a later optional upgrade) using a fixed isometric `THREE.OrthographicCamera` (35.264° elevation, 45° yaw). Modular ES Modules / TypeScript services: `GameState`, `InventoryManager`, `QuestLog`, `AudioManager` (Web Audio API), `SaveManager` (IndexedDB via localforage). Player and NPCs are stylized low/mid-poly 3D entities with state machines; pixel sprites are whitebox-only. Illusion objects register with an `IllusionBus` event bus. Mirrors use authored diorama tricks or low-resolution shared render targets, not per-mirror planar reflection on low-end devices. One world unit = 1 metre; a typical dungeon tile is 1 m �— 1 m.
 
 **Data Schemas (JSON / TypeScript Interfaces):**
 
@@ -4425,7 +4430,7 @@ IMMUNITIES: Stun, Poison, Bleed, Cold / Frost Hazards
 
 ### 35.1 Repaired Symmetric 16-Core Adjacency Matrix & 28-Zone Master Topology (v2.0)
 
-In v1.0, the 16×16 core matrix contained asymmetric one-way discrepancies (`C↔G`, `D↔K`, `F↔H`, `G↔H`, `J↔O`, `K↔L`, `K↔M`, `M↔O`, `N↔P`) and omitted the 12 peripheral sectors. Below is the **strictly symmetric (`M[i][j] == M[j][i]`) 16-Core Citadel Matrix** (`A–P`), followed by the **Complete 28-Zone 4-Tier Topological Graph** governing `world_manifest.json`.
+In v1.0, the 16�—16 core matrix contained asymmetric one-way discrepancies (`C↔G`, `D↔K`, `F↔H`, `G↔H`, `J↔O`, `K↔L`, `K↔M`, `M↔O`, `N↔P`) and omitted the 12 peripheral sectors. Below is the **strictly symmetric (`M[i][j] == M[j][i]`) 16-Core Citadel Matrix** (`A–P`), followed by the **Complete 28-Zone 4-Tier Topological Graph** governing `world_manifest.json`.
 
 | Zone | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P |
 |---|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
@@ -4959,7 +4964,7 @@ IMPLEMENTATION PHASES (EXECUTE IN SEQUENCE):
 
 ### 39.2 What NOT to ship as final art
 
-- 16×16 or 32×32 pixel tilesets used as final wall/floor textures.
+- 16�—16 or 32�—32 pixel tilesets used as final wall/floor textures.
 - Nearest-filtered, visibly pixelated character sprites at large screen sizes.
 - Unlit box geometry with no shadows, no fog, and full-saturation emissive materials.
 - Uniformly saturated purple walls/floors; emissive materials should be accents, not the dominant surface color.
@@ -5019,7 +5024,7 @@ This section is the **source of truth for implementation**. Older map/quest note
 
 ### 41.1 Canonical World Rules
 
-1. **One metre = one world unit.** A standard dungeon tile is 1 m × 1 m. Camera is fixed isometric (35.264° pitch, 45° yaw).
+1. **One metre = one world unit.** A standard dungeon tile is 1 m �— 1 m. Camera is fixed isometric (35.264° pitch, 45° yaw).
 2. **Every exit is explicit data:** target scene, target spawn, requirements, one-way flag, and encounter variant. Do not infer connectivity from prose.
 3. **No mandatory one-way dead ends.** One-way transitions are allowed only for shortcuts and must have an alternate return path.
 4. **Keys precede gates.** No item/ability can be required by the room that awards it. Movement abilities are `ABILITY_WALL_LEAP`, `ABILITY_AIR_DASH`, `ABILITY_GRAV_INVERSION`, `ABILITY_MIRROR_PHASE`.
@@ -5085,7 +5090,7 @@ S00 Approach & Sunken Courtyard
 
 ### 41.4 Conflict Resolutions (v2.0 Master Alignment)
 
-- **Relativistic Time Dilation (14 Mortal Years vs. 80 Keep Winters):** Outside in Greyport, 14 years have passed since the Great Lockdown (1886 -> 1900). Inside the keep's pressurized Starlight Field, Vaelor accelerated the Chronomantic Spire (`CR1–CR5`) to 5.714× mortal speed while looping the midnight cycle—reconciling Kaelen's age (29) with the 80 subjective winters experienced by trapped inhabitants.
+- **Relativistic Time Dilation (14 Mortal Years vs. 80 Keep Winters):** Outside in Greyport, 14 years have passed since the Great Lockdown (1886 -> 1900). Inside the keep's pressurized Starlight Field, Vaelor accelerated the Chronomantic Spire (`CR1–CR5`) to 5.714�— mortal speed while looping the midnight cycle—reconciling Kaelen's age (29) with the 80 subjective winters experienced by trapped inhabitants.
 - **Character Identity Disambiguation:** Major Captain 4 is **Duchess Seraphina Vane** (Master Vane's daughter, distinct from the crystallized child **Lady Cynthia Vaelor**); the Prison Block overseer (`PB2`) is **Castellan Dredge the Iron Gaoler** (distinct from Spire Major Captain 3 **Magus Malakor the Void-Eyed**); Vaelor's mortal name is **Aethelgard Vaelor**, his grandfather (`HA2`) is **Patriarch Morvath Vaelor**, the nursery ghost (`HA3`) is **Governess Vivienne Claire**, and the starving couple in `BQ1` are **Marquess Cassian** and **Marchioness Genevieve**.
 - **Room Code Disambiguation (`SH1–SH4` vs. `BQ1–BQ3`):** Mister Bartholomew Sterling's State Dining Salon, Pantry, Dumbwaiter Crossroads, and Tea Parlor are indexed as **`SH1–SH4`**, reserving **`BQ1–BQ3`** exclusively for *The Cenacle of Eternal Satiety*. The Alchemist's Lab is indexed as **`AL_L1–AL_L3`** to avoid colliding with the Arcane Library (`L1–L6`).
 - **Dual-Component Music Box:** Restoring Cynthia's Starlight Music Box requires the **7 Prismatic Casing Shards** (`OW4`, `SQ4`, `HM5`, `PH4`, `RS6`, `CS5`, `U4`) AND the **3 Master Brass Cylinders** (*Harmony* in `MS5`, *Grief* in `HA5`, *Truth* in `LB5`).
@@ -5160,7 +5165,7 @@ S00 Approach & Sunken Courtyard
 | RG1-RG4 Rooftop Gardens | **Modular GLB room kit**, wind cone prop, glider shortcut, vista point |
 | VR1-VR3 Void Realm | **Modular GLB room kit**, torus portal prop, dream-logic room, core return |
 | RS1-RS6 Relativity Cloister | **Modular GLB room kit**, torus portal prop, impossible stairways, dining table |
-| CO1 The Veil Colosseum | **Modular GLB room kit** scaled 1.4×, gate arch, Captain encounter, Wall Leap reward |
+| CO1 The Veil Colosseum | **Modular GLB room kit** scaled 1.4�—, gate arch, Captain encounter, Wall Leap reward |
 | CO3 Crystal Theater | **Modular GLB room kit** scaled 1.4x, purple-tinted, gate arch, Crystal Mirror puzzle (requires Mirror Phase), Duchess Seraphina's lore |
 | CR1 Chronomantic Scriptorium | **Modular GLB room kit** scaled 1.4x, teal-tinted, gate arch, Retrocausal Portcullis puzzle (requires Tachyon Phial), Retrograde Ouroboros reward |
 | MS3 Gilded Music Salon | **Modular GLB room kit** scaled 1.4x, gold-tinted, gate arch, Resonant Harmonies puzzle (requires Glass-Armonica Mallet), Score of the Unbroken Chord reward |
@@ -5199,7 +5204,7 @@ S00 Approach & Sunken Courtyard
 
 ### 41.13 Minimap HUD (Built)
 
-- **UI:** Always-on 150×150 canvas in the bottom-left corner showing the current room footprint.
+- **UI:** Always-on 150�—150 canvas in the bottom-left corner showing the current room footprint.
 - **Rendering:** Player position (blue dot), exit points (green/amber dots based on requirement met), room boundary.
 - **Integration:** `drawMinimap()` called in the render loop; uses `exits` lookup and `playerState` position.
 
@@ -5800,3 +5805,326 @@ plus the 43.7 checklist.
 ---
 
 *VEILKEEP GDD v2.0 — Master Narrative, Topological Map, Multi-Solution Puzzle & CRPG Systems Edition.*
+
+## 7b. New Scene & Quest — The Planetary Watcher ("The Star-Reader's Vigil")
+
+### Scene: The Orrery of Last Light (Zone ID: OW9 — Observatory Spire)
+
+A high, wind-scoured observatory crowning the Outer Wards, reachable only by a
+shattered glass staircase that reassembles itself under starlight. At its center
+stands an ancient brass orrery whose planets still orbit a cold, blue-white
+star. The **Planetary Watcher** — a hooded, ageless figure known only as
+**Astronomer-Captain Oryn** — sits beneath the orrery, telescope trained on a
+sky that no longer matches the constellations he remembers.
+
+Oryn is not a boss. He is a **quest-giver and lore-keeper**. He speaks in
+star-metaphors, never names, and refuses to look at Kaelen directly, claiming
+the thief's "shadow is too loud for the lenses."
+
+### Quest: "The Star-Reader's Vigil" (Side Quest, Act I)
+
+**Giver:** Astronomer-Captain Oryn (OW9)
+**Objectives:**
+1. Speak with Oryn and accept the vigil.
+2. Recover the three **Lost Constellation Plates** scattered across the fortress:
+   - *Plate of the Thief* — hidden in the Halls of Mirrors (HM2), guarded by a
+     mirror-wraith.
+   - *Plate of the Keeper* — locked in the Abyssal Prison (PB3), requires
+     SKILL_LOCKPICK_2 or the Iron Nail.
+   - *Plate of the Fallen Star* — resting in the Dreaming Gardens (DG1), only
+     visible under Veil Sight.
+3. Return the plates to Oryn and calibrate the orrery by rotating its three
+   rings (multi-solution puzzle: any order that sums to 360 degrees realigns
+   the star).
+4. Read the corrected sky and choose which constellation Oryn should "follow."
+
+**Rewards:** +200 XP, ITEM_ORRERY_LENS (reveals hidden star-doors in 3 zones),
+ABILITY_STAR_STEP (short teleport between lit star-markers), +1 Empathy
+conviction, Memory Shard IX "The Shard of the Sky."
+
+**Branching (RPG elements for the Thief):**
+- *[CHA 12]* Convince Oryn to abandon the vigil and join the Shadowhand's
+  cause ? he becomes a recruitable ally in the final assault, granting a
+  stealth bonus in the Sanctum.
+- *[INT 13]* Decode the plates yourself and lie about the sky ? Oryn stays,
+  but Kaelen gains ITEM_FALSE_CONSTELLATION (sells for 300 moons, -1
+  Empathy).
+- *[STR 10]* Threaten Oryn ? he shatters one plate; quest fails forward into
+  "The Blind Watcher" (Oryn becomes hostile, drops ITEM_ORRERY_LENS anyway,
+  but the Memory Shard is lost).
+- Non-lethal pacifist path: complete all 3 plates without combat ? unlocks
+  the hidden ending beat "The Sky Remembers."
+
+**Failing Forward:** If Kaelen ignores the quest, the orrery drifts further;
+  at Act III the fortress's night-reset schedule desyncs, making two rooms
+  permanently dark (increased enemy aggro, no star-markers).
+
+## 7c. New Scene & Puzzle — The Rotating Cell ("The Tumbling Chamber")
+
+### Scene: The Tumbling Chamber (Zone ID: RC9 — Relativity Cloister Annex)
+
+A square stone cell whose gravity is not fixed. Four walls, a floor, and a ceiling
+are all identical: each bears a door, a lever, and a faint star-mark. The room
+has no "up" — Kaelen can rotate the entire chamber 90 degrees by pulling any
+lever, and gravity follows the new floor. Crates, braziers, and a single
+breakable wall rotate with the room.
+
+### Puzzle: "The Tumbling Chamber" (Multi-Solution)
+
+**Objective:** Reach the sealed exit on the "ceiling" wall and break through it.
+
+**Mechanics:**
+- Pulling a lever rotates the whole room 90 deg (clockwise from that wall's view).
+- Objects (crates, braziers) fall to the new floor; Kaelen must ride them.
+- The breakable wall is only vulnerable when struck from its "front" face; after
+  two rotations it faces the player and can be shattered with a heavy strike or
+  the Iron Nail.
+
+**Solution Paths:**
+1. *Gravity Ride* — Rotate twice, ride a crate to the ceiling door, shatter wall
+   with STR 11 heavy strike.
+2. *Nail Anchor* — Use ITEM_IRON_NAIL to pin the crate mid-rotation, then
+   leap across (requires ABILITY_STAR_STEP or AGI 12).
+3. *Veil Sight* — With Veil Sight active, the true floor is highlighted; solve
+   in one rotation by walking the "wall" that is actually floor (requires
+   SKILL_VEIL_SIGHT_1).
+4. *Pacifist / Non-lethal* — No combat; all paths avoid enemies entirely.
+
+**Rewards:** +150 XP, ITEM_TUMBLING_KEY (opens RC9 exit to RS7), Memory Shard X
+"The Shard of the Turn," +1 Rationalism conviction.
+
+**Failing Forward:** A wrong rotation drops Kaelen into a pit of dream-foam;
+  HP reduced to 1, respawn at last lever, no softlock. The chamber remembers the
+  last rotation, so progress is never lost.
+
+**RPG Elements for the Thief:**
+- Dialogue with the cell's previous occupant (a ghost) offers lore and a hint
+  for [CHA 9] or [INT 11].
+- Conviction-aware: Rationalism +1 for logical solution, Empathy +1 for freeing
+  the ghost, Solipsism +1 for ignoring the ghost entirely.
+
+## 7d. New Scene & Encounter — The Jester's Court ("The Juggling Duel")
+
+### Scene: The Jester's Court (Zone ID: JC1 — Court of Mirrors Annex)
+
+A circular, spotlighted stage surrounded by empty velvet seats. The **Court
+Jester** — a painted, grinning figure in motley named **Pip the Perpetual** —
+stands center stage, juggling five glass orbs that never touch the ground. The
+orbs are Memory Shards in disguise. Pip never stops smiling; his eyes are the
+only part of him that moves, tracking Kaelen's every step.
+
+### Encounter: "The Juggling Duel" (Mini-Boss / Skill Challenge)
+
+Pip does not attack. Instead he **challenges** Kaelen to a juggling duel. The
+room's only exit locks; the only way out is to out-juggle Pip or find another
+path.
+
+**Mechanics:**
+- Pip juggles 5 orbs. Kaelen must juggle 3+ orbs simultaneously for 30 seconds
+  to win. Dropping an orb costs HP (glass shrapnel).
+- Orbs are picked up from the floor; juggling requires timing (rhythm mini-game).
+- Pip escalates: 5 orbs -> 7 orbs -> 9 orbs, each tier faster.
+
+**Solution Paths:**
+1. *Out-Juggle* — Match Pip's tier for 30s. Rewards full loot + Memory Shard.
+2. *Sabotage (non-lethal)* — [Sleight of Hand 3] steal an orb mid-flight;
+   Pip fumbles, drops all orbs, stunned for 5s. Kaelen escapes. Counts as
+   non-lethal (Shadowhand preserved).
+3. *Stat Check* — [AGI 12] or [LCK 10] allows Kaelen to juggle 2 orbs
+   but pass via luck (Pip drops first). Partial reward.
+4. *Combat* — Attack Pip. He shatters all orbs (lose the Memory Shard) but
+   drops ITEM_JESTER_MASK (cosmetic +1 CHA in dialogue).
+5. *Pacifist* — Refuse to juggle; Pip lets Kaelen leave after 60s of
+   watching, but no rewards and +1 Solipsism.
+
+**Rewards (path 1):** +175 XP, ITEM_JESTER_MASK, Memory Shard XI "The Shard
+of the Toss," +1 Empathy conviction, ABILITY_RHYTHM_STEP (dodge window +1
+frame).
+
+**Failing Forward:** Dropping all orbs spawns 3 glass-wraiths; defeating them
+still opens the exit but the Memory Shard is destroyed. No softlock.
+
+**RPG Elements for the Thief:**
+- [CHA 9] taunt Pip into adding an extra orb (makes his juggle harder).
+- [INT 11] spot that two orbs are hollow (contain lockpicks) — can pocket
+  them mid-duel without breaking the juggle.
+- Conviction-aware ending: Empathy path thanks Pip; Solipsism path mocks him;
+  Rationalism path asks for the physics of his trick (unlocks a lore entry).
+
+## 7e. New Hub — The Wayfarer's Rest ("The Crossroads Town")
+
+### Overview
+
+Inspired by the classic RPG town-hub pattern (Diablo's Tristram), **The
+Wayfarer's Rest** is a safe, torch-lit mountain village nestled in the foothills
+beneath the floating fortress. It is the player's **rebase**: a place to heal,
+re-kit, accept quests, and descend back into the fortress with better gear. The
+town is the only location where the night-reset clock pauses; time stands still
+here so the player can plan.
+
+### Layout
+
+- **The Crossroads Inn** — Save point, bed (full heal + status clear), bulletin
+  board of rumors.
+- **Merchant Row:**
+  - *Marta the Ironmonger* — Weapons, armor, repair, whetstones.
+  - *Old Fenwick, Apothecary* — Potions, antidotes, volatile reagents
+    (alchemist origin synergy).
+  - *Sister Vael, Reliquary* — Relics, charms, curse removal (antiquarian
+    synergy).
+  - *The Fence (unnamed)* — Buys stolen goods at 60% value, sells lockpicks
+    and smoke bombs (charlatan synergy).
+- **Quest Givers:**
+  - *Guildmaster Sable* — Main quest line (Q0 commission, Q1 gatekeeper).
+  - *Captain of the Watch* — Bounty board: kill/stealth objectives in the
+    fortress for moon rewards.
+  - *The Hermit of the Well* — Hidden quests unlocked by Memory Shards.
+- **The Descent Gate** — A fortified archway leading to S00 (Sunken Courtyard).
+  Requires the Gatehouse Key to open; once opened, becomes a permanent
+  fast-travel point.
+
+### Classic RPG Elements
+
+- **Quest Log & Journal:** All active quests tracked with objectives, rewards,
+  and a "Recommended Level" indicator.
+- **Inventory & Stash:** Personal stash chest (unlimited) plus a shared
+  "Caravan" stash for NG+.
+- **Crafting Benches:** Whetstone (weapon upgrade), Alchemy Table (potions),
+  Reliquary Workbench (relic attunement).
+- **Companions:** Up to two recruitable allies (Oryn from OW9, a rescued
+  guard) with their own skill trees and banter.
+- **Reputation:** Townsfolk react to Kaelen's conviction alignment and kill
+  count; high empathy unlocks discounts, high solipsism unlocks darker rumors.
+- **Rest & Recovery:** Sleeping at the inn advances the night-reset clock by
+  one cycle and respawns non-quest fortress enemies.
+- **Economy:** Moon currency earned from loot/bounties; prices scale with
+  town reputation and difficulty tier.
+
+### Dialogue Samples (Quest Givers)
+
+- **Guildmaster Sable:** "The keep floats, Kaelen. So does our debt. Steal the
+  Heart; we're square. Die, and we forget you. Now — the gatehouse. Orin still
+  stands there, dreaming of a relief watch that never comes. Ground him."
+- **Marta the Ironmonger:** "You look like you've been through a mirror. Let
+  me see that blade — yes, the edge is more memory than steel. I'll fix it,
+  but you owe me a favor: bring me a Vane calibration cog from the foundry."
+- **Old Fenwick:** "Brimstone and saltpetre, the old recipe. You're an
+  alchemist's child, aren't you? I can smell the sulfur on your coat. Take
+  this pouch — free of charge. But when you blow something up, don't tell
+  them where you got it."
+- **Sister Vael:** "Every relic has a lie in it. The lens shows you which part
+  is breathing. Bring me the cracked pocket watch from Master Vane's study and
+  I'll show you how to shatter a Duchess's vanity without spilling blood."
+- **The Fence:** "I don't ask names. I don't ask where it came from. I ask
+  one thing: is it shiny? If yes, we have a deal. The guard tabard you're
+  wearing — very convincing. Almost too convincing. Don't let the captain see
+  you in it twice."
+
+### Integration into World
+
+- The Wayfarer's Rest connects to S00 via the Descent Gate (requires
+  ITEM_GATEHOUSE_KEY).
+- All fortress exits funnel back to the town through the "Return to Rest"
+  interact at any scene spawn point (costs 1 in-game hour).
+- Town NPCs reference fortress events dynamically: if Kaelen spared the Captain
+  (Shadowhand), Sable comments on the "ghost of the keep"; if lethal, the
+  bounty board adds a "Wanted: Shadowhand" poster.
+- Re-kitting in town is the only way to change equipped gear, learn spells
+  from Minor Magicians (Crucible), and attune relics.
+- The final act locks the Descent Gate until the player chooses an ending,
+  forcing a last re-kit and companion selection.
+
+## 7f. New Scene & Encounter — The Arcane Hedge Maze ("Labyrinth Courtyard")
+
+### Scene Premise & Progression Gate
+
+Zone ID: **MZ1 — Labyrinth Courtyard**, a sprawling Diablo-scale overgrown hedge
+labyrinth between the Outer Wards and the Gatehouse. The player cannot walk a
+straight line to the exit: the labyrinth's open pathways are gated by arcane
+waystones, illusionary hedge walls, and a central clearing guardian. The exit
+archway (MZ1_EXIT_GATE) remains sealed until the maze objective completes.
+
+**Exit Condition (aligned with core mechanics):**
+- Activate all 3 **Arcane Waystones** hidden in dead-end pockets (interact
+  prompt: "Attune Waystone"), OR
+- Dispel the 2 **Illusionary Hedge Walls** blocking the exit archway using
+  SKILL_VEIL_SIGHT_1 / ITEM_RELIQUARY_LENS, OR
+- Defeat the **Center Clearing Guardian** (elite pod) which drops the
+  ITEM_LABYRINTH_KEY.
+
+Any one path opens MZ1_EXIT_GATE -> transition to GH1.
+
+### Spatial & Top-Down Readability Design
+
+**Sightline & Fog-of-War Rules:**
+- Tall hedges (2m+) block line-of-sight and ranged projectiles; enemies
+  behind them are hidden until the player enters their corridor.
+- Low/trimmed hedges (0.6m) allow vision and spell casting over them but block
+  movement; used for previewing dead-end loot or ambush alcoves.
+- Fog-of-war: unexplored corridors render as dark mist on the minimap; explored
+  corridors stay lit.
+
+**Sub-Zones:**
+- *Entry Threshold (MZ1_ENTRY):* Safe orientation pocket; the locked exit gate
+  is visible in the distance through a gap in the hedges. Spawn point.
+- *Bifurcated Lanes & Dead-End Pockets:* Tight 2m corridors branching into
+  alcoves. Each dead-end holds either an ambush pod, a loot chest, or a
+  waystone. False paths loop back via teleporter pads (Lost Woods style).
+- *Shifting / Destructible Hedge Walls:* Bramble_Barrier_Destructible props
+  that can be burned (ITEM_VOLATILE_SULFUR_POUCH), chopped (heavy strike),
+  or lowered via a nearby lever. Opening them creates shortcuts once explored.
+- *Center Clearing / Gazebo (MZ1_CENTER):* Mid-maze landmark; houses the elite
+  guardian pod and the Maze_Waystone_Pedestal key mechanism required to
+  unseal the exit.
+
+### Encounter Pods & Hazards
+
+Enemies are grouped into localized **Maze Encounter Pods** triggered by corridor
+entry, never pulling the whole labyrinth at once (matches existing combat pacing).
+
+- *Ambushers:* emerge from hedge alcoves when the player enters a dead-end
+  pocket (2-3 fast enemies, stagger window).
+- *Ranged Units:* fire down long straightaways; tall hedges provide cover.
+- *Environmental Hazards:* encroaching thorn traps (root damage on contact),
+  poison spore clouds (DoT in low corridors), swinging vine snares (root 1.5s).
+
+### Narrative & Clues (Find the Wizard Integration)
+
+Environmental clues at key intersections reward observation:
+- Glowing flora (blue phosphor) marks the true path toward the Wizard's trail.
+- Plaques with riddles ("The star that does not move points the way") hint at
+  the correct turn.
+- Statues of previous seekers point (via gaze direction) toward the center
+  clearing or away from trap corridors.
+- NPC familiar (a starlight raven) circles above the true path when Veil Sight
+  is active.
+
+### Modular Hedge Kit (assets/models/environment/)
+
+Generate modular .glb pieces with -col collision meshes:
+- Hedge_Wall_Straight_2m, Hedge_Wall_Straight_4m
+- Hedge_Corner_90, Hedge_T_Junction, Hedge_Cross_Junction
+- Hedge_Archway_Gate (entry/exit frame)
+- Bramble_Barrier_Destructible (shortcut/gate blocker)
+- Maze_Waystone_Pedestal (interactive objective prop)
+
+### Room Assembly (Hedge_Maze_Room)
+
+- Expanded Diablo-scale grid footprint (~40x40m).
+- Bake NavigationRegion/NavMesh through all valid pathways; configure dynamic
+  obstacle rebaking when a Bramble_Barrier or secret hedge door opens.
+- Place Encounter Pod spawners, clue/text triggers, and the locked exit
+  transition node that opens once the maze objective completes.
+
+### Data & Text Entries (data/)
+
+- Environmental clue strings, interaction prompts ("Attune Waystone", "Dispel
+  Illusion"), and encounter wave definitions added to data/dialogue.json,
+  data/puzzles.json, and data/encounters.json.
+
+### Rewards
+
+- +250 XP, ITEM_LABYRINTH_KEY, Memory Shard XII "The Shard of the Maze",
+  +1 Rationalism conviction.
+- Non-lethal path: clear all 3 waystones without combat -> +1 Empathy, hidden
+  beat "The Maze Remembers."

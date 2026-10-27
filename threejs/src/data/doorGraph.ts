@@ -23,6 +23,7 @@ export interface DoorDef {
 export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
   S00: [
     { x: 0, z: -5.0, to: 'OW1', requires: [] },
+    { x: 0, z: 5.0, to: 'WR1', requires: ['ITEM_GATEHOUSE_KEY'] },
   ],
   OW1: [
     { x: 0, z: 5.0, to: 'S00', requires: [] },
@@ -231,6 +232,9 @@ export const FORTRESS_EXITS: Record<string, DoorDef[]> = {
   RS6: [
     { x: 0, z: 5.0, to: 'RS5', requires: [] },
     { x: 0, z: -5.0, to: 'S00', requires: [] },
+  ],
+  WR1: [
+    { x: 0, z: 5.0, to: 'S00', requires: [] },
   ],
 };
 

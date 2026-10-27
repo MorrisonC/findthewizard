@@ -56,7 +56,7 @@ export interface AutoProgressState {
 /** Shortest sensible order that respects every gameplay gate. */
 export const CAMPAIGN_ORDER: readonly string[] = [
   // Prologue + the gatehouse run (unlocks Mirror Phase in HM1).
-  'S00', 'OW1', 'GH1', 'GH2', 'GH3', 'HM1',
+  'S00', 'OW1', 'GH1', 'GH2', 'GH3', 'WR1', 'HM1',
   // Side wings reachable from the courtyard / outer wards / gatehouse.
   'CR1', 'MS3', 'B1', 'SQ1', 'GH4', 'BT1',
   'U1', 'U2', 'U3', 'U4',
@@ -87,6 +87,7 @@ export const SCENE_PLANS: Record<string, ScenePlan> = {
     tasks: [
       { id: 'ow1:clear', kind: 'clear', label: 'Neutralise the ward patrol' },
       { id: 'ow1:nail', kind: 'collect', item: 'ITEM_IRON_NAIL', label: 'Claim the Iron Nail', x: 2, z: -1, radius: 0.6 },
+      { id: 'ow1:nail', kind: 'collect', item: 'ITEM_IRON_NAIL', label: 'Claim the Iron Nail', x: 2, z: -1, radius: 0.6 },
     ],
   },
   GH1: {
@@ -115,7 +116,7 @@ export const SCENE_PLANS: Record<string, ScenePlan> = {
   GH3: {
     sceneId: 'GH3',
     title: 'Barbican Captain',
-    tasks: [{ id: 'gh3:clear', kind: 'clear', label: 'Defeat the Barbican Captain', grants: ['ABILITY_WALL_LEAP'] }],
+    tasks: [{ id: 'gh3:clear', kind: 'clear', label: 'Defeat the Barbican Captain', grants: ['ABILITY_WALL_LEAP', 'ITEM_GATEHOUSE_KEY'] }],
   },
   HM1: {
     sceneId: 'HM1',
@@ -343,6 +344,11 @@ export const SCENE_PLANS: Record<string, ScenePlan> = {
       { id: 'san1:vaelor', kind: 'clear', label: 'Defeat Archillusionist Vaelor', grants: ['ABILITY_GRAVITON_INVERSION'] },
       { id: 'san1:cynthia', kind: 'talk', npc: 'cynthia', label: 'Commune with Liberated Cynthia', x: 0, z: -1, radius: 1.8, grantsAny: ['PUZZLE_HOLLOW_GLASS'] },
     ],
+  },
+  WR1: {
+    sceneId: 'WR1',
+    title: "Wayfarer's Rest",
+    tasks: [],
   },
 };
 

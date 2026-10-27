@@ -7,3 +7,4 @@ export * from './WeaponTrail';
 export * from './CombatParticles';
 export * from './EnemyCombatAI';
 export * from './BossVaelorEncounter';
+export * from './PlayerCharacter';

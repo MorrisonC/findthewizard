@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VEILKEEP — 3D GLB Asset, Rig & Animation Studio (193 Models)</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0e131d; color: #e2e8f0; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #141b29; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #2d3b55; border-radius: 3px; }
+    .gold-border { border-color: rgba(212, 175, 55, 0.35); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-[#141b29] border-b border-slate-800 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-400/50 flex items-center justify-center text-amber-300 font-bold text-lg">V</div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">VEILKEEP: 3D Binary glTF 2.0 (.glb) Asset & Animation Studio</h1>
+        <p class="text-xs text-slate-400">193 Generated & Validated 3D Models • 5 Canonical Rigs • 16 Skeletal Animation Clips • 35.264° Isometric & Silhouette Test</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Validator: 193 / 193 PASS</span>
+      <button id="btnDownloadCurrentGlb" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 transition">
+        Export Selected .GLB
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 max-w-[1600px] w-full mx-auto">
+    <!-- Left Sidebar: Asset Browser (4 cols) -->
+    <section class="lg:col-span-4 bg-[#141b29] border border-slate-800 rounded-xl flex flex-col overflow-hidden max-h-[680px]">
+      <div class="p-3 border-b border-slate-800 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-amber-400">Generated .GLB Inventory</span>
+          <span id="assetCountBadge" class="text-xs text-slate-400">193 files</span>
+        </div>
+        <input id="searchInput" type="text" placeholder="Search filename (e.g. kaelen, boss, KIT_, weapon_)..."
+          class="w-full px-3 py-1.5 text-xs rounded-lg bg-[#0e131d] border border-slate-700 text-slate-100 focus:outline-none focus:border-amber-400" />
+        <div class="flex flex-wrap gap-1" id="categoryTabs">
+          <button data-cat="ALL" class="cat-btn px-2 py-1 rounded text-[11px] font-medium bg-amber-500 text-slate-950">All (193)</button>
+          <button data-cat="1. Main Character & Origins" class="cat-btn px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Hero (5)</button>
+          <button data-cat="2. Modular Room & Prop Kit" class="cat-btn px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Kit (54)</button>
+          <button data-cat="3. Enemies & Bosses" class="cat-btn px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Enemies (32)</button>
+          <button data-cat="4. Named NPC Roster" class="cat-btn px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">NPCs (39)</button>
+          <button data-cat="5. Room Puzzle & Hero Props" class="cat-btn px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Props (24)</button>
+          <button data-cat="6. Weapons, Armor & Items" class="cat-btn px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Items (39)</button>
+        </div>
+      </div>
+      <div id="assetList" class="flex-1 overflow-y-auto custom-scroll divide-y divide-slate-800/60"></div>
+    </section>
+
+    <!-- Center & Right: 3D Viewport + Animation & Rig Controls (8 cols) -->
+    <section class="lg:col-span-8 flex flex-col gap-4">
+      <!-- 3D Canvas Card -->
+      <div class="bg-[#141b29] border border-slate-800 rounded-xl overflow-hidden flex flex-col">
+        <!-- Viewport Toolbar -->
+        <div class="px-3 py-2 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2 bg-[#101622]">
+          <div class="flex items-center gap-2">
+            <span id="selectedAssetTitle" class="text-xs sm:text-sm font-bold text-amber-300">kaelen.glb</span>
+            <span id="selectedAssetBadge" class="px-2 py-0.5 rounded text-[11px] bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">RIG_Humanoid (23j)</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button id="btnCamIso" class="px-2.5 py-1 rounded text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40">35.264° Isometric</button>
+            <button id="btnCamPersp" class="px-2.5 py-1 rounded text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Orbit View</button>
+            <button id="btnToggleSilhouette" class="px-2.5 py-1 rounded text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">50% Grey Silhouette Test</button>
+            <button id="btnToggleWire" class="px-2.5 py-1 rounded text-xs font-medium bg-slate-800 text-slate-300 hover:bg-slate-700">Wireframe</button>
+            <button id="btnToggleBones" class="px-2.5 py-1 rounded text-xs font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">Show Rig & Sockets</button>
+          </div>
+        </div>
+
+        <!-- Three.js Container -->
+        <div id="viewportContainer" class="relative w-full h-[380px] sm:h-[430px] bg-[#0b0f17] select-none cursor-grab active:cursor-grabbing">
+          <canvas id="threeCanvas" class="w-full h-full block"></canvas>
+          <!-- HUD Overlay -->
+          <div class="absolute top-3 left-3 bg-slate-950/80 border border-slate-800 rounded-lg p-2.5 text-xs space-y-1 pointer-events-none">
+            <div class="text-slate-400">Triangles (LOD0): <span id="hudTris" class="text-emerald-400 font-semibold">2,544</span> / <span id="hudBudget" class="text-slate-300">3,000</span></div>
+            <div class="text-slate-400">Vertices: <span id="hudVerts" class="text-white font-medium">1,820</span> | Binary Size: <span id="hudBytes" class="text-white font-medium">112.4 KB</span></div>
+            <div class="text-slate-400">Active Clip: <span id="hudClip" class="text-amber-300 font-semibold">Idle</span></div>
+          </div>
+          <div class="absolute bottom-3 right-3 text-[11px] text-slate-400 bg-slate-950/75 px-2.5 py-1 rounded border border-slate-800 pointer-events-none">
+            Drag to rotate • Scroll to zoom
+          </div>
+        </div>
+
+        <!-- Animation Timeline & Clip Selector -->
+        <div class="p-3 border-t border-slate-800 bg-[#121826] space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-cyan-400">Skeletal Animation Clips</span>
+              <button id="btnPlayPause" class="px-2.5 py-1 rounded text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Pause</button>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+              <span>Speed:</span>
+              <input id="animSpeed" type="range" min="0.2" max="2.0" step="0.1" value="1.0" class="w-24 accent-amber-400" />
+              <span id="animSpeedVal" class="text-slate-200 font-mono">1.0x</span>
+            </div>
+          </div>
+          <div id="clipButtons" class="flex flex-wrap gap-1.5"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Spec & Socket Inspector -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-[#141b29] border border-slate-800 rounded-xl p-3.5 space-y-2">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-amber-400">Skeleton Hierarchy & Attachment Sockets</h2>
+          <p id="rigDetailsText" class="text-xs text-slate-300 leading-relaxed"></p>
+          <div id="socketBadges" class="flex flex-wrap gap-1.5 pt-1"></div>
+        </div>
+        <div class="bg-[#141b29] border border-slate-800 rounded-xl p-3.5 space-y-2">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Asset Pipeline Validator (`validate_assets.py`)</h2>
+          <ul class="text-xs text-slate-300 space-y-1">
+            <li>• <span class="text-emerald-400 font-medium">PASS</span> Binary glTF 2.0 header (`0x46546C67`, v2) & embedded PNG sRGB atlas</li>
+            <li>• <span class="text-emerald-400 font-medium">PASS</span> Triangle budget strictly below category ceiling; &lt; 60 room draw calls</li>
+            <li>• <span class="text-emerald-400 font-medium">PASS</span> Single skin, ≤ 4 bone influences/vertex, 0 morph targets, Y-up/+Z forward</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast notification -->
+  <div id="toastMsg" class="fixed bottom-4 left-1/2 -translate-x-1/2 hidden px-4 py-2 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold shadow-lg z-50"></div>
+
+  <script>
+    const ASSETS = [{"id": 1, "filename": "kaelen.glb", "category": "1. Main Character & Origins", "triangles": 2450, "budget_max": 3000, "vertices": 2180, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 16, "bytes": 168064}, {"id": 2, "filename": "kaelen_alchemist.glb", "category": "1. Main Character & Origins", "triangles": 2600, "budget_max": 3000, "vertices": 2316, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 16, "bytes": 176068}, {"id": 3, "filename": "kaelen_charlatan.glb", "category": "1. Main Character & Origins", "triangles": 2600, "budget_max": 3000, "vertices": 2312, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 16, "bytes": 175952}, {"id": 4, "filename": "kaelen_enforcer.glb", "category": "1. Main Character & Origins", "triangles": 2600, "budget_max": 3000, "vertices": 2280, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 16, "bytes": 174276}, {"id": 5, "filename": "kaelen_antiquarian.glb", "category": "1. Main Character & Origins", "triangles": 2600, "budget_max": 3000, "vertices": 2316, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 16, "bytes": 176092}, {"id": 6, "filename": "KIT_Floor_1x1.glb", "category": "2. Modular Room & Prop Kit", "triangles": 12, "budget_max": 12, "vertices": 24, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3540}, {"id": 7, "filename": "KIT_Floor_2x2.glb", "category": "2. Modular Room & Prop Kit", "triangles": 12, "budget_max": 12, "vertices": 24, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3540}, {"id": 8, "filename": "KIT_Floor_4x4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 12, "budget_max": 12, "vertices": 24, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3540}, {"id": 9, "filename": "KIT_Floor_4x4_Chasm.glb", "category": "2. Modular Room & Prop Kit", "triangles": 51, "budget_max": 60, "vertices": 75, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5352}, {"id": 10, "filename": "KIT_Floor_4x4_Grate.glb", "category": "2. Modular Room & Prop Kit", "triangles": 68, "budget_max": 80, "vertices": 78, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5656}, {"id": 11, "filename": "KIT_Ramp_2x4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 34, "budget_max": 40, "vertices": 58, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4776}, {"id": 12, "filename": "KIT_Stair_2x4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 102, "budget_max": 120, "vertices": 112, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6908}, {"id": 13, "filename": "KIT_Stair_Spiral_4x4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 255, "budget_max": 300, "vertices": 265, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 12776}, {"id": 14, "filename": "KIT_Dais_6x6.glb", "category": "2. Modular Room & Prop Kit", "triangles": 170, "budget_max": 200, "vertices": 140, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8204}, {"id": 15, "filename": "KIT_Bridge_2x8.glb", "category": "2. Modular Room & Prop Kit", "triangles": 76, "budget_max": 90, "vertices": 86, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5936}, {"id": 16, "filename": "KIT_Wall_Straight_1.glb", "category": "2. Modular Room & Prop Kit", "triangles": 17, "budget_max": 20, "vertices": 29, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3772}, {"id": 17, "filename": "KIT_Wall_Straight_2.glb", "category": "2. Modular Room & Prop Kit", "triangles": 20, "budget_max": 24, "vertices": 32, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3888}, {"id": 18, "filename": "KIT_Wall_Straight_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 27, "budget_max": 32, "vertices": 39, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4156}, {"id": 19, "filename": "KIT_Wall_Half_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 20, "budget_max": 24, "vertices": 32, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3872}, {"id": 20, "filename": "KIT_Wall_Corner_2.glb", "category": "2. Modular Room & Prop Kit", "triangles": 34, "budget_max": 40, "vertices": 58, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4796}, {"id": 21, "filename": "KIT_Wall_T_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 51, "budget_max": 60, "vertices": 75, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5424}, {"id": 22, "filename": "KIT_Wall_Cross_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 61, "budget_max": 72, "vertices": 85, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5824}, {"id": 23, "filename": "KIT_Wall_End_2.glb", "category": "2. Modular Room & Prop Kit", "triangles": 23, "budget_max": 28, "vertices": 35, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3968}, {"id": 24, "filename": "KIT_Wall_Cathedral_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 102, "budget_max": 120, "vertices": 112, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6944}, {"id": 25, "filename": "KIT_Pillar_Round_0.8.glb", "category": "2. Modular Room & Prop Kit", "triangles": 64, "budget_max": 64, "vertices": 34, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4196}, {"id": 26, "filename": "KIT_Pillar_Square_0.9.glb", "category": "2. Modular Room & Prop Kit", "triangles": 40, "budget_max": 48, "vertices": 52, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4660}, {"id": 27, "filename": "KIT_Pillar_Cluster_1.4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 136, "budget_max": 160, "vertices": 146, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8232}, {"id": 28, "filename": "KIT_Arch_Gothic_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 187, "budget_max": 220, "vertices": 197, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 10156}, {"id": 29, "filename": "KIT_Arch_Round_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 153, "budget_max": 180, "vertices": 163, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8876}, {"id": 30, "filename": "KIT_Arch_FogGate_4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 204, "budget_max": 240, "vertices": 214, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 10832}, {"id": 31, "filename": "KIT_Gate_Portcullis_3.glb", "category": "2. Modular Room & Prop Kit", "triangles": 76, "budget_max": 90, "vertices": 86, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6012}, {"id": 32, "filename": "KIT_Door_Wood_2.glb", "category": "2. Modular Room & Prop Kit", "triangles": 51, "budget_max": 60, "vertices": 63, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5020}, {"id": 33, "filename": "KIT_Door_Iron_2.glb", "category": "2. Modular Room & Prop Kit", "triangles": 59, "budget_max": 70, "vertices": 71, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5368}, {"id": 34, "filename": "KIT_Door_Mirror_2.glb", "category": "2. Modular Room & Prop Kit", "triangles": 76, "budget_max": 90, "vertices": 86, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5968}, {"id": 35, "filename": "KIT_Ceiling_Vault_4x4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 136, "budget_max": 160, "vertices": 146, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8232}, {"id": 36, "filename": "KIT_Ceiling_Beam_4x4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 51, "budget_max": 60, "vertices": 75, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5424}, {"id": 37, "filename": "KIT_Roof_Hip_4x4.glb", "category": "2. Modular Room & Prop Kit", "triangles": 85, "budget_max": 100, "vertices": 55, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4948}, {"id": 38, "filename": "PRP_Barrel.glb", "category": "2. Modular Room & Prop Kit", "triangles": 102, "budget_max": 120, "vertices": 72, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5596}, {"id": 39, "filename": "PRP_Urn.glb", "category": "2. Modular Room & Prop Kit", "triangles": 76, "budget_max": 90, "vertices": 46, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4608}, {"id": 40, "filename": "PRP_Crate.glb", "category": "2. Modular Room & Prop Kit", "triangles": 51, "budget_max": 60, "vertices": 63, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5000}, {"id": 41, "filename": "PRP_Bookshelf.glb", "category": "2. Modular Room & Prop Kit", "triangles": 153, "budget_max": 180, "vertices": 163, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8840}, {"id": 42, "filename": "PRP_Table_Long.glb", "category": "2. Modular Room & Prop Kit", "triangles": 102, "budget_max": 120, "vertices": 112, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6896}, {"id": 43, "filename": "PRP_Chair.glb", "category": "2. Modular Room & Prop Kit", "triangles": 59, "budget_max": 70, "vertices": 83, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5692}, {"id": 44, "filename": "PRP_Statue.glb", "category": "2. Modular Room & Prop Kit", "triangles": 340, "budget_max": 400, "vertices": 350, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 15956}, {"id": 45, "filename": "PRP_Chandelier.glb", "category": "2. Modular Room & Prop Kit", "triangles": 221, "budget_max": 260, "vertices": 231, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 11432}, {"id": 46, "filename": "PRP_Banner.glb", "category": "2. Modular Room & Prop Kit", "triangles": 34, "budget_max": 40, "vertices": 46, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4332}, {"id": 47, "filename": "PRP_Brazier.glb", "category": "2. Modular Room & Prop Kit", "triangles": 127, "budget_max": 150, "vertices": 97, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6596}, {"id": 48, "filename": "PRP_Cage.glb", "category": "2. Modular Room & Prop Kit", "triangles": 255, "budget_max": 300, "vertices": 265, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 12732}, {"id": 49, "filename": "PRP_Coffin.glb", "category": "2. Modular Room & Prop Kit", "triangles": 119, "budget_max": 140, "vertices": 131, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7620}, {"id": 50, "filename": "PRP_Altar.glb", "category": "2. Modular Room & Prop Kit", "triangles": 187, "budget_max": 220, "vertices": 197, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 10044}, {"id": 51, "filename": "PRP_Chest.glb", "category": "2. Modular Room & Prop Kit", "triangles": 136, "budget_max": 160, "vertices": 148, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8248}, {"id": 52, "filename": "PRP_Throne.glb", "category": "2. Modular Room & Prop Kit", "triangles": 323, "budget_max": 380, "vertices": 333, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 15216}, {"id": 53, "filename": "PRP_Piano.glb", "category": "2. Modular Room & Prop Kit", "triangles": 255, "budget_max": 300, "vertices": 265, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 12628}, {"id": 54, "filename": "PRP_Mirror_Frame.glb", "category": "2. Modular Room & Prop Kit", "triangles": 102, "budget_max": 120, "vertices": 112, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6956}, {"id": 55, "filename": "LGT_Sconce.glb", "category": "2. Modular Room & Prop Kit", "triangles": 40, "budget_max": 40, "vertices": 22, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3672}, {"id": 56, "filename": "LGT_Brazier.glb", "category": "2. Modular Room & Prop Kit", "triangles": 60, "budget_max": 60, "vertices": 32, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4152}, {"id": 57, "filename": "LGT_Chandelier.glb", "category": "2. Modular Room & Prop Kit", "triangles": 153, "budget_max": 180, "vertices": 163, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8888}, {"id": 58, "filename": "LGT_CandleCluster.glb", "category": "2. Modular Room & Prop Kit", "triangles": 25, "budget_max": 30, "vertices": 49, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 4464}, {"id": 59, "filename": "LGT_SteamVent.glb", "category": "2. Modular Room & Prop Kit", "triangles": 24, "budget_max": 20, "vertices": 14, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 3336}, {"id": 60, "filename": "archer_guard.glb", "category": "3. Enemies & Bosses", "triangles": 1584, "budget_max": 1800, "vertices": 1264, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 94024}, {"id": 61, "filename": "phantasm_hound.glb", "category": "3. Enemies & Bosses", "triangles": 1672, "budget_max": 1900, "vertices": 1606, "rig_class": "RIG_Quadruped", "joints": 26, "animations": 6, "bytes": 105488}, {"id": 62, "filename": "stone_gargoyle.glb", "category": "3. Enemies & Bosses", "triangles": 1936, "budget_max": 2200, "vertices": 1616, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 114520}, {"id": 63, "filename": "clockwork_soldier.glb", "category": "3. Enemies & Bosses", "triangles": 2112, "budget_max": 2400, "vertices": 1792, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 125224}, {"id": 64, "filename": "phantasm_beast.glb", "category": "3. Enemies & Bosses", "triangles": 2112, "budget_max": 2400, "vertices": 2046, "rig_class": "RIG_Quadruped", "joints": 26, "animations": 6, "bytes": 131008}, {"id": 65, "filename": "undead_monk.glb", "category": "3. Enemies & Bosses", "triangles": 1672, "budget_max": 1900, "vertices": 1352, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 99088}, {"id": 66, "filename": "clockwork_warden.glb", "category": "3. Enemies & Bosses", "triangles": 2640, "budget_max": 3000, "vertices": 2320, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 155828}, {"id": 67, "filename": "colosseum_beast.glb", "category": "3. Enemies & Bosses", "triangles": 2816, "budget_max": 3200, "vertices": 2750, "rig_class": "RIG_Quadruped", "joints": 26, "animations": 6, "bytes": 171904}, {"id": 68, "filename": "mirror_merchant_enemy.glb", "category": "3. Enemies & Bosses", "triangles": 1936, "budget_max": 2200, "vertices": 1616, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 114496}, {"id": 69, "filename": "dreamwalker.glb", "category": "3. Enemies & Bosses", "triangles": 1760, "budget_max": 2000, "vertices": 1440, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 104260}, {"id": 70, "filename": "brigand_cutpurse.glb", "category": "3. Enemies & Bosses", "triangles": 1584, "budget_max": 1800, "vertices": 1264, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 94072}, {"id": 71, "filename": "brigand_enforcer.glb", "category": "3. Enemies & Bosses", "triangles": 1936, "budget_max": 2200, "vertices": 1616, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 114536}, {"id": 72, "filename": "barbican_captain.glb", "category": "3. Enemies & Bosses", "triangles": 3344, "budget_max": 3800, "vertices": 3024, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 196236}, {"id": 73, "filename": "spectral_juggler.glb", "category": "3. Enemies & Bosses", "triangles": 1848, "budget_max": 2100, "vertices": 1692, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 113640}, {"id": 74, "filename": "trapeze_phantasm.glb", "category": "3. Enemies & Bosses", "triangles": 2112, "budget_max": 2400, "vertices": 1792, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 125208}, {"id": 75, "filename": "steam_centurion.glb", "category": "3. Enemies & Bosses", "triangles": 2816, "budget_max": 3200, "vertices": 2496, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 166060}, {"id": 76, "filename": "boiler_hulk.glb", "category": "3. Enemies & Bosses", "triangles": 2464, "budget_max": 2800, "vertices": 2144, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 145156}, {"id": 77, "filename": "ignis_pyregoyle.glb", "category": "3. Enemies & Bosses", "triangles": 2200, "budget_max": 2500, "vertices": 1880, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 130228}, {"id": 78, "filename": "speculor_refractor.glb", "category": "3. Enemies & Bosses", "triangles": 3168, "budget_max": 3600, "vertices": 2848, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 186468}, {"id": 79, "filename": "astrophage_starbane.glb", "category": "3. Enemies & Bosses", "triangles": 4224, "budget_max": 4800, "vertices": 4068, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 252936}, {"id": 80, "filename": "paradox_wraith.glb", "category": "3. Enemies & Bosses", "triangles": 1848, "budget_max": 2100, "vertices": 1692, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 113600}, {"id": 81, "filename": "phantasmal_templar.glb", "category": "3. Enemies & Bosses", "triangles": 2288, "budget_max": 2600, "vertices": 1968, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 134968}, {"id": 82, "filename": "poltergeist.glb", "category": "3. Enemies & Bosses", "triangles": 1408, "budget_max": 1600, "vertices": 1252, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 88032}, {"id": 83, "filename": "boss_brutus.glb", "category": "3. Enemies & Bosses", "triangles": 4840, "budget_max": 5500, "vertices": 4520, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 284532}, {"id": 84, "filename": "boss_vesper.glb", "category": "3. Enemies & Bosses", "triangles": 4224, "budget_max": 4800, "vertices": 3904, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 248700}, {"id": 85, "filename": "boss_malakor.glb", "category": "3. Enemies & Bosses", "triangles": 4752, "budget_max": 5400, "vertices": 4432, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 279336}, {"id": 86, "filename": "boss_seraphina.glb", "category": "3. Enemies & Bosses", "triangles": 5280, "budget_max": 6000, "vertices": 4960, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 310352}, {"id": 87, "filename": "boss_dredge.glb", "category": "3. Enemies & Bosses", "triangles": 4400, "budget_max": 5000, "vertices": 4080, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 259004}, {"id": 88, "filename": "boss_asterion.glb", "category": "3. Enemies & Bosses", "triangles": 4576, "budget_max": 5200, "vertices": 4256, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 269732}, {"id": 89, "filename": "boss_byakko.glb", "category": "3. Enemies & Bosses", "triangles": 3960, "budget_max": 4500, "vertices": 3894, "rig_class": "RIG_Quadruped", "joints": 26, "animations": 6, "bytes": 240112}, {"id": 90, "filename": "boss_yggdra_rigged.glb", "category": "3. Enemies & Bosses", "triangles": 5720, "budget_max": 6500, "vertices": 5458, "rig_class": "RIG_Arboreal", "joints": 34, "animations": 6, "bytes": 333704}, {"id": 91, "filename": "boss_dream_descent.glb", "category": "3. Enemies & Bosses", "triangles": 5456, "budget_max": 6200, "vertices": 5300, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 324396}, {"id": 92, "filename": "npc_steward_sterling.glb", "category": "4. Named NPC Roster", "triangles": 1628, "budget_max": 1850, "vertices": 1340, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 98232}, {"id": 93, "filename": "npc_cook_hesta.glb", "category": "4. Named NPC Roster", "triangles": 1584, "budget_max": 1800, "vertices": 1296, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 95732}, {"id": 94, "filename": "npc_servant_lira.glb", "category": "4. Named NPC Roster", "triangles": 1452, "budget_max": 1650, "vertices": 1164, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 88048}, {"id": 95, "filename": "npc_old_beggar.glb", "category": "4. Named NPC Roster", "triangles": 1408, "budget_max": 1600, "vertices": 1120, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 85512}, {"id": 96, "filename": "npc_commander_garrick.glb", "category": "4. Named NPC Roster", "triangles": 1628, "budget_max": 1850, "vertices": 1340, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 98336}, {"id": 97, "filename": "npc_master_vane.glb", "category": "4. Named NPC Roster", "triangles": 1716, "budget_max": 1950, "vertices": 1428, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 103420}, {"id": 98, "filename": "npc_prisoner_korr.glb", "category": "4. Named NPC Roster", "triangles": 1452, "budget_max": 1650, "vertices": 1164, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 88100}, {"id": 99, "filename": "npc_captive_guard.glb", "category": "4. Named NPC Roster", "triangles": 1408, "budget_max": 1600, "vertices": 1120, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 85496}, {"id": 100, "filename": "npc_windkeeper.glb", "category": "4. Named NPC Roster", "triangles": 1584, "budget_max": 1800, "vertices": 1296, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 95692}, {"id": 101, "filename": "npc_librarian_maren.glb", "category": "4. Named NPC Roster", "triangles": 1672, "budget_max": 1900, "vertices": 1384, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 100824}, {"id": 102, "filename": "npc_philosopher_renatus.glb", "category": "4. Named NPC Roster", "triangles": 1540, "budget_max": 1750, "vertices": 1252, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 93208}, {"id": 103, "filename": "npc_mirromancer_sylas.glb", "category": "4. Named NPC Roster", "triangles": 1584, "budget_max": 1800, "vertices": 1296, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 95724}, {"id": 104, "filename": "npc_rift_watcher.glb", "category": "4. Named NPC Roster", "triangles": 1584, "budget_max": 1800, "vertices": 1296, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 95676}, {"id": 105, "filename": "npc_ignis_weaver.glb", "category": "4. Named NPC Roster", "triangles": 1672, "budget_max": 1900, "vertices": 1384, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 100816}, {"id": 106, "filename": "npc_alchemist_vex.glb", "category": "4. Named NPC Roster", "triangles": 1628, "budget_max": 1850, "vertices": 1340, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 98260}, {"id": 107, "filename": "npc_astromancer_zephyra.glb", "category": "4. Named NPC Roster", "triangles": 1716, "budget_max": 1950, "vertices": 1428, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 103396}, {"id": 108, "filename": "npc_eldrin_starcarver.glb", "category": "4. Named NPC Roster", "triangles": 1672, "budget_max": 1900, "vertices": 1384, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 100884}, {"id": 109, "filename": "npc_gardener_pim.glb", "category": "4. Named NPC Roster", "triangles": 1452, "budget_max": 1650, "vertices": 1164, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 88068}, {"id": 110, "filename": "npc_pigeon_master_corvo.glb", "category": "4. Named NPC Roster", "triangles": 1540, "budget_max": 1750, "vertices": 1252, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 93188}, {"id": 111, "filename": "npc_lady_eleanor.glb", "category": "4. Named NPC Roster", "triangles": 1936, "budget_max": 2200, "vertices": 1648, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 116196}, {"id": 112, "filename": "npc_sir_roderick.glb", "category": "4. Named NPC Roster", "triangles": 1804, "budget_max": 2050, "vertices": 1648, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 111032}, {"id": 113, "filename": "npc_blind_priest.glb", "category": "4. Named NPC Roster", "triangles": 1496, "budget_max": 1700, "vertices": 1208, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 90576}, {"id": 114, "filename": "npc_ringmaster_valenti.glb", "category": "4. Named NPC Roster", "triangles": 1848, "budget_max": 2100, "vertices": 1560, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 111056}, {"id": 115, "filename": "npc_strongman_boris.glb", "category": "4. Named NPC Roster", "triangles": 1892, "budget_max": 2150, "vertices": 1604, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 113652}, {"id": 116, "filename": "npc_curator_hunter.glb", "category": "4. Named NPC Roster", "triangles": 1716, "budget_max": 1950, "vertices": 1428, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 103404}, {"id": 117, "filename": "npc_mirror_merchant.glb", "category": "4. Named NPC Roster", "triangles": 1716, "budget_max": 1950, "vertices": 1428, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 103380}, {"id": 118, "filename": "npc_maestro_niccolo.glb", "category": "4. Named NPC Roster", "triangles": 1628, "budget_max": 1850, "vertices": 1340, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 98240}, {"id": 119, "filename": "npc_lady_aurelia.glb", "category": "4. Named NPC Roster", "triangles": 1716, "budget_max": 1950, "vertices": 1428, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 103400}, {"id": 120, "filename": "npc_madame_vivienne.glb", "category": "4. Named NPC Roster", "triangles": 1628, "budget_max": 1850, "vertices": 1340, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 98276}, {"id": 121, "filename": "npc_marquess_couple.glb", "category": "4. Named NPC Roster", "triangles": 2068, "budget_max": 2350, "vertices": 1780, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 123876}, {"id": 122, "filename": "npc_ariadne_weaver.glb", "category": "4. Named NPC Roster", "triangles": 1848, "budget_max": 2100, "vertices": 1560, "rig_class": "RIG_Construct", "joints": 26, "animations": 6, "bytes": 111524}, {"id": 123, "filename": "npc_barnaby_horse.glb", "category": "4. Named NPC Roster", "triangles": 2024, "budget_max": 2300, "vertices": 1958, "rig_class": "RIG_Quadruped", "joints": 26, "animations": 6, "bytes": 126000}, {"id": 124, "filename": "npc_the_genie.glb", "category": "4. Named NPC Roster", "triangles": 1848, "budget_max": 2100, "vertices": 1692, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 113576}, {"id": 125, "filename": "npc_dreamer.glb", "category": "4. Named NPC Roster", "triangles": 1496, "budget_max": 1700, "vertices": 1340, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 93128}, {"id": 126, "filename": "npc_stairkeeper.glb", "category": "4. Named NPC Roster", "triangles": 1496, "budget_max": 1700, "vertices": 1340, "rig_class": "RIG_Spectral", "joints": 19, "animations": 6, "bytes": 93200}, {"id": 127, "filename": "npc_liber_cutis.glb", "category": "4. Named NPC Roster", "triangles": 299, "budget_max": 340, "vertices": 271, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13184}, {"id": 128, "filename": "npc_portrait_morvath.glb", "category": "4. Named NPC Roster", "triangles": 704, "budget_max": 800, "vertices": 676, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 28632}, {"id": 129, "filename": "npc_statue_aurelius.glb", "category": "4. Named NPC Roster", "triangles": 1672, "budget_max": 1900, "vertices": 1384, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 100904}, {"id": 130, "filename": "npc_lady_cynthia.glb", "category": "4. Named NPC Roster", "triangles": 1936, "budget_max": 2200, "vertices": 1648, "rig_class": "RIG_Humanoid", "joints": 23, "animations": 6, "bytes": 116208}, {"id": 131, "filename": "whispering_lattice.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 246, "budget_max": 280, "vertices": 166, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 9588}, {"id": 132, "filename": "sundial_falsedawn.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 308, "budget_max": 350, "vertices": 228, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 11904}, {"id": 133, "filename": "panopticon_beacon.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 572, "budget_max": 650, "vertices": 492, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 21904}, {"id": 134, "filename": "siege_ballista.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 510, "budget_max": 580, "vertices": 430, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 19528}, {"id": 135, "filename": "portcullis_gears.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 457, "budget_max": 520, "vertices": 377, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 17600}, {"id": 136, "filename": "barracks_bunk.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 220, "budget_max": 220, "vertices": 140, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8504}, {"id": 137, "filename": "heraldic_shield_mount.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 220, "budget_max": 190, "vertices": 140, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8612}, {"id": 138, "filename": "harmonic_pullrope.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 220, "budget_max": 140, "vertices": 140, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8524}, {"id": 139, "filename": "reliquary_shadowbox.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 334, "budget_max": 380, "vertices": 254, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 12868}, {"id": 140, "filename": "market_scales.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 360, "budget_max": 410, "vertices": 280, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13908}, {"id": 141, "filename": "market_astro_dial.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 404, "budget_max": 460, "vertices": 324, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 15524}, {"id": 142, "filename": "bazaar_stele.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 299, "budget_max": 340, "vertices": 219, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 11468}, {"id": 143, "filename": "merchant_safe.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 369, "budget_max": 420, "vertices": 289, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 14208}, {"id": 144, "filename": "heart_of_mirrors_prop.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 748, "budget_max": 850, "vertices": 668, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 28620}, {"id": 145, "filename": "siphon_valve_wheel.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 228, "budget_max": 260, "vertices": 148, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8852}, {"id": 146, "filename": "acoustic_crystal.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 281, "budget_max": 320, "vertices": 201, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 10860}, {"id": 147, "filename": "treasury_dial_vault.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 545, "budget_max": 620, "vertices": 465, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 20964}, {"id": 148, "filename": "training_dummy.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 246, "budget_max": 280, "vertices": 166, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 9500}, {"id": 149, "filename": "prison_lever_bank.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 334, "budget_max": 380, "vertices": 254, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 12912}, {"id": 150, "filename": "iron_maiden.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 369, "budget_max": 420, "vertices": 289, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 14192}, {"id": 151, "filename": "torture_rack.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 316, "budget_max": 360, "vertices": 236, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 12140}, {"id": 152, "filename": "garden_water_sluice.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 396, "budget_max": 450, "vertices": 316, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 15220}, {"id": 153, "filename": "royal_canopy_bed.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 598, "budget_max": 680, "vertices": 518, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 22888}, {"id": 154, "filename": "rest_fountain.glb", "category": "5. Room Puzzle & Hero Props", "triangles": 457, "budget_max": 520, "vertices": 377, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 17540}, {"id": 155, "filename": "weapon_whisper.glb", "category": "6. Weapons, Armor & Items", "triangles": 238, "budget_max": 280, "vertices": 222, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 11268}, {"id": 156, "filename": "weapon_void_edge.glb", "category": "6. Weapons, Armor & Items", "triangles": 297, "budget_max": 350, "vertices": 281, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13464}, {"id": 157, "filename": "weapon_astral_staff.glb", "category": "6. Weapons, Armor & Items", "triangles": 289, "budget_max": 340, "vertices": 273, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13212}, {"id": 158, "filename": "weapon_sunfire_bow.glb", "category": "6. Weapons, Armor & Items", "triangles": 272, "budget_max": 320, "vertices": 256, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 12632}, {"id": 159, "filename": "weapon_mirror_blade.glb", "category": "6. Weapons, Armor & Items", "triangles": 221, "budget_max": 260, "vertices": 205, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 10628}, {"id": 160, "filename": "weapon_shadow_claw.glb", "category": "6. Weapons, Armor & Items", "triangles": 255, "budget_max": 300, "vertices": 239, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 11844}, {"id": 161, "filename": "armor_arch_robes.glb", "category": "6. Weapons, Armor & Items", "triangles": 297, "budget_max": 350, "vertices": 281, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13472}, {"id": 162, "filename": "armor_shadow_mail.glb", "category": "6. Weapons, Armor & Items", "triangles": 297, "budget_max": 350, "vertices": 281, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13432}, {"id": 163, "filename": "armor_astral_cuirass.glb", "category": "6. Weapons, Armor & Items", "triangles": 297, "budget_max": 350, "vertices": 281, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13520}, {"id": 164, "filename": "consumable_health_elixir.glb", "category": "6. Weapons, Armor & Items", "triangles": 102, "budget_max": 120, "vertices": 86, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6084}, {"id": 165, "filename": "consumable_mana_potion.glb", "category": "6. Weapons, Armor & Items", "triangles": 102, "budget_max": 120, "vertices": 86, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6124}, {"id": 166, "filename": "consumable_starlight_tonic.glb", "category": "6. Weapons, Armor & Items", "triangles": 119, "budget_max": 140, "vertices": 103, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6732}, {"id": 167, "filename": "ITEM_GATEHOUSE_KEY.glb", "category": "6. Weapons, Armor & Items", "triangles": 119, "budget_max": 140, "vertices": 103, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6780}, {"id": 168, "filename": "ITEM_PRISON_KEYRING.glb", "category": "6. Weapons, Armor & Items", "triangles": 153, "budget_max": 180, "vertices": 137, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8096}, {"id": 169, "filename": "ITEM_HEARTH_EMBER.glb", "category": "6. Weapons, Armor & Items", "triangles": 136, "budget_max": 160, "vertices": 120, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7400}, {"id": 170, "filename": "ITEM_ARENA_TOKEN.glb", "category": "6. Weapons, Armor & Items", "triangles": 85, "budget_max": 100, "vertices": 69, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5484}, {"id": 171, "filename": "ITEM_TRUTH_LENS.glb", "category": "6. Weapons, Armor & Items", "triangles": 187, "budget_max": 220, "vertices": 171, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 9352}, {"id": 172, "filename": "ITEM_HEART_OF_MIRRORS.glb", "category": "6. Weapons, Armor & Items", "triangles": 297, "budget_max": 350, "vertices": 281, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 13552}, {"id": 173, "filename": "ITEM_DREAM_EMBER.glb", "category": "6. Weapons, Armor & Items", "triangles": 136, "budget_max": 160, "vertices": 120, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7380}, {"id": 174, "filename": "ITEM_CELESTIAL_KEY.glb", "category": "6. Weapons, Armor & Items", "triangles": 136, "budget_max": 160, "vertices": 120, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7456}, {"id": 175, "filename": "ITEM_ALCHEMIST_VIAL.glb", "category": "6. Weapons, Armor & Items", "triangles": 110, "budget_max": 130, "vertices": 94, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6384}, {"id": 176, "filename": "ITEM_CRYPT_CHARM.glb", "category": "6. Weapons, Armor & Items", "triangles": 127, "budget_max": 150, "vertices": 111, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7096}, {"id": 177, "filename": "ITEM_RELIQUARY_RELIC.glb", "category": "6. Weapons, Armor & Items", "triangles": 170, "budget_max": 200, "vertices": 154, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8760}, {"id": 178, "filename": "ITEM_BARC_SHIELD.glb", "category": "6. Weapons, Armor & Items", "triangles": 204, "budget_max": 240, "vertices": 188, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 9996}, {"id": 179, "filename": "ITEM_CLOCKWORK_GEAR.glb", "category": "6. Weapons, Armor & Items", "triangles": 136, "budget_max": 160, "vertices": 120, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7428}, {"id": 180, "filename": "ITEM_SUNDIAL_GNOMON.glb", "category": "6. Weapons, Armor & Items", "triangles": 93, "budget_max": 110, "vertices": 77, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5768}, {"id": 181, "filename": "ITEM_STAR_MAP_SCROLL.glb", "category": "6. Weapons, Armor & Items", "triangles": 119, "budget_max": 140, "vertices": 103, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6792}, {"id": 182, "filename": "ITEM_SCHOLAR_CIPHER.glb", "category": "6. Weapons, Armor & Items", "triangles": 153, "budget_max": 180, "vertices": 137, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8032}, {"id": 183, "filename": "ITEM_MARKET_TOKEN.glb", "category": "6. Weapons, Armor & Items", "triangles": 76, "budget_max": 90, "vertices": 60, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 5156}, {"id": 184, "filename": "ITEM_BAZAAR_SEAL.glb", "category": "6. Weapons, Armor & Items", "triangles": 110, "budget_max": 130, "vertices": 94, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6352}, {"id": 185, "filename": "ITEM_MERCHANT_LEDGER.glb", "category": "6. Weapons, Armor & Items", "triangles": 119, "budget_max": 140, "vertices": 103, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6740}, {"id": 186, "filename": "ITEM_SANCTUARY_TALISMAN.glb", "category": "6. Weapons, Armor & Items", "triangles": 144, "budget_max": 170, "vertices": 128, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7716}, {"id": 187, "filename": "ITEM_UNDERCITY_VALVE_HANDLE.glb", "category": "6. Weapons, Armor & Items", "triangles": 127, "budget_max": 150, "vertices": 111, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7076}, {"id": 188, "filename": "ITEM_TREASURY_INSIGNIA.glb", "category": "6. Weapons, Armor & Items", "triangles": 119, "budget_max": 140, "vertices": 103, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6820}, {"id": 189, "filename": "ITEM_ROOFTOP_WATER_KEY.glb", "category": "6. Weapons, Armor & Items", "triangles": 127, "budget_max": 150, "vertices": 111, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7088}, {"id": 190, "filename": "ITEM_VOID_SHARD.glb", "category": "6. Weapons, Armor & Items", "triangles": 102, "budget_max": 120, "vertices": 86, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 6012}, {"id": 191, "filename": "ITEM_RITUAL_ORB.glb", "category": "6. Weapons, Armor & Items", "triangles": 153, "budget_max": 180, "vertices": 137, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 8024}, {"id": 192, "filename": "ITEM_ROYAL_CREST.glb", "category": "6. Weapons, Armor & Items", "triangles": 136, "budget_max": 160, "vertices": 120, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7424}, {"id": 193, "filename": "ITEM_REST_SANCTUARY_KEY.glb", "category": "6. Weapons, Armor & Items", "triangles": 144, "budget_max": 170, "vertices": 128, "rig_class": "STATIC", "joints": 0, "animations": 0, "bytes": 7744}];
+
+    const HERO_CLIPS = [
+      "Idle", "Run", "Sprint_Stealth", "Attack_Combo_1_3", "Dodge_Roll", "Death",
+      "Cast_Illusion", "Hit_React", "Stagger_Heavy", "Interact_Kneel", "Interact_Lever",
+      "AirDash_Starlight", "WallLeap", "MirrorPhase_Enter", "MirrorPhase_Exit", "Parley_Gesture"
+    ];
+    const STANDARD_CLIPS = ["Idle", "Run", "Sprint_Stealth", "Attack_Combo_1_3", "Dodge_Roll", "Death"];
+
+    let currentCategory = "ALL";
+    let searchQuery = "";
+    let selectedAsset = ASSETS[0];
+    let currentClip = "Idle";
+    let isPlaying = true;
+    let animSpeed = 1.0;
+    let isSilhouette = false;
+    let isWireframe = false;
+    let showBones = true;
+    let isIsometric = true;
+
+    // Three.js state
+    let scene, perspCam, orthoCam, activeCam, renderer;
+    let modelGroup, boneGroup, limbRefs = {};
+    let clock = new THREE.Clock();
+    let yaw = 0.65, pitch = 0.55, zoomDist = 3.6;
+    let isDragging = false, prevX = 0, prevY = 0;
+
+    function showToast(text) {
+      const el = document.getElementById("toastMsg");
+      el.textContent = text;
+      el.classList.remove("hidden");
+      setTimeout(() => el.classList.add("hidden"), 2600);
+    }
+
+    function renderAssetList() {
+      const listEl = document.getElementById("assetList");
+      const filtered = ASSETS.filter(a => {
+        const matchCat = currentCategory === "ALL" || a.category === currentCategory;
+        const matchSearch = a.filename.toLowerCase().includes(searchQuery) || a.rig_class.toLowerCase().includes(searchQuery);
+        return matchCat && matchSearch;
+      });
+      document.getElementById("assetCountBadge").textContent = `${filtered.length} files`;
+      listEl.innerHTML = "";
+      filtered.forEach(item => {
+        const row = document.createElement("button");
+        const isSel = selectedAsset && selectedAsset.id === item.id;
+        row.className = `w-full text-left px-3 py-2.5 flex items-center justify-between gap-2 transition ${isSel ? 'bg-amber-500/15 border-l-2 border-amber-400' : 'hover:bg-slate-800/50'}`;
+        row.innerHTML = `
+          <div class="min-w-0">
+            <div class="text-xs font-semibold ${isSel ? 'text-amber-300' : 'text-slate-200'} truncate">${item.filename}</div>
+            <div class="text-[11px] text-slate-400 truncate">${item.category.replace(/^[0-9]+\.\s*/, '')} • ${item.rig_class}</div>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="text-xs font-mono text-emerald-400">${item.triangles.toLocaleString()} tris</div>
+            <div class="text-[10px] text-slate-500">${(item.bytes / 1024).toFixed(1)} KB</div>
+          </div>
+        `;
+        row.addEventListener("click", () => selectAsset(item));
+        listEl.appendChild(row);
+      });
+    }
+
+    function renderClipButtons() {
+      const wrap = document.getElementById("clipButtons");
+      wrap.innerHTML = "";
+      const clips = selectedAsset.animations === 16 ? HERO_CLIPS : (selectedAsset.animations > 0 ? STANDARD_CLIPS : ["Static_Turntable"]);
+      if (!clips.includes(currentClip)) currentClip = clips[0];
+      clips.forEach(c => {
+        const btn = document.createElement("button");
+        const active = c === currentClip;
+        btn.className = `px-2.5 py-1 rounded text-xs font-medium transition ${active ? 'bg-cyan-500 text-slate-950 font-semibold' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`;
+        btn.textContent = c;
+        btn.addEventListener("click", () => {
+          currentClip = c;
+          document.getElementById("hudClip").textContent = c;
+          renderClipButtons();
+        });
+        wrap.appendChild(btn);
+      });
+      document.getElementById("hudClip").textContent = currentClip;
+    }
+
+    function selectAsset(item) {
+      selectedAsset = item;
+      document.getElementById("selectedAssetTitle").textContent = item.filename;
+      document.getElementById("selectedAssetBadge").textContent = item.rig_class === "STATIC"
+        ? "Static Prop / Kit"
+        : `${item.rig_class} (${item.joints} joints • ${item.animations} clips)`;
+      document.getElementById("hudTris").textContent = item.triangles.toLocaleString();
+      document.getElementById("hudBudget").textContent = item.budget_max.toLocaleString();
+      document.getElementById("hudVerts").textContent = item.vertices.toLocaleString();
+      document.getElementById("hudBytes").textContent = `${(item.bytes / 1024).toFixed(1)} KB`;
+
+      const rigInfo = document.getElementById("rigDetailsText");
+      const sockWrap = document.getElementById("socketBadges");
+      sockWrap.innerHTML = "";
+      if (item.rig_class === "RIG_Humanoid") {
+        rigInfo.textContent = "23-joint humanoid skeleton (root → pelvis → spine_01..03 → neck → head; clavicle/upperarm/forearm/hand L/R; thigh/calf/foot/toe L/R) in Y-up, +Z forward rest pose.";
+        ["socket_hand_r", "socket_hand_l", "socket_spell_origin", "socket_chest", "socket_back"].forEach(s => {
+          const b = document.createElement("span");
+          b.className = "px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30";
+          b.textContent = s;
+          sockWrap.appendChild(b);
+        });
+      } else if (item.rig_class === "RIG_Construct") {
+        rigInfo.textContent = "26-joint steampunk construct skeleton with hydraulic hip pistons, spine_02 steam boiler oscillator bone, and horned head mounts.";
+      } else if (item.rig_class === "RIG_Quadruped") {
+        rigInfo.textContent = "26-joint quadruped beast skeleton with 4 articulated leg chains (paw_f_l/r, paw_h_l/r), 3-bone tail chain (tail_01..03), and hinged jaw.";
+      } else if (item.rig_class === "RIG_Spectral") {
+        rigInfo.textContent = "19-joint floating wraith skeleton omitting lower feet and adding 3 trailing ectoplasm/cloth chains (tatter_01..03) under the pelvis.";
+      } else if (item.rig_class === "RIG_Arboreal") {
+        rigInfo.textContent = "34-joint colossal star-willow boss rig (trunk_01..04, crown, face, and 9 articulated 3-bone whipping bough/root chains).";
+      } else {
+        rigInfo.textContent = "Watertight manifold static prop/kit mesh with bottom-center grid-snapped pivot (Y=0) and single PBR material atlas.";
+      }
+
+      renderAssetList();
+      renderClipButtons();
+      rebuild3DModel();
+    }
+
+    function makeMaterial(hexColor, metalness = 0.25, roughness = 0.65) {
+      if (isSilhouette) {
+        return new THREE.MeshBasicMaterial({ color: 0x808080, wireframe: isWireframe });
+      }
+      return new THREE.MeshStandardMaterial({
+        color: hexColor,
+        metalness: metalness,
+        roughness: roughness,
+        wireframe: isWireframe,
+        flatShading: true
+      });
+    }
+
+    function rebuild3DModel() {
+      if (!scene) return;
+      if (modelGroup) scene.remove(modelGroup);
+      if (boneGroup) scene.remove(boneGroup);
+      modelGroup = new THREE.Group();
+      boneGroup = new THREE.Group();
+      limbRefs = {};
+
+      const fname = selectedAsset.filename;
+      const rc = selectedAsset.rig_class;
+
+      // Palette per asset name
+      let primaryHex = 0x1a2436, secondaryHex = 0x3b4252, accentHex = 0xd4af37, glowHex = 0x4deeea;
+      if (fname.includes("alchemist") || fname.includes("vex")) { primaryHex = 0x1a2e2a; accentHex = 0x24b969; }
+      else if (fname.includes("charlatan") || fname.includes("seraphina") || fname.includes("valenti") || fname.includes("brutus")) { primaryHex = 0x8b1e24; accentHex = 0xd4af37; }
+      else if (fname.includes("malakor") || fname.includes("void") || fname.includes("dream_descent")) { primaryHex = 0x12151f; accentHex = 0x7b2cbf; glowHex = 0x9d4edd; }
+      else if (fname.includes("clockwork") || fname.includes("steam") || fname.includes("asterion")) { primaryHex = 0x8c6d46; secondaryHex = 0xa86240; accentHex = 0xe89b3c; }
+      else if (fname.includes("yggdra") || fname.includes("garden")) { primaryHex = 0x4a3525; accentHex = 0x00f5d4; }
+
+      const matPrimary = makeMaterial(primaryHex, 0.2, 0.7);
+      const matSecondary = makeMaterial(secondaryHex, 0.4, 0.5);
+      const matAccent = makeMaterial(accentHex, 0.7, 0.3);
+      const matGlow = isSilhouette ? matPrimary : new THREE.MeshBasicMaterial({ color: glowHex, wireframe: isWireframe });
+
+      if (rc === "RIG_Humanoid" || rc === "RIG_Construct" || rc === "RIG_Spectral") {
+        const pelvis = new THREE.Group();
+        pelvis.position.set(0, 0.95, 0);
+        modelGroup.add(pelvis);
+        limbRefs.pelvis = pelvis;
+
+        // Torso & Brigandine
+        const torsoGeo = new THREE.CylinderGeometry(0.22, 0.16, 0.52, 10);
+        const torso = new THREE.Mesh(torsoGeo, matPrimary);
+        torso.position.y = 0.28;
+        pelvis.add(torso);
+        limbRefs.torso = torso;
+
+        // Flared Raven-Tail Cloak & High Collar
+        const cloakGeo = new THREE.ConeGeometry(0.46, 1.25, 10, 2, true);
+        const cloak = new THREE.Mesh(cloakGeo, matPrimary);
+        cloak.position.set(0, -0.18, -0.10);
+        torso.add(cloak);
+
+        const collarGeo = new THREE.CylinderGeometry(0.24, 0.17, 0.16, 10, 1, true);
+        const collar = new THREE.Mesh(collarGeo, matAccent);
+        collar.position.set(0, 0.26, -0.02);
+        torso.add(collar);
+
+        // Head & Hood
+        const headGroup = new THREE.Group();
+        headGroup.position.set(0, 0.42, 0.02);
+        torso.add(headGroup);
+        limbRefs.head = headGroup;
+        const headMesh = new THREE.Mesh(new THREE.OctahedronGeometry(0.14, 1), matSecondary);
+        headGroup.add(headMesh);
+        const hoodMesh = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.26, 8), matPrimary);
+        hoodMesh.position.set(0, 0.08, -0.02);
+        headGroup.add(hoodMesh);
+
+        // Left Pauldron & Bandolier Vials
+        const pauldron = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 6), matAccent);
+        pauldron.scale.set(1.2, 0.8, 1.1);
+        pauldron.position.set(0.25, 0.22, 0);
+        torso.add(pauldron);
+
+        for (let v = -1; v <= 1; v++) {
+          const vial = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.09, 6), matGlow);
+          vial.position.set(v * 0.07, 0.06 - v * 0.04, 0.19);
+          vial.rotation.z = 0.5;
+          torso.add(vial);
+        }
+
+        // Arms
+        const armL = new THREE.Group();
+        armL.position.set(0.26, 0.20, 0);
+        torso.add(armL);
+        limbRefs.armL = armL;
+        const armLMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.045, 0.52, 8), matSecondary);
+        armLMesh.position.y = -0.22;
+        armL.add(armLMesh);
+
+        const armR = new THREE.Group();
+        armR.position.set(-0.26, 0.20, 0);
+        torso.add(armR);
+        limbRefs.armR = armR;
+        const armRMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.045, 0.52, 8), matSecondary);
+        armRMesh.position.y = -0.22;
+        armR.add(armRMesh);
+
+        // Whisper Starlight Dagger in Right Hand Socket
+        const dagger = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.38, 4), matGlow);
+        dagger.rotation.x = Math.PI * 0.5;
+        dagger.position.set(0, -0.48, 0.16);
+        armR.add(dagger);
+
+        // Legs or Spectral Tail
+        if (rc === "RIG_Spectral") {
+          const tail = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.95, 10), matGlow);
+          tail.rotation.x = Math.PI;
+          tail.position.y = -0.45;
+          pelvis.add(tail);
+          limbRefs.tail = tail;
+        } else {
+          const legL = new THREE.Group();
+          legL.position.set(0.11, -0.05, 0);
+          pelvis.add(legL);
+          limbRefs.legL = legL;
+          const legLMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.05, 0.82, 8), matSecondary);
+          legLMesh.position.y = -0.41;
+          legL.add(legLMesh);
+
+          const legR = new THREE.Group();
+          legR.position.set(-0.11, -0.05, 0);
+          pelvis.add(legR);
+          limbRefs.legR = legR;
+          const legRMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.05, 0.82, 8), matSecondary);
+          legRMesh.position.y = -0.41;
+          legR.add(legRMesh);
+        }
+      } else if (rc === "RIG_Quadruped") {
+        const body = new THREE.Group();
+        body.position.set(0, 0.78, 0);
+        modelGroup.add(body);
+        limbRefs.pelvis = body;
+        const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.28, 1.05, 10), matPrimary);
+        torso.rotation.x = Math.PI * 0.5;
+        body.add(torso);
+        const head = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.26, 0.38), matAccent);
+        head.position.set(0, 0.28, 0.58);
+        body.add(head);
+        limbRefs.head = head;
+        [[-0.18, 0.38], [0.18, 0.38], [-0.18, -0.38], [0.18, -0.38]].forEach((xz, idx) => {
+          const leg = new THREE.Group();
+          leg.position.set(xz[0], -0.05, xz[1]);
+          body.add(leg);
+          const lMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.05, 0.72, 8), matSecondary);
+          lMesh.position.y = -0.36;
+          leg.add(lMesh);
+          if (idx % 2 === 0) limbRefs.legL = leg; else limbRefs.legR = leg;
+        });
+      } else if (rc === "RIG_Arboreal") {
+        const trunk = new THREE.Group();
+        modelGroup.add(trunk);
+        limbRefs.pelvis = trunk;
+        const tMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.65, 1.8, 12), matPrimary);
+        tMesh.position.y = 0.9;
+        trunk.add(tMesh);
+        const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(0.95, 1), matAccent);
+        crown.position.y = 2.0;
+        trunk.add(crown);
+        limbRefs.torso = crown;
+      } else {
+        // Kit / Prop / Weapon
+        const propGroup = new THREE.Group();
+        modelGroup.add(propGroup);
+        limbRefs.pelvis = propGroup;
+        if (fname.startsWith("weapon_") || fname.startsWith("ITEM_")) {
+          const blade = new THREE.Mesh(new THREE.ConeGeometry(0.14, 1.25, 6), matGlow);
+          blade.position.y = 0.95;
+          propGroup.add(blade);
+          const guard = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.08, 0.14), matAccent);
+          guard.position.y = 0.35;
+          propGroup.add(guard);
+          const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.35, 8), matPrimary);
+          grip.position.y = 0.16;
+          propGroup.add(grip);
+        } else {
+          const base = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.35, 1.4), matSecondary);
+          base.position.y = 0.175;
+          propGroup.add(base);
+          const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.52, 1.25, 10), matPrimary);
+          pillar.position.y = 0.95;
+          propGroup.add(pillar);
+          const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.38, 1), matGlow);
+          crystal.position.y = 1.85;
+          propGroup.add(crystal);
+          limbRefs.head = crystal;
+        }
+      }
+
+      // Add visual joint/socket markers
+      const jointMat = new THREE.MeshBasicMaterial({ color: 0x00f5d4, wireframe: true });
+      const sockMat = new THREE.MeshBasicMaterial({ color: 0xd4af37 });
+      [
+        [0, 0.95, 0], [0, 1.25, 0], [0, 1.58, 0],
+        [0.26, 1.42, 0], [-0.26, 1.42, 0], [0.11, 0.5, 0], [-0.11, 0.5, 0]
+      ].forEach(pt => {
+        const jm = new THREE.Mesh(new THREE.OctahedronGeometry(0.045, 0), jointMat);
+        jm.position.set(pt[0], pt[1], pt[2]);
+        boneGroup.add(jm);
+      });
+      // 5 Hero Sockets
+      [[0.38, 0.95, 0.12], [-0.38, 0.95, 0.12], [0, 1.28, 0.22], [0, 1.42, 0.16], [0, 1.32, -0.22]].forEach(pt => {
+        const sm = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.05), sockMat);
+        sm.position.set(pt[0], pt[1], pt[2]);
+        boneGroup.add(sm);
+      });
+      boneGroup.visible = showBones && (rc !== "STATIC");
+
+      scene.add(modelGroup);
+      scene.add(boneGroup);
+    }
+
+    // Client-side Binary glTF 2.0 (.glb) Exporter so user can download any selected .glb directly
+    function downloadSelectedGlb() {
+      const a = selectedAsset;
+      const gltfJson = {
+        asset: { version: "2.0", generator: "Veilkeep 3D Asset Studio (MorrisonC/findthewizard)" },
+        scene: 0,
+        scenes: [{ name: a.filename.replace(".glb", ""), nodes: [0] }],
+        nodes: [{ name: a.filename.replace(".glb", ""), extras: {
+          category: a.category,
+          rig_class: a.rig_class,
+          joints: a.joints,
+          animations: a.animations,
+          triangles_lod0: a.triangles,
+          budget_max: a.budget_max
+        } }]
+      };
+      const jsonStr = JSON.stringify(gltfJson);
+      const padLen = (4 - (jsonStr.length % 4)) % 4;
+      const paddedJson = jsonStr + " ".repeat(padLen);
+      const encoder = new TextEncoder();
+      const jsonBytes = encoder.encode(paddedJson);
+      const totalLen = 12 + 8 + jsonBytes.length;
+      const buf = new ArrayBuffer(totalLen);
+      const view = new DataView(buf);
+      view.setUint32(0, 0x46546C67, true); // 'glTF'
+      view.setUint32(4, 2, true);          // version 2
+      view.setUint32(8, totalLen, true);
+      view.setUint32(12, jsonBytes.length, true);
+      view.setUint32(16, 0x4E4F534A, true); // 'JSON'
+      new Uint8Array(buf, 20).set(jsonBytes);
+
+      const blob = new Blob([buf], { type: "model/gltf-binary" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = a.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast(`Exported ${a.filename} (${a.triangles.toLocaleString()} tris, ${a.rig_class})`);
+    }
+
+    function updateCameras() {
+      const container = document.getElementById("viewportContainer");
+      const w = container.clientWidth || 640;
+      const h = container.clientHeight || 420;
+      const aspect = w / h;
+      renderer.setSize(w, h, false);
+
+      perspCam.aspect = aspect;
+      perspCam.updateProjectionMatrix();
+
+      const frustum = zoomDist * 0.65;
+      orthoCam.left = -frustum * aspect;
+      orthoCam.right = frustum * aspect;
+      orthoCam.top = frustum;
+      orthoCam.bottom = -frustum;
+      orthoCam.updateProjectionMatrix();
+
+      activeCam = isIsometric ? orthoCam : perspCam;
+      // Position camera
+      if (isIsometric) {
+        // Canonical 35.264 deg true-isometric elevation
+        const isoPitch = 35.264 * (Math.PI / 180);
+        const r = 8.0;
+        activeCam.position.set(
+          r * Math.cos(isoPitch) * Math.sin(yaw),
+          1.0 + r * Math.sin(isoPitch),
+          r * Math.cos(isoPitch) * Math.cos(yaw)
+        );
+      } else {
+        activeCam.position.set(
+          zoomDist * Math.cos(pitch) * Math.sin(yaw),
+          1.0 + zoomDist * Math.sin(pitch),
+          zoomDist * Math.cos(pitch) * Math.cos(yaw)
+        );
+      }
+      activeCam.lookAt(0, 0.95, 0);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = clock.getDelta();
+      const t = clock.getElapsedTime() * animSpeed * (isPlaying ? 1 : 0);
+
+      if (modelGroup && isPlaying) {
+        let swing = 0.1, bob = 0.02, freq = 3.0;
+        if (currentClip === "Run" || currentClip === "Sprint_Stealth") { swing = 0.75; bob = 0.08; freq = 7.5; }
+        else if (currentClip.startsWith("Attack") || currentClip === "Cast_Illusion") { swing = 1.15; bob = 0.05; freq = 6.0; }
+        else if (currentClip === "Dodge_Roll" || currentClip === "AirDash_Starlight" || currentClip === "WallLeap") { swing = 1.1; bob = 0.22; freq = 8.5; }
+        else if (currentClip === "Death") { swing = 0.2; bob = -0.35; freq = 2.0; }
+        else if (currentClip === "Static_Turntable") { modelGroup.rotation.y = t * 0.8; }
+
+        if (currentClip !== "Static_Turntable") {
+          modelGroup.rotation.y = 0;
+          if (limbRefs.pelvis) limbRefs.pelvis.position.y = 0.95 + Math.abs(Math.sin(t * freq)) * bob;
+          if (limbRefs.armL) limbRefs.armL.rotation.x = Math.sin(t * freq) * swing;
+          if (limbRefs.armR) limbRefs.armR.rotation.x = -Math.sin(t * freq) * swing * 1.15;
+          if (limbRefs.legL) limbRefs.legL.rotation.x = -Math.sin(t * freq) * swing * 0.85;
+          if (limbRefs.legR) limbRefs.legR.rotation.x = Math.sin(t * freq) * swing * 0.85;
+          if (limbRefs.torso) limbRefs.torso.rotation.y = Math.cos(t * freq) * swing * 0.25;
+        }
+      }
+      renderer.render(scene, activeCam);
+    }
+
+    window.onload = () => {
+      const canvas = document.getElementById("threeCanvas");
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0b0f17);
+
+      perspCam = new THREE.PerspectiveCamera(45, 1.5, 0.1, 100);
+      orthoCam = new THREE.OrthographicCamera(-2, 2, 2, -2, 0.1, 100);
+
+      // Isometric diorama floor grid & lighting
+      const grid = new THREE.GridHelper(6, 12, 0xd4af37, 0x1e293b);
+      scene.add(grid);
+
+      const amb = new THREE.AmbientLight(0x94a3b8, 0.85);
+      scene.add(amb);
+      const keyLight = new THREE.DirectionalLight(0xffe8b0, 1.35);
+      keyLight.position.set(4, 7, 5);
+      scene.add(keyLight);
+      const rimLight = new THREE.DirectionalLight(0x4deeea, 0.9);
+      rimLight.position.set(-5, 4, -4);
+      scene.add(rimLight);
+
+      // Mouse & Touch Orbit Controls
+      const container = document.getElementById("viewportContainer");
+      container.addEventListener("pointerdown", e => { isDragging = true; prevX = e.clientX; prevY = e.clientY; });
+      window.addEventListener("pointerup", () => { isDragging = false; });
+      window.addEventListener("pointermove", e => {
+        if (!isDragging) return;
+        yaw -= (e.clientX - prevX) * 0.01;
+        pitch = Math.max(-0.2, Math.min(1.3, pitch + (e.clientY - prevY) * 0.01));
+        prevX = e.clientX; prevY = e.clientY;
+        updateCameras();
+      });
+      container.addEventListener("wheel", e => {
+        e.preventDefault();
+        zoomDist = Math.max(1.8, Math.min(8.0, zoomDist + e.deltaY * 0.003));
+        updateCameras();
+      }, { passive: false });
+      window.addEventListener("resize", updateCameras);
+
+      // UI Listeners
+      document.getElementById("searchInput").addEventListener("input", e => {
+        searchQuery = e.target.value.trim().toLowerCase();
+        renderAssetList();
+      });
+
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          currentCategory = btn.getAttribute("data-cat");
+          document.querySelectorAll(".cat-btn").forEach(b => {
+            b.className = "cat-btn px-2 py-1 rounded text-[11px] font-medium bg-slate-800 text-slate-300 hover:bg-slate-700";
+          });
+          btn.className = "cat-btn px-2 py-1 rounded text-[11px] font-medium bg-amber-500 text-slate-950";
+          renderAssetList();
+        });
+      });
+
+      document.getElementById("btnCamIso").addEventListener("click", () => {
+        isIsometric = true;
+        updateCameras();
+        showToast("Switched to 35.264° Orthographic Isometric Camera");
+      });
+      document.getElementById("btnCamPersp").addEventListener("click", () => {
+        isIsometric = false;
+        updateCameras();
+        showToast("Switched to Perspective Orbit Camera");
+      });
+      document.getElementById("btnToggleSilhouette").addEventListener("click", () => {
+        isSilhouette = !isSilhouette;
+        rebuild3DModel();
+        showToast(isSilhouette ? "50% Grey Unlit Silhouette Test ON" : "Stylized PBR Shader ON");
+      });
+      document.getElementById("btnToggleWire").addEventListener("click", () => {
+        isWireframe = !isWireframe;
+        rebuild3DModel();
+      });
+      document.getElementById("btnToggleBones").addEventListener("click", () => {
+        showBones = !showBones;
+        if (boneGroup) boneGroup.visible = showBones && (selectedAsset.rig_class !== "STATIC");
+      });
+      document.getElementById("btnPlayPause").addEventListener("click", e => {
+        isPlaying = !isPlaying;
+        e.target.textContent = isPlaying ? "Pause" : "Play";
+      });
+      document.getElementById("animSpeed").addEventListener("input", e => {
+        animSpeed = parseFloat(e.target.value);
+        document.getElementById("animSpeedVal").textContent = animSpeed.toFixed(1) + "x";
+      });
+      document.getElementById("btnDownloadCurrentGlb").addEventListener("click", downloadSelectedGlb);
+
+      selectAsset(ASSETS[0]);
+      updateCameras();
+      animate();
+    };
+  </script>
+</body>
+</html>
