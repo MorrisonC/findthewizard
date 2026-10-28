@@ -1,17 +1,65 @@
 import * as THREE from 'three';
-import type { MainCharacterRig } from './MainCharacterRig';
-import { COMBAT_TIMING, buildCombatClips, type ClipName, type CombatState, type StateTiming } from './CombatAnimations';
-import type { EquippedWeapon, EquippedShield } from './WeaponArsenal';
-import type { WeaponTrail } from './WeaponTrail';
-import type { CombatParticles } from './CombatParticles';
 
-export const CROSSFADE_SECONDS = 0.15;
-const INPUT_BUFFER_SECONDS = 0.35;
-const DODGE_COOLDOWN = 0.2;
-const DODGE_DISTANCE = 3.2;
-const DODGE_MOVE_SPAN: [number, number] = [0.05, 0.7];
-const BLOCK_DAMAGE_SCALE = 0.25;
-export const HIT_STOP_SECONDS = 0.055;
+export type DifficultyTierId =
+  | 'novice'
+  | 'apprentice'
+  | 'adept'
+  | 'expert'
+  | 'master'
+  | 'legendary';
+
+export interface DifficultyPreset {
+  id: DifficultyTierId;
+  label: string;
+  playerDamageMult: number;
+  enemyDamageMult: number;
+  enemyHpMult: number;
+}
+
+export const SKYRIM_DIFFICULTY_PRESETS: Record<DifficultyTierId, DifficultyPreset> = {
+  novice: {
+    id: 'novice',
+    label: 'Novice (1.5x Player / 0.5x Enemy)',
+    playerDamageMult: 1.5,
+    enemyDamageMult: 0.5,
+    enemyHpMult: 0.75,
+  },
+  apprentice: {
+    id: 'apprentice',
+    label: 'Apprentice (1.25x Player / 0.75x Enemy)',
+    playerDamageMult: 1.25,
+    enemyDamageMult: 0.75,
+    enemyHpMult: 0.9,
+  },
+  adept: {
+    id: 'adept',
+    label: 'Adept (1.0x Balanced Default)',
+    playerDamageMult: 1.0,
+    enemyDamageMult: 1.0,
+    enemyHpMult: 1.0,
+  },
+  expert: {
+    id: 'expert',
+    label: 'Expert (0.75x Player / 1.5x Enemy)',
+    playerDamageMult: 0.75,
+    enemyDamageMult: 1.5,
+    enemyHpMult: 1.25,
+  },
+  master: {
+    id: 'master',
+    label: 'Master (0.5x Player / 2.0x Enemy)',
+    playerDamageMult: 0.5,
+    enemyDamageMult: 2.0,
+    enemyHpMult: 1.55,
+  },
+  legendary: {
+    id: 'legendary',
+    label: 'Legendary (0.35x Player / 3.0x Enemy)',
+    playerDamageMult: 0.35,
+    enemyDamageMult: 3.0,
+    enemyHpMult: 2.1,
+  },
+};
 
 export interface EquipmentStats {
   weaponDamageMultiplier: number;
@@ -22,543 +70,218 @@ export interface EquipmentStats {
   bladeLength: number;
 }
 
-export const ARMOR_PRESETS: Record<string, Partial<EquipmentStats>> = {
-  armor_arch_robes: { damageMitigation: 0.12, staminaCostMultiplier: 0.85, critChance: 0.15 },
-  armor_shadow_mail: { damageMitigation: 0.24, staminaCostMultiplier: 0.9, critChance: 0.22 },
-  armor_astral_cuirass: { damageMitigation: 0.38, staminaCostMultiplier: 1.0, critChance: 0.12 },
-};
-
-export const WEAPON_STAT_PRESETS: Record<string, Partial<EquipmentStats>> = {
-  weapon_whisper: { weaponDamageMultiplier: 1.0, critChance: 0.25, bladeLength: 0.85 },
-  hunter_blade: { weaponDamageMultiplier: 1.0, critChance: 0.15, bladeLength: 1.05 },
-  weapon_mirror_blade: { weaponDamageMultiplier: 1.25, critChance: 0.2, bladeLength: 1.15 },
-  weapon_shadow_claw: { weaponDamageMultiplier: 1.15, critChance: 0.32, bladeLength: 0.75 },
-  weapon_void_edge: { weaponDamageMultiplier: 1.65, critChance: 0.18, bladeLength: 1.55 },
-  weapon_astral_staff: { weaponDamageMultiplier: 1.35, critChance: 0.22, bladeLength: 1.45 },
-  weapon_sunfire_bow: { weaponDamageMultiplier: 1.2, critChance: 0.28, bladeLength: 1.1 },
-};
-
-const COMBO_DAMAGE_MULTIPLIERS: Record<string, number> = {
-  Light_Attack_1: 1.0,
-  Light_Attack_2: 1.2,
-  Heavy_Combo_Finisher: 1.6,
-};
-
-export interface CombatTarget {
-  id: string;
-  position: THREE.Vector3;
-  radius: number;
+export interface PlayerRPGState {
+  level: number;
+  xp: number;
+  xpToNextLevel: number;
+  perkPoints: number;
+  maxHp: number;
+  hp: number;
+  maxStamina: number;
+  stamina: number;
+  maxFocus: number;
+  focus: number;
+  armorRating: number;
+  baseAttackDamage: number;
+  skills: {
+    bladeAndParry: number;
+    shadowcraftAndEvasion: number;
+    arcaneLoreAndWards: number;
+  };
+  perks: {
+    armsman: boolean;
+    silentRoll: boolean;
+    resonantWard: boolean;
+  };
 }
 
-export interface HitEvent {
-  target: CombatTarget;
-  damage: number;
-  knockback: number;
-  state: CombatState;
-  direction: THREE.Vector3;
-  isCrit?: boolean;
-  isHeavyBranch?: boolean;
-}
-
-export interface SpellEvent {
-  origin: THREE.Vector3;
-  direction: THREE.Vector3;
-  damage: number;
-}
-
-export interface IncomingHit {
-  damage: number;
-  kind?: 'melee' | 'spell';
-  direction?: THREE.Vector3;
-}
-export type HitOutcome = 'hit' | 'blocked' | 'parried' | 'evaded' | 'countered';
-
-export interface CombatCallbacks {
-  onHit?: (e: HitEvent) => void;
-  onHitboxOpen?: (state: CombatState) => void;
-  onSpell?: (e: SpellEvent) => void;
-  onStateChange?: (next: CombatState, prev: CombatState) => void;
-  onDamaged?: (damage: number) => void;
-  onParry?: () => void;
-  onCounter?: () => void;
-}
-
-const COMBO: CombatState[] = ['Light_Attack_1', 'Light_Attack_2', 'Heavy_Combo_Finisher'];
-const isAttack = (s: CombatState) => COMBO.includes(s);
-
-const _a = new THREE.Vector3();
-const _b = new THREE.Vector3();
-const _ab = new THREE.Vector3();
-const _ap = new THREE.Vector3();
-const _hiltPos = new THREE.Vector3();
-const _tipPos = new THREE.Vector3();
-
-function segmentPointDistance(p0: THREE.Vector3, p1: THREE.Vector3, c: THREE.Vector3): number {
-  _ab.subVectors(p1, p0);
-  _ap.subVectors(c, p0);
-  const len2 = _ab.lengthSq();
-  const t = len2 > 1e-8 ? THREE.MathUtils.clamp(_ap.dot(_ab) / len2, 0, 1) : 0;
-  return _b.copy(p0).addScaledVector(_ab, t).distanceTo(c);
-}
-
-const inWindow = (n: number, w?: [number, number]) => !!w && n >= w[0] && n <= w[1];
-const smooth = (x: number) => {
-  const t = THREE.MathUtils.clamp(x, 0, 1);
-  return t * t * (3 - 2 * t);
-};
+export const DODGE_COOLDOWN = 0.25;
+export const DODGE_DURATION = 0.52;
+export const DODGE_IFRAME_START = 0.05;
+export const DODGE_IFRAME_END = 0.42;
+export const DODGE_DISTANCE = 3.4;
+export const PARRY_WINDOW_SECONDS = 0.24;
 
 export class CombatController {
-  readonly mixer: THREE.AnimationMixer;
-  readonly callbacks: CombatCallbacks;
-  readonly clips: Record<ClipName, THREE.AnimationClip>;
-  private actions = new Map<ClipName, THREE.AnimationAction>();
-
-  state: CombatState = 'Idle_Combat';
-  private clipName: ClipName = 'Idle_Combat';
-  private action: THREE.AnimationAction;
-
-  attackSpeed = 1;
-  targetProvider: () => CombatTarget[] = () => [];
-
-  equipmentStats: EquipmentStats = {
-    weaponDamageMultiplier: 1.0,
-    critChance: 0.15,
-    critMultiplier: 1.5,
-    staminaCostMultiplier: 1.0,
-    damageMitigation: 0.12,
-    bladeLength: 1.05,
+  public difficulty: DifficultyPreset = SKYRIM_DIFFICULTY_PRESETS.adept;
+  public rpg: PlayerRPGState = {
+    level: 1,
+    xp: 0,
+    xpToNextLevel: 120,
+    perkPoints: 1,
+    maxHp: 180,
+    hp: 180,
+    maxStamina: 120,
+    stamina: 120,
+    maxFocus: 80,
+    focus: 80,
+    armorRating: 110,
+    baseAttackDamage: 20,
+    skills: {
+      bladeAndParry: 15,
+      shadowcraftAndEvasion: 15,
+      arcaneLoreAndWards: 15,
+    },
+    perks: {
+      armsman: false,
+      silentRoll: false,
+      resonantWard: false,
+    },
   };
 
-  // input
-  private bufAttack = 0;
-  private bufHeavy = 0;
-  private bufCast = 0;
-  private bufDodge = 0;
-  private dodgeDir = new THREE.Vector3();
-  private blockHeld = false;
-  private move = new THREE.Vector2();
-  private run = false;
-  private strafe = 0;
-  private aimYaw: number | null = null;
+  public isDodging: boolean = false;
+  public dodgeTimer: number = 0;
+  public dodgeCooldownTimer: number = 0;
+  public isParrying: boolean = false;
+  public parryTimer: number = 0;
+  public shadowCounterBuffTimer: number = 0;
 
-  // combat bookkeeping
-  private comboIndex = 0;
-  private heavyFinisherBranch = false;
-  private hitStopTimer = 0;
-  private dodgeCooldown = 0;
-  private blockTime = 0;
-  private spawned = false;
-  private hitSet = new Set<string>();
-  private hitboxWasActive = false;
-  private prevAnchor = new THREE.Vector3();
-  private curAnchor = new THREE.Vector3();
-  private lastDodgeN = 0;
-  private rootDelta = new THREE.Vector3();
-  private _hitboxActive = false;
+  public setDifficulty(tier: DifficultyTierId): void {
+    this.difficulty = SKYRIM_DIFFICULTY_PRESETS[tier];
+  }
 
-  equippedWeapon?: EquippedWeapon;
-  equippedShield?: EquippedShield;
-  weaponTrail?: WeaponTrail;
-  combatParticles?: CombatParticles;
+  public get hasInvulnerabilityFrames(): boolean {
+    if (!this.isDodging) return false;
+    const elapsed = DODGE_DURATION - this.dodgeTimer;
+    const extraIframe = this.rpg.perks.silentRoll ? 0.08 : 0.0;
+    return elapsed >= DODGE_IFRAME_START && elapsed <= DODGE_IFRAME_END + extraIframe;
+  }
 
-  attachWeapon(weapon: EquippedWeapon): void {
-    this.equippedWeapon = weapon;
-    this.weaponTrail?.setWeapon(weapon);
-    const preset = WEAPON_STAT_PRESETS[(weapon as any)?.id ?? 'hunter_blade'];
-    if (preset) {
-      Object.assign(this.equipmentStats, preset);
+  public tryStartDodge(): boolean {
+    const staminaCost = this.rpg.perks.silentRoll ? 16 : 22;
+    if (this.isDodging || this.dodgeCooldownTimer > 0 || this.rpg.stamina < staminaCost) {
+      return false;
     }
+    this.rpg.stamina -= staminaCost;
+    this.isDodging = true;
+    this.dodgeTimer = DODGE_DURATION;
+    this.grantSkillXp('shadowcraftAndEvasion', 14);
+    return true;
   }
 
-  equipArmor(armorId: string): void {
-    const preset = ARMOR_PRESETS[armorId];
-    if (preset) {
-      Object.assign(this.equipmentStats, preset);
+  public tryStartParry(): boolean {
+    if (this.isDodging || this.rpg.stamina < 10) return false;
+    this.isParrying = true;
+    this.parryTimer = PARRY_WINDOW_SECONDS;
+    return true;
+  }
+
+  public computePlayerStrike(kind: 'light' | 'heavy'): {
+    rawDamage: number;
+    poiseDamage: number;
+    isCrit: boolean;
+  } | null {
+    const staminaCost = kind === 'heavy' ? 28 : 12;
+    if (this.rpg.stamina < staminaCost) return null;
+    this.rpg.stamina -= staminaCost;
+
+    const skillMult = 1 + (this.rpg.skills.bladeAndParry - 15) * 0.015;
+    const perkMult = this.rpg.perks.armsman ? 1.2 : 1.0;
+    const heavyMult = kind === 'heavy' ? 1.95 : 1.0;
+    const counterMult = this.shadowCounterBuffTimer > 0 ? 1.4 : 1.0;
+
+    const critChance = 0.1 + (this.rpg.skills.shadowcraftAndEvasion - 15) * 0.004;
+    const isCrit = Math.random() < critChance;
+    const critMult = isCrit ? 1.65 : 1.0;
+
+    const rawDamage = Math.round(
+      this.rpg.baseAttackDamage *
+        skillMult *
+        perkMult *
+        heavyMult *
+        counterMult *
+        critMult *
+        this.difficulty.playerDamageMult
+    );
+    const poiseDamage = kind === 'heavy' ? 38 : 14;
+
+    this.shadowCounterBuffTimer = 0;
+    this.grantSkillXp('bladeAndParry', kind === 'heavy' ? 22 : 12);
+    return { rawDamage, poiseDamage, isCrit };
+  }
+
+  public receiveEnemyAttack(
+    enemyBaseDamage: number,
+    attackType: 'light_parriable' | 'heavy_unblockable' | 'aoe_nova'
+  ): { outcome: 'dodged_iframe' | 'parried' | 'hit'; damageTaken: number } {
+    if (this.hasInvulnerabilityFrames) {
+      this.shadowCounterBuffTimer = 3.0;
+      this.grantSkillXp('shadowcraftAndEvasion', 28);
+      return { outcome: 'dodged_iframe', damageTaken: 0 };
     }
-  }
 
-  attachShield(shield: EquippedShield): void {
-    this.equippedShield = shield;
-  }
-
-  attachWeaponTrail(trail: WeaponTrail): void {
-    this.weaponTrail = trail;
-    if (this.equippedWeapon) trail.setWeapon(this.equippedWeapon);
-  }
-
-  attachParticles(particles: CombatParticles): void {
-    this.combatParticles = particles;
-  }
-
-  constructor(
-    readonly rig: MainCharacterRig,
-    callbacks: CombatCallbacks = {},
-    clips?: Partial<Record<ClipName, THREE.AnimationClip>>,
-  ) {
-    this.callbacks = callbacks;
-    const procedural = buildCombatClips(rig.source === 'imported');
-    const imported = new Map(rig.importedClips.map((c) => [c.name.toLowerCase(), c]));
-    this.clips = { ...procedural };
-    for (const key of Object.keys(procedural)) {
-      const authored = imported.get(key.toLowerCase());
-      if (authored) this.clips[key as ClipName] = authored;
-    }
-    Object.assign(this.clips, clips);
-
-    this.mixer = new THREE.AnimationMixer(rig.group);
-    for (const [name, clip] of Object.entries(this.clips) as [ClipName, THREE.AnimationClip][]) {
-      const a = this.mixer.clipAction(clip);
-      if (name.startsWith('Locomotion') || name === 'Idle_Combat') {
-        a.setLoop(THREE.LoopRepeat, Infinity);
-      } else {
-        a.setLoop(THREE.LoopOnce, 1);
-        a.clampWhenFinished = true;
+    if (this.isParrying && attackType === 'light_parriable') {
+      this.grantSkillXp('bladeAndParry', 30);
+      if (this.rpg.perks.resonantWard) {
+        this.rpg.focus = Math.min(this.rpg.maxFocus, this.rpg.focus + 18);
       }
-      this.actions.set(name, a);
-    }
-    this.action = this.actions.get('Idle_Combat')!;
-    this.action.play();
-  }
-
-  // ---- input API --------------------------------------------------------
-
-  setMove(x: number, z: number, run = false, strafe = 0): void {
-    this.move.set(x, z);
-    this.run = run;
-    this.strafe = strafe;
-  }
-  setAimYaw(yaw: number | null): void {
-    this.aimYaw = yaw;
-  }
-  pressAttack(): void {
-    this.bufAttack = INPUT_BUFFER_SECONDS;
-  }
-  pressHeavyAttack(): void {
-    this.bufHeavy = INPUT_BUFFER_SECONDS;
-  }
-  pressCast(): void {
-    this.bufCast = INPUT_BUFFER_SECONDS;
-  }
-  pressDodge(dirX?: number, dirZ?: number): void {
-    this.bufDodge = INPUT_BUFFER_SECONDS;
-    if (dirX !== undefined && dirZ !== undefined && (dirX || dirZ)) this.dodgeDir.set(dirX, 0, dirZ);
-    else if (this.move.lengthSq() > 0.01) this.dodgeDir.set(this.move.x, 0, this.move.y);
-    else this.dodgeDir.set(0, 0, 0);
-  }
-  setBlock(held: boolean): void {
-    this.blockHeld = held;
-  }
-
-  // ---- queries ----------------------------------------------------------
-
-  get normalizedTime(): number {
-    const d = this.action.getClip().duration;
-    return d > 0 ? THREE.MathUtils.clamp(this.action.time / d, 0, 1) : 0;
-  }
-  get hitboxActive(): boolean {
-    return this._hitboxActive;
-  }
-  get invulnerable(): boolean {
-    return this.state === 'Dodge_Roll' && inWindow(this.normalizedTime, COMBAT_TIMING.Dodge_Roll.iframes);
-  }
-  get busy(): boolean {
-    return this.state !== 'Idle_Combat' && this.state !== 'Locomotion';
-  }
-  consumeRootMotion(out = new THREE.Vector3()): THREE.Vector3 {
-    out.copy(this.rootDelta);
-    this.rootDelta.set(0, 0, 0);
-    return out;
-  }
-  get forward(): THREE.Vector3 {
-    const y = this.rig.group.rotation.y;
-    return new THREE.Vector3(Math.sin(y), 0, Math.cos(y));
-  }
-
-  receiveHit(hit: IncomingHit): HitOutcome {
-    const kind = hit.kind ?? 'melee';
-    if (this.invulnerable) return 'evaded';
-    if (kind === 'spell' && this.state === 'Arcane_Cast' && inWindow(this.normalizedTime, COMBAT_TIMING.Arcane_Cast.counter)) {
-      this.callbacks.onCounter?.();
-      return 'countered';
-    }
-    const mitigatedDamage = hit.damage * Math.max(0.15, 1 - this.equipmentStats.damageMitigation);
-    if (this.state === 'Block_Parry') {
-      if (inWindow(this.blockTime / COMBAT_TIMING.Block_Parry.duration, COMBAT_TIMING.Block_Parry.parry)) {
-        this.equippedShield?.setWardActive(true, true);
-        this.combatParticles?.spawnParryBurst(this.rig.group.position, true);
-        this.callbacks.onParry?.();
-        return 'parried';
-      }
-      this.equippedShield?.setWardActive(true, false);
-      this.combatParticles?.spawnParryBurst(this.rig.group.position, false);
-      this.callbacks.onDamaged?.(mitigatedDamage * BLOCK_DAMAGE_SCALE);
-      return 'blocked';
-    }
-    this.combatParticles?.spawnStaggerBurst(this.rig.group.position);
-    this.callbacks.onDamaged?.(mitigatedDamage);
-    this.enter('Hit_Stagger');
-    return 'hit';
-  }
-
-  // ---- update -----------------------------------------------------------
-
-  update(dt: number): void {
-    this.bufAttack = Math.max(0, this.bufAttack - dt);
-    this.bufHeavy = Math.max(0, this.bufHeavy - dt);
-    this.bufCast = Math.max(0, this.bufCast - dt);
-    this.bufDodge = Math.max(0, this.bufDodge - dt);
-    this.dodgeCooldown = Math.max(0, this.dodgeCooldown - dt);
-
-    if (this.hitStopTimer > 0) {
-      this.hitStopTimer = Math.max(0, this.hitStopTimer - dt);
-      this.combatParticles?.update(dt);
-      return;
+      return { outcome: 'parried', damageTaken: 0 };
     }
 
-    this.mixer.update(dt);
-    if (this.state === 'Block_Parry') this.blockTime += dt;
-    const n = this.normalizedTime;
-    const t = COMBAT_TIMING[this.state === 'Locomotion' ? 'Idle_Combat' : this.state] as StateTiming;
-
-    switch (this.state) {
-      case 'Idle_Combat':
-      case 'Locomotion':
-        if (!this.startBufferedAction()) this.syncLocomotion();
-        break;
-      case 'Light_Attack_1':
-      case 'Light_Attack_2':
-      case 'Heavy_Combo_Finisher':
-        if (n >= (t.cancelFrom ?? 1)) {
-          if (this.tryDodge()) break;
-          // Heavy Finisher branch after Hit 2 when Heavy Attack or Cast is buffered
-          if (this.state === 'Light_Attack_2' && this.bufHeavy > 0) {
-            this.bufHeavy = 0;
-            this.comboIndex = 2;
-            this.heavyFinisherBranch = true;
-            this.enter('Heavy_Combo_Finisher');
-            break;
-          }
-          const next = COMBO[this.comboIndex + 1];
-          if (next && this.bufAttack > 0) {
-            this.bufAttack = 0;
-            this.comboIndex++;
-            this.heavyFinisherBranch = false;
-            this.enter(next);
-            break;
-          }
-        }
-        if (n >= 0.98) this.exitToFree();
-        break;
-      case 'Arcane_Cast':
-        if (!this.spawned && n >= (t.spawn ?? 1)) this.releaseSpell();
-        if (n >= (t.cancelFrom ?? 1) && this.tryDodge()) break;
-        if (n >= 0.98) this.exitToFree();
-        break;
-      case 'Dodge_Roll':
-        this.applyDodgeMotion(n);
-        if (n >= 0.98) this.exitToFree();
-        break;
-      case 'Block_Parry':
-        if (this.tryDodge()) break;
-        if (this.bufAttack > 0 && this.blockTime > 0.3) {
-          this.enter('Light_Attack_1');
-          this.comboIndex = 0;
-          this.bufAttack = 0;
-          break;
-        }
-        if (!this.blockHeld && this.blockTime > 0.12) this.exitToFree();
-        break;
-      case 'Hit_Stagger':
-        if (n >= (t.cancelFrom ?? 1) && this.tryDodge()) break;
-        if (n >= 0.98) this.exitToFree();
-        break;
-    }
-    this.updateHitbox();
-
-    if (this.state === 'Block_Parry') {
-      this.equippedShield?.setWardActive(true);
-    } else {
-      this.equippedShield?.setWardActive(false);
-    }
-    const comboTier = this.state === 'Heavy_Combo_Finisher' ? 3 : this.state === 'Light_Attack_2' ? 2 : 1;
-    this.weaponTrail?.update(dt, this._hitboxActive, comboTier);
-    this.equippedWeapon?.pulseRunes(this._hitboxActive ? 3.0 : 1.2);
-    this.combatParticles?.update(dt);
+    const mitigation = Math.min(0.8, this.rpg.armorRating * 0.0012);
+    const damageTaken = Math.max(
+      4,
+      Math.round(enemyBaseDamage * this.difficulty.enemyDamageMult * (1 - mitigation))
+    );
+    this.rpg.hp = Math.max(0, this.rpg.hp - damageTaken);
+    return { outcome: 'hit', damageTaken };
   }
 
-  // ---- internals --------------------------------------------------------
-
-  private startBufferedAction(): boolean {
-    if (this.tryDodge()) return true;
-    if (this.bufAttack > 0) {
-      this.bufAttack = 0;
-      this.comboIndex = 0;
-      this.heavyFinisherBranch = false;
-      this.enter('Light_Attack_1');
-      return true;
-    }
-    if (this.bufHeavy > 0) {
-      this.bufHeavy = 0;
-      this.comboIndex = 2;
-      this.heavyFinisherBranch = true;
-      this.enter('Heavy_Combo_Finisher');
-      return true;
-    }
-    if (this.bufCast > 0) {
-      this.bufCast = 0;
-      this.enter('Arcane_Cast');
-      return true;
-    }
-    if (this.blockHeld) {
-      this.enter('Block_Parry');
+  public grantSkillXp(skill: keyof PlayerRPGState['skills'], amount: number): boolean {
+    this.rpg.skills[skill] += Math.max(1, Math.round(amount / 15));
+    this.rpg.xp += amount;
+    if (this.rpg.xp >= this.rpg.xpToNextLevel) {
+      this.rpg.xp -= this.rpg.xpToNextLevel;
+      this.rpg.level += 1;
+      this.rpg.xpToNextLevel = Math.round(this.rpg.xpToNextLevel * 1.35);
+      this.rpg.perkPoints += 1;
+      this.rpg.maxHp += 25;
+      this.rpg.hp = this.rpg.maxHp;
+      this.rpg.maxStamina += 15;
+      this.rpg.stamina = this.rpg.maxStamina;
+      this.rpg.baseAttackDamage += 3;
       return true;
     }
     return false;
   }
 
-  private tryDodge(): boolean {
-    if (this.bufDodge <= 0 || this.dodgeCooldown > 0) return false;
-    this.bufDodge = 0;
-    if (this.dodgeDir.lengthSq() < 1e-4) this.dodgeDir.copy(this.forward).negate();
-    this.dodgeDir.normalize();
-    this.enter('Dodge_Roll');
-    return true;
-  }
+  public attachWeaponTrail(_trail: unknown): void {}
+  public attachParticles(_particles: unknown): void {}
+  public attachWeapon(_weapon: unknown): void {}
+  public attachShield(_shield: unknown): void {}
 
-  private exitToFree(): void {
-    this.comboIndex = 0;
-    this.heavyFinisherBranch = false;
-    this.enter(this.move.lengthSq() > 0.01 ? 'Locomotion' : 'Idle_Combat');
-  }
+  public consumeRootMotion(): THREE.Vector3 { return new THREE.Vector3(); }
+  public setMove(_x: number, _z: number, _sprint: boolean): void {}
+  public setAimYaw(_yaw: number): void {}
+  public pressAttack(_kind: string): void {}
+  public receiveHit(_amount: number): void {}
 
-  private syncLocomotion(): void {
-    const moving = this.move.lengthSq() > 0.01;
-    const want: CombatState = moving ? 'Locomotion' : 'Idle_Combat';
-    if (this.state !== want) this.enter(want);
-    else if (moving && this.pickGait() !== this.clipName) this.setClip(this.pickGait());
-  }
-
-  private pickGait(): ClipName {
-    if (Math.abs(this.strafe) > 0.5) return this.strafe < 0 ? 'Locomotion_StrafeL' : 'Locomotion_StrafeR';
-    return this.run ? 'Locomotion_Run' : 'Locomotion_Walk';
-  }
-
-  private enter(next: CombatState): void {
-    const prev = this.state;
-    if (next === prev && !isAttack(next) && next !== 'Hit_Stagger') return;
-    this.state = next;
-    this.blockTime = 0;
-    this.spawned = false;
-    this.hitSet.clear();
-    this.hitboxWasActive = false;
-    this._hitboxActive = false;
-    this.lastDodgeN = 0;
-    this.rootDelta.set(0, 0, 0);
-
-    if (next === 'Dodge_Roll') {
-      this.dodgeCooldown = DODGE_COOLDOWN + COMBAT_TIMING.Dodge_Roll.duration;
-      this.rig.group.rotation.y = Math.atan2(this.dodgeDir.x, this.dodgeDir.z);
-    } else if ((isAttack(next) || next === 'Arcane_Cast') && this.aimYaw !== null) {
-      this.rig.group.rotation.y = this.aimYaw;
-    }
-    const speed = isAttack(next) || next === 'Arcane_Cast' ? this.attackSpeed : 1;
-    this.setClip(next === 'Locomotion' ? this.pickGait() : (next as ClipName), speed);
-    this.callbacks.onStateChange?.(next, prev);
-  }
-
-  private setClip(name: ClipName, timeScale = 1): void {
-    const next = this.actions.get(name)!;
-    const prev = this.action;
-    const gaitSwap = name.startsWith('Locomotion') && this.clipName.startsWith('Locomotion');
-    const phase = gaitSwap ? prev.time / prev.getClip().duration : 0;
-    next.reset();
-    next.setEffectiveTimeScale(timeScale);
-    next.setEffectiveWeight(1);
-    if (gaitSwap) next.time = phase * next.getClip().duration;
-    next.play();
-    if (prev !== next) prev.crossFadeTo(next, CROSSFADE_SECONDS, false);
-    this.action = next;
-    this.clipName = name;
-  }
-
-  private applyDodgeMotion(n: number): void {
-    const [a, b] = DODGE_MOVE_SPAN;
-    if (this.lastDodgeN < a && n >= a) {
-      this.combatParticles?.spawnDodgeDust(this.rig.group.position, this.dodgeDir);
-    }
-    const f0 = smooth((this.lastDodgeN - a) / (b - a));
-    const f1 = smooth((n - a) / (b - a));
-    this.lastDodgeN = n;
-    this.rootDelta.addScaledVector(this.dodgeDir, (f1 - f0) * DODGE_DISTANCE);
-  }
-
-  private releaseSpell(): void {
-    this.spawned = true;
-    const origin = this.rig.spellOrigin.getWorldPosition(new THREE.Vector3());
-    this.callbacks.onSpell?.({ origin, direction: this.forward, damage: COMBAT_TIMING.Arcane_Cast.damage ?? 0 });
-  }
-
-  /** Weapon-socket OBB / segment sweep from hilt to blade tip and across frame motion. */
-  private updateHitbox(): void {
-    const t = COMBAT_TIMING[this.state === 'Locomotion' ? 'Idle_Combat' : this.state] as StateTiming;
-    const active = isAttack(this.state) && inWindow(this.normalizedTime, t.hit);
-    this._hitboxActive = active;
-    if (!active) {
-      this.hitboxWasActive = false;
-      return;
-    }
-
-    this.rig.group.updateMatrixWorld(true);
-    this.rig.hitboxAnchor.getWorldPosition(this.curAnchor);
-    if (this.rig.weaponSocket) {
-      this.rig.weaponSocket.getWorldPosition(_hiltPos);
-    } else {
-      _hiltPos.copy(this.curAnchor);
-    }
-    _tipPos.copy(this.curAnchor).addScaledVector(this.forward, this.equipmentStats.bladeLength * 0.35);
-
-    if (!this.hitboxWasActive) {
-      this.prevAnchor.copy(this.curAnchor);
-      this.hitboxWasActive = true;
-      this.callbacks.onHitboxOpen?.(this.state);
-    }
-
-    const radius = (t.hitRadius ?? 0.35) * Math.max(1, this.equipmentStats.bladeLength * 0.95);
-    const stepMult = this.heavyFinisherBranch ? 2.0 : COMBO_DAMAGE_MULTIPLIERS[this.state] ?? 1.0;
-
-    for (const target of this.targetProvider()) {
-      if (this.hitSet.has(target.id)) continue;
-      const distSweep = segmentPointDistance(this.prevAnchor, this.curAnchor, target.position);
-      const distBlade = segmentPointDistance(_hiltPos, _tipPos, target.position);
-      if (Math.min(distSweep, distBlade) > radius + target.radius) continue;
-
-      this.hitSet.add(target.id);
-      const dir = _a.subVectors(target.position, this.rig.group.position).setY(0);
-      if (dir.lengthSq() < 1e-6) dir.copy(this.forward);
-
-      const baseDamage = (t.damage ?? 18) * stepMult * this.equipmentStats.weaponDamageMultiplier;
-      const isFinishingBlow = this.state === 'Heavy_Combo_Finisher';
-      if (isFinishingBlow) {
-        this.hitStopTimer = HIT_STOP_SECONDS;
+  public update(dt: number): void {
+    if (this.isDodging) {
+      this.dodgeTimer -= dt;
+      if (this.dodgeTimer <= 0) {
+        this.isDodging = false;
+        this.dodgeCooldownTimer = DODGE_COOLDOWN;
       }
-
-      this.callbacks.onHit?.({
-        target,
-        damage: Math.round(baseDamage),
-        knockback: (t.knockback ?? 1) * (this.heavyFinisherBranch ? 1.5 : 1.0),
-        state: this.state,
-        direction: dir.clone().normalize(),
-        isCrit: isFinishingBlow,
-        isHeavyBranch: this.heavyFinisherBranch,
-      });
+    } else if (this.dodgeCooldownTimer > 0) {
+      this.dodgeCooldownTimer = Math.max(0, this.dodgeCooldownTimer - dt);
     }
-    this.prevAnchor.copy(this.curAnchor);
-  }
 
-  dispose(): void {
-    this.mixer.stopAllAction();
-    this.mixer.uncacheRoot(this.rig.group);
-    this.weaponTrail?.dispose();
-    this.combatParticles?.dispose();
+    if (this.isParrying) {
+      this.parryTimer -= dt;
+      if (this.parryTimer <= 0) {
+        this.isParrying = false;
+      }
+    }
+
+    if (this.shadowCounterBuffTimer > 0) {
+      this.shadowCounterBuffTimer = Math.max(0, this.shadowCounterBuffTimer - dt);
+    }
+
+    // Regenerate stamina and focus when not dodging
+    if (!this.isDodging) {
+      this.rpg.stamina = Math.min(this.rpg.maxStamina, this.rpg.stamina + 18 * dt);
+      this.rpg.focus = Math.min(this.rpg.maxFocus, this.rpg.focus + 8 * dt);
+    }
   }
 }

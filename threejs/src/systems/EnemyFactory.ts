@@ -1,340 +1,335 @@
 import * as THREE from 'three';
-import { AssetLoader } from '../core/AssetLoader';
-import { ItemPickupFactory } from './ItemPickupFactory';
-import encountersData from '../data/encounters.json';
 
-export type EnemyPosition = THREE.Vector3 | { x: number; y?: number; z: number };
+/**
+ * Grounding & Y-Offset Utility (`snapObjectToFloor`)
+ * Fixes the bug where `box.min.y` was subtracted blindly or sampled after keyframe transforms:
+ * 1. Resets any skinned mesh skeleton to rest pose before sampling bounds.
+ * 2. Computes accurate world-space bounding box (`Box3.setFromObject`).
+ * 3. Aligns the bottom-most vertex strictly to `floorY` (0.0m by default),
+ *    adding `hoverHeight` ONLY when `floating === true`.
+ */
+export function snapObjectToFloor(
+  object: THREE.Object3D,
+  floorY: number = 0,
+  floating: boolean = false,
+  hoverHeight: number = 0
+): number {
+  object.traverse((child) => {
+    const skinned = child as THREE.SkinnedMesh;
+    if (skinned.isSkinnedMesh && skinned.skeleton) {
+      skinned.skeleton.pose();
+    }
+  });
+
+  object.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(object);
+  if (box.isEmpty()) {
+    object.position.y = floorY + (floating ? hoverHeight : 0);
+    return object.position.y;
+  }
+
+  const bottomOffsetFromOrigin = box.min.y - object.position.y;
+  const targetMinY = floorY + (floating ? hoverHeight : 0);
+  object.position.y = targetMinY - bottomOffsetFromOrigin;
+  object.updateMatrixWorld(true);
+  return object.position.y;
+}
+
+export interface EnemySpawnConfig {
+  encounterId: string;
+  sceneId: string;
+  modelId: string;
+  name: string;
+  position: [number, number, number];
+  level: number;
+  baseHp: number;
+  baseArmor: number;
+  baseDamage: number;
+  basePoise: number;
+  isBoss?: boolean;
+  floating?: boolean;
+  hoverHeight?: number;
+}
 
 export interface EnemyHandle {
   encounterId: string;
   sceneId: string;
   modelId: string;
+  name: string;
   group: THREE.Group;
-  mesh: THREE.Group;
-  root: THREE.Group;
-  mixer: THREE.AnimationMixer | null;
-  actions: Record<string, THREE.AnimationAction>;
-  colliderRadius: number;
+  level: number;
   hp: number;
   maxHp: number;
+  armorRating: number;
+  baseDamage: number;
   poise: number;
   maxPoise: number;
+  bossPhase: 1 | 2 | 3;
+  isBoss: boolean;
+  floating: boolean;
+  baseGroundY: number;
+  hoverHeight: number;
   dead: boolean;
-  telegraphMesh?: THREE.Mesh;
-  update: (dt: number, scene?: THREE.Scene) => void;
-  playClip: (name: string, fade?: number) => void;
-  takeDamage: (amount: number, poiseDamage?: number, scene?: THREE.Scene) => { staggered: boolean; dead: boolean };
-  setTelegraph: (active: boolean, radius?: number, colorHex?: number) => void;
-  playDeath: (scene?: THREE.Scene) => void;
-}
-
-const ENCOUNTER_MODEL_MAP: Record<string, string> = {
-  ENC_GH3_CAPTAIN: 'barbican_captain',
-  ENC_CO1_MAJOR_CAPTAIN: 'archer_guard',
-  ENC_PB2_DREDGE: 'boss_dredge',
-  ENC_CO3_SERAPHINA: 'boss_seraphina',
-  ENC_MH1_HAZEL: 'mother_hazel',
-  ENC_AG1_YGGDRA: 'boss_yggdra_rigged',
-  ENC_VR3_DREAM_DESCENT: 'boss_dream_descent',
-  ENC_SAN1_VAELOR: 'vaelor',
-  ENC_AR1_BRUTUS: 'boss_brutus',
-  ENC_AR2_VESPER: 'boss_vesper',
-  ENC_AR3_MALAKOR: 'boss_malakor',
-  ENC_LH1_ASTERION: 'boss_asterion',
-  ENC_ZOO_BYAKKO: 'boss_byakko',
-  ENC_S00_MONK: 'corrupted_monk',
-  ENC_OW1_GUARD: 'keep_guard',
-  ENC_HM1_WRAITH: 'mirror_wraith',
-  ENC_TR2_MIMIC: 'mimic_chest',
-};
-
-const ROOT_ENEMY_MODELS = new Set([
-  'keep_guard',
-  'mirror_wraith',
-  'mimic_chest',
-  'vaelor',
-  'mother_hazel',
-  'corrupted_monk',
-]);
-
-const AGILE_EVADE_MODELS = new Set([
-  'brigand_cutpurse',
-  'boss_vesper',
-  'dream_stalker',
-  'shadow_hound',
-]);
-
-const BOSS_LOOT_TABLE: Record<string, string> = {
-  barbican_captain: 'ITEM_GATEHOUSE_KEY',
-  boss_brutus: 'ITEM_ARENA_TOKEN',
-  boss_vesper: 'weapon_shadow_claw',
-  boss_malakor: 'weapon_void_edge',
-  boss_seraphina: 'weapon_mirror_blade',
-  boss_dredge: 'ITEM_PRISON_KEYRING',
-  mother_hazel: 'ITEM_HEARTH_EMBER',
-  boss_asterion: 'ITEM_SCHOLAR_CIPHER',
-  boss_byakko: 'consumable_starlight_tonic',
-  boss_yggdra_rigged: 'ITEM_ROOFTOP_WATER_KEY',
-  boss_dream_descent: 'ITEM_DREAM_EMBER',
-  vaelor: 'weapon_astral_staff',
-};
-
-const STANDARD_LOOT_POOL = [
-  'consumable_health_elixir',
-  'consumable_mana_potion',
-  'consumable_starlight_tonic',
-];
-
-const CLIP_NAMES = [
-  'Idle',
-  'Run',
-  'Sprint_Stealth',
-  'Attack_Combo_1_3',
-  'Dodge_Roll',
-  'Death',
-  'Hit_React',
-  'Stagger_Heavy',
-] as const;
-
-const RIG_RADIUS: Record<string, number> = {
-  boss_dredge: 1.1,
-  boss_seraphina: 1.0,
-  boss_yggdra_rigged: 1.2,
-  boss_dream_descent: 1.1,
-  boss_brutus: 1.15,
-  boss_vesper: 0.85,
-  boss_malakor: 1.05,
-  boss_asterion: 1.15,
-  boss_byakko: 1.1,
-  vaelor: 1.0,
-  mother_hazel: 0.8,
-  barbican_captain: 0.7,
-  archer_guard: 0.6,
-};
-
-function toVector3(position: EnemyPosition): THREE.Vector3 {
-  if (position instanceof THREE.Vector3) return position.clone();
-  return new THREE.Vector3(position.x, position.y ?? 0, position.z);
-}
-
-function resolveModelId(encounterId: string): string {
-  if (ENCOUNTER_MODEL_MAP[encounterId]) return ENCOUNTER_MODEL_MAP[encounterId];
-  return encounterId.replace(/^enemy_/i, '');
-}
-
-function colliderRadiusFor(modelId: string): number {
-  if (RIG_RADIUS[modelId]) return RIG_RADIUS[modelId];
-  if (modelId.startsWith('boss_')) return 1.1;
-  if (modelId.includes('hound') || modelId.includes('byakko')) return 0.55;
-  if (modelId.includes('chest') || modelId.includes('mimic')) return 0.5;
-  if (modelId.includes('wraith') || modelId.includes('poltergeist') || modelId.includes('wisp')) return 0.6;
-  if (modelId.includes('gargoyle') || modelId.includes('construct') || modelId.includes('golem')) return 0.75;
-  return 0.6;
-}
-
-function findClip(clips: THREE.AnimationClip[], target: string): THREE.AnimationClip | undefined {
-  const needle = target.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return clips.find((clip) => {
-    const hay = clip.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    return hay.includes(needle) || needle.includes(hay);
-  });
-}
-
-function modelUrls(modelId: string): string[] {
-  const urls: string[] = [];
-  if (ROOT_ENEMY_MODELS.has(modelId)) {
-    urls.push(`/assets/models/${modelId}.glb`, `assets/models/${modelId}.glb`);
-  }
-  urls.push(
-    `/assets/models/enemies/${modelId}.glb`,
-    `assets/models/enemies/${modelId}.glb`,
-    `/assets/models/${modelId}.glb`,
-    `assets/models/${modelId}.glb`,
-  );
-  return Array.from(new Set(urls));
-}
-
-async function loadModel(modelId: string): Promise<{ scene: THREE.Group; animations: THREE.AnimationClip[] }> {
-  let lastError: unknown;
-  for (const url of modelUrls(modelId)) {
-    try {
-      const loaded = await AssetLoader.load(url);
-      return { scene: loaded.scene, animations: loaded.animations };
-    } catch (err) {
-      lastError = err;
-    }
-  }
-  throw lastError ?? new Error(`Unable to load model for ${modelId}`);
-}
-
-function spawnLoot(scene: THREE.Scene | null, position: THREE.Vector3, modelId: string): void {
-  if (!scene) return;
-  const geom = new THREE.SphereGeometry(0.25, 12, 12);
-  const mat = new THREE.MeshStandardMaterial({ color: 0xfbf24, emissive: 0xf59e0b, emissiveIntensity: 0.8 });
-  const mesh = new THREE.Mesh(geom, mat);
-  mesh.position.copy(position);
-  mesh.position.y += 0.6;
-  mesh.userData.loot = true;
-  const dropItemId =
-    BOSS_LOOT_TABLE[modelId] ??
-    STANDARD_LOOT_POOL[Math.abs(modelId.length) % STANDARD_LOOT_POOL.length];
-  mesh.userData.itemId = dropItemId;
-  scene.add(mesh);
-
-  // Also asynchronously spawn the 3D GLB item pickup if available
-  void ItemPickupFactory.spawn(dropItemId, { x: position.x, y: position.y + 0.15, z: position.z }, scene).catch(() => {
-    // Keep glowing loot orb fallback if GLB load fails in headless unit test
-  });
+  isStunned: boolean;
+  stunTimer: number;
+  attackState: 'idle' | 'windup' | 'active_swing' | 'recovery';
+  attackType: 'light_parriable' | 'heavy_unblockable' | 'aoe_nova';
+  stateTimer: number;
+  telegraphRing: THREE.Mesh;
+  update: (dt: number, playerPos: THREE.Vector3) => void;
+  takeDamage: (rawDamage: number, poiseDamage: number, isCounterHit?: boolean) => {
+    finalDamage: number;
+    guardBroken: boolean;
+    phaseTransitioned: boolean;
+    newPhase: 1 | 2 | 3;
+  };
+  playDeath: () => void;
 }
 
 export class EnemyFactory {
-  static async spawn(
-    encounterId: string,
-    sceneId: string,
-    position: EnemyPosition,
-    scene?: THREE.Scene,
-  ): Promise<EnemyHandle> {
-    const modelId = resolveModelId(encounterId);
-    const loaded = await loadModel(modelId);
-    const group = loaded.scene;
-    const pos = toVector3(position);
-    // Keep model feet on the ground regardless of authored origin offset.
-    const box = new THREE.Box3().setFromObject(group);
-    group.position.copy(pos);
-    group.position.y -= box.min.y;
+  public static spawnEnemy(
+    scene: THREE.Scene,
+    config: EnemySpawnConfig,
+    playerLevel: number = 1,
+    difficultyScale: { hpMult: number; dmgMult: number } = { hpMult: 1.0, dmgMult: 1.0 }
+  ): EnemyHandle {
+    const group = new THREE.Group();
+    group.name = `enemy_${config.encounterId}`;
 
-    const mixer = new THREE.AnimationMixer(group);
-    const actions: Record<string, THREE.AnimationAction> = {};
-    for (const clip of loaded.animations) {
-      actions[clip.name] = mixer.clipAction(clip);
-    }
-    for (const name of CLIP_NAMES) {
-      const clip = findClip(loaded.animations, name);
-      if (clip && !actions[name]) {
-        actions[name] = mixer.clipAction(clip);
-      }
-    }
+    // Build articulated rig (Legs, Torso, Head, Weapon Arm, Shield/Offhand)
+    const isBoss = Boolean(config.isBoss);
+    const scale = isBoss ? 1.25 : 1.0;
 
-    let currentAction: THREE.AnimationAction | null = actions.Idle ?? null;
-    if (currentAction) {
-      currentAction.play();
-    }
+    const bodyMat = new THREE.MeshStandardMaterial({
+      color: isBoss ? 0x5b21b6 : config.floating ? 0x0284c7 : 0x475569,
+      roughness: 0.45,
+      metalness: 0.4,
+    });
+    const accentMat = new THREE.MeshStandardMaterial({
+      color: isBoss ? 0xf59e0b : 0x94a3b8,
+      roughness: 0.3,
+      metalness: 0.7,
+    });
 
-    const colliderRadius = colliderRadiusFor(modelId);
-    const capsule = new THREE.Group();
-    capsule.name = 'collider_capsule';
-    capsule.userData.colliderRadius = colliderRadius;
-    capsule.userData.colliderHeight = colliderRadius * 2.4;
-    group.add(capsule);
+    const leftBoot = new THREE.Mesh(new THREE.BoxGeometry(0.16 * scale, 0.48 * scale, 0.18 * scale), accentMat);
+    leftBoot.position.set(-0.15 * scale, 0.24 * scale, 0);
+    leftBoot.castShadow = true;
 
-    // Ground telegraph decal ring for wind-up attacks & boss AoEs
-    const telegraphGeom = new THREE.RingGeometry(colliderRadius * 0.6, colliderRadius * 2.1, 32);
-    const telegraphMat = new THREE.MeshBasicMaterial({
-      color: 0xef4444,
+    const rightBoot = new THREE.Mesh(new THREE.BoxGeometry(0.16 * scale, 0.48 * scale, 0.18 * scale), accentMat);
+    rightBoot.position.set(0.15 * scale, 0.24 * scale, 0);
+    rightBoot.castShadow = true;
+
+    const torso = new THREE.Mesh(new THREE.BoxGeometry(0.5 * scale, 0.68 * scale, 0.3 * scale), bodyMat);
+    torso.position.set(0, 0.82 * scale, 0);
+    torso.castShadow = true;
+
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.28 * scale, 0.3 * scale, 0.28 * scale), accentMat);
+    head.position.set(0, 1.34 * scale, 0);
+    head.castShadow = true;
+
+    const weaponArm = new THREE.Group();
+    weaponArm.position.set(0.36 * scale, 1.05 * scale, 0);
+    const blade = new THREE.Mesh(
+      new THREE.BoxGeometry(0.06 * scale, 0.85 * scale, 0.12 * scale),
+      accentMat
+    );
+    blade.position.set(0, 0.35 * scale, 0.25 * scale);
+    blade.rotation.x = Math.PI / 4;
+    weaponArm.add(blade);
+
+    group.add(leftBoot, rightBoot, torso, head, weaponArm);
+
+    // Telegraph ring flat on the floor (Y = 0.02)
+    const ringGeo = new THREE.RingGeometry(0.65 * scale, 1.45 * scale, 32);
+    ringGeo.rotateX(-Math.PI / 2);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0xfacc15,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0.0,
     });
-    const telegraphMesh = new THREE.Mesh(telegraphGeom, telegraphMat);
-    telegraphMesh.rotation.x = -Math.PI / 2;
-    telegraphMesh.position.set(0, 0.04, 0);
-    telegraphMesh.visible = false;
-    telegraphMesh.name = 'enemy_telegraph_decal';
-    group.add(telegraphMesh);
+    const telegraphRing = new THREE.Mesh(ringGeo, ringMat);
+    telegraphRing.position.set(0, 0.02, 0);
+    group.add(telegraphRing);
 
-    const isBoss = modelId.startsWith('boss_') || modelId === 'vaelor' || modelId === 'mother_hazel';
-    const maxHp = isBoss ? 220 : 65;
-    const maxPoise = isBoss ? 100 : 35;
+    // Set XZ position first, then enforce strict Y=0 floor snapping
+    group.position.set(config.position[0], config.position[1], config.position[2]);
+    const floating = Boolean(config.floating);
+    const hoverHeight = floating ? (config.hoverHeight ?? 0.45) : 0.0;
+    const baseGroundY = snapObjectToFloor(group, config.position[1], floating, hoverHeight);
+
+    scene.add(group);
+
+    // Skyrim-style level & difficulty scaling (prevents 1-2 hit kills)
+    const effectiveLevel = Math.max(config.level, Math.round(playerLevel * 0.85 + config.level * 0.3));
+    const maxHp = Math.round(
+      config.baseHp * (1 + 0.18 * (effectiveLevel - 1)) * difficultyScale.hpMult
+    );
+    const maxPoise = Math.round(config.basePoise * (1 + 0.1 * (effectiveLevel - 1)));
+    let elapsed = 0;
 
     const handle: EnemyHandle = {
-      encounterId,
-      sceneId,
-      modelId,
+      encounterId: config.encounterId,
+      sceneId: config.sceneId,
+      modelId: config.modelId,
+      name: config.name,
       group,
-      mesh: group,
-      root: group,
-      mixer,
-      actions,
-      colliderRadius,
+      level: effectiveLevel,
       hp: maxHp,
       maxHp,
+      armorRating: config.baseArmor + effectiveLevel * 12,
+      baseDamage: Math.round(config.baseDamage * (1 + 0.14 * (effectiveLevel - 1)) * difficultyScale.dmgMult),
       poise: maxPoise,
       maxPoise,
+      bossPhase: 1,
+      isBoss,
+      floating,
+      baseGroundY,
+      hoverHeight,
       dead: false,
-      telegraphMesh,
-      update: (dt: number, _nextScene?: THREE.Scene) => {
-        if (handle.dead) return;
-        mixer?.update(dt);
-        if (telegraphMesh.visible) {
-          const pulse = 0.45 + 0.35 * Math.sin((typeof performance !== 'undefined' ? performance.now() : Date.now()) * 0.012);
-          (telegraphMesh.material as THREE.MeshBasicMaterial).opacity = pulse;
-        }
-      },
-      playClip: (name: string, fade = 0.15) => {
-        const next = actions[name] ?? actions[Object.keys(actions).find((k) => k.toLowerCase() === name.toLowerCase()) ?? ''];
-        if (!next) return;
-        if (currentAction && currentAction !== next) {
-          currentAction.fadeOut(fade);
-        }
-        next.reset().fadeIn(fade).play();
-        currentAction = next;
-      },
-      takeDamage: (amount: number, poiseDamage = 18, activeScene?: THREE.Scene) => {
-        if (handle.dead) return { staggered: false, dead: true };
-        handle.hp = Math.max(0, handle.hp - amount);
-        handle.poise = Math.max(0, handle.poise - poiseDamage);
-        handle.setTelegraph(false);
+      isStunned: false,
+      stunTimer: 0,
+      attackState: 'idle',
+      attackType: 'light_parriable',
+      stateTimer: 1.2,
+      telegraphRing,
 
-        if (handle.hp <= 0) {
-          handle.playDeath(activeScene ?? scene);
-          return { staggered: false, dead: true };
+      update(dt: number, playerPos: THREE.Vector3) {
+        if (this.dead) return;
+        elapsed += dt;
+
+        // Maintain strict grounding or intentional floating oscillation
+        if (this.floating) {
+          this.group.position.y = this.baseGroundY + Math.sin(elapsed * 2.4) * 0.12;
+        } else {
+          this.group.position.y = this.baseGroundY;
         }
 
-        if (handle.poise <= 0) {
-          handle.poise = handle.maxPoise;
-          handle.playClip(actions.Stagger_Heavy ? 'Stagger_Heavy' : 'Hit_React', 0.1);
-          return { staggered: true, dead: false };
+        if (this.isStunned) {
+          this.stunTimer -= dt;
+          ringMat.opacity = 0;
+          torso.rotation.z = Math.sin(elapsed * 18) * 0.12;
+          if (this.stunTimer <= 0) {
+            this.isStunned = false;
+            this.poise = this.maxPoise;
+            torso.rotation.z = 0;
+          }
+          return;
         }
 
-        if (AGILE_EVADE_MODELS.has(modelId) && actions.Dodge_Roll && Math.random() < 0.35) {
-          handle.playClip('Dodge_Roll', 0.12);
-        } else if (actions.Hit_React) {
-          handle.playClip('Hit_React', 0.1);
+        // Face player on XZ plane
+        const dx = playerPos.x - this.group.position.x;
+        const dz = playerPos.z - this.group.position.z;
+        const dist = Math.hypot(dx, dz);
+        if (dist > 0.1) {
+          this.group.rotation.y = Math.atan2(dx, dz);
         }
-        return { staggered: false, dead: false };
+
+        // Leg walk animation when closing distance
+        if (dist > 2.4 && dist < 14.0 && this.attackState === 'idle') {
+          const speed = (this.isBoss ? 2.6 : 2.1) * (1 + (this.bossPhase - 1) * 0.18);
+          this.group.position.x += (dx / dist) * speed * dt;
+          this.group.position.z += (dz / dist) * speed * dt;
+          leftBoot.position.z = Math.sin(elapsed * 8) * 0.16;
+          rightBoot.position.z = -Math.sin(elapsed * 8) * 0.16;
+        } else {
+          leftBoot.position.z = 0;
+          rightBoot.position.z = 0;
+        }
+
+        // Attack state machine with telegraph rings
+        this.stateTimer -= dt;
+        if (this.attackState === 'idle' && dist <= 3.2 && this.stateTimer <= 0) {
+          this.attackState = 'windup';
+          // Phase 2 & 3 bosses mix unblockable heavy attacks & AoE novas
+          const roll = Math.random();
+          if (this.isBoss && this.bossPhase === 3 && roll < 0.4) {
+            this.attackType = 'aoe_nova';
+            this.stateTimer = 1.05;
+            ringMat.color.setHex(0xef4444); // Red = Dodge-Roll required
+          } else if (roll < 0.35 + (this.bossPhase - 1) * 0.15) {
+            this.attackType = 'heavy_unblockable';
+            this.stateTimer = 0.85;
+            ringMat.color.setHex(0xef4444); // Red = Unblockable
+          } else {
+            this.attackType = 'light_parriable';
+            this.stateTimer = 0.65;
+            ringMat.color.setHex(0xfacc15); // Yellow = Parriable
+          }
+        } else if (this.attackState === 'windup') {
+          ringMat.opacity = 0.55;
+          weaponArm.rotation.x = -1.1;
+          if (this.stateTimer <= 0) {
+            this.attackState = 'active_swing';
+            this.stateTimer = 0.22;
+            weaponArm.rotation.x = 0.85;
+          }
+        } else if (this.attackState === 'active_swing') {
+          ringMat.opacity = 0.85;
+          if (this.stateTimer <= 0) {
+            this.attackState = 'recovery';
+            this.stateTimer = Math.max(0.55, 1.35 - (this.bossPhase - 1) * 0.25);
+            ringMat.opacity = 0.0;
+            weaponArm.rotation.x = 0;
+          }
+        } else if (this.attackState === 'recovery' && this.stateTimer <= 0) {
+          this.attackState = 'idle';
+          this.stateTimer = 0.4;
+        }
       },
-      setTelegraph: (active: boolean, radius?: number, colorHex = 0xef4444) => {
-        telegraphMesh.visible = active;
-        const mat = telegraphMesh.material as THREE.MeshBasicMaterial;
-        mat.color.setHex(colorHex);
-        mat.opacity = active ? 0.65 : 0.0;
-        if (radius && radius > 0) {
-          const scale = radius / (colliderRadius * 2.1);
-          telegraphMesh.scale.set(scale, scale, 1);
+
+      takeDamage(rawDamage: number, poiseDamage: number, isCounterHit: boolean = false) {
+        if (this.dead) {
+          return { finalDamage: 0, guardBroken: false, phaseTransitioned: false, newPhase: this.bossPhase };
         }
+        // Skyrim hyperbolic armor mitigation: max 80% damage reduction
+        const mitigation = Math.min(0.8, this.armorRating * 0.0012);
+        const stunBonus = this.isStunned || isCounterHit ? 1.45 : 1.0;
+        const finalDamage = Math.max(2, Math.round(rawDamage * (1 - mitigation) * stunBonus));
+
+        this.hp = Math.max(0, this.hp - finalDamage);
+        this.poise = Math.max(0, this.poise - poiseDamage);
+
+        let guardBroken = false;
+        if (this.poise <= 0 && !this.isStunned) {
+          this.isStunned = true;
+          this.stunTimer = 2.5;
+          this.attackState = 'idle';
+          guardBroken = true;
+        }
+
+        // Check 3-Phase Boss Transitions (66% -> Phase 2, 33% -> Phase 3)
+        let phaseTransitioned = false;
+        const hpRatio = this.hp / this.maxHp;
+        if (this.isBoss) {
+          if (hpRatio <= 0.33 && this.bossPhase < 3) {
+            this.bossPhase = 3;
+            phaseTransitioned = true;
+            bodyMat.emissive.setHex(0x7c3aed);
+            bodyMat.emissiveIntensity = 0.6;
+          } else if (hpRatio <= 0.66 && this.bossPhase < 2) {
+            this.bossPhase = 2;
+            phaseTransitioned = true;
+            bodyMat.emissive.setHex(0xd97706);
+            bodyMat.emissiveIntensity = 0.35;
+          }
+        }
+
+        if (this.hp <= 0) {
+          this.playDeath();
+        }
+
+        return { finalDamage, guardBroken, phaseTransitioned, newPhase: this.bossPhase };
       },
-      playDeath: (activeScene?: THREE.Scene) => {
-        handle.dead = true;
-        handle.setTelegraph(false);
-        if (actions.Death) {
-          actions.Death.setLoop(THREE.LoopOnce, 1);
-          actions.Death.clampWhenFinished = true;
-          handle.playClip('Death', 0.12);
-        }
-        spawnLoot(activeScene ?? scene ?? null, group.position, modelId);
+
+      playDeath() {
+        this.dead = true;
+        ringMat.opacity = 0;
+        this.group.rotation.x = -Math.PI / 2;
+        this.group.position.y = this.baseGroundY + 0.15;
       },
     };
 
-    group.userData.encounterId = encounterId;
-    group.userData.sceneId = sceneId;
-    group.userData.modelId = modelId;
-    group.userData.colliderRadius = colliderRadius;
-    group.userData.enemyHandle = handle;
-
-    if (scene) scene.add(group);
-    void encountersData;
     return handle;
   }
 }
-
-export default EnemyFactory;

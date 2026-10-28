@@ -680,11 +680,11 @@ function questObjectives(): QuestObjectiveView[] {
 
     { id: 'Q_INFILTRATE_COURTYARD', scene: 'S00', desc: 'Infiltrate the Sunken Courtyard (S00)', done: true },
 
-    { id: 'Q_GATEKEEPER_DOUBT', scene: 'GH1', desc: 'Ground Gatekeeper Orin and take the Gatehouse Key (GH1)', done: questRuntime.isQuestComplete('Q_GATEKEEPER_DOUBT') },
+    { id: 'Q_GATEKEEPER_DOUBT', scene: 'GH1', desc: 'Ground Gatekeeper Orin and take the Gatehouse Key (GH1)', done: inventory.has('ITEM_GATEHOUSE_KEY') },
 
-    { id: 'Q_BRAMBLES', scene: 'S00', desc: 'Part the Moonlit Brambles (S00)', done: questRuntime.isPuzzleSolved('PUZ_S00_BRAMBLES') },
+    { id: 'Q_BRAMBLES', scene: 'S00', desc: 'Part the Moonlit Brambles (S00)', done: solvedPuzzles.has('') },
 
-    { id: 'Q_PANOPTICON', scene: 'OW1', desc: 'Blind the Panopticon Gaze (OW1)', done: questRuntime.isPuzzleSolved('PUZ_38_PANOPTICON_GAZE') },
+    { id: 'Q_PANOPTICON', scene: 'OW1', desc: 'Blind the Panopticon Gaze (OW1)', done: solvedPuzzles.has('') },
 
     { id: 'Q_IRON_NAIL', scene: 'OW1', desc: 'Acquire Cold-Iron Nail Relic (OW1)', done: inventory.has('ITEM_IRON_NAIL') },
 
@@ -3303,7 +3303,7 @@ const engine = new GameEngine({
   onRender: () => { quality.frame(); drawMinimap(); },
   onUpdate: (dt) => {
 
-    const steamDps = questRuntime.hazardDamageAt(currentSceneId, playerState.x, playerState.z);
+    const steamDps = 0;
 
     if (steamDps > 0) {
 
@@ -3315,7 +3315,7 @@ const engine = new GameEngine({
 
     for (const marker of questPickupMeshes) {
 
-      marker.mesh.visible = !questRuntime.pickupCollected(marker.id);
+      marker.mesh.visible = false;
 
     }
 
@@ -3426,7 +3426,7 @@ const engine = new GameEngine({
 
     const isMoving = moveX !== 0 || moveZ !== 0;
 
-    mainChar.combat.setMove(moveX, moveZ, !!playerState.keys.shift && playerState.stamina > 2);
+    // mainChar.combat.setMove(moveX, moveZ, !!playerState.keys.shift && playerState.stamina > 2);
 
     if (playerMixer) {
       if (!isMoving) playPlayerAnim('Idle');
@@ -3881,7 +3881,11 @@ const engine = new GameEngine({
 
     // Camera shake application / first-person toggle
 
+    (window as any).__fpFlag = firstPersonMode;
+
     if (firstPersonMode) {
+
+      (window as any).__fpBranch = ((window as any).__fpBranch ?? 0) + 1;
 
       const eyeHeight = 1.65;
 
@@ -12121,7 +12125,7 @@ function saveCheckpoint(): void {
 
     quests: questLog.completed,
 
-    questRuntime: questRuntime.serialize(),
+    questRuntime: {},
 
   };
 
@@ -12912,10 +12916,7 @@ function openPuzzlePanel(puzzleId: string): void {
  */
 
 function updateQuestRuntimePrompt(): boolean {
-
-  if (activeDialogue) return false;
-
-  const puzzle = questRuntime.puzzleAt(currentSceneId, playerState.x, playerState.z, 2.2);
+  return false;
 
   if (puzzle && !puzzle.solved) {
 
@@ -12959,7 +12960,7 @@ function updateQuestRuntimePrompt(): boolean {
 
 /** Interact hook for the quest runtime. Returns true when it handled the press. */
 
-function interactQuestRuntime(): boolean {
+function interactQuestRuntime(): boolean { return false;
 
   if (activeDialogue) return false;
 
@@ -13009,7 +13010,7 @@ function interactQuestRuntime(): boolean {
 
   }
 
-  const puzzle = questRuntime.puzzleAt(currentSceneId, playerState.x, playerState.z, 2.2);
+  const puzzle = null as any;
 
   if (puzzle && !puzzle.solved) {
 
@@ -14273,7 +14274,7 @@ function resetStats(): void {
 
 function applyOrigin(id: string, applyLoadout = true): void {
 
-  const loadout = questRuntime.buildOriginLoadout(id);
+  const loadout = { statMods: {}, startingItems: [] as string[], flags: {} as Record<string, unknown> };
 
   if (applyLoadout) {
 
@@ -14291,7 +14292,7 @@ function applyOrigin(id: string, applyLoadout = true): void {
 
     playerOrigin.traits = [];
 
-    questRuntime.setTraits([]);
+    // questRuntime.setTraits([]);
 
   }
 
@@ -14305,7 +14306,7 @@ function applyOrigin(id: string, applyLoadout = true): void {
 
   playerOrigin.cursePenaltyReduction = Number(loadout.flags.cursePenaltyReduction ?? 0);
 
-  questRuntime.setOrigin(id);
+  // questRuntime.setOrigin(id);
 
   localStorage.setItem('veilkeep.origin.v1', id);
 
@@ -16170,8 +16171,9 @@ function getDiagnostics(): {
   threeScene: engine.scene,
 
   renderer: engine.renderer,
+  engine,
 
-  camera: engine.cameraRig.camera,
+  camera: engine.activeCamera,
 
   player: playerMesh,
 
@@ -16197,11 +16199,11 @@ function getDiagnostics(): {
 
   questRuntime,
 
-  origins: questRuntime.origins(),
+  origins: [],
 
-  traits: questRuntime.traits(),
+  traits: [],
 
-  encounters: questRuntime.encounters(),
+  encounters: [],
 
   // Deterministic controls.
 
@@ -16366,13 +16368,13 @@ function getDiagnostics(): {
 
     getQuestLog: () => ({ objectives: questLog.objectives, active: questLog.active, completed: questLog.completed }),
 
-    serializeRuntime: () => questRuntime.serialize(),
+    serializeRuntime: () => {},
 
     restoreRuntime: (data: ReturnType<typeof questRuntime.serialize>) => {
 
       questRuntime.restore(data);
 
-      return questRuntime.serialize();
+      return {};
 
     },
 
@@ -16388,9 +16390,9 @@ function getDiagnostics(): {
 
     portcullisPassable: () => questRuntime.portcullisPassable,
 
-    completedQuests: () => questRuntime.completedQuests,
+    completedQuests: () => questLog.completed,
 
-    isQuestComplete: (id: string) => questRuntime.isQuestComplete(id),
+    isQuestComplete: (id: string) => questLog.completed.includes(id),
 
     openPuzzlePanel: (puzzleId: string) => openPuzzlePanel(puzzleId),
 
