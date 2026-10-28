@@ -11,6 +11,8 @@ export class GameEngine {
   public renderer: THREE.WebGLRenderer;
   public scene: THREE.Scene;
   public cameraRig: IsometricCameraRig;
+  public perspectiveCamera: THREE.PerspectiveCamera;
+  public activeCamera: THREE.Camera;
 
   private isRunning: boolean = false;
   private lastTime: number = 0;
@@ -27,6 +29,8 @@ export class GameEngine {
 
     const aspect = window.innerWidth / window.innerHeight;
     this.cameraRig = new IsometricCameraRig({ aspect, viewSize: 16 });
+    this.perspectiveCamera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+    this.activeCamera = this.cameraRig.camera;
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: config.canvas,
@@ -81,6 +85,8 @@ export class GameEngine {
       const height = window.innerHeight;
       this.renderer.setSize(width, height);
       this.cameraRig.handleResize(width / height);
+      this.perspectiveCamera.aspect = width / height;
+      this.perspectiveCamera.updateProjectionMatrix();
     });
   }
 
@@ -117,7 +123,7 @@ export class GameEngine {
       this.onRenderCallback(alpha);
     }
 
-    this.renderer.render(this.scene, this.cameraRig.camera);
+    this.renderer.render(this.scene, this.activeCamera);
     requestAnimationFrame(this.loop);
   };
 

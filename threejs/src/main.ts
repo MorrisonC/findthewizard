@@ -780,6 +780,8 @@ let attackLungeOffset = 0;
 
 let cameraShake = 0;
 
+let firstPersonMode = true;
+
 let footstepTimer = 0;
 
 let truthLensActive = false;
@@ -1254,6 +1256,19 @@ function toggleMap(): void {
 
   }
 
+}
+
+function toggleFirstPerson(force?: boolean): void {
+  firstPersonMode = force !== undefined ? !!force : !firstPersonMode;
+  if (firstPersonMode) {
+    engine.activeCamera = engine.perspectiveCamera;
+    playerMesh.visible = false;
+    showToast('First Person Mode');
+  } else {
+    engine.activeCamera = engine.cameraRig.camera;
+    playerMesh.visible = true;
+    showToast('Third Person Mode');
+  }
 }
 
 function renderMap(): void {
@@ -3864,9 +3879,23 @@ const engine = new GameEngine({
 
     playerMesh.position.set(nextPos.x + lungeX, nextPos.y, nextPos.z + lungeZ);
 
-    // Camera shake application
+    // Camera shake application / first-person toggle
 
-    if (cameraShake > 0) {
+    if (firstPersonMode) {
+
+      const eyeHeight = 1.65;
+
+      const cam = engine.perspectiveCamera;
+
+      cam.position.set(playerMesh.position.x + (Math.random() - 0.5) * (cameraShake > 0 ? cameraShake * 0.05 : 0), playerMesh.position.y + eyeHeight, playerMesh.position.z + (Math.random() - 0.5) * (cameraShake > 0 ? cameraShake * 0.05 : 0));
+
+      const forward = new THREE.Vector3(Math.sin(playerMesh.rotation.y), 0, Math.cos(playerMesh.rotation.y));
+
+      cam.lookAt(cam.position.clone().add(forward));
+
+      if (cameraShake > 0) cameraShake = Math.max(0, cameraShake - dt * 2.5);
+
+    } else if (cameraShake > 0) {
 
       cameraShake = Math.max(0, cameraShake - dt * 2.5);
 
@@ -8123,7 +8152,8 @@ function createGuard(sceneId: SceneId, x: number, z: number, captainFlag = false
 
   const mesh = makeGuardMesh(captainFlag ? 0xb91c1c : 0x7f1d1d);
 
-  mesh.position.set(x, 0.6, z);
+  const guardBox = new THREE.Box3().setFromObject(mesh);
+  mesh.position.set(x, -guardBox.min.y, z);
   const hp = captainFlag ? 80 : 40;
   let mixer: THREE.AnimationMixer | undefined;
   const actions: Record<string, THREE.AnimationAction> = {};
@@ -15270,6 +15300,9 @@ playerMesh.traverse((node) => {
 });
 playerMesh.position.set(initialSpawn.x, 0.6, initialSpawn.z);
 engine.scene.add(playerMesh);
+firstPersonMode = true;
+engine.activeCamera = engine.perspectiveCamera;
+playerMesh.visible = false;
 const playerLight = new THREE.PointLight(0xfef08a, 1.8, 9);
 playerLight.position.set(0, 0.6, 0);
 playerMesh.add(playerLight);
@@ -15294,6 +15327,10 @@ canvas.addEventListener('mousedown', (e) => {
   } else if (e.button === 0) {
 
     tryAttack();
+
+  } else if (e.button === 1) {
+
+    toggleFirstPerson();
 
   }
 
@@ -15462,6 +15499,18 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault();
 
     toggleAutoBattler();
+
+    return;
+
+  }
+
+  // First-person toggle ([Z])
+
+  if (k === 'z') {
+
+    e.preventDefault();
+
+    toggleFirstPerson();
 
     return;
 
@@ -16163,6 +16212,11 @@ function getDiagnostics(): {
   awardConviction,
 
   toggleMap,
+  toggleFirstPerson,
+  get firstPersonMode() { return firstPersonMode; },
+  get firstPerson() { return firstPersonMode; },
+  get isFirstPerson() { return firstPersonMode; },
+  setFirstPerson: (v: boolean) => toggleFirstPerson(v),
 
   spawnDamagePopup,
 

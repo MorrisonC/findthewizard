@@ -198,7 +198,10 @@ export class EnemyFactory {
     const loaded = await loadModel(modelId);
     const group = loaded.scene;
     const pos = toVector3(position);
+    // Keep model feet on the ground regardless of authored origin offset.
+    const box = new THREE.Box3().setFromObject(group);
     group.position.copy(pos);
+    group.position.y -= box.min.y;
 
     const mixer = new THREE.AnimationMixer(group);
     const actions: Record<string, THREE.AnimationAction> = {};
