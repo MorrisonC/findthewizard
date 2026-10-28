@@ -127,14 +127,30 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      gap: 14px;
+      /* Keep the control strip clear of the fixed 150px minimap in the corner. */
+      padding-left: 176px;
     }
     .controls-hint {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 12px;
+      max-width: min(1000px, 64vw);
       font-size: 12px;
+      line-height: 1.7;
       color: #94a3b8;
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 8px 14px;
       border-radius: 6px;
+    }
+    .controls-hint > span {
+      white-space: nowrap;
+    }
+    .hud-bottom > .hud-card {
+      flex: 0 0 auto;
+      white-space: nowrap;
     }
     .controls-hint kbd {
       background: #1e293b;
@@ -1363,6 +1379,41 @@
 <body>
   <canvas id="game-canvas"></canvas>
 
+  <div id="fp-crosshair" aria-hidden="true">
+    <span class="fp-dot"></span>
+  </div>
+  <style>
+    #fp-crosshair {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      margin: -9px 0 0 -9px;
+      pointer-events: none;
+      z-index: 60;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    #fp-crosshair.active { opacity: 0.85; }
+    #fp-crosshair::before,
+    #fp-crosshair::after {
+      content: '';
+      position: absolute;
+      background: rgba(226, 232, 240, 0.9);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+    }
+    #fp-crosshair::before { left: 8px; top: 0; width: 2px; height: 18px; }
+    #fp-crosshair::after { left: 0; top: 8px; width: 18px; height: 2px; }
+    #fp-crosshair .fp-dot {
+      position: absolute;
+      left: 7px; top: 7px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #d4af37;
+    }
+  </style>
+
   <div id="hud-truth-lens"></div>
   <div id="hud-lowhp" style="position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle,transparent 50%,rgba(239,68,68,0.35) 100%);opacity:0;transition:opacity 0.3s ease;z-index:45;"></div>
   <style>
@@ -1697,23 +1748,24 @@
 
     <div class="hud-bottom">
       <div class="controls-hint">
-        Move: <kbd>WASD</kbd> &nbsp;|&nbsp; 
-        Sneak: <kbd>Ctrl</kbd> &nbsp;|&nbsp; 
-        Sprint: <kbd>Shift</kbd> &nbsp;|&nbsp; 
-        Attack: <kbd>Space</kbd> &nbsp;|&nbsp; 
-        Parry: <kbd>X</kbd> &nbsp;|&nbsp; 
-        Weapon: <kbd>T</kbd> &nbsp;|&nbsp; 
-        Decoy: <kbd>R</kbd> &nbsp;|&nbsp; 
-        Rewind: <kbd>B</kbd> (RS) &nbsp;|&nbsp; 
-        Dash: <kbd>C</kbd> &nbsp;|&nbsp; 
-        Dart: <kbd>V</kbd> &nbsp;|&nbsp; 
-        Truth Lens: <kbd>Q</kbd> &nbsp;|&nbsp; 
-        Echo Bell: <kbd>F</kbd> &nbsp;|&nbsp; 
-        Folio: <kbd>I</kbd> &nbsp;|&nbsp; 
-        Journal: <kbd>J</kbd> &nbsp;|&nbsp; 
-        Map: <kbd>M</kbd> &nbsp;|&nbsp; 
-        Auto-Battler: <kbd>P</kbd> &nbsp;|&nbsp; 
-        Menu: <kbd>Esc</kbd>
+        <span>Move <kbd>WASD</kbd></span>
+        <span>Look <kbd>Mouse</kbd></span>
+        <span>Sprint <kbd>Shift</kbd></span>
+        <span>Sneak <kbd>Ctrl</kbd></span>
+        <span>Attack <kbd>Space</kbd></span>
+        <span>Parry <kbd>X</kbd></span>
+        <span>Weapon <kbd>T</kbd></span>
+        <span>Decoy <kbd>G</kbd></span>
+        <span>Dash <kbd>C</kbd></span>
+        <span>Rewind <kbd>B</kbd> (RS)</span>
+        <span>Dart <kbd>V</kbd></span>
+        <span>Truth Lens <kbd>Q</kbd></span>
+        <span>Echo Bell <kbd>F</kbd></span>
+        <span>Folio <kbd>I</kbd></span>
+        <span>Journal <kbd>J</kbd></span>
+        <span>Map <kbd>M</kbd></span>
+        <span>Auto-Battler <kbd>P</kbd></span>
+        <span>Menu <kbd>Esc</kbd></span>
       </div>
       <div class="hud-card" style="font-size: 12px; color: #d4af37">
         Soft Clock: <b>21:45</b> (Night)

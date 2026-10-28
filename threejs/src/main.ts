@@ -682,9 +682,9 @@ function questObjectives(): QuestObjectiveView[] {
 
     { id: 'Q_GATEKEEPER_DOUBT', scene: 'GH1', desc: 'Ground Gatekeeper Orin and take the Gatehouse Key (GH1)', done: inventory.has('ITEM_GATEHOUSE_KEY') },
 
-    { id: 'Q_BRAMBLES', scene: 'S00', desc: 'Part the Moonlit Brambles (S00)', done: solvedPuzzles.has('') },
+    { id: 'Q_BRAMBLES', scene: 'S00', desc: 'Part the Moonlit Brambles (S00)', done: solvedPuzzles.has('PUZZLE_S00_BRAMBLES') },
 
-    { id: 'Q_PANOPTICON', scene: 'OW1', desc: 'Blind the Panopticon Gaze (OW1)', done: solvedPuzzles.has('') },
+    { id: 'Q_PANOPTICON', scene: 'OW1', desc: 'Blind the Panopticon Gaze (OW1)', done: solvedPuzzles.has('PUZZLE_PANOPTICON_GAZE') },
 
     { id: 'Q_IRON_NAIL', scene: 'OW1', desc: 'Acquire Cold-Iron Nail Relic (OW1)', done: inventory.has('ITEM_IRON_NAIL') },
 
@@ -781,6 +781,14 @@ let attackLungeOffset = 0;
 let cameraShake = 0;
 
 let firstPersonMode = true;
+
+/** First-person look state (yaw matches the character convention: +Z at 0). */
+let fpYaw = Math.PI;
+let fpPitch = -0.06;
+const FP_MAX_PITCH = THREE.MathUtils.degToRad(78);
+const FP_EYE_HEIGHT = 1.62;
+/** Player visuals are grounded at y=0; the physics capsule keeps its own height. */
+const PLAYER_VISUAL_Y = 0;
 
 let footstepTimer = 0;
 
@@ -1263,12 +1271,23 @@ function toggleFirstPerson(force?: boolean): void {
   if (firstPersonMode) {
     engine.activeCamera = engine.perspectiveCamera;
     playerMesh.visible = false;
+    // Enter looking where the hero is already facing.
+    fpYaw = playerMesh.rotation.y;
+    fpPitch = -0.06;
     showToast('First Person Mode');
   } else {
     engine.activeCamera = engine.cameraRig.camera;
     playerMesh.visible = true;
+    if (document.pointerLockElement === canvas) document.exitPointerLock?.();
     showToast('Third Person Mode');
   }
+  updateCrosshairVisibility();
+}
+
+function updateCrosshairVisibility(): void {
+  const el = document.getElementById('fp-crosshair');
+  if (!el) return;
+  el.classList.toggle('active', firstPersonMode && !isPaused && !isInventoryOpen && !isQuestLogOpen && !isMapOpen && !isLoreOpen);
 }
 
 function renderMap(): void {
@@ -3292,6 +3311,7 @@ const magicalBushes: {
   idleAction?: THREE.AnimationAction;
   retractAction?: THREE.AnimationAction;
   isRetracted: boolean;
+  everRetracted?: boolean;
   originalScale: THREE.Vector3;
   targetScale: THREE.Vector3;
 }[] = [];
@@ -3302,6 +3322,9 @@ const engine = new GameEngine({
 
   onRender: () => { quality.frame(); drawMinimap(); },
   onUpdate: (dt) => {
+
+    // Keep the first-person reticle in sync with pause/menu/dialogue state.
+    updateCrosshairVisibility();
 
     const steamDps = 0;
 
@@ -3335,13 +3358,29 @@ const engine = new GameEngine({
 
     if (!activeDialogue && !isInventoryOpen && !isQuestLogOpen && !isLoreOpen && !isPaused && !isMapOpen) {
 
-      if (playerState.keys.w) { moveX -= 1; moveZ -= 1; }
+      if (firstPersonMode) {
 
-      if (playerState.keys.s) { moveX += 1; moveZ += 1; }
+        // Camera-relative movement: W is always where you look.
+        const fwdX = Math.sin(fpYaw);
+        const fwdZ = Math.cos(fpYaw);
+        const rightX = Math.cos(fpYaw);
+        const rightZ = -Math.sin(fpYaw);
+        if (playerState.keys.w) { moveX += fwdX; moveZ += fwdZ; }
+        if (playerState.keys.s) { moveX -= fwdX; moveZ -= fwdZ; }
+        if (playerState.keys.d) { moveX += rightX; moveZ += rightZ; }
+        if (playerState.keys.a) { moveX -= rightX; moveZ -= rightZ; }
 
-      if (playerState.keys.a) { moveX -= 1; moveZ += 1; }
+      } else {
 
-      if (playerState.keys.d) { moveX += 1; moveZ -= 1; }
+        if (playerState.keys.w) { moveX -= 1; moveZ -= 1; }
+
+        if (playerState.keys.s) { moveX += 1; moveZ += 1; }
+
+        if (playerState.keys.a) { moveX -= 1; moveZ += 1; }
+
+        if (playerState.keys.d) { moveX += 1; moveZ -= 1; }
+
+      }
 
     }
 
@@ -3426,7 +3465,10 @@ const engine = new GameEngine({
 
     const isMoving = moveX !== 0 || moveZ !== 0;
 
-    // mainChar.combat.setMove(moveX, moveZ, !!playerState.keys.shift && playerState.stamina > 2);
+    if (mainChar) {
+      mainChar.combat.setMove(moveX, moveZ, !!playerState.keys.shift && playerState.stamina > 2);
+      mainChar.combat.setAimYaw(playerMesh.rotation.y);
+    }
 
     if (playerMixer) {
       if (!isMoving) playPlayerAnim('Idle');
@@ -3709,7 +3751,7 @@ const engine = new GameEngine({
 
     const isBusy = mainChar ? mainChar.combat.busy : false;
 
-    let nextPos = { x: playerState.x, y: 0.6, z: playerState.z };
+    let nextPos = { x: playerState.x, y: PLAYER_VISUAL_Y, z: playerState.z };
     let deltaX = rootMotion.x;
     let deltaZ = rootMotion.z;
     if (isMoving && !isPaused && !isBusy) {
@@ -3859,15 +3901,25 @@ const engine = new GameEngine({
 
     }
 
-    let yawDiff = targetPlayerYaw - playerMesh.rotation.y;
+    if (firstPersonMode) {
 
-    while (yawDiff < -Math.PI) yawDiff += Math.PI * 2;
+      // In first person the hero always faces the look direction so attacks
+      // (and the sword trail) go where the crosshair points.
+      playerMesh.rotation.y = fpYaw;
 
-    while (yawDiff > Math.PI) yawDiff -= Math.PI * 2;
+    } else {
 
-    if (!mainChar || !mainChar.combat.busy) {
+      let yawDiff = targetPlayerYaw - playerMesh.rotation.y;
 
-      playerMesh.rotation.y += yawDiff * Math.min(1, 16 * dt);
+      while (yawDiff < -Math.PI) yawDiff += Math.PI * 2;
+
+      while (yawDiff > Math.PI) yawDiff -= Math.PI * 2;
+
+      if (!mainChar || !mainChar.combat.busy) {
+
+        playerMesh.rotation.y += yawDiff * Math.min(1, 16 * dt);
+
+      }
 
     }
     // Attack lunge decay & positioning
@@ -3877,7 +3929,7 @@ const engine = new GameEngine({
 
     const lungeZ = Math.cos(playerMesh.rotation.y) * attackLungeOffset;
 
-    playerMesh.position.set(nextPos.x + lungeX, nextPos.y, nextPos.z + lungeZ);
+    playerMesh.position.set(nextPos.x + lungeX, PLAYER_VISUAL_Y, nextPos.z + lungeZ);
 
     // Camera shake application / first-person toggle
 
@@ -3887,15 +3939,43 @@ const engine = new GameEngine({
 
       (window as any).__fpBranch = ((window as any).__fpBranch ?? 0) + 1;
 
-      const eyeHeight = 1.65;
-
       const cam = engine.perspectiveCamera;
 
-      cam.position.set(playerMesh.position.x + (Math.random() - 0.5) * (cameraShake > 0 ? cameraShake * 0.05 : 0), playerMesh.position.y + eyeHeight, playerMesh.position.z + (Math.random() - 0.5) * (cameraShake > 0 ? cameraShake * 0.05 : 0));
+      // Autoplay steers in world space, so let the view follow its heading.
+      if ((autoEnabled || autoplayController.running) && isMoving) {
 
-      const forward = new THREE.Vector3(Math.sin(playerMesh.rotation.y), 0, Math.cos(playerMesh.rotation.y));
+        let follow = Math.atan2(moveX, moveZ) - fpYaw;
 
-      cam.lookAt(cam.position.clone().add(forward));
+        while (follow < -Math.PI) follow += Math.PI * 2;
+
+        while (follow > Math.PI) follow -= Math.PI * 2;
+
+        fpYaw += follow * Math.min(1, 6 * dt);
+
+      }
+
+      const bobPhase = (window as any).__fpBobPhase ?? 0;
+
+      const nextBobPhase = bobPhase + dt * (playerState.isSprinting ? 12 : 8.5);
+      (window as any).__fpBobPhase = isMoving ? nextBobPhase : bobPhase;
+
+      const bob = isMoving ? Math.sin(nextBobPhase * 2) * 0.035 : 0;
+
+      const shake = cameraShake > 0 ? cameraShake * 0.05 : 0;
+
+      cam.position.set(
+
+        playerMesh.position.x + (Math.random() - 0.5) * shake,
+
+        PLAYER_VISUAL_Y + FP_EYE_HEIGHT + bob + (playerState.isSneaking ? -0.35 : 0),
+
+        playerMesh.position.z + (Math.random() - 0.5) * shake,
+
+      );
+
+      cam.rotation.order = 'YXZ';
+
+      cam.rotation.set(fpPitch, fpYaw + Math.PI, 0);
 
       if (cameraShake > 0) cameraShake = Math.max(0, cameraShake - dt * 2.5);
 
@@ -3926,6 +4006,7 @@ const engine = new GameEngine({
       if (dist < 2.5) {
         if (!bush.isRetracted) {
           bush.isRetracted = true;
+          bush.everRetracted = true;
           if (bush.retractAction) {
             bush.retractAction.reset().fadeIn(0.2).play();
           }
@@ -3949,6 +4030,16 @@ const engine = new GameEngine({
         bush.mat.emissiveIntensity = THREE.MathUtils.lerp(bush.mat.emissiveIntensity, 2.8, 0.05);
       }
       bush.mesh.scale.lerp(bush.targetScale, 0.08);
+    }
+    // Parting every veil bramble in the courtyard solves the S00 grove puzzle.
+    if (currentSceneId === 'S00'
+      && magicalBushes.length > 0
+      && magicalBushes.every((b) => b.everRetracted)
+      && !solvedPuzzles.has('PUZZLE_S00_BRAMBLES')) {
+      solvedPuzzles.add('PUZZLE_S00_BRAMBLES');
+      SoundFX.playPuzzleSolved();
+      showToast('Puzzle Solved: The Moonlit Brambles Part Before You');
+      saveCheckpoint();
     }
     // Interaction Proximity Detection
     let hasPrompt = false;
@@ -12183,7 +12274,7 @@ function loadScene(id: SceneId, spawn?: Partial<Spawn>): boolean {
 
   playerState.z = target.z;
 
-  playerMesh.position.set(target.x, target.y, target.z);
+  playerMesh.position.set(target.x, PLAYER_VISUAL_Y, target.z);
 
   engine.cameraRig.setTarget(target.x, 0, target.z);
 
@@ -12683,6 +12774,16 @@ function resolveMeleeHits(): void {
 
           showToast('Guard Neutralized');
 
+          // Clearing the Outer Wards patrol blinds the Panopticon's gaze.
+          if (g.sceneId === 'OW1'
+            && !activeGuards.some((other) => other.sceneId === 'OW1' && other.state !== 'dead')
+            && !solvedPuzzles.has('PUZZLE_PANOPTICON_GAZE')) {
+            solvedPuzzles.add('PUZZLE_PANOPTICON_GAZE');
+            SoundFX.playPuzzleSolved();
+            showToast('Puzzle Solved: The Panopticon Gaze Is Blinded');
+            saveCheckpoint();
+          }
+
         }
 
       }
@@ -12706,6 +12807,58 @@ function closePuzzlePanel(): void {
     puzzlePanel = null;
 
   }
+
+}
+
+/**
+ * Autoplay helper: operate whichever puzzle panel is open, strongest path first
+ * (dial puzzles aligned to their furthest turn, then any available method).
+ * Returns true when the panel accepted an action; success closes it.
+ */
+function autoSolveOpenPuzzle(): boolean {
+
+  const panel = document.getElementById('puzzle-solution-panel');
+
+  if (!panel) return false;
+
+  const dialButtons = [...panel.querySelectorAll<HTMLButtonElement>('.mirror-rotate-btn')];
+
+  if (dialButtons.length > 0) {
+
+    const furthest = dialButtons.reduce((best, button) =>
+      Number(button.dataset.angle ?? 0) > Number(best.dataset.angle ?? 0) ? button : best);
+
+    furthest.click();
+
+    if (!document.getElementById('puzzle-solution-panel')) return true;
+
+  }
+
+  const methods = [...panel.querySelectorAll<HTMLButtonElement>('.puzzle-solution-btn')];
+
+  const target = methods.find((button) => button.dataset.available === 'true');
+
+  if (!target) {
+
+    // Nothing documented is unlocked yet: close so the bot can leave and return later.
+    closePuzzlePanel();
+
+    return false;
+
+  }
+
+  target.click();
+
+  // A failed attempt leaves the panel open; close it so the bot never re-clicks in a loop.
+  if (document.getElementById('puzzle-solution-panel')) {
+
+    closePuzzlePanel();
+
+    return false;
+
+  }
+
+  return true;
 
 }
 
@@ -12736,6 +12889,8 @@ function openPuzzlePanel(puzzleId: string): void {
   const panel = document.createElement('div');
 
   panel.id = 'puzzle-solution-panel';
+
+  panel.dataset.puzzleId = puzzleId;
 
   panel.style.cssText =
 
@@ -12827,6 +12982,8 @@ function openPuzzlePanel(puzzleId: string): void {
 
     button.dataset.method = solution.method;
 
+    button.dataset.available = solution.available ? 'true' : 'false';
+
     button.className = 'puzzle-solution-btn';
 
     const prerequisite = solution.requires.length
@@ -12916,7 +13073,9 @@ function openPuzzlePanel(puzzleId: string): void {
  */
 
 function updateQuestRuntimePrompt(): boolean {
-  return false;
+  if (activeDialogue) return false;
+
+  const puzzle = questRuntime.puzzleAt(currentSceneId, playerState.x, playerState.z, 2.2);
 
   if (puzzle && !puzzle.solved) {
 
@@ -12960,7 +13119,7 @@ function updateQuestRuntimePrompt(): boolean {
 
 /** Interact hook for the quest runtime. Returns true when it handled the press. */
 
-function interactQuestRuntime(): boolean { return false;
+function interactQuestRuntime(): boolean {
 
   if (activeDialogue) return false;
 
@@ -13010,7 +13169,7 @@ function interactQuestRuntime(): boolean { return false;
 
   }
 
-  const puzzle = null as any;
+  const puzzle = questRuntime.puzzleAt(currentSceneId, playerState.x, playerState.z, 2.2);
 
   if (puzzle && !puzzle.solved) {
 
@@ -14274,7 +14433,19 @@ function resetStats(): void {
 
 function applyOrigin(id: string, applyLoadout = true): void {
 
-  const loadout = { statMods: {}, startingItems: [] as string[], flags: {} as Record<string, unknown> };
+  const origin = questRuntime.origin(id);
+
+  const loadout = {
+
+    statMods: origin?.statMods ?? {},
+
+    startingItems: origin?.startingItems ?? [],
+
+    flags: origin?.flags ?? {},
+
+    tag: origin?.tag ?? '',
+
+  };
 
   if (applyLoadout) {
 
@@ -14282,7 +14453,7 @@ function applyOrigin(id: string, applyLoadout = true): void {
 
     for (const [key, value] of Object.entries(loadout.statMods)) {
 
-      stats[key as keyof typeof stats] += Number(value ?? 0);
+      if (key in stats) stats[key as keyof typeof stats] += Number(value ?? 0);
 
     }
 
@@ -14292,7 +14463,7 @@ function applyOrigin(id: string, applyLoadout = true): void {
 
     playerOrigin.traits = [];
 
-    // questRuntime.setTraits([]);
+    questRuntime.setTraits([]);
 
   }
 
@@ -14306,7 +14477,7 @@ function applyOrigin(id: string, applyLoadout = true): void {
 
   playerOrigin.cursePenaltyReduction = Number(loadout.flags.cursePenaltyReduction ?? 0);
 
-  // questRuntime.setOrigin(id);
+  questRuntime.setOrigin(id);
 
   localStorage.setItem('veilkeep.origin.v1', id);
 
@@ -14411,10 +14582,8 @@ function checkExits(): void {
           clamped = true;
         }
         if (clamped) {
-          const py = playerMesh.position.y || 0.6;
-
-          physics.teleportPlayer({ x: playerState.x, y: py, z: playerState.z });
-          playerMesh.position.set(playerState.x, py, playerState.z);
+          physics.teleportPlayer({ x: playerState.x, y: 0.6, z: playerState.z });
+          playerMesh.position.set(playerState.x, PLAYER_VISUAL_Y, playerState.z);
         }
         if (lockedMessageCooldown <= 0) {
           const reqLabels = exit.requires.map(r =>
@@ -15299,7 +15468,7 @@ function cycleNextWeapon(): void {
 playerMesh.traverse((node) => {
   if (node instanceof THREE.Mesh) node.castShadow = true;
 });
-playerMesh.position.set(initialSpawn.x, 0.6, initialSpawn.z);
+playerMesh.position.set(initialSpawn.x, PLAYER_VISUAL_Y, initialSpawn.z);
 engine.scene.add(playerMesh);
 firstPersonMode = true;
 engine.activeCamera = engine.perspectiveCamera;
@@ -15332,6 +15501,47 @@ canvas.addEventListener('mousedown', (e) => {
   } else if (e.button === 1) {
 
     toggleFirstPerson();
+
+  }
+
+});
+
+// First-person mouse look: click the canvas to capture the pointer.
+canvas.addEventListener('click', () => {
+
+  if (!firstPersonMode) return;
+
+  if (document.pointerLockElement === canvas) return;
+
+  try {
+
+    const request = canvas.requestPointerLock?.() as unknown as Promise<void> | undefined;
+
+    if (request && typeof request.catch === 'function') request.catch(() => {});
+
+  } catch {
+
+    // Pointer lock is unavailable (headless browsers, embedded frames).
+  }
+
+});
+
+document.addEventListener('mousemove', (e) => {
+
+  if (!firstPersonMode || document.pointerLockElement !== canvas) return;
+
+  fpYaw -= e.movementX * 0.0022;
+
+  fpPitch = THREE.MathUtils.clamp(fpPitch - e.movementY * 0.0022, -FP_MAX_PITCH, FP_MAX_PITCH);
+
+});
+
+document.addEventListener('pointerlockchange', () => {
+
+  // Leaving pointer lock (Esc) must not leave stale keys held down.
+  if (document.pointerLockElement !== canvas) {
+
+    playerState.keys.w = playerState.keys.a = playerState.keys.s = playerState.keys.d = false;
 
   }
 
@@ -15461,7 +15671,7 @@ window.addEventListener('keydown', (e) => {
 
       playerState.z = target.z;
 
-      playerMesh.position.set(target.x, 0.6, target.z);
+      playerMesh.position.set(target.x, PLAYER_VISUAL_Y, target.z);
 
       physics.teleportPlayer({ x: target.x, y: 0.6, z: target.z });
 
@@ -15537,17 +15747,22 @@ window.addEventListener('keydown', (e) => {
 
   // Actions
 
+  if (e.repeat) return;
+
   if (k === ' ') tryAttack();
 
   if (k === 'x') tryParry();
 
   if (k === 'e') interact();
 
-  if (k === 'q') quality.cycle();
+  // Quality cycling is Shift+Q so plain Q stays the Truth Lens relic.
+  if (k === 'q' && e.shiftKey) quality.cycle();
 
-  if (k === 't') throwDistraction();
+  // Distraction decoy moved off [T] (which cycles weapons) onto [G].
+  if (k === 'g') throwDistraction();
 
-  if (k === 'c' && (currentSceneId === 'AL1' || currentSceneId === 'AL2' || currentSceneId === 'AL3')) toggleCrafting();
+  // Crafting moved off [C] (shadow-step dash) onto [K].
+  if (k === 'k' && (currentSceneId === 'AL1' || currentSceneId === 'AL2' || currentSceneId === 'AL3')) toggleCrafting();
 
   // Relic: Truth Lens ([Q] hold)
 
@@ -15585,13 +15800,17 @@ window.addEventListener('keydown', (e) => {
 
   // Spells & Stealth Keys
 
-  if (e.key === 'Control') playerState.keys.ctrl = !playerState.keys.ctrl;
+  if (e.key === 'Control') playerState.keys.ctrl = true;
 
-  if (k === 'r' || k === '1') castMirrorDecoy();
+  if (!e.repeat) {
 
-  if (k === 'c') castShadowStep();
+    if (k === 'r' || k === '1') castMirrorDecoy();
 
-  if (k === 'v') castGlassDart();
+    if (k === 'c') castShadowStep();
+
+    if (k === 'v') castGlassDart();
+
+  }
 
   // Quest Log / Journal ([J])
 
@@ -15616,6 +15835,8 @@ window.addEventListener('keyup', (e) => {
   if (k === 'd' || k === 'arrowright') playerState.keys.d = false;
 
   if (e.key === 'Shift') playerState.keys.shift = false;
+
+  if (e.key === 'Control') playerState.keys.ctrl = false;
 
   // Relic: Truth Lens release
 
@@ -16430,7 +16651,7 @@ function getDiagnostics(): {
 
         playerState.z = pz;
 
-        playerMesh.position.set(px, 0.6, pz);
+        playerMesh.position.set(px, PLAYER_VISUAL_Y, pz);
 
         captain.hp = 0;
 
@@ -16630,6 +16851,8 @@ const autoplayHost: AutoplayHost = {
   navigate: (x, z, radius, dt) => autoNavigate(x, z, radius, dt),
 
   interact: () => interact(true),
+
+  solveOpenPuzzle: () => autoSolveOpenPuzzle(),
 
   attack: () => tryAttack(),
 

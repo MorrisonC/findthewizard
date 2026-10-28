@@ -88,7 +88,7 @@ export interface EnemyHandle {
 
 export class EnemyFactory {
   public static spawnEnemy(
-    scene: THREE.Scene,
+    scene: THREE.Scene | null,
     config: EnemySpawnConfig,
     playerLevel: number = 1,
     difficultyScale: { hpMult: number; dmgMult: number } = { hpMult: 1.0, dmgMult: 1.0 }
@@ -158,7 +158,7 @@ export class EnemyFactory {
     const hoverHeight = floating ? (config.hoverHeight ?? 0.45) : 0.0;
     const baseGroundY = snapObjectToFloor(group, config.position[1], floating, hoverHeight);
 
-    scene.add(group);
+    scene?.add(group);
 
     // Skyrim-style level & difficulty scaling (prevents 1-2 hit kills)
     const effectiveLevel = Math.max(config.level, Math.round(playerLevel * 0.85 + config.level * 0.3));
@@ -331,5 +331,33 @@ export class EnemyFactory {
     };
 
     return handle;
+  }
+
+  /**
+   * Async convenience spawn used by the scene builders. The handle is detached
+   * (callers reparent `handle.group`), so this does not need a live scene.
+   */
+  public static spawn(
+    encounterId: string,
+    sceneId: string,
+    position: { x: number; y: number; z: number },
+    options: Partial<Omit<EnemySpawnConfig, 'encounterId' | 'sceneId' | 'position'>> = {},
+  ): Promise<EnemyHandle> {
+    const config: EnemySpawnConfig = {
+      encounterId,
+      sceneId,
+      modelId: options.modelId ?? 'procedural_rig',
+      name: options.name ?? encounterId,
+      position: [position.x, position.y, position.z],
+      level: options.level ?? 3,
+      baseHp: options.baseHp ?? 180,
+      baseArmor: options.baseArmor ?? 10,
+      baseDamage: options.baseDamage ?? 18,
+      basePoise: options.basePoise ?? 120,
+      isBoss: options.isBoss ?? true,
+      floating: options.floating ?? false,
+      hoverHeight: options.hoverHeight,
+    };
+    return Promise.resolve(EnemyFactory.spawnEnemy(null, config));
   }
 }

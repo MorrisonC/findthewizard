@@ -115,6 +115,23 @@ export function resolveOriginUrls(originId?: string): string[] {
 }
 
 /**
+ * Drop the visual rig so its lowest point (boot soles) sits exactly on y=0 of
+ * the group origin. Imported assets are authored with their own pivot — some
+ * have the origin at the hips — which otherwise leaves the character hovering
+ * above the floor (or sunk into it) while physics runs at ground level.
+ */
+export function groundRigToFeet(rig: MainCharacterRig): number {
+  rig.group.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(rig.group);
+  if (!Number.isFinite(box.min.y) || !Number.isFinite(box.max.y)) return 0;
+  const offset = -box.min.y;
+  if (Math.abs(offset) < 0.002) return 0;
+  for (const child of rig.group.children) child.position.y += offset;
+  rig.group.updateMatrixWorld(true);
+  return offset;
+}
+
+/**
  * Load `kaelen.glb` / `main_character.glb/.fbx` and bind it to the canonical humanoid rig.
  * Falls back to the procedural wizard-hunter if the file is missing or lacks required bones.
  */
@@ -159,6 +176,8 @@ export async function spawnMainCharacter(opts: SpawnOptions = {}): Promise<Spawn
   const weaponId = opts.weaponId ?? 'hunter_blade';
 
   const rig = await loadMainCharacterRig(urls, false);
+  // Imported rigs keep the artist's pivot; normalise so the feet rest on y=0.
+  groundRigToFeet(rig);
   const combat = new CombatController(rig, opts.callbacks);
   if (opts.targetProvider) combat.targetProvider = opts.targetProvider;
 
@@ -169,21 +188,25 @@ export async function spawnMainCharacter(opts: SpawnOptions = {}): Promise<Spawn
   if (withWeapon) equippedWeapon = equipWeapon(rig, weaponId);
 
   let equippedShield: EquippedShield | undefined;
-  if (withShield) equippedShield = equipShield(rig, true) ?? undefined;
+  if (withShield) equippedShield = equipShield(rig) ?? undefined;
+
+  // Add to the scene *before* building VFX so trails/particles live in world
+  // space instead of inheriting the character transform.
+  if (opts.scene) opts.scene.add(rig.group);
+  const vfxParent = (rig.group.parent as THREE.Scene | null) ?? (rig.group as unknown as THREE.Scene);
 
   let weaponTrail: WeaponTrail | undefined;
   if (withTrail && equippedWeapon) {
-    weaponTrail = new WeaponTrail(rig.group.parent ?? rig.group, equippedWeapon);
+    weaponTrail = new WeaponTrail(vfxParent);
+    weaponTrail.setWeapon(equippedWeapon);
     combat.attachWeaponTrail(weaponTrail);
   }
 
-  const combatParticles = new CombatParticles(rig.group.parent ?? rig.group);
+  const combatParticles = new CombatParticles(vfxParent);
   combat.attachParticles(combatParticles);
 
   if (equippedWeapon) combat.attachWeapon(equippedWeapon);
   if (equippedShield) combat.attachShield(equippedShield);
-
-  if (opts.scene) opts.scene.add(rig.group);
 
   const character: SpawnedCharacter = {
     rig,
@@ -200,8 +223,8 @@ export async function spawnMainCharacter(opts: SpawnOptions = {}): Promise<Spawn
       combat.attachWeapon(w);
       return w;
     },
-    equipShield: (enabled = true) => {
-      const s = equipShield(rig, enabled);
+    equipShield: (_enabled = true) => {
+      const s = equipShield(rig);
       character.equippedShield = s ?? undefined;
       if (s) combat.attachShield(s);
       return s;

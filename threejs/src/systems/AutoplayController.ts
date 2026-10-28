@@ -87,6 +87,11 @@ export interface AutoplayHost {
   navigate(x: number, z: number, arriveRadius: number, dt: number): boolean;
   interact(): void;
   attack(): void;
+  /**
+   * Resolve a multi-solution puzzle panel the bot has opened (the game freezes
+   * movement behind it). True when an action was taken.
+   */
+  solveOpenPuzzle?(): boolean;
 
   nearestGuard(): { x: number; z: number; distance: number } | null;
   hasDialogue(): boolean;
@@ -368,6 +373,13 @@ export class AutoplayController {
   }
 
   private runTask(task: AutoTask, state: AutoProgressState, dt: number): void {
+    // A multi-solution puzzle panel freezes movement: operate it, don't steer into it.
+    if (this.host.solveOpenPuzzle?.()) {
+      this.lastError = null;
+      this.sampleWatchdog(false);
+      this.idle();
+      return;
+    }
     if (!taskReady(task, state)) {
       this.lastError = `blocked:${task.id}`;
       this.idle();
@@ -399,11 +411,13 @@ export class AutoplayController {
   }
 
   private combat(guard: { x: number; z: number; distance: number }, dt: number): void {
-    this.sampleWatchdog(true);
     if (guard.distance > 1.15) {
+      this.sampleWatchdog(true);
       this.host.navigate(guard.x, guard.z, 1.0, dt);
       return;
     }
+    // Standing still inside melee range to swing is not a navigation stall.
+    this.sampleWatchdog(false);
     this.idle();
     this.actionTimer -= dt * this.speedMultiplier;
     if (guard.distance <= 1.55 && this.actionTimer <= 0) {

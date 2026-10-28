@@ -87,7 +87,6 @@ export const SCENE_PLANS: Record<string, ScenePlan> = {
     tasks: [
       { id: 'ow1:clear', kind: 'clear', label: 'Neutralise the ward patrol' },
       { id: 'ow1:nail', kind: 'collect', item: 'ITEM_IRON_NAIL', label: 'Claim the Iron Nail', x: 2, z: -1, radius: 0.6 },
-      { id: 'ow1:nail', kind: 'collect', item: 'ITEM_IRON_NAIL', label: 'Claim the Iron Nail', x: 2, z: -1, radius: 0.6 },
     ],
   },
   GH1: {
