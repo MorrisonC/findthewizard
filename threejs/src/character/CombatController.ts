@@ -9,13 +9,43 @@ export const CROSSFADE_SECONDS = 0.15;
 const INPUT_BUFFER_SECONDS = 0.35;
 const DODGE_COOLDOWN = 0.2;
 const DODGE_DISTANCE = 3.2;
-/** Fraction of the dodge clip over which the directional impulse is applied. */
 const DODGE_MOVE_SPAN: [number, number] = [0.05, 0.7];
 const BLOCK_DAMAGE_SCALE = 0.25;
+export const HIT_STOP_SECONDS = 0.055;
+
+export interface EquipmentStats {
+  weaponDamageMultiplier: number;
+  critChance: number;
+  critMultiplier: number;
+  staminaCostMultiplier: number;
+  damageMitigation: number;
+  bladeLength: number;
+}
+
+export const ARMOR_PRESETS: Record<string, Partial<EquipmentStats>> = {
+  armor_arch_robes: { damageMitigation: 0.12, staminaCostMultiplier: 0.85, critChance: 0.15 },
+  armor_shadow_mail: { damageMitigation: 0.24, staminaCostMultiplier: 0.9, critChance: 0.22 },
+  armor_astral_cuirass: { damageMitigation: 0.38, staminaCostMultiplier: 1.0, critChance: 0.12 },
+};
+
+export const WEAPON_STAT_PRESETS: Record<string, Partial<EquipmentStats>> = {
+  weapon_whisper: { weaponDamageMultiplier: 1.0, critChance: 0.25, bladeLength: 0.85 },
+  hunter_blade: { weaponDamageMultiplier: 1.0, critChance: 0.15, bladeLength: 1.05 },
+  weapon_mirror_blade: { weaponDamageMultiplier: 1.25, critChance: 0.2, bladeLength: 1.15 },
+  weapon_shadow_claw: { weaponDamageMultiplier: 1.15, critChance: 0.32, bladeLength: 0.75 },
+  weapon_void_edge: { weaponDamageMultiplier: 1.65, critChance: 0.18, bladeLength: 1.55 },
+  weapon_astral_staff: { weaponDamageMultiplier: 1.35, critChance: 0.22, bladeLength: 1.45 },
+  weapon_sunfire_bow: { weaponDamageMultiplier: 1.2, critChance: 0.28, bladeLength: 1.1 },
+};
+
+const COMBO_DAMAGE_MULTIPLIERS: Record<string, number> = {
+  Light_Attack_1: 1.0,
+  Light_Attack_2: 1.2,
+  Heavy_Combo_Finisher: 1.6,
+};
 
 export interface CombatTarget {
   id: string;
-  /** World position (updated by the owner). */
   position: THREE.Vector3;
   radius: number;
 }
@@ -25,8 +55,9 @@ export interface HitEvent {
   damage: number;
   knockback: number;
   state: CombatState;
-  /** World-space push direction (horizontal, normalised). */
   direction: THREE.Vector3;
+  isCrit?: boolean;
+  isHeavyBranch?: boolean;
 }
 
 export interface SpellEvent {
@@ -38,18 +69,15 @@ export interface SpellEvent {
 export interface IncomingHit {
   damage: number;
   kind?: 'melee' | 'spell';
-  /** World direction the attack travels (attacker -> player). Optional. */
   direction?: THREE.Vector3;
 }
 export type HitOutcome = 'hit' | 'blocked' | 'parried' | 'evaded' | 'countered';
 
 export interface CombatCallbacks {
   onHit?: (e: HitEvent) => void;
-  /** Fired once per swing when the hitbox window (normalised clip time) opens. */
   onHitboxOpen?: (state: CombatState) => void;
   onSpell?: (e: SpellEvent) => void;
   onStateChange?: (next: CombatState, prev: CombatState) => void;
-  /** Fired when the player is damaged for real (state became Hit_Stagger). */
   onDamaged?: (damage: number) => void;
   onParry?: () => void;
   onCounter?: () => void;
@@ -62,6 +90,8 @@ const _a = new THREE.Vector3();
 const _b = new THREE.Vector3();
 const _ab = new THREE.Vector3();
 const _ap = new THREE.Vector3();
+const _hiltPos = new THREE.Vector3();
+const _tipPos = new THREE.Vector3();
 
 function segmentPointDistance(p0: THREE.Vector3, p1: THREE.Vector3, c: THREE.Vector3): number {
   _ab.subVectors(p1, p0);
@@ -72,15 +102,11 @@ function segmentPointDistance(p0: THREE.Vector3, p1: THREE.Vector3, c: THREE.Vec
 }
 
 const inWindow = (n: number, w?: [number, number]) => !!w && n >= w[0] && n <= w[1];
-const smooth = (x: number) => { const t = THREE.MathUtils.clamp(x, 0, 1); return t * t * (3 - 2 * t); };
+const smooth = (x: number) => {
+  const t = THREE.MathUtils.clamp(x, 0, 1);
+  return t * t * (3 - 2 * t);
+};
 
-/**
- * Combat animation state machine.
- *
- * Owns an AnimationMixer on `rig.group`, crossfades between states over 0.15s,
- * buffers combo input, gates hitboxes by *normalised clip time* and exposes
- * i-frames + dodge root motion. Call `update(dt)` once per frame.
- */
 export class CombatController {
   readonly mixer: THREE.AnimationMixer;
   readonly callbacks: CombatCallbacks;
@@ -91,13 +117,21 @@ export class CombatController {
   private clipName: ClipName = 'Idle_Combat';
   private action: THREE.AnimationAction;
 
-  /** Multiplies attack/cast clip speed; hit windows are normalised so they scale too. */
   attackSpeed = 1;
-  /** Supplies currently attackable targets (world-space). */
   targetProvider: () => CombatTarget[] = () => [];
+
+  equipmentStats: EquipmentStats = {
+    weaponDamageMultiplier: 1.0,
+    critChance: 0.15,
+    critMultiplier: 1.5,
+    staminaCostMultiplier: 1.0,
+    damageMitigation: 0.12,
+    bladeLength: 1.05,
+  };
 
   // input
   private bufAttack = 0;
+  private bufHeavy = 0;
   private bufCast = 0;
   private bufDodge = 0;
   private dodgeDir = new THREE.Vector3();
@@ -109,6 +143,8 @@ export class CombatController {
 
   // combat bookkeeping
   private comboIndex = 0;
+  private heavyFinisherBranch = false;
+  private hitStopTimer = 0;
   private dodgeCooldown = 0;
   private blockTime = 0;
   private spawned = false;
@@ -128,6 +164,17 @@ export class CombatController {
   attachWeapon(weapon: EquippedWeapon): void {
     this.equippedWeapon = weapon;
     this.weaponTrail?.setWeapon(weapon);
+    const preset = WEAPON_STAT_PRESETS[(weapon as any)?.id ?? 'hunter_blade'];
+    if (preset) {
+      Object.assign(this.equipmentStats, preset);
+    }
+  }
+
+  equipArmor(armorId: string): void {
+    const preset = ARMOR_PRESETS[armorId];
+    if (preset) {
+      Object.assign(this.equipmentStats, preset);
+    }
   }
 
   attachShield(shield: EquippedShield): void {
@@ -143,14 +190,18 @@ export class CombatController {
     this.combatParticles = particles;
   }
 
-  constructor(readonly rig: MainCharacterRig, callbacks: CombatCallbacks = {}, clips?: Partial<Record<ClipName, THREE.AnimationClip>>) {
+  constructor(
+    readonly rig: MainCharacterRig,
+    callbacks: CombatCallbacks = {},
+    clips?: Partial<Record<ClipName, THREE.AnimationClip>>,
+  ) {
     this.callbacks = callbacks;
     const procedural = buildCombatClips(rig.source === 'imported');
     const imported = new Map(rig.importedClips.map((c) => [c.name.toLowerCase(), c]));
     this.clips = { ...procedural };
-    for (const key of Object.keys(procedural) as ClipName[]) {
+    for (const key of Object.keys(procedural)) {
       const authored = imported.get(key.toLowerCase());
-      if (authored) this.clips[key] = authored; // artist clips override procedural ones
+      if (authored) this.clips[key as ClipName] = authored;
     }
     Object.assign(this.clips, clips);
 
@@ -169,40 +220,50 @@ export class CombatController {
     this.action.play();
   }
 
-  // ---- input API -----------------------------------------------------------
+  // ---- input API --------------------------------------------------------
 
-  /** Camera-relative or world move intent already converted to world XZ. */
   setMove(x: number, z: number, run = false, strafe = 0): void {
     this.move.set(x, z);
     this.run = run;
     this.strafe = strafe;
   }
-  /** Facing used when an attack / cast / dodge begins. */
-  setAimYaw(yaw: number | null): void { this.aimYaw = yaw; }
-  pressAttack(): void { this.bufAttack = INPUT_BUFFER_SECONDS; }
-  pressCast(): void { this.bufCast = INPUT_BUFFER_SECONDS; }
-  /** Direction defaults to the current move intent, else backwards. */
+  setAimYaw(yaw: number | null): void {
+    this.aimYaw = yaw;
+  }
+  pressAttack(): void {
+    this.bufAttack = INPUT_BUFFER_SECONDS;
+  }
+  pressHeavyAttack(): void {
+    this.bufHeavy = INPUT_BUFFER_SECONDS;
+  }
+  pressCast(): void {
+    this.bufCast = INPUT_BUFFER_SECONDS;
+  }
   pressDodge(dirX?: number, dirZ?: number): void {
     this.bufDodge = INPUT_BUFFER_SECONDS;
     if (dirX !== undefined && dirZ !== undefined && (dirX || dirZ)) this.dodgeDir.set(dirX, 0, dirZ);
     else if (this.move.lengthSq() > 0.01) this.dodgeDir.set(this.move.x, 0, this.move.y);
     else this.dodgeDir.set(0, 0, 0);
   }
-  setBlock(held: boolean): void { this.blockHeld = held; }
+  setBlock(held: boolean): void {
+    this.blockHeld = held;
+  }
 
-  // ---- queries -------------------------------------------------------------
+  // ---- queries ----------------------------------------------------------
 
   get normalizedTime(): number {
     const d = this.action.getClip().duration;
     return d > 0 ? THREE.MathUtils.clamp(this.action.time / d, 0, 1) : 0;
   }
-  get hitboxActive(): boolean { return this._hitboxActive; }
+  get hitboxActive(): boolean {
+    return this._hitboxActive;
+  }
   get invulnerable(): boolean {
     return this.state === 'Dodge_Roll' && inWindow(this.normalizedTime, COMBAT_TIMING.Dodge_Roll.iframes);
   }
-  /** True while a committed action prevents free movement. */
-  get busy(): boolean { return this.state !== 'Idle_Combat' && this.state !== 'Locomotion'; }
-  /** World-space displacement from dodge root motion accumulated since last call. Feed to physics.movePlayer(). */
+  get busy(): boolean {
+    return this.state !== 'Idle_Combat' && this.state !== 'Locomotion';
+  }
   consumeRootMotion(out = new THREE.Vector3()): THREE.Vector3 {
     out.copy(this.rootDelta);
     this.rootDelta.set(0, 0, 0);
@@ -213,7 +274,6 @@ export class CombatController {
     return new THREE.Vector3(Math.sin(y), 0, Math.cos(y));
   }
 
-  /** Resolve an incoming enemy attack against the current state. */
   receiveHit(hit: IncomingHit): HitOutcome {
     const kind = hit.kind ?? 'melee';
     if (this.invulnerable) return 'evaded';
@@ -221,6 +281,7 @@ export class CombatController {
       this.callbacks.onCounter?.();
       return 'countered';
     }
+    const mitigatedDamage = hit.damage * Math.max(0.15, 1 - this.equipmentStats.damageMitigation);
     if (this.state === 'Block_Parry') {
       if (inWindow(this.blockTime / COMBAT_TIMING.Block_Parry.duration, COMBAT_TIMING.Block_Parry.parry)) {
         this.equippedShield?.setWardActive(true, true);
@@ -230,22 +291,29 @@ export class CombatController {
       }
       this.equippedShield?.setWardActive(true, false);
       this.combatParticles?.spawnParryBurst(this.rig.group.position, false);
-      this.callbacks.onDamaged?.(hit.damage * BLOCK_DAMAGE_SCALE);
+      this.callbacks.onDamaged?.(mitigatedDamage * BLOCK_DAMAGE_SCALE);
       return 'blocked';
     }
     this.combatParticles?.spawnStaggerBurst(this.rig.group.position);
-    this.callbacks.onDamaged?.(hit.damage);
+    this.callbacks.onDamaged?.(mitigatedDamage);
     this.enter('Hit_Stagger');
     return 'hit';
   }
 
-  // ---- update --------------------------------------------------------------
+  // ---- update -----------------------------------------------------------
 
   update(dt: number): void {
     this.bufAttack = Math.max(0, this.bufAttack - dt);
+    this.bufHeavy = Math.max(0, this.bufHeavy - dt);
     this.bufCast = Math.max(0, this.bufCast - dt);
     this.bufDodge = Math.max(0, this.bufDodge - dt);
     this.dodgeCooldown = Math.max(0, this.dodgeCooldown - dt);
+
+    if (this.hitStopTimer > 0) {
+      this.hitStopTimer = Math.max(0, this.hitStopTimer - dt);
+      this.combatParticles?.update(dt);
+      return;
+    }
 
     this.mixer.update(dt);
     if (this.state === 'Block_Parry') this.blockTime += dt;
@@ -262,8 +330,22 @@ export class CombatController {
       case 'Heavy_Combo_Finisher':
         if (n >= (t.cancelFrom ?? 1)) {
           if (this.tryDodge()) break;
+          // Heavy Finisher branch after Hit 2 when Heavy Attack or Cast is buffered
+          if (this.state === 'Light_Attack_2' && this.bufHeavy > 0) {
+            this.bufHeavy = 0;
+            this.comboIndex = 2;
+            this.heavyFinisherBranch = true;
+            this.enter('Heavy_Combo_Finisher');
+            break;
+          }
           const next = COMBO[this.comboIndex + 1];
-          if (next && this.bufAttack > 0) { this.bufAttack = 0; this.comboIndex++; this.enter(next); break; }
+          if (next && this.bufAttack > 0) {
+            this.bufAttack = 0;
+            this.comboIndex++;
+            this.heavyFinisherBranch = false;
+            this.enter(next);
+            break;
+          }
         }
         if (n >= 0.98) this.exitToFree();
         break;
@@ -278,7 +360,12 @@ export class CombatController {
         break;
       case 'Block_Parry':
         if (this.tryDodge()) break;
-        if (this.bufAttack > 0 && this.blockTime > 0.3) { this.enter('Light_Attack_1'); this.comboIndex = 0; this.bufAttack = 0; break; }
+        if (this.bufAttack > 0 && this.blockTime > 0.3) {
+          this.enter('Light_Attack_1');
+          this.comboIndex = 0;
+          this.bufAttack = 0;
+          break;
+        }
         if (!this.blockHeld && this.blockTime > 0.12) this.exitToFree();
         break;
       case 'Hit_Stagger':
@@ -293,26 +380,46 @@ export class CombatController {
     } else {
       this.equippedShield?.setWardActive(false);
     }
-    const comboTier = this.state === 'Heavy_Combo_Finisher' ? 3 : (this.state === 'Light_Attack_2' ? 2 : 1);
+    const comboTier = this.state === 'Heavy_Combo_Finisher' ? 3 : this.state === 'Light_Attack_2' ? 2 : 1;
     this.weaponTrail?.update(dt, this._hitboxActive, comboTier);
     this.equippedWeapon?.pulseRunes(this._hitboxActive ? 3.0 : 1.2);
     this.combatParticles?.update(dt);
   }
 
-  // ---- internals -----------------------------------------------------------
+  // ---- internals --------------------------------------------------------
 
   private startBufferedAction(): boolean {
     if (this.tryDodge()) return true;
-    if (this.bufAttack > 0) { this.bufAttack = 0; this.comboIndex = 0; this.enter('Light_Attack_1'); return true; }
-    if (this.bufCast > 0) { this.bufCast = 0; this.enter('Arcane_Cast'); return true; }
-    if (this.blockHeld) { this.enter('Block_Parry'); return true; }
+    if (this.bufAttack > 0) {
+      this.bufAttack = 0;
+      this.comboIndex = 0;
+      this.heavyFinisherBranch = false;
+      this.enter('Light_Attack_1');
+      return true;
+    }
+    if (this.bufHeavy > 0) {
+      this.bufHeavy = 0;
+      this.comboIndex = 2;
+      this.heavyFinisherBranch = true;
+      this.enter('Heavy_Combo_Finisher');
+      return true;
+    }
+    if (this.bufCast > 0) {
+      this.bufCast = 0;
+      this.enter('Arcane_Cast');
+      return true;
+    }
+    if (this.blockHeld) {
+      this.enter('Block_Parry');
+      return true;
+    }
     return false;
   }
 
   private tryDodge(): boolean {
     if (this.bufDodge <= 0 || this.dodgeCooldown > 0) return false;
     this.bufDodge = 0;
-    if (this.dodgeDir.lengthSq() < 1e-4) this.dodgeDir.copy(this.forward).negate(); // backstep when idle
+    if (this.dodgeDir.lengthSq() < 1e-4) this.dodgeDir.copy(this.forward).negate();
     this.dodgeDir.normalize();
     this.enter('Dodge_Roll');
     return true;
@@ -320,6 +427,7 @@ export class CombatController {
 
   private exitToFree(): void {
     this.comboIndex = 0;
+    this.heavyFinisherBranch = false;
     this.enter(this.move.lengthSq() > 0.01 ? 'Locomotion' : 'Idle_Combat');
   }
 
@@ -327,7 +435,7 @@ export class CombatController {
     const moving = this.move.lengthSq() > 0.01;
     const want: CombatState = moving ? 'Locomotion' : 'Idle_Combat';
     if (this.state !== want) this.enter(want);
-    else if (moving && this.pickGait() !== this.clipName) this.setClip(this.pickGait()); // gait change within Locomotion
+    else if (moving && this.pickGait() !== this.clipName) this.setClip(this.pickGait());
   }
 
   private pickGait(): ClipName {
@@ -358,7 +466,6 @@ export class CombatController {
     this.callbacks.onStateChange?.(next, prev);
   }
 
-  /** Crossfade (0.15s) to a clip. Foot phase is preserved between gait clips. */
   private setClip(name: ClipName, timeScale = 1): void {
     const next = this.actions.get(name)!;
     const prev = this.action;
@@ -391,34 +498,58 @@ export class CombatController {
     this.callbacks.onSpell?.({ origin, direction: this.forward, damage: COMBAT_TIMING.Arcane_Cast.damage ?? 0 });
   }
 
-  /** Hit detection: only inside the state's normalised-time window, swept from last frame's blade position. */
+  /** Weapon-socket OBB / segment sweep from hilt to blade tip and across frame motion. */
   private updateHitbox(): void {
     const t = COMBAT_TIMING[this.state === 'Locomotion' ? 'Idle_Combat' : this.state] as StateTiming;
     const active = isAttack(this.state) && inWindow(this.normalizedTime, t.hit);
     this._hitboxActive = active;
-    if (!active) { this.hitboxWasActive = false; return; }
+    if (!active) {
+      this.hitboxWasActive = false;
+      return;
+    }
 
     this.rig.group.updateMatrixWorld(true);
     this.rig.hitboxAnchor.getWorldPosition(this.curAnchor);
+    if (this.rig.weaponSocket) {
+      this.rig.weaponSocket.getWorldPosition(_hiltPos);
+    } else {
+      _hiltPos.copy(this.curAnchor);
+    }
+    _tipPos.copy(this.curAnchor).addScaledVector(this.forward, this.equipmentStats.bladeLength * 0.35);
+
     if (!this.hitboxWasActive) {
       this.prevAnchor.copy(this.curAnchor);
       this.hitboxWasActive = true;
       this.callbacks.onHitboxOpen?.(this.state);
     }
 
-    const radius = t.hitRadius ?? 0.35;
+    const radius = (t.hitRadius ?? 0.35) * Math.max(1, this.equipmentStats.bladeLength * 0.95);
+    const stepMult = this.heavyFinisherBranch ? 2.0 : COMBO_DAMAGE_MULTIPLIERS[this.state] ?? 1.0;
+
     for (const target of this.targetProvider()) {
       if (this.hitSet.has(target.id)) continue;
-      if (segmentPointDistance(this.prevAnchor, this.curAnchor, target.position) > radius + target.radius) continue;
+      const distSweep = segmentPointDistance(this.prevAnchor, this.curAnchor, target.position);
+      const distBlade = segmentPointDistance(_hiltPos, _tipPos, target.position);
+      if (Math.min(distSweep, distBlade) > radius + target.radius) continue;
+
       this.hitSet.add(target.id);
       const dir = _a.subVectors(target.position, this.rig.group.position).setY(0);
       if (dir.lengthSq() < 1e-6) dir.copy(this.forward);
+
+      const baseDamage = (t.damage ?? 18) * stepMult * this.equipmentStats.weaponDamageMultiplier;
+      const isFinishingBlow = this.state === 'Heavy_Combo_Finisher';
+      if (isFinishingBlow) {
+        this.hitStopTimer = HIT_STOP_SECONDS;
+      }
+
       this.callbacks.onHit?.({
         target,
-        damage: t.damage ?? 0,
-        knockback: t.knockback ?? 0,
+        damage: Math.round(baseDamage),
+        knockback: (t.knockback ?? 1) * (this.heavyFinisherBranch ? 1.5 : 1.0),
         state: this.state,
         direction: dir.clone().normalize(),
+        isCrit: isFinishingBlow,
+        isHeavyBranch: this.heavyFinisherBranch,
       });
     }
     this.prevAnchor.copy(this.curAnchor);

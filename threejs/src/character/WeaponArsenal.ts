@@ -1,7 +1,17 @@
 import * as THREE from 'three';
 import type { MainCharacterRig } from './MainCharacterRig';
 
-export type WeaponId = 'hunter_blade' | 'glass_cleaver' | 'void_rapier' | 'sun_staff';
+export type WeaponId =
+  | 'hunter_blade'
+  | 'glass_cleaver'
+  | 'void_rapier'
+  | 'sun_staff'
+  | 'weapon_whisper'
+  | 'weapon_mirror_blade'
+  | 'weapon_shadow_claw'
+  | 'weapon_void_edge'
+  | 'weapon_astral_staff'
+  | 'weapon_sunfire_bow';
 
 export interface WeaponDefinition {
   id: WeaponId;
@@ -9,12 +19,54 @@ export interface WeaponDefinition {
   description: string;
   damageMultiplier: number;
   hitRadius: number;
+  critChance?: number;
+  staminaCost?: number;
   trailColor: number;
   trailGlowColor: number;
   baseOffset: [number, number, number];
   tipOffset: [number, number, number];
   createMesh: () => THREE.Group;
 }
+
+export interface ArmorStats {
+  id: string;
+  name: string;
+  magicResist: number;
+  physicalMitigation: number;
+  staminaCostMultiplier: number;
+  critChanceBonus: number;
+  poiseBonus: number;
+}
+
+export const ARMOR_REGISTRY: Record<string, ArmorStats> = {
+  armor_arch_robes: {
+    id: 'armor_arch_robes',
+    name: "Archmage's Ethereal Robes",
+    magicResist: 0.15,
+    physicalMitigation: 0.05,
+    staminaCostMultiplier: 0.90, // -10% stamina cost
+    critChanceBonus: 0.05,
+    poiseBonus: 10,
+  },
+  armor_shadow_mail: {
+    id: 'armor_shadow_mail',
+    name: 'Shadowhand Brigandine Mail',
+    magicResist: 0.05,
+    physicalMitigation: 0.25, // +25% physical mitigation
+    staminaCostMultiplier: 1.0,
+    critChanceBonus: 0.10, // +10% crit
+    poiseBonus: 20,
+  },
+  armor_astral_cuirass: {
+    id: 'armor_astral_cuirass',
+    name: 'Astral Sentinel Cuirass',
+    magicResist: 0.20,
+    physicalMitigation: 0.35, // +35% total mitigation
+    staminaCostMultiplier: 1.1,
+    critChanceBonus: 0.0,
+    poiseBonus: 35, // +20% poise armor
+  },
+};
 
 export interface EquippedWeapon {
   def: WeaponDefinition;
@@ -246,6 +298,90 @@ export const WEAPON_REGISTRY: Record<WeaponId, WeaponDefinition> = {
     tipOffset: [0, 1.05, 0],
     createMesh: () => buildSunStaff().group,
   },
+  weapon_whisper: {
+    id: 'weapon_whisper',
+    name: 'Whisper (Silent Silver Edge)',
+    description: "Kaelen's signature silent foil. Balanced speed, reach, and kinetic slice.",
+    damageMultiplier: 1.0,
+    hitRadius: 0.42,
+    critChance: 0.15,
+    staminaCost: 10,
+    trailColor: 0x38bdf8,
+    trailGlowColor: 0x0284c7,
+    baseOffset: [0, 0.12, 0],
+    tipOffset: [0, 1.15, 0],
+    createMesh: () => buildHunterBlade().group,
+  },
+  weapon_mirror_blade: {
+    id: 'weapon_mirror_blade',
+    name: 'Mirror Blade of the Keep',
+    description: 'Crystalline cleaver reflecting enemy enchantments back upon their casters.',
+    damageMultiplier: 1.35,
+    hitRadius: 0.56,
+    critChance: 0.12,
+    staminaCost: 16,
+    trailColor: 0x2dd4bf,
+    trailGlowColor: 0x059669,
+    baseOffset: [0.03, 0.15, 0],
+    tipOffset: [0.03, 1.35, 0],
+    createMesh: () => buildGlassCleaver().group,
+  },
+  weapon_shadow_claw: {
+    id: 'weapon_shadow_claw',
+    name: 'Shadow Claw of the Cutpurse',
+    description: 'Hooked steel claw with serrated edges for rapid counter-hit staggering.',
+    damageMultiplier: 1.1,
+    hitRadius: 0.38,
+    critChance: 0.25,
+    staminaCost: 8,
+    trailColor: 0xc084fc,
+    trailGlowColor: 0x7c3aed,
+    baseOffset: [0, 0.1, 0],
+    tipOffset: [0, 1.18, 0],
+    createMesh: () => buildVoidRapier().group,
+  },
+  weapon_void_edge: {
+    id: 'weapon_void_edge',
+    name: 'Void Edge Greatsword',
+    description: 'Heavy two-handed meteorite greatsword that cleaves through illusion barrier wards.',
+    damageMultiplier: 1.6,
+    hitRadius: 0.65,
+    critChance: 0.20,
+    staminaCost: 24,
+    trailColor: 0xa855f7,
+    trailGlowColor: 0x6b21a8,
+    baseOffset: [0, 0.15, 0],
+    tipOffset: [0, 1.45, 0],
+    createMesh: () => buildGlassCleaver().group,
+  },
+  weapon_astral_staff: {
+    id: 'weapon_astral_staff',
+    name: 'Astral Battle Staff',
+    description: 'Focus staff aligning celestial constellations to unleash starlight pulses.',
+    damageMultiplier: 1.25,
+    hitRadius: 0.50,
+    critChance: 0.18,
+    staminaCost: 14,
+    trailColor: 0x818cf8,
+    trailGlowColor: 0x4f46e5,
+    baseOffset: [0, 0.18, 0],
+    tipOffset: [0, 1.10, 0],
+    createMesh: () => buildSunStaff().group,
+  },
+  weapon_sunfire_bow: {
+    id: 'weapon_sunfire_bow',
+    name: 'Sunfire Radiant Khopesh',
+    description: 'Gilded solar armament firing searing sunfire projectile arcs.',
+    damageMultiplier: 1.3,
+    hitRadius: 0.48,
+    critChance: 0.22,
+    staminaCost: 15,
+    trailColor: 0xfbbf24,
+    trailGlowColor: 0xd97706,
+    baseOffset: [0, 0.18, 0],
+    tipOffset: [0, 1.12, 0],
+    createMesh: () => buildSunStaff().group,
+  },
 };
 
 export const WEAPON_IDS: WeaponId[] = ['hunter_blade', 'glass_cleaver', 'void_rapier', 'sun_staff'];
@@ -323,14 +459,39 @@ export function equipWeapon(rig: MainCharacterRig, weaponId: WeaponId): Equipped
 }
 
 /**
- * Mount the runic ward shield onto the character's LeftLowerArm bone.
+ * Mount the runic ward shield onto the character's LeftLowerArm / socket_hand_l bone.
  */
 export function equipShield(rig: MainCharacterRig): EquippedShield {
-  const existing = rig.bones.LeftLowerArm.getObjectByName('HarmonicAegis');
+  const mountParent = rig.group.getObjectByName('socket_hand_l')
+    ?? rig.bones.LeftLowerArm.getObjectByName('socket_hand_l')
+    ?? rig.bones.LeftLowerArm;
+
+  const existing = mountParent.getObjectByName('HarmonicAegis') ?? rig.bones.LeftLowerArm.getObjectByName('HarmonicAegis');
   if (existing) {
     existing.removeFromParent();
   }
   const shield = buildRunicShield();
-  rig.bones.LeftLowerArm.add(shield.group);
+  mountParent.add(shield.group);
   return shield;
+}
+
+/**
+ * Stow a two-handed weapon on the character's back (socket_back).
+ */
+export function stowWeaponOnBack(rig: MainCharacterRig, weaponId: WeaponId): THREE.Group {
+  const backSocket = rig.group.getObjectByName('socket_back')
+    ?? rig.bones.Chest.getObjectByName('socket_back')
+    ?? rig.bones.Chest;
+
+  const existing = backSocket.getObjectByName('StowedWeapon');
+  if (existing) existing.removeFromParent();
+
+  const def = WEAPON_REGISTRY[weaponId] ?? WEAPON_REGISTRY.hunter_blade;
+  const mesh = def.createMesh();
+  mesh.name = 'StowedWeapon';
+  mesh.rotation.set(0, 0, Math.PI / 4);
+  mesh.position.set(0, 0, 0);
+  mesh.scale.setScalar(0.9);
+  backSocket.add(mesh);
+  return mesh;
 }

@@ -9,6 +9,8 @@ export interface PuzzlePropHandle {
   model: THREE.Group;
   interactionRadius: number;
   modelPath: string;
+  requiredItem?: string;
+  solved: boolean;
   playInteract: (kind: 'lever' | 'kneel') => Promise<void>;
 }
 
@@ -58,6 +60,52 @@ const PUZZLE_PROPS = [
 
 const ALL_PROP_PATHS = [...HERO_PROPS, ...PUZZLE_PROPS];
 
+const EXPLICIT_PUZZLE_MODELS: Record<string, string> = {
+  p1: '/assets/models/mirror_lock.glb',
+  p2: '/assets/models/props/heart_of_mirrors_prop.glb',
+  p3: '/assets/models/props/heraldic_shield_mount.glb',
+  p4: '/assets/models/props/market_scales.glb',
+  p5: '/assets/models/props/bazaar_stele.glb',
+  p6: '/assets/models/props/merchant_safe.glb',
+  p7: '/assets/models/props/prison_lever_bank.glb',
+  p8: '/assets/models/props/iron_maiden.glb',
+  p9: '/assets/models/escher_anchor.glb',
+  p10: '/assets/models/celestial_telescope.glb',
+  p11: '/assets/models/alchemist_bench.glb',
+  p12: '/assets/models/archival_lectern.glb',
+  p13: '/assets/models/rooftop_anemometer.glb',
+  p14: '/assets/models/void_rift_anchor.glb',
+  p15: '/assets/models/props/reliquary_shadowbox.glb',
+  p16: '/assets/models/props/treasury_dial_vault.glb',
+  p17: '/assets/models/props/panopticon_beacon.glb',
+  p18: '/assets/models/props/garden_water_sluice.glb',
+  p19: '/assets/models/steampunk_boiler.glb',
+  p20: '/assets/models/monk_sarcophagus.glb',
+  p21: '/assets/models/starmap_pedestal.glb',
+  p22: '/assets/models/vent_grate.glb',
+  p23: '/assets/models/chronomantic_astrolabe.glb',
+  p24: '/assets/models/props/portcullis_gears.glb',
+  p25: '/assets/models/glass_armonica.glb',
+  p26: '/assets/models/props/sundial_falsedawn.glb',
+  p27: '/assets/models/props/whispering_lattice.glb',
+  p28: '/assets/models/aeolian_belfry.glb',
+  p29: '/assets/models/props/acoustic_crystal.glb',
+  p30: '/assets/models/props/siphon_valve_wheel.glb',
+};
+
+const PUZZLE_REQUIRED_ITEMS: Record<string, string> = {
+  p9: 'ITEM_IRON_NAIL',
+  p12: 'ITEM_SCHOLAR_CIPHER',
+  p13: 'ITEM_ROOFTOP_WATER_KEY',
+  p14: 'ITEM_RITUAL_ORB',
+  p23: 'ITEM_CLOCKWORK_GEAR',
+  p24: 'ITEM_CLOCKWORK_GEAR',
+  p26: 'ITEM_SUNDIAL_GNOMON',
+  p28: 'ITEM_ECHO_BELL',
+  p29: 'ITEM_ECHO_BELL',
+  p30: 'ITEM_UNDERCITY_VALVE_HANDLE',
+};
+
 function toVector3(position: PuzzlePosition): THREE.Vector3 {
   if (position instanceof THREE.Vector3) return position.clone();
   return new THREE.Vector3(position.x, position.y ?? 0, position.z);
@@ -71,40 +119,19 @@ function resolveModelPath(puzzleId: string): string {
   const id = String(puzzleId ?? '');
   const norm = normalizeId(id);
 
-  // Direct filename/stem match (with or without extension).
   for (const path of ALL_PROP_PATHS) {
     const stem = path.split('/').pop()!.replace(/\.glb$/i, '');
     if (normalizeId(stem) === norm) return path;
   }
 
-  // Explicit puzzle-id -> hero prop mapping for well-known puzzles.
-  const explicit: Record<string, string> = {
-    p1: '/assets/models/mirror_lock.glb',
-    p2: '/assets/models/props/heart_of_mirrors_prop.glb',
-    p9: '/assets/models/escher_anchor.glb',
-    p10: '/assets/models/celestial_telescope.glb',
-    p11: '/assets/models/alchemist_bench.glb',
-    p13: '/assets/models/rooftop_anemometer.glb',
-    p14: '/assets/models/void_rift_anchor.glb',
-    p19: '/assets/models/steampunk_boiler.glb',
-    p23: '/assets/models/chronomantic_astrolabe.glb',
-    p24: '/assets/models/props/portcullis_gears.glb',
-    p25: '/assets/models/glass_armonica.glb',
-    p26: '/assets/models/props/sundial_falsedawn.glb',
-    p27: '/assets/models/props/whispering_lattice.glb',
-    p28: '/assets/models/aeolian_belfry.glb',
-    p30: '/assets/models/props/siphon_valve_wheel.glb',
-  };
-  if (explicit[norm]) return explicit[norm];
+  if (EXPLICIT_PUZZLE_MODELS[norm]) return EXPLICIT_PUZZLE_MODELS[norm];
 
-  // PUZ_ style ids: hash to a stable prop.
   if (norm.startsWith('puz')) {
     let hash = 0;
     for (let i = 0; i < norm.length; i++) hash = (hash * 31 + norm.charCodeAt(i)) >>> 0;
     return ALL_PROP_PATHS[hash % ALL_PROP_PATHS.length];
   }
 
-  // P1..Pn style ids.
   const pMatch = /^p(\d+)$/.exec(norm);
   if (pMatch) {
     const n = Number(pMatch[1]);
@@ -113,7 +140,6 @@ function resolveModelPath(puzzleId: string): string {
     }
   }
 
-  // Fallback: try a prop with the same stem, then a generic prop.
   return `/assets/models/props/${id}.glb`.replace(/\s+/g, '_').toLowerCase();
 }
 
@@ -122,7 +148,6 @@ function easeOutCubic(t: number): number {
 }
 
 async function loadModel(path: string): Promise<THREE.Group> {
-  // Try the resolved path, then a few common variants.
   const candidates = [path, path.replace(/^\//, ''), path.replace('/assets/', 'assets/')];
   let lastError: unknown;
   for (const url of candidates) {
@@ -133,7 +158,6 @@ async function loadModel(path: string): Promise<THREE.Group> {
       lastError = err;
     }
   }
-  // Final fallback: a simple visible box so spawn never hard-fails in tests.
   const box = new THREE.Mesh(
     new THREE.BoxGeometry(0.6, 0.6, 0.6),
     new THREE.MeshStandardMaterial({ color: 0x888888 }),
@@ -149,20 +173,22 @@ export class PuzzleFactory {
     const modelPath = resolveModelPath(puzzleId);
     const model = await loadModel(modelPath);
     const pos = toVector3(position);
+    const norm = normalizeId(puzzleId);
 
     const group = new THREE.Group();
     group.add(model);
     group.position.copy(pos);
 
     const interactionRadius = 1.6;
+    const requiredItem = PUZZLE_REQUIRED_ITEMS[norm];
 
     group.userData.puzzleId = puzzleId;
     group.userData.modelPath = modelPath;
+    group.userData.requiredItem = requiredItem;
     group.userData.interactionRadius = interactionRadius;
     group.userData.colliderRadius = interactionRadius;
     group.userData.colliderType = 'sphere';
 
-    // Rapier interaction collider metadata (static trigger sphere).
     group.userData.rapierCollider = {
       type: 'ball',
       radius: interactionRadius,
@@ -176,7 +202,10 @@ export class PuzzleFactory {
       model,
       interactionRadius,
       modelPath,
+      requiredItem,
+      solved: false,
       playInteract: async (kind: 'lever' | 'kneel') => {
+        handle.solved = true;
         return PuzzleFactory.playInteract(handle, kind);
       },
     };
@@ -186,6 +215,28 @@ export class PuzzleFactory {
     if (scene) scene.add(group);
 
     return handle;
+  }
+
+  static canSolveWithInventory(puzzleId: string, inventory: string[] = []): boolean {
+    const req = PUZZLE_REQUIRED_ITEMS[normalizeId(puzzleId)];
+    if (!req) return true;
+    return inventory.some((item) => item.toUpperCase() === req.toUpperCase());
+  }
+
+  static emitEchoBellRing(parent: THREE.Object3D, origin: THREE.Vector3): THREE.Mesh {
+    const geom = new THREE.TorusGeometry(0.35, 0.04, 12, 36);
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.85,
+    });
+    const ring = new THREE.Mesh(geom, mat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.copy(origin);
+    ring.position.y += 0.6;
+    ring.name = 'echo_bell_acoustic_ring';
+    parent.add(ring);
+    return ring;
   }
 
   static async playInteract(puzzle: PuzzlePropHandle | THREE.Group | any, kind: 'lever' | 'kneel'): Promise<void> {
@@ -202,7 +253,6 @@ export class PuzzleFactory {
     const startRotZ = group.rotation.z;
     const startRotX = group.rotation.x;
 
-    // Ensure base values are stored for repeated interactions.
     if (group.userData._baseY === undefined) group.userData._baseY = startY;
     if (group.userData._baseRotZ === undefined) group.userData._baseRotZ = startRotZ;
     if (group.userData._baseRotX === undefined) group.userData._baseRotX = startRotX;
@@ -223,7 +273,6 @@ export class PuzzleFactory {
         } else {
           group.position.y = baseY - 0.22 * e;
         }
-        // Visual state feedback via emissive flash on meshes.
         group.traverse((node) => {
           const mesh = node as THREE.Mesh;
           if (mesh && mesh.isMesh && mesh.material && 'emissive' in (mesh.material as any)) {
@@ -242,7 +291,6 @@ export class PuzzleFactory {
             setTimeout(step, 16);
           }
         } else {
-          // Final state.
           if (kind === 'lever') {
             group.rotation.z = baseRotZ + Math.PI / 2;
             group.userData._baseRotZ = group.rotation.z;
@@ -261,5 +309,3 @@ export class PuzzleFactory {
     });
   }
 }
-
-export default PuzzleFactory;

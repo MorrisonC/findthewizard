@@ -64,10 +64,45 @@ export async function loadPlayerCharacter(originId: string): Promise<PlayerChara
     actions.set(clip.name, action);
   }
 
-  // Sockets
+  // Sockets resolution with canonical bone fallbacks
+  const resolveSocket = (name: PlayerSocketName): THREE.Object3D | null => {
+    let found = root.getObjectByName(name);
+    if (found) return found;
+
+    if (name === 'socket_hand_r') {
+      found = root.getObjectByName('hand_r_socket')
+        ?? root.getObjectByName('WeaponSocket')
+        ?? root.getObjectByName('hand_r')
+        ?? root.getObjectByName('RightHand');
+    } else if (name === 'socket_hand_l') {
+      found = root.getObjectByName('hand_l')
+        ?? root.getObjectByName('LeftHand')
+        ?? root.getObjectByName('LeftLowerArm')
+        ?? root.getObjectByName('forearm_l');
+    } else if (name === 'socket_spell_origin') {
+      found = root.getObjectByName('SpellOrigin')
+        ?? root.getObjectByName('socket_hand_l')
+        ?? root.getObjectByName('LeftHand');
+    } else if (name === 'socket_chest') {
+      found = root.getObjectByName('Chest') ?? root.getObjectByName('chest');
+    } else if (name === 'socket_back') {
+      found = root.getObjectByName('BackSocket') ?? root.getObjectByName('back');
+      if (!found) {
+        const chest = root.getObjectByName('Chest') ?? root.getObjectByName('chest') ?? root;
+        const b = new THREE.Object3D();
+        b.name = 'socket_back';
+        b.position.set(0, 0.15, -0.15);
+        b.rotation.set(0, Math.PI, 0);
+        chest.add(b);
+        found = b;
+      }
+    }
+    return found ?? null;
+  };
+
   const sockets = {} as Record<PlayerSocketName, THREE.Object3D | null>;
   for (const name of PLAYER_SOCKET_NAMES) {
-    sockets[name] = root.getObjectByName(name) ?? null;
+    sockets[name] = resolveSocket(name);
   }
 
   let currentAction: THREE.AnimationAction | null = null;
@@ -81,12 +116,30 @@ export async function loadPlayerCharacter(originId: string): Promise<PlayerChara
   };
 
   const attachItem = async (socketName: string, itemGlbUrl: string): Promise<void> => {
-    const socket = sockets[socketName as PlayerSocketName] ?? root.getObjectByName(socketName);
+    const socket = sockets[socketName as PlayerSocketName]
+      ?? resolveSocket(socketName as PlayerSocketName)
+      ?? root.getObjectByName(socketName);
     if (!socket) return;
     // Clear previous attachments
     while (socket.children.length) socket.remove(socket.children[0]);
-    const item = await AssetLoader.load(itemGlbUrl);
-    socket.add(item.scene);
+    const candidates = [
+      itemGlbUrl,
+      itemGlbUrl.replace(/^\//, ''),
+      `/assets/models/items/${itemGlbUrl.split('/').pop()}`,
+      `assets/models/items/${itemGlbUrl.split('/').pop()}`,
+    ];
+    let loadedItem: any = null;
+    for (const url of candidates) {
+      try {
+        loadedItem = await AssetLoader.load(url);
+        break;
+      } catch {
+        // try next
+      }
+    }
+    if (loadedItem) {
+      socket.add(loadedItem.scene);
+    }
   };
 
   // Kick off idle if present

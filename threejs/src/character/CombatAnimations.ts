@@ -7,6 +7,7 @@ export type CombatState =
   | 'Light_Attack_1'
   | 'Light_Attack_2'
   | 'Heavy_Combo_Finisher'
+  | 'Cast_Illusion'
   | 'Arcane_Cast'
   | 'Dodge_Roll'
   | 'Block_Parry'
@@ -43,7 +44,8 @@ export const COMBAT_TIMING: Record<Exclude<CombatState, 'Locomotion'>, StateTimi
   Idle_Combat: { duration: 2.4 },
   Light_Attack_1: { duration: 0.6, hit: [0.25, 0.55], damage: 10, hitRadius: 0.35, knockback: 1.5, cancelFrom: 0.55 },
   Light_Attack_2: { duration: 0.65, hit: [0.28, 0.56], damage: 12, hitRadius: 0.35, knockback: 1.8, cancelFrom: 0.56 },
-  Heavy_Combo_Finisher: { duration: 1.1, hit: [0.4, 0.62], damage: 28, hitRadius: 0.55, knockback: 4.5, cancelFrom: 0.7 },
+  Heavy_Combo_Finisher: { duration: 1.1, hit: [0.35, 0.65], damage: 28, hitRadius: 0.55, knockback: 4.5, cancelFrom: 0.7 },
+  Cast_Illusion: { duration: 1.15, hit: [0.30, 0.65], damage: 34, hitRadius: 0.65, knockback: 5.0, cancelFrom: 0.72 },
   Arcane_Cast: { duration: 0.9, spawn: 0.4, counter: [0.15, 0.5], damage: 14, cancelFrom: 0.65 },
   Dodge_Roll: { duration: 0.65, iframes: [0.05, 0.6], cancelFrom: 1 },
   Block_Parry: { duration: 0.5, parry: [0, 0.3], cancelFrom: 0.3 },
@@ -280,6 +282,7 @@ export function buildCombatClips(stripPositions = false): Record<ClipName, THREE
     Light_Attack_1: lightAttack1(),
     Light_Attack_2: lightAttack2(),
     Heavy_Combo_Finisher: heavyFinisher(),
+    Cast_Illusion: heavyFinisher(),
     Arcane_Cast: arcaneCast(),
     Dodge_Roll: dodgeRoll(),
     Block_Parry: blockParry(),

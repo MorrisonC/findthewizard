@@ -215,6 +215,18 @@ const ALIASES: Record<string, BoneName> = (() => {
     leftupleg: 'LeftUpperLeg', leftleg: 'LeftLowerLeg',
     rightupleg: 'RightUpperLeg', rightleg: 'RightLowerLeg',
     armature: 'Root',
+    handr: 'RightHand', handl: 'LeftHand',
+    forearmr: 'RightLowerArm', forearml: 'LeftLowerArm',
+    upperarmr: 'RightUpperArm', upperarml: 'LeftUpperArm',
+    thighr: 'RightUpperLeg', thighl: 'LeftUpperLeg',
+    shinr: 'RightLowerLeg', shinl: 'LeftLowerLeg',
+    footr: 'RightFoot', footl: 'LeftFoot',
+    righthand: 'RightHand', lefthand: 'LeftHand',
+    rightlowerarm: 'RightLowerArm', leftlowerarm: 'LeftLowerArm',
+    rightupperarm: 'RightUpperArm', leftupperarm: 'LeftUpperArm',
+    rightupperleg: 'RightUpperLeg', leftupperleg: 'LeftUpperLeg',
+    rightlowerleg: 'RightLowerLeg', leftlowerleg: 'LeftLowerLeg',
+    rightfoot: 'RightFoot', leftfoot: 'LeftFoot',
   };
   return Object.assign(a, mixamo);
 })();
@@ -267,12 +279,31 @@ export function bindImportedRig(
   // Reuse sockets if the artist authored them, otherwise create.
   const existing = (n: string) => scene.getObjectByName(n) ?? null;
   const made = attachSockets(bones);
-  const weaponSocket = existing('hand_r_socket') ?? existing('WeaponSocket') ?? made.weaponSocket;
-  const spellOrigin = existing('SpellOrigin') ?? made.spellOrigin;
+  const weaponSocket = existing('socket_hand_r') ?? existing('hand_r_socket') ?? existing('WeaponSocket') ?? existing('hand_r') ?? made.weaponSocket;
+  const spellOrigin = existing('socket_spell_origin') ?? existing('SpellOrigin') ?? made.spellOrigin;
   const authoredAnchor = existing('HitboxAnchor');
   const hitboxAnchor = authoredAnchor ?? made.hitboxAnchor;
   if (weaponSocket !== made.weaponSocket) { made.weaponSocket.removeFromParent(); if (!authoredAnchor) weaponSocket.add(made.hitboxAnchor); }
   if (spellOrigin !== made.spellOrigin) made.spellOrigin.removeFromParent();
+
+  // Ensure socket_back exists for two-handed / stowed gear
+  let backSocket = existing('socket_back') ?? existing('BackSocket') ?? existing('back');
+  if (!backSocket) {
+    backSocket = new THREE.Object3D();
+    backSocket.name = 'socket_back';
+    backSocket.position.set(0, 0.15, -0.15);
+    backSocket.rotation.set(0, Math.PI, 0);
+    bones.Chest.add(backSocket);
+  }
+
+  // Ensure socket_hand_l exists on left forearm/hand
+  let offhandSocket = existing('socket_hand_l') ?? existing('hand_l') ?? existing('LeftLowerArm') ?? existing('forearm_l');
+  if (!offhandSocket) {
+    offhandSocket = new THREE.Object3D();
+    offhandSocket.name = 'socket_hand_l';
+    bones.LeftLowerArm.add(offhandSocket);
+  }
+
   return {
     rig: { group, bones, skeleton, weaponSocket, spellOrigin, hitboxAnchor, importedClips: reClips, source: 'imported', bakedWeapon: !!existing('BakedWeaponMesh') },
   };

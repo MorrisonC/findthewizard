@@ -1,13 +1,42 @@
-/**
- * BossVaelorEncounter: Multi-phase boss fight for Arch-Illusionist Vaelor in SAN1.
- *
- * Phase 1: High Poise (120), Starlight Thrust telegraphs (0.60s), expanding Void Shockwaves.
- * Phase 2 (<= 50% HP): Dimensional inversion, summons 2 Mirror Mirage Clones,
- * faster attack wind-ups (0.42s), and violent teleport dashes.
- * Defeat: Spawns the legendary Sun-Staff ground pickup with glowing beacon.
- */
 import * as THREE from 'three';
 import { POISE_CONSTANTS } from './EnemyCombatAI';
+
+export type VaelorEndingId =
+  | 'thiefs_contract'
+  | 'mercy_of_unmaking'
+  | 'new_sovereign'
+  | 'awakening_of_the_mind';
+
+export interface EndingOption {
+  id: VaelorEndingId;
+  title: string;
+  description: string;
+  requiresAllMemoryShards?: boolean;
+}
+
+export const VAELOR_ENDINGS: EndingOption[] = [
+  {
+    id: 'thiefs_contract',
+    title: "Ending 1: The Thief's Contract",
+    description: 'Steal ITEM_HEART_OF_MIRRORS for Guildmaster Sable and escape Veilkeep into the winter night.',
+  },
+  {
+    id: 'mercy_of_unmaking',
+    title: 'Ending 2: The Mercy of Unmaking',
+    description: "Shatter the Heart of Mirrors with Whisper to fulfill Lady Cynthia's final wish.",
+  },
+  {
+    id: 'new_sovereign',
+    title: 'Ending 3: The New Sovereign',
+    description: "Claim the Astral Staff and take Vaelor's place at the illusion loom of Veilkeep.",
+  },
+  {
+    id: 'awakening_of_the_mind',
+    title: 'Ending 4: The Awakening of the Mind',
+    description: 'Reconcile all 7 Memory Shards to release Cynthia, Vaelor, and Veilkeep from the 80-winter loop.',
+    requiresAllMemoryShards: true,
+  },
+];
 
 export interface BossShockwave {
   mesh: THREE.Mesh;
@@ -27,7 +56,7 @@ export interface BossLootDrop {
 
 export class BossVaelorEncounter {
   public mesh: THREE.Group;
-  public phase: 1 | 2 = 1;
+  public phase: 1 | 2 | 3 | 4 = 1;
   public hp = 180;
   public maxHp = 180;
   public poise = 120;
@@ -41,7 +70,15 @@ export class BossVaelorEncounter {
   public shockwaveTimer = 4.5;
   public isDead = false;
 
+  // 4-Phase Sanctum mechanics & 4-Ending choice state
+  public truthLensActive = false;
+  public gravityTiltAngle = 0;
+  public endingModalOpen = false;
+  public selectedEnding: VaelorEndingId | null = null;
   public clones: THREE.Group[] = [];
+  public starlightBeams: THREE.Mesh[] = [];
+  public steamTelegraphs: THREE.Mesh[] = [];
+  public tetherBeam: THREE.Mesh | null = null;
   public shockwaves: BossShockwave[] = [];
   public lootDrop: BossLootDrop | null = null;
 
@@ -56,7 +93,6 @@ export class BossVaelorEncounter {
   }
 
   private buildBossModel(): void {
-    // Elegant arched robes with emissive indigo runic glow
     const robeMat = new THREE.MeshStandardMaterial({
       color: 0x2e1065,
       emissive: 0x4338ca,
@@ -68,14 +104,12 @@ export class BossVaelorEncounter {
     this.robeMesh.castShadow = true;
     this.mesh.add(this.robeMesh);
 
-    // Floating Starlight Nimbus / Gimbal Halo
     const haloMat = new THREE.MeshBasicMaterial({ color: 0x818cf8, wireframe: true });
     this.haloMesh = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.04, 8, 32), haloMat);
     this.haloMesh.position.set(0, 1.05, 0);
     this.haloMesh.rotation.x = Math.PI / 2;
     this.mesh.add(this.haloMesh);
 
-    // Faceless Mirror Mask
     const maskMat = new THREE.MeshStandardMaterial({
       color: 0xe0e7ff,
       emissive: 0x6366f1,
@@ -87,17 +121,32 @@ export class BossVaelorEncounter {
     head.position.set(0, 0.85, 0);
     this.mesh.add(head);
 
-    // Dynamic Boss Aura Light
     this.bossLight = new THREE.PointLight(0x818cf8, 2.8, 9);
     this.bossLight.position.set(0, 1.1, 0);
     this.mesh.add(this.bossLight);
+  }
+
+  public setTruthLensActive(active: boolean): void {
+    this.truthLensActive = active;
+    if (this.robeMesh) {
+      const mat = this.robeMesh.material as THREE.MeshStandardMaterial;
+      mat.emissive.setHex(active ? 0x38bdf8 : this.phase >= 2 ? 0xec4899 : 0x4338ca);
+      mat.emissiveIntensity = active ? 1.6 : 0.9;
+    }
+    for (const clone of this.clones) {
+      clone.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          (child.material as THREE.MeshStandardMaterial).opacity = active ? 0.2 : 0.65;
+        }
+      });
+    }
   }
 
   public update(
     dt: number,
     playerPos: THREE.Vector3,
     isDodging: boolean,
-    isBlocking: boolean
+    isBlocking: boolean,
   ): { shockwaveDamage: number; playerHitOutcome?: 'hit' | 'blocked' | 'evaded' } {
     if (this.isDead) {
       if (this.lootDrop && !this.lootDrop.claimed) {
@@ -107,12 +156,22 @@ export class BossVaelorEncounter {
       return { shockwaveDamage: 0 };
     }
 
-    // Spin halo
     if (this.haloMesh) {
-      this.haloMesh.rotation.z += dt * (this.phase === 2 ? 3.0 : 1.2);
+      this.haloMesh.rotation.z += dt * (this.phase >= 2 ? 3.0 : 1.2);
     }
 
-    // Stun logic
+    // Rotate Phase 2 refracted starlight beams
+    for (const beam of this.starlightBeams) {
+      beam.rotation.y += dt * 0.85;
+    }
+
+    // Smoothly slerp Phase 3 Escher gravity tilt
+    if (this.phase === 3) {
+      this.gravityTiltAngle = THREE.MathUtils.lerp(this.gravityTiltAngle, Math.PI / 12, dt * 2.0);
+    } else if (this.phase === 4) {
+      this.gravityTiltAngle = THREE.MathUtils.lerp(this.gravityTiltAngle, 0, dt * 3.0);
+    }
+
     if (this.isStunned) {
       this.stunTimer -= dt;
       this.mesh.rotation.z = Math.sin(this.stunTimer * 12) * 0.12;
@@ -124,43 +183,35 @@ export class BossVaelorEncounter {
       return { shockwaveDamage: 0 };
     }
 
-    // Poise regen
     if (this.poiseRegenTimer > 0) {
       this.poiseRegenTimer -= dt;
     } else if (this.poise < this.maxPoise) {
       this.poise = Math.min(this.maxPoise, this.poise + POISE_CONSTANTS.POISE_REGEN_RATE * 1.2 * dt);
     }
 
-    // Cooldown & shockwave timers
     if (this.cooldown > 0) this.cooldown -= dt;
     this.shockwaveTimer -= dt;
 
     if (this.shockwaveTimer <= 0 && this.mesh.parent) {
       this.spawnShockwave(this.mesh.parent);
-      this.shockwaveTimer = this.phase === 2 ? 3.2 : 5.0;
+      this.shockwaveTimer = this.phase >= 2 ? 3.2 : 5.0;
     }
 
-    // Update active shockwaves
     let totalShockwaveDmg = 0;
     for (let i = this.shockwaves.length - 1; i >= 0; i--) {
       const sw = this.shockwaves[i];
       sw.radius += sw.speed * dt;
       sw.mesh.scale.set(sw.radius, sw.radius, 1);
 
-      // Fade out
       const progress = sw.radius / sw.maxRadius;
       const mat = sw.mesh.material as THREE.MeshBasicMaterial;
       mat.opacity = Math.max(0, 1.0 - progress);
 
-      // Collision with player
       const distToPlayer = Math.hypot(
         sw.mesh.position.x - playerPos.x,
-        sw.mesh.position.z - playerPos.z
+        sw.mesh.position.z - playerPos.z,
       );
-      if (
-        !sw.hasHitPlayer &&
-        Math.abs(distToPlayer - sw.radius) < 0.65
-      ) {
+      if (!sw.hasHitPlayer && Math.abs(distToPlayer - sw.radius) < 0.65) {
         sw.hasHitPlayer = true;
         if (!isDodging) {
           totalShockwaveDmg += isBlocking ? 5 : 16;
@@ -175,7 +226,6 @@ export class BossVaelorEncounter {
       }
     }
 
-    // Update clones: mimic rotation and subtle bobbing
     for (const clone of this.clones) {
       clone.rotation.y = this.mesh.rotation.y;
       clone.position.y = 1.2 + Math.sin(Date.now() * 0.004 + clone.position.x) * 0.1;
@@ -187,7 +237,7 @@ export class BossVaelorEncounter {
   public spawnShockwave(parent: THREE.Object3D): void {
     const geom = new THREE.RingGeometry(0.1, 0.45, 32);
     const mat = new THREE.MeshBasicMaterial({
-      color: this.phase === 2 ? 0xec4899 : 0x818cf8,
+      color: this.phase >= 2 ? 0xec4899 : 0x818cf8,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0.9,
@@ -206,12 +256,14 @@ export class BossVaelorEncounter {
     });
   }
 
-  public spawnMirageClones(parent: THREE.Object3D): void {
+  public spawnMirageClones(parent: THREE.Object3D, count = 4): void {
     this.clearClones();
     const offsets = [
       new THREE.Vector3(-2.8, 1.2, -2.6),
       new THREE.Vector3(2.8, 1.2, -2.6),
-    ];
+      new THREE.Vector3(-2.8, 1.2, 2.2),
+      new THREE.Vector3(2.8, 1.2, 2.2),
+    ].slice(0, count);
 
     for (let i = 0; i < offsets.length; i++) {
       const cloneGroup = new THREE.Group();
@@ -223,14 +275,66 @@ export class BossVaelorEncounter {
         emissive: 0x818cf8,
         emissiveIntensity: 0.8,
         transparent: true,
-        opacity: 0.65,
+        opacity: this.truthLensActive ? 0.2 : 0.65,
         wireframe: true,
       });
       const robe = new THREE.Mesh(new THREE.ConeGeometry(0.5, 1.5, 8), cloneMat);
+      robe.castShadow = false; // Clones never cast shadows; only the true Vaelor casts a shadow
       cloneGroup.add(robe);
 
       parent.add(cloneGroup);
       this.clones.push(cloneGroup);
+    }
+  }
+
+  public spawnPhantasmLaserBeams(parent: THREE.Object3D): void {
+    for (const b of this.starlightBeams) {
+      b.geometry.dispose();
+      (b.material as THREE.Material).dispose();
+      b.parent?.remove(b);
+    }
+    this.starlightBeams = [];
+    for (let i = 0; i < 2; i++) {
+      const geom = new THREE.CylinderGeometry(0.06, 0.06, 10, 12);
+      geom.rotateZ(Math.PI / 2);
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        transparent: true,
+        opacity: 0.7,
+      });
+      const beam = new THREE.Mesh(geom, mat);
+      beam.position.set(this.mesh.position.x, 0.9, this.mesh.position.z);
+      beam.rotation.y = (i * Math.PI) / 2;
+      parent.add(beam);
+      this.starlightBeams.push(beam);
+    }
+  }
+
+  public spawnSteamVentTelegraphs(parent: THREE.Object3D): void {
+    for (const t of this.steamTelegraphs) {
+      t.geometry.dispose();
+      (t.material as THREE.Material).dispose();
+      t.parent?.remove(t);
+    }
+    this.steamTelegraphs = [];
+    const positions = [
+      new THREE.Vector3(-2.2, 0.05, -1.5),
+      new THREE.Vector3(2.2, 0.05, -1.5),
+      new THREE.Vector3(0, 0.05, 1.8),
+    ];
+    for (const pos of positions) {
+      const geom = new THREE.RingGeometry(0.2, 1.3, 24);
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0xf97316,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.75,
+      });
+      const decal = new THREE.Mesh(geom, mat);
+      decal.rotation.x = -Math.PI / 2;
+      decal.position.copy(pos);
+      parent.add(decal);
+      this.steamTelegraphs.push(decal);
     }
   }
 
@@ -248,17 +352,30 @@ export class BossVaelorEncounter {
     this.clones = [];
   }
 
+  public getAvailableEndings(memoryShardCount = 0): EndingOption[] {
+    return VAELOR_ENDINGS.filter((e) => !e.requiresAllMemoryShards || memoryShardCount >= 7);
+  }
+
+  public selectEnding(endingId: VaelorEndingId): EndingOption | undefined {
+    this.selectedEnding = endingId;
+    this.endingModalOpen = false;
+    return VAELOR_ENDINGS.find((e) => e.id === endingId);
+  }
+
   public receivePlayerHit(
     damage: number,
-    poiseDamage: number
+    poiseDamage: number,
   ): {
     phaseShift: boolean;
     guardBroken: boolean;
     isExecution: boolean;
     isDead: boolean;
     damageDealt: number;
+    endingTriggered?: boolean;
   } {
-    if (this.isDead) return { phaseShift: false, guardBroken: false, isExecution: false, isDead: true, damageDealt: 0 };
+    if (this.isDead) {
+      return { phaseShift: false, guardBroken: false, isExecution: false, isDead: true, damageDealt: 0 };
+    }
 
     let isExecution = false;
     let actualDmg = damage;
@@ -290,9 +407,14 @@ export class BossVaelorEncounter {
       }
     }
 
+    if (this.hp <= this.maxHp * 0.05) {
+      this.endingModalOpen = true;
+    }
+
     if (this.hp <= 0) {
       this.hp = 0;
       this.isDead = true;
+      this.endingModalOpen = true;
       this.clearClones();
       return {
         phaseShift: false,
@@ -300,12 +422,15 @@ export class BossVaelorEncounter {
         isExecution,
         isDead: true,
         damageDealt: actualDmg,
+        endingTriggered: true,
       };
     }
 
-    // Phase 2 transition at 50% HP (<= 90 HP)
     let phaseShift = false;
-    if (this.phase === 1 && this.hp <= this.maxHp * 0.5) {
+    const hpRatio = this.hp / this.maxHp;
+
+    // Preserve <= 50% HP phaseShift contract for unit tests while supporting 4 distinct phases
+    if (this.phase === 1 && hpRatio <= 0.5) {
       this.phase = 2;
       phaseShift = true;
       this.speed = 3.4;
@@ -317,6 +442,23 @@ export class BossVaelorEncounter {
         this.bossLight.color.setHex(0xec4899);
         this.bossLight.intensity = 3.6;
       }
+      if (this.mesh.parent) {
+        this.spawnPhantasmLaserBeams(this.mesh.parent);
+      }
+    } else if (this.phase === 2 && hpRatio <= 0.35) {
+      this.phase = 3;
+      phaseShift = true;
+      this.speed = 3.8;
+      if (this.mesh.parent) {
+        this.spawnSteamVentTelegraphs(this.mesh.parent);
+      }
+    } else if (this.phase === 3 && hpRatio <= 0.2) {
+      this.phase = 4;
+      phaseShift = true;
+      this.clearClones();
+      if (this.robeMesh) {
+        (this.robeMesh.material as THREE.MeshStandardMaterial).emissive.setHex(0x38bdf8);
+      }
     }
 
     return {
@@ -325,6 +467,7 @@ export class BossVaelorEncounter {
       isExecution,
       isDead: false,
       damageDealt: actualDmg,
+      endingTriggered: this.endingModalOpen,
     };
   }
 
@@ -332,53 +475,19 @@ export class BossVaelorEncounter {
     const group = new THREE.Group();
     group.position.set(this.mesh.position.x, 0.4, this.mesh.position.z);
 
-    // Glowing vertical light beacon
     const beaconLight = new THREE.PointLight(0xfacc15, 3.5, 7);
     beaconLight.position.set(0, 0.8, 0);
     group.add(beaconLight);
 
-    // Golden vertical pillar beam
     const beamGeom = new THREE.CylinderGeometry(0.12, 0.12, 4.0, 16);
     const beamMat = new THREE.MeshBasicMaterial({
       color: 0xfacc15,
       transparent: true,
       opacity: 0.35,
-      side: THREE.DoubleSide,
     });
     const beam = new THREE.Mesh(beamGeom, beamMat);
     beam.position.set(0, 2.0, 0);
     group.add(beam);
-
-    // Rotating ground ring halo
-    const haloGeom = new THREE.TorusGeometry(0.65, 0.05, 8, 32);
-    const haloMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true });
-    const halo = new THREE.Mesh(haloGeom, haloMat);
-    halo.rotation.x = Math.PI / 2;
-    halo.position.set(0, 0.05, 0);
-    group.add(halo);
-
-    // Floating Sun-Staff relic mesh
-    const staffShaft = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.04, 0.04, 1.2, 8),
-      new THREE.MeshStandardMaterial({ color: 0x78350f, metalness: 0.6, roughness: 0.3 })
-    );
-    const staffOrb = new THREE.Mesh(
-      new THREE.SphereGeometry(0.18, 16, 16),
-      new THREE.MeshStandardMaterial({
-        color: 0xfef08a,
-        emissive: 0xfacc15,
-        emissiveIntensity: 1.2,
-      })
-    );
-    staffOrb.position.set(0, 0.65, 0);
-    const staffGroup = new THREE.Group();
-    staffGroup.add(staffShaft);
-    staffGroup.add(staffOrb);
-    staffGroup.position.set(0, 0.75, 0);
-    staffGroup.rotation.z = Math.PI / 6;
-    group.add(staffGroup);
-
-    parent.add(group);
 
     this.lootDrop = {
       group,
@@ -387,50 +496,7 @@ export class BossVaelorEncounter {
       claimed: false,
       beaconLight,
     };
+    parent.add(group);
     return this.lootDrop;
-  }
-
-  public updateHUD(
-    hudContainer: HTMLElement | null,
-    hpFill: HTMLElement | null,
-    poiseFill: HTMLElement | null,
-    subtitle: HTMLElement | null
-  ): void {
-    if (!hudContainer) return;
-    if (this.isDead) {
-      hudContainer.classList.remove('visible');
-      return;
-    }
-
-    hudContainer.classList.add('visible');
-    if (hpFill) {
-      const pct = Math.max(0, (this.hp / this.maxHp) * 100);
-      hpFill.style.width = `${pct}%`;
-    }
-    if (poiseFill) {
-      const pct = Math.max(0, (this.poise / this.maxPoise) * 100);
-      poiseFill.style.width = `${pct}%`;
-    }
-    if (subtitle) {
-      subtitle.textContent =
-        this.phase === 1
-          ? 'THE WEAVER OF MIRRORS • PHASE 1'
-          : 'THE MIRROR INVERSION • PHASE 2';
-    }
-  }
-
-  public dispose(): void {
-    this.clearClones();
-    for (const sw of this.shockwaves) {
-      sw.mesh.geometry.dispose();
-      (sw.mesh.material as THREE.Material).dispose();
-      sw.mesh.parent?.remove(sw.mesh);
-    }
-    this.shockwaves = [];
-    if (this.lootDrop) {
-      this.lootDrop.group.parent?.remove(this.lootDrop.group);
-      this.lootDrop = null;
-    }
-    this.mesh.parent?.remove(this.mesh);
   }
 }

@@ -3,6 +3,22 @@ import { AssetLoader } from '../core/AssetLoader';
 
 export type NpcPosition = THREE.Vector3 | { x: number; y?: number; z: number };
 
+export interface PlayerStatBlock {
+  STR?: number;
+  AGI?: number;
+  VIT?: number;
+  INT?: number;
+  CHA?: number;
+  LCK?: number;
+  originId?: string;
+}
+
+export interface DialogueStatCheck {
+  stat?: 'STR' | 'AGI' | 'VIT' | 'INT' | 'CHA' | 'LCK';
+  dc?: number;
+  requiredOrigin?: string;
+}
+
 export interface NpcHandle {
   npcId: string;
   modelId: string;
@@ -19,7 +35,9 @@ export interface NpcHandle {
 const NPC_MODEL_MAP: Record<string, string> = {
   sable: 'starlight_raven',
   orin: 'gatekeeper_orin',
+  gatekeeper_orin: 'gatekeeper_orin',
   bartholomew: 'npc_steward_sterling',
+  sterling: 'npc_steward_sterling',
   eldrin: 'npc_eldrin_starcarver',
   maren: 'npc_librarian_maren',
   eleanor: 'npc_lady_eleanor',
@@ -30,6 +48,23 @@ const NPC_MODEL_MAP: Record<string, string> = {
   morvath: 'npc_portrait_morvath',
   yggdra: 'boss_yggdra_rigged',
   hazel: 'mother_hazel',
+  mother_hazel: 'mother_hazel',
+  kord: 'npc_blacksmith_kord',
+  venn: 'npc_alchemist_venn',
+  hal: 'npc_quartermaster_hal',
+  griggs: 'npc_jailer_griggs',
+  lyra: 'npc_astronomer_lyra',
+  moss: 'npc_gardener_moss',
+  tol: 'npc_bellringer_tol',
+  duval: 'npc_sommelier_duval',
+  charon: 'npc_ferryman_charon',
+};
+
+const ORIGIN_BONUS_STAT: Record<string, keyof PlayerStatBlock> = {
+  alchemist: 'INT',
+  charlatan: 'CHA',
+  enforcer: 'STR',
+  antiquarian: 'LCK',
 };
 
 function toVector3(position: NpcPosition): THREE.Vector3 {
@@ -38,15 +73,8 @@ function toVector3(position: NpcPosition): THREE.Vector3 {
 }
 
 function resolveModelId(npcId: string): string {
-  return NPC_MODEL_MAP[npcId] ?? npcId;
-}
-
-function findClip(clips: THREE.AnimationClip[], target: string): THREE.AnimationClip | undefined {
-  const needle = target.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return clips.find((clip) => {
-    const hay = clip.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    return hay.includes(needle) || needle.includes(hay);
-  });
+  const clean = String(npcId ?? '').trim().toLowerCase();
+  return NPC_MODEL_MAP[clean] ?? NPC_MODEL_MAP[npcId] ?? npcId;
 }
 
 function modelUrls(modelId: string): string[] {
@@ -73,16 +101,24 @@ async function loadModel(modelId: string): Promise<{ scene: THREE.Group; animati
   throw lastError ?? new Error(`Unable to load model for ${modelId}`);
 }
 
+function findClip(clips: THREE.AnimationClip[], target: string): THREE.AnimationClip | undefined {
+  const needle = target.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return clips.find((clip) => {
+    const hay = clip.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return hay.includes(needle) || needle.includes(hay);
+  });
+}
+
 function findBone(root: THREE.Object3D, names: string[]): THREE.Bone | null {
+  const targets = names.map((n) => n.toLowerCase().replace(/[^a-z0-9]/g, ''));
   let found: THREE.Bone | null = null;
   root.traverse((node) => {
     if (found) return;
-    if (node instanceof THREE.Bone) {
-      const lower = node.name.toLowerCase();
-      if (names.some((n) => lower.includes(n))) found = node;
-    } else if ((node as any).isBone) {
-      const lower = node.name.toLowerCase();
-      if (names.some((n) => lower.includes(n))) found = node as THREE.Bone;
+    if ((node as THREE.Bone).isBone || node.type === 'Bone') {
+      const clean = node.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (targets.some((t) => clean === t || clean.includes(t))) {
+        found = node as THREE.Bone;
+      }
     }
   });
   return found;
@@ -106,8 +142,8 @@ export class NpcFactory {
     const parleyClip = findClip(loaded.animations, 'Parley_Gesture');
     if (parleyClip && !actions.Parley_Gesture) actions.Parley_Gesture = mixer.clipAction(parleyClip);
 
-    const headBone = findBone(group, ['head']);
-    const spineBone = findBone(group, ['spine_03', 'spine03', 'spine 03']);
+    const headBone = findBone(group, ['head', 'neck']);
+    const spineBone = findBone(group, ['spine_03', 'spine03', 'spine 03', 'chest', 'spine']);
 
     const handle: NpcHandle = {
       npcId,
@@ -131,6 +167,7 @@ export class NpcFactory {
     group.userData.npcId = npcId;
     group.userData.modelId = modelId;
     group.userData.npcHandle = handle;
+    group.userData.interactionRadius = 2.2;
 
     if (scene) scene.add(group);
 
@@ -172,6 +209,20 @@ export class NpcFactory {
         idle.reset().fadeIn(0.2).play();
       }, Math.max(0, duration * 1000));
     }
+  }
+
+  static evaluateDialogueCheck(check: DialogueStatCheck, stats: PlayerStatBlock = {}): boolean {
+    if (check.requiredOrigin) {
+      const cleanOrigin = (stats.originId ?? '').toLowerCase().replace(/^origin_/i, '');
+      if (cleanOrigin === check.requiredOrigin.toLowerCase().replace(/^origin_/i, '')) {
+        return true;
+      }
+    }
+    if (!check.stat) return true;
+    const baseVal = Number(stats[check.stat] ?? 10);
+    const originClean = (stats.originId ?? '').toLowerCase().replace(/^origin_/i, '');
+    const bonus = ORIGIN_BONUS_STAT[originClean] === check.stat ? 2 : 0;
+    return baseVal + bonus >= (check.dc ?? 10);
   }
 }
 
