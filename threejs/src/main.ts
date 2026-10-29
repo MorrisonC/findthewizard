@@ -786,6 +786,7 @@ let firstPersonMode = true;
 let fpYaw = Math.PI;
 let fpPitch = -0.06;
 const FP_MAX_PITCH = THREE.MathUtils.degToRad(78);
+let fpBobPhase = 0;
 const FP_EYE_HEIGHT = 1.62;
 /** Player visuals are grounded at y=0; the physics capsule keeps its own height. */
 const PLAYER_VISUAL_Y = 0;
@@ -3403,6 +3404,13 @@ const engine = new GameEngine({
 
     }
 
+    // Keep diagonal movement the same speed as cardinal movement.
+    const inputLength = Math.hypot(moveX, moveZ);
+    if (inputLength > 1) {
+      moveX /= inputLength;
+      moveZ /= inputLength;
+    }
+
     if (autoEnabled) autoTick(dt);
 
     else if (autoplayController.running) autoplayController.tick(dt);
@@ -3952,11 +3960,7 @@ const engine = new GameEngine({
 
     // Camera shake application / first-person toggle
 
-    (window as any).__fpFlag = firstPersonMode;
-
     if (firstPersonMode) {
-
-      (window as any).__fpBranch = ((window as any).__fpBranch ?? 0) + 1;
 
       const cam = engine.perspectiveCamera;
 
@@ -3973,12 +3977,10 @@ const engine = new GameEngine({
 
       }
 
-      const bobPhase = (window as any).__fpBobPhase ?? 0;
+      const nextBobPhase = fpBobPhase + dt * (playerState.isSprinting ? 12 : 8.5);
+      if (isMoving) fpBobPhase = nextBobPhase;
 
-      const nextBobPhase = bobPhase + dt * (playerState.isSprinting ? 12 : 8.5);
-      (window as any).__fpBobPhase = isMoving ? nextBobPhase : bobPhase;
-
-      const bob = isMoving ? Math.sin(nextBobPhase * 2) * 0.035 : 0;
+      const bob = isMoving ? Math.sin(fpBobPhase * 2) * 0.035 : 0;
 
       const shake = cameraShake > 0 ? cameraShake * 0.05 : 0;
 
@@ -14475,6 +14477,8 @@ engine.scene.add(playerMesh);
 firstPersonMode = true;
 engine.activeCamera = engine.perspectiveCamera;
 playerMesh.visible = false;
+document.body.classList.add('first-person');
+updateCrosshairVisibility();
 const playerLight = new THREE.PointLight(0xffd7a1, 1.5, 9);
 playerLight.position.set(0, 0.6, 0);
 playerMesh.add(playerLight);
@@ -14532,7 +14536,7 @@ document.addEventListener('mousemove', (e) => {
 
   if (!firstPersonMode || document.pointerLockElement !== canvas) return;
 
-  fpYaw -= e.movementX * 0.0022;
+  fpYaw += e.movementX * 0.0022;
 
   fpPitch = THREE.MathUtils.clamp(fpPitch - e.movementY * 0.0022, -FP_MAX_PITCH, FP_MAX_PITCH);
 
@@ -15396,7 +15400,7 @@ function getDiagnostics(): {
   renderer: engine.renderer,
   engine,
 
-  camera: engine.activeCamera,
+  get camera() { return engine.activeCamera; },
 
   player: playerMesh,
 

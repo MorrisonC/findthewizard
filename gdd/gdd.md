@@ -6,7 +6,7 @@
 **Veilkeep: The Illusionist's Fortress** (`findthewizard`) follows **Kaelen Voss, the Shadowhand**, infiltrating the sky-fortress of **Archillusionist Vaelor** to seize the *Heart of Mirrors*. Version 3.0 upgrades the whitebox single-prop rooms and 1–2 hit encounters into a richly dressed Victorian Gothic / Arcane Fantasy action-RPG featuring:
 
 1. **Dual-Perspective Camera & Movement Architecture**:
-   - Seamless real-time toggle (`V` key or HUD switch) between **First-Person Perspective Mode** (`75° FOV`, eye height `1.68m` grounded to local floor height with subtle stride head-bob, pointer-lock + drag mouse-look, first-person weapon/hand viewmodel, automatic culling of the player's own head/torso mesh to prevent internal geometry clipping, camera-relative WASD + strafe movement) and **Classic Dimetric Isometric Mode** (`35.264°` pitch, `45°` yaw orthographic projection with world-axis movement and full character rig visibility).
+   - Seamless real-time toggle (`Z` key or middle mouse) between **First-Person Perspective Mode** (`75° FOV`, eye height `1.62m` grounded to the floor with subtle stride head-bob, click-to-lock pointer mouse-look, a centered crosshair reticle, full player-mesh culling to prevent internal geometry clipping, camera-relative WASD + strafe movement) and **Classic Dimetric Isometric Mode** (`35.264°` pitch, `45°` yaw orthographic projection with world-axis movement and full character rig visibility). First-person is the default view.
 2. **Strict Grounding & Elevation Alignment (`Y = 0.0` Floor Anchor)**:
    - Every static prop, interactive puzzle mechanism, NPC, item pickup pedestal, and rigged mob enforces a root-at-feet / base-at-zero convention (`localMinY = 0.0`).
    - Only explicitly designated aerial or arcane-suspended entities (`floating: true`, such as **Scholar Specters**, **Floating Grimoires**, **Wraiths**, and **Harpies**) hover above the ground using deterministic sinusoidal levitation offsets.
@@ -43,19 +43,21 @@ Every zone in `zones.json` and `RoomSceneBuilder.ts` is populated with a full ar
 ## 3. First-Person & Classic Isometric Dual-Camera Specification
 
 ### 3.1 First-Person Perspective Mode (`fpMode = true`)
-- **Projection & Framing**: `THREE.PerspectiveCamera(75, aspect, 0.08, 250)`.
+- **Projection & Framing**: `THREE.PerspectiveCamera(75, aspect, 0.1, 1000)`.
 - **Grounded Eye Height & Head-Bob**:
-  - Camera position is anchored at the player's grounded XZ coordinates with `eyeHeight = groundY + 1.68m`.
-  - During movement, a damped sinusoidal stride oscillation applies `verticalBob = sin(walkPhase * 2) * 0.035m` and `horizontalSway = cos(walkPhase) * 0.018m`.
-  - During a **Dodge Roll**, camera height smoothly ducks to `groundY + 0.85m` with a subtle roll tilt (`±6°`) instead of disorienting 360° camera flips.
+  - Camera position is anchored at the player's grounded XZ coordinates with `eyeHeight = groundY + 1.62m`.
+  - During movement, a damped sinusoidal stride oscillation applies `verticalBob = sin(walkPhase * 2) * 0.035m`.
+  - Sneaking lowers the camera by `0.35m`.
 - **Look Controls & Smooth Transition**:
-  - Supports **Pointer Lock** (`canvas.requestPointerLock()`) for raw mouse-look (`yaw -= movementX * 0.0022`, `pitch = clamp(pitch - movementY * 0.0022, -78°, +78°)`), plus fallback **Right-Click / Left-Drag Look** and `Q / E` or Arrow-key turn support so gameplay works seamlessly inside embedded browser iframes and Canvas previews.
-  - Switching from Isometric to First-Person initializes `yaw` directly from `player.rotation.y` and sets `pitch = -0.08 rad`, eliminating camera snapping.
-- **Self-Mesh Culling & First-Person Viewmodel**:
-  - In First-Person mode, the third-person character mesh's head, neck, torso, and cape sub-meshes are set to `visible = false` (while keeping `castShadow = true` via shadow-only material override or frustum offset), completely eliminating internal head/hair clipping.
-  - A dedicated **First-Person Viewmodel Rig** renders Kaelen's right-hand blade (`Shadowfang Dagger` / `Astral Broadsword`) and left-hand arcane ward/lantern in the lower screen corners, animating in sync with light attacks, heavy windups, parry blocks, and spell casts.
+  - Click the world to capture the pointer (`canvas.requestPointerLock()`); raw mouse-look uses `yaw += movementX * 0.0022` and `pitch = clamp(pitch - movementY * 0.0022, -78°, +78°)`.
+  - Press `Esc` to release the pointer. Releasing pointer lock clears held movement keys so the player never keeps walking.
+  - Switching from Isometric to First-Person initializes `yaw` from `player.rotation.y` and sets `pitch = -0.06 rad`, eliminating camera snapping.
+- **Self-Mesh Culling & Reticle**:
+  - The entire third-person player mesh is hidden in first person, preventing internal head/torso clipping. A `#fp-crosshair` reticle (gold dot + pale cross) is shown while first-person is active and hidden during menus, dialogue, pause, inventory, map, and lore overlays.
+  - A dedicated first-person viewmodel rig is **not yet implemented**; this remains a planned polish item.
 - **Camera-Relative Movement & Wall Sliding**:
   - `W / S` move along the camera's horizontal forward vector $(\sin(\text{yaw}), 0, \cos(\text{yaw}))$; `A / D` strafe along the perpendicular right vector.
+  - Diagonal input is normalized so moving diagonally is not faster than moving straight.
   - Capsule collision checks against room walls, bookshelves, and hedge maze corridors resolve penetration with smooth wall-sliding along the surface normal.
 
 ### 3.2 Classic Isometric Diorama Mode (`fpMode = false`)
@@ -69,16 +71,16 @@ Every zone in `zones.json` and `RoomSceneBuilder.ts` is populated with a full ar
 To eliminate floating mobs and props across all 50 scenes:
 1. **Blender & GLB Origin Convention**:
    - All character armatures (`Hips` parented to `Root` at `[0,0,0]`) and static meshes are shifted prior to export so the lowest vertex of their rest pose sits at `Z = 0.000` in Blender (`Y = 0.000` in glTF 2.0).
-2. **Runtime Grounding Pass (`snapObjectToGround`)**:
-   - In `EnemyFactory.ts`, `NpcFactory.ts`, `PuzzleFactory.ts`, and `RoomSceneBuilder.ts`, every spawned `THREE.Object3D` executes:
+2. **Runtime Grounding Pass**:
+   - `EnemyFactory.ts` measures each loaded GLB with `new THREE.Box3().setFromObject(group)` and offsets the root so its lowest authored vertex rests on the requested spawn `y`:
      ```ts
-     object.updateMatrixWorld(true);
-     const bounds = new THREE.Box3().setFromObject(object);
-     const localBottomOffset = bounds.min.y - object.position.y;
-     const floorY = physicsWorld.sampleFloorHeight(object.position.x, object.position.z);
-     object.position.y = floorY - localBottomOffset + (entity.floating ? entity.hoverHeight : 0);
+     const box = new THREE.Box3().setFromObject(group);
+     group.position.copy(pos);
+     group.position.y -= box.min.y;
      ```
-   - Skinned meshes reset their skeleton to rest pose (`skeleton.pose()`) before bounding-box sampling so keyframe offsets never corrupt the vertical ground offset.
+   - The primitive guard path in `main.ts` applies the same `-box.min.y` offset after cloning the guard model, replacing the old hard-coded `y = 0.6` spawn height.
+   - The local player is rendered at `PLAYER_VISUAL_Y = 0`; the physics capsule remains independent, and the first-person eye height is derived from that grounded visual root.
+   - NPC, puzzle, and room-kit grounding is still being migrated to the same helper; do not assume every prop uses it yet.
 
 ---
 
@@ -143,3 +145,21 @@ Every boss encounter features a 3-segment Phase Bar (`Phase I: 100%–66%`, `Pha
    - *Phase I (Master of Mirrors — 100%–66% HP)*: Casts linear Arcane Bolts, teleports between the 8 Mirror Monoliths, and summons 2 **Mirror Decoy Clones** (clones shimmer with violet phase-distortion and shatter in 1 hit or via `Aether Pulse`).
    - *Phase II (Chronomantic Fracture — 66%–33% HP)*: Summons expanding temporal slow-domes, fires 5-orb homing **Arcane Barrages**, and sweeps the arena with rotating mirror-laser beams that must be dodge-rolled through using i-frames.
    - *Phase III (Shattered Veil Reality Shift — 33%–0% HP)*: Darkens the sanctum into the Astral Void, levitates above the central astrolabe, chains teleport-scythe combos with meteoric Glass Storms, and channels the *Unmaking Nova* unless interrupted by ringing the **Echo Bell** at the active Aether Conduits (`P29`).
+
+---
+
+## 12. Current Implementation Status (Playtest Pass � 2026-10-28)
+
+### Verified in runtime
+- First-person is the default camera; Z / middle mouse toggles to the isometric camera and back.
+- Pointer-lock mouse-look drives yaw/pitch, with pitch clamped to +/-78 deg; diagonal movement is normalized.
+- First-person movement is camera-relative (W/S forward/back, A/D strafe) and the player mesh is hidden in first person.
+- A centered crosshair is shown in first person and suppressed while any menu/dialogue/pause overlay is open.
+- Guard GLB roots are grounded from their bounding box instead of a hard-coded y = 0.6; this removed the visible enemy hover.
+- Cold boot via ?autoplay=1 reaches a playable scene with no console errors; 60s autoplay completed with only transient navigation stutter reports (sub-2s capsule stalls in OW1, GH1, GH2).
+
+### Known gaps / next pass
+- First-person weapon/hand viewmodel is still planned, not implemented.
+- Autoplay reports transient VK-P1-NAV stutter events at room-spawn coordinates; these recover but should be investigated against door/collider clearance.
+- NPC, puzzle-prop, and room-kit grounding still needs the same bounding-box pass used by enemies.
+- Some quest-runtime interactions remain stubbed (puzzleAt, encounterAt, pickupAt, origin loadout) and should be reconnected when the runtime API is completed.
