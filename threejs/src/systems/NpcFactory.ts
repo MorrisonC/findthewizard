@@ -131,6 +131,13 @@ export class NpcFactory {
     const group = loaded.scene;
     const pos = toVector3(position);
     group.position.copy(pos);
+    // Authoring pivots vary: snap the loaded model's lowest vertex to the
+    // requested floor height so NPCs never hover or sink.
+    group.updateMatrixWorld(true);
+    const authoredBox = new THREE.Box3().setFromObject(group);
+    if (Number.isFinite(authoredBox.min.y)) {
+      group.position.y += pos.y - authoredBox.min.y;
+    }
 
     const mixer = new THREE.AnimationMixer(group);
     const actions: Record<string, THREE.AnimationAction> = {};

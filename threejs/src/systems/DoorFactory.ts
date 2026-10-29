@@ -117,7 +117,10 @@ export class DoorFactory {
     const portcullis = isPortcullis(doorType);
     const mirrorDoor = file === 'KIT_Door_Mirror_2.glb' || normalizeType(doorType).includes('mirror');
     const swingAngle = portcullis ? 0 : Math.PI / 2;
-    const liftHeight = 2.4;
+    // A portcullis raised by its full height floats in mid-air: this asset has
+    // no surrounding frame. Retract it down into the floor slot instead, then
+    // hide it once fully clear of the opening.
+    const retractDepth = 4.8;
 
     const baseY = group.position.y;
     const baseRotY = group.rotation.y;
@@ -148,12 +151,13 @@ export class DoorFactory {
 
     const animate = (open: boolean): Promise<void> => {
       const transitionId = ++activeTransitionId;
+      group.visible = true;
       return new Promise<void>((resolve) => {
         const duration = 600;
         const start = typeof performance !== 'undefined' ? performance.now() : Date.now();
         const startY = group.position.y;
         const startRotY = group.rotation.y;
-        const targetY = open ? baseY + liftHeight : baseY;
+        const targetY = open ? baseY - retractDepth : baseY;
         const targetRotY = open ? baseRotY + swingAngle : baseRotY;
 
         const step = () => {
@@ -177,6 +181,7 @@ export class DoorFactory {
           } else {
             if (portcullis) group.position.y = targetY;
             else group.rotation.y = targetRotY;
+            if (portcullis && open) group.visible = false;
             isOpen = open;
             handle.isOpen = open;
             group.userData.isOpen = open;

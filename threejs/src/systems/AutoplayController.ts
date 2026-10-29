@@ -83,6 +83,8 @@ export interface AutoplayHost {
   sceneExists(sceneId: string): boolean;
 
   setInput(x: number, z: number): void;
+  /** Current steering vector; zero means the bot is standing on purpose. */
+  getInput?(): { x: number; z: number };
   /** A* navigation; returns true once within `arriveRadius`. */
   navigate(x: number, z: number, arriveRadius: number, dt: number): boolean;
   interact(): void;
@@ -95,6 +97,8 @@ export interface AutoplayHost {
 
   nearestGuard(): { x: number; z: number; distance: number } | null;
   hasDialogue(): boolean;
+  /** True while a modal/pause screen freezes player movement. */
+  isInputBlocked?(): boolean;
   advanceDialogue(dt: number): void;
 
   /** Fire a traversal brand (wall leap, air dash, ...). False if unavailable. */
@@ -398,8 +402,27 @@ export class AutoplayController {
     if (!this.ensureReachable(task.x, task.z)) return;
 
     const arrived = this.host.navigate(task.x, task.z, 0.6, dt);
-    this.sampleWatchdog(!arrived);
-    if (!arrived) return;
+    if (!arrived) {
+      // Props such as the mirror and relativity anchor sit on the task point,
+      // so the 0.6 m arrival ring can be unreachable even though the prop is
+      // already inside interaction range. Stand and interact instead of
+      // grinding against it forever (and filing a false navigation P1).
+      const here = this.host.getPosition();
+      const nearTask = Math.hypot(task.x - here.x, task.z - here.z) <= 1.8;
+      if (nearTask) {
+        this.sampleWatchdog(false);
+        this.idle();
+        this.actionTimer -= dt * this.speedMultiplier;
+        if (this.actionTimer <= 0) {
+          this.actionTimer = 0.55;
+          this.host.interact();
+        }
+        return;
+      }
+      this.sampleWatchdog(true);
+      return;
+    }
+    this.sampleWatchdog(false);
     this.lastError = null;
 
     this.idle();
@@ -557,7 +580,11 @@ export class AutoplayController {
    */
   private sampleWatchdog(moving: boolean): void {
     const position = this.host.getPosition();
-    if (!moving) {
+    const input = this.host.getInput?.();
+    const actuallySteering = !input || Math.hypot(input.x, input.z) > 0.01;
+    // A lore panel, puzzle modal or dialogue freezes the capsule while the bot
+    // is "steering"; that is not a collider bug, so hold the window open.
+    if (!moving || !actuallySteering || this.host.isInputBlocked?.()) {
       this.windowStart = position;
       this.windowTicks = 0;
       return;

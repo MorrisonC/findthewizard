@@ -58,6 +58,11 @@ export class GameEngine {
     const ambientLight = new THREE.AmbientLight(new THREE.Color('#243247'), 0.75);
     this.scene.add(ambientLight);
 
+    // Sky/ground bounce: vertical stonework otherwise reads as black slabs
+    // under a single high key light, especially the north and west walls.
+    const bounce = new THREE.HemisphereLight(new THREE.Color('#7d8fb3'), new THREE.Color('#231a12'), 0.55);
+    this.scene.add(bounce);
+
     const keyLight = new THREE.DirectionalLight(new THREE.Color('#f3e3c3'), 1.55);
     keyLight.position.set(32, 48, 36);
     keyLight.castShadow = true;

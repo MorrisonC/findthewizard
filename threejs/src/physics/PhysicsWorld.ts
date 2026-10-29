@@ -105,6 +105,12 @@ export class RapierPhysics {
     this.staticBoxes = [];
   }
 
+  /** Current capsule translation (debug/QA). */
+  getPlayerTranslation(): Vec3 {
+    const t = this.playerBody.translation();
+    return { x: t.x, y: t.y, z: t.z };
+  }
+
   teleportPlayer(spawn: Vec3): void {
     this.playerBody.setTranslation(spawn, true);
   }

@@ -7,6 +7,7 @@ import { AudioManager } from './core/AudioManager';
 import { RapierPhysics } from './physics/PhysicsWorld';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { spawnMainCharacter, type WeaponId } from './character';
 import { loadPlayerCharacter } from './character/PlayerCharacter';
 import { SoundFX } from './core/SoundFX';
@@ -313,7 +314,10 @@ function spawnDamagePopup(pos: { x: number; y: number; z: number }, text: string
   const heightOffset = isStatus ? 1.45 : 0.82;
 
   const tempV = new THREE.Vector3(pos.x, pos.y + heightOffset, pos.z);
-  tempV.project(engine.cameraRig.camera);
+  tempV.project(engine.activeCamera);
+  // Drop popups anchored behind the active camera (a first-person issue when
+  // this still projected through the isometric rig).
+  if (tempV.z < -1 || tempV.z > 1) return;
   // Apply subtle vertical stacking and horizontal stagger to prevent overlapping popups
   const staggerY = recentPopupCount * 22;
 
@@ -454,13 +458,18 @@ interface ExitTrigger {
 
 const exits: Record<SceneId, ExitTrigger[]> = FORTRESS_EXITS as unknown as Record<SceneId, ExitTrigger[]>;
 
+// Capsule: half-height 0.45 + radius 0.32 = 0.77 m below centre. Spawning at
+// the old 0.6 buried the capsule 0.17 m in the floor, which made Rapier resolve
+// penetration instead of horizontal movement (the VK-P1-NAV room-centre stalls).
+const PLAYER_CAPSULE_Y = 0.8;
+
 const sceneById = new Map(worldManifest.mvpVerticalSliceScenes.map((scene) => [scene.id as SceneId, scene]));
 
 const sceneSpawn = (id: SceneId): Spawn => {
 
   const scene = sceneById.get(id)!;
 
-  return { x: scene.spawn[0], y: scene.spawn[1], z: scene.spawn[2] };
+  return { x: scene.spawn[0], y: PLAYER_CAPSULE_Y, z: scene.spawn[2] };
 
 };
 
@@ -4016,6 +4025,17 @@ const engine = new GameEngine({
 
     }
 
+    updateFpViewmodel(dt);
+    torchFlameTime += dt;
+    for (const flame of torchFlames) {
+      if (!flame.mesh.parent) continue;
+      const t = torchFlameTime * 7.5 + flame.phase;
+      const k = 1 + Math.sin(t) * 0.13 + Math.sin(t * 2.3) * 0.06;
+      flame.mesh.scale.set(1 + Math.sin(t * 1.7) * 0.08, k, 1 + Math.cos(t * 1.3) * 0.08);
+      const mat = flame.mesh.material as THREE.MeshBasicMaterial;
+      mat.opacity = 0.72 + Math.sin(t * 3.1) * 0.18;
+    }
+
     for (const bush of magicalBushes) {
 
       if (currentSceneId !== 'S00') continue;
@@ -4653,6 +4673,16 @@ new THREE.TextureLoader().load(ASSETS.CONCEPT.SCENE00_APPROACH_SUNKEN, (tex) => 
 const s00Group = new THREE.Group();
 
 const gltfLoader = new GLTFLoader();
+let brazierModelPromise: Promise<THREE.Group | null> | null = null;
+function loadBrazierModel(): Promise<THREE.Group | null> {
+  if (!brazierModelPromise) {
+    brazierModelPromise = gltfLoader
+      .loadAsync('assets/models/kit/PRP_Brazier.glb')
+      .then((g) => g.scene)
+      .catch(() => null);
+  }
+  return brazierModelPromise;
+}
 /**
  * Emissive ceilings for authored prop materials. The GLBs ship 3.0–3.5, which
  * tone-maps to flat white and hides the material's colour; these caps keep a
@@ -4819,22 +4849,48 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
     if (node instanceof THREE.Mesh) {
       node.castShadow = true;
       node.receiveShadow = true;
+      // The authored core is a low-poly icosphere with a very hot emissive:
+      // at first-person distance it reads as a flat violet slab. Keep the
+      // small vine buds, hide the slab core, and add a soft additive halo
+      // below so the puzzle remains legible.
+      if (node.name === 'BrambleCore' || node.name.startsWith('CoreShard')) {
+        node.visible = false;
+      }
       if (node.material) {
         node.material = (node.material as THREE.Material).clone();
-        if (node.material.name === 'VK_Veil_Core' || node.material.name === 'VK_Veil_Amethyst') {
+        const matName = node.material.name;
+        if (matName === 'VK_Bramble_Bark' && 'color' in node.material) {
+          (node.material as THREE.MeshStandardMaterial).color.set(0x6a5680);
+        } else if (matName === 'VK_Bramble_Thorns' && 'color' in node.material) {
+          (node.material as THREE.MeshStandardMaterial).color.set(0x8a6fa6);
+        }
+        if (matName === 'VK_Veil_Core' || matName === 'VK_Veil_Amethyst') {
           const veilMat = node.material as THREE.MeshStandardMaterial;
           const isCore = veilMat.name === 'VK_Veil_Core';
           // Authored emissive (2.8–3.6) clipped the blossoms to flat white. Keep a
           // violet glow that still reads as a lit flower at night.
           veilMat.color.set(isCore ? 0xb98ad6 : 0x7c3fb0);
           veilMat.emissive.set(isCore ? 0x9a5ce0 : 0x8b4bc4);
-          veilMat.emissiveIntensity = isCore ? 0.9 : 1.1;
+          veilMat.emissiveIntensity = isCore ? 0.7 : 0.85;
           veilMat.userData.baseEmissive = veilMat.emissiveIntensity;
           veilMats.push(veilMat);
         }
       }
     }
   });
+  const halo = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.115, 1),
+    new THREE.MeshBasicMaterial({
+      color: 0xb58bea,
+      transparent: true,
+      opacity: 0.5,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    }),
+  );
+  halo.name = 'BrambleHalo';
+  halo.position.set(0, 0.55, 0);
+  bushInstance.add(halo);
   let mixer: THREE.AnimationMixer | undefined;
   let idleAction: THREE.AnimationAction | undefined;
 
@@ -4855,6 +4911,11 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
     }
   }
   s00Group.add(bushInstance);
+  // The veil bramble GLB is authored with its root above the lowest leaves;
+  // drop the clone so its lowest vertex sits on the courtyard floor.
+  bushInstance.updateMatrixWorld(true);
+  const bushBox = new THREE.Box3().setFromObject(bushInstance);
+  if (Number.isFinite(bushBox.min.y)) bushInstance.position.y -= bushBox.min.y;
   const origScale = new THREE.Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier);
 
   magicalBushes.push({
@@ -4869,16 +4930,16 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
     targetScale: origScale.clone(),
   });
 }
-createMagicalBush(-2.2, -1.8, 1.2);
-createMagicalBush(2.2, -1.8, 1.2);
+createMagicalBush(-2.4, -1.6, 0.9);
+createMagicalBush(2.4, -1.6, 0.9);
 
-createMagicalBush(-3.5, 0.5, 0.9);
+createMagicalBush(-3.6, 0.6, 0.75);
 
-createMagicalBush(3.5, 0.5, 0.9);
+createMagicalBush(3.6, 0.6, 0.75);
 
-createMagicalBush(-1.2, 0.8, 0.7);
+createMagicalBush(-1.5, 0.6, 0.55);
 
-createMagicalBush(1.2, 0.8, 0.7);
+createMagicalBush(1.5, 0.6, 0.55);
 
 function addS00Colliders(): void {
 
@@ -8820,6 +8881,257 @@ void DoorFactory.spawn('gate', { x: 0, y: 0, z: -17.5 }).then((h) => {
   void h.open();
 });
 let currentBuildingSceneId: SceneId | null = null;
+let stoneWallTexture: THREE.CanvasTexture | null = null;
+function getStoneWallTexture(): THREE.CanvasTexture {
+  if (stoneWallTexture) return stoneWallTexture;
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#242a33';
+    ctx.fillRect(0, 0, 256, 256);
+    let seed = 1337;
+    const rand = () => {
+      seed = (seed * 1664525 + 1013904223) % 4294967296;
+      return seed / 4294967296;
+    };
+    const cols = 4;
+    const rows = 5;
+    const bw = 256 / cols;
+    const bh = 256 / rows;
+    for (let row = 0; row < rows; row++) {
+      const offset = row % 2 === 0 ? 0 : bw * 0.5;
+      for (let col = -1; col < cols + 1; col++) {
+        const x = col * bw + offset;
+        const y = row * bh;
+        const shade = 62 + Math.floor(rand() * 34);
+        ctx.fillStyle = `rgb(${shade},${shade + 8},${shade + 18})`;
+        ctx.fillRect(x + 2, y + 2, bw - 4, bh - 4);
+        ctx.fillStyle = `rgba(255,255,255,${0.03 + rand() * 0.04})`;
+        ctx.fillRect(x + 4, y + 3, bw - 8, 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.16)';
+        ctx.fillRect(x + 3, y + bh - 5, bw - 6, 2);
+      }
+    }
+    for (let i = 0; i < 420; i++) {
+      const a = rand() * 0.09;
+      ctx.fillStyle = `rgba(${rand() > 0.5 ? '255,255,255' : '0,0,0'},${a})`;
+      ctx.fillRect(rand() * 256, rand() * 256, 1 + rand() * 2, 1 + rand() * 2);
+    }
+  }
+  stoneWallTexture = new THREE.CanvasTexture(canvas);
+  stoneWallTexture.wrapS = THREE.RepeatWrapping;
+  stoneWallTexture.wrapT = THREE.RepeatWrapping;
+  stoneWallTexture.repeat.set(9, 3.4);
+  stoneWallTexture.colorSpace = THREE.SRGBColorSpace;
+  stoneWallTexture.anisotropy = 4;
+  return stoneWallTexture;
+}
+
+const torchFlames: { mesh: THREE.Mesh; phase: number }[] = [];
+let torchFlameTime = 0;
+
+/**
+ * Rooms used to end at an invisible collider wall: the player saw a tiled
+ * floor floating in the painted sky. Build a real perimeter from merged
+ * BoxGeometry so an entire room's stonework costs three draw calls:
+ * wall mass, dark trim (skirting + cornice) and lighter corner pilasters.
+ * Exit gaps line up with the room's door triggers.
+ */
+function addRoomPerimeterArchitecture(group: THREE.Group, id: SceneId): void {
+  const { hw, hh } = getRoomHalfExtents(id);
+  const walls: THREE.BufferGeometry[] = [];
+  const trims: THREE.BufferGeometry[] = [];
+  const pilasters: THREE.BufferGeometry[] = [];
+  const wallH = 5.2;
+  const wallY = wallH * 0.5;
+  const t = 0.6;
+  const gap = 4.2;
+  const halfGap = gap * 0.5;
+
+  const pushBox = (
+    list: THREE.BufferGeometry[],
+    w: number, h: number, d: number,
+    x: number, y: number, z: number,
+  ) => {
+    const geo = new THREE.BoxGeometry(w, h, d);
+    geo.translate(x, y, z);
+    list.push(geo);
+  };
+
+  const roomExits = exits[id] ?? [];
+  const hasNorth = roomExits.some((e) => e.z <= -4);
+  const hasSouth = roomExits.some((e) => e.z >= 4);
+  const hasEast = roomExits.some((e) => e.x >= 4);
+  const hasWest = roomExits.some((e) => e.x <= -4);
+
+  const side = (hasGap: boolean, axis: 'x' | 'z', sign: 1 | -1) => {
+    const span = axis === 'x' ? hw : hh;
+    const length = span * 2 + t;
+    const at = (span + t * 0.5) * sign;
+    const mk = (w: number, h: number, d: number, along: number, y: number) => {
+      if (axis === 'x') pushBox(walls, w, h, d, along, y, at);
+      else pushBox(walls, w, h, d, at, y, along);
+    };
+    if (!hasGap) {
+      mk(length, wallH, t, 0, wallY);
+    } else {
+      const seg = (length - gap) * 0.5;
+      const off = halfGap + seg * 0.5;
+      mk(seg, wallH, t, -off, wallY);
+      mk(seg, wallH, t, off, wallY);
+      // Lintel over the exit: the arch fills it, the wall keeps the room sealed.
+      mk(gap, 1.0, t, 0, wallH - 0.5);
+    }
+    // Cornice + skirting run the full side, stepping over the gate lintel.
+    if (axis === 'x') {
+      pushBox(trims, length, 0.26, 0.9, 0, wallH - 0.13, at - t * 0.55 * sign);
+      pushBox(trims, length, 0.42, 0.22, 0, 0.21, at - t * 0.62 * sign);
+    } else {
+      pushBox(trims, 0.9, 0.26, length, at - t * 0.55 * sign, wallH - 0.13, 0);
+      pushBox(trims, 0.22, 0.42, length, at - t * 0.62 * sign, 0.21, 0);
+    }
+  };
+
+  side(hasNorth, 'x', -1);
+  side(hasSouth, 'x', 1);
+  side(hasEast, 'z', 1);
+  side(hasWest, 'z', -1);
+
+  // Inner corner piers give the wall plane a vertical rhythm and catch the
+  // key light instead of reading as one flat slab.
+  for (const sx of [-1, 1]) {
+    for (const sz of [-1, 1]) {
+      pushBox(pilasters, 0.95, wallH + 0.2, 0.95, sx * (hw - 0.32), (wallH + 0.2) * 0.5, sz * (hh - 0.32));
+    }
+  }
+  // Intermediate buttress piers: a 36 m wall with only corner piers reads as
+  // an empty backdrop. Place them every 6 m, clear of the exit gap.
+  for (const off of [-12, -6, 6, 12]) {
+    if (Math.abs(off) < hw - 1.2) {
+      for (const sz of [-1, 1]) {
+        pushBox(pilasters, 0.72, wallH, 0.78, off, wallY, sz * (hh - 0.22));
+      }
+    }
+    if (Math.abs(off) < hh - 1.2) {
+      for (const sx of [-1, 1]) {
+        pushBox(pilasters, 0.78, wallH, 0.72, sx * (hw - 0.22), wallY, off);
+      }
+    }
+  }
+  // A string course at 3.4 m divides the wall into a readable base + clerestory.
+  for (const sz of [-1, 1]) {
+    pushBox(trims, hw * 2 + t, 0.14, 0.16, 0, 3.4, sz * (hh + t * 0.5) - sz * t * 0.72);
+  }
+  for (const sx of [-1, 1]) {
+    pushBox(trims, 0.16, 0.14, hh * 2 + t, sx * (hw + t * 0.5) - sx * t * 0.72, 3.4, 0);
+  }
+
+  const wallMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    map: getStoneWallTexture(),
+    roughness: 0.94,
+    metalness: 0.04,
+  });
+  const trimMat = new THREE.MeshStandardMaterial({ color: 0x262d38, roughness: 0.9, metalness: 0.08 });
+  const pierMat = new THREE.MeshStandardMaterial({ color: 0x5a6878, roughness: 0.86, metalness: 0.06 });
+
+  const addMerged = (geos: THREE.BufferGeometry[], mat: THREE.Material, name: string) => {
+    if (geos.length === 0) return;
+    const merged = mergeGeometries(geos, false);
+    for (const g of geos) g.dispose();
+    if (!merged) return;
+    const mesh = new THREE.Mesh(merged, mat);
+    mesh.name = name;
+    mesh.receiveShadow = true;
+    mesh.castShadow = true;
+    group.add(mesh);
+  };
+
+  addMerged(walls, wallMat, `PerimeterWalls_${id}`);
+  addMerged(trims, trimMat, `PerimeterTrim_${id}`);
+  addMerged(pilasters, pierMat, `PerimeterPiers_${id}`);
+
+  // Warm gate braziers: two practical lights plus four stock props. They give
+  // the door a focal point and keep the new stonework from going flat navy.
+  const torchHost = new THREE.Group();
+  torchHost.name = `TorchHost_${id}`;
+  group.add(torchHost);
+  void loadBrazierModel().then((template) => {
+    if (!template) return;
+    for (const [bx, bz] of [[-5.2, -hh + 1.5], [5.2, -hh + 1.5], [-5.2, hh - 1.5], [5.2, hh - 1.5]]) {
+      const brazier = template.clone(true);
+      brazier.position.set(bx, 0, bz);
+      brazier.scale.setScalar(1.15);
+      brazier.traverse((node) => {
+        if (node instanceof THREE.Mesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      });
+      torchHost.add(brazier);
+      const flame = new THREE.Mesh(
+        new THREE.ConeGeometry(0.095, 0.34, 6),
+        new THREE.MeshBasicMaterial({
+          color: 0xffa14a,
+          transparent: true,
+          opacity: 0.9,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+      );
+      flame.name = 'BrazierFlame';
+      flame.position.set(bx, 1.2, bz);
+      torchHost.add(flame);
+      torchFlames.push({ mesh: flame, phase: Math.random() * Math.PI * 2 });
+    }
+    for (const [lz, lx] of [[-hh + 2.6, 0], [hh - 2.6, 0]]) {
+      const light = new THREE.PointLight(0xff9a4d, 26, 16, 2);
+      light.position.set(lx, 2.55, lz);
+      torchHost.add(light);
+    }
+  });
+}
+
+/**
+ * Every exit gets a carved arch frame plus a portcullis that retracts into the
+ * floor slot when unlocked. The old code raised the bare portcullis into the
+ * air, leaving a floating wooden slab across the doorway.
+ */
+function spawnExitPortal(
+  group: THREE.Group,
+  exit: ExitTrigger,
+  x: number,
+  z: number,
+  rotY: number,
+  scale: number,
+  withArch: boolean,
+): void {
+  if (withArch) {
+    void DoorFactory.spawn('gatearch', { x, y: 0, z }).then((h) => {
+      const arch = h.group;
+      arch.scale.setScalar(scale);
+      arch.rotation.y = rotY;
+      arch.traverse((node) => {
+        if (node instanceof THREE.Mesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      });
+      group.add(arch);
+    }).catch(() => {});
+  }
+  void DoorFactory.spawn('gate', { x, y: 0, z }).then((h) => {
+    const gate = h.group;
+    gate.scale.setScalar(scale);
+    gate.rotation.y = rotY;
+    gate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
+    group.add(gate);
+    if (requirementsMet(exit.requires)) void h.open();
+  }).catch(() => {});
+}
+
 function buildGenericScene(id: SceneId): THREE.Group {
 
   currentBuildingSceneId = id;
@@ -8830,56 +9142,17 @@ function buildGenericScene(id: SceneId): THREE.Group {
 
   const gateZ = isCustomCompound ? 5.5 : (isExtendedHall ? 23.5 : 17.5);
   const gateX = isCustomCompound ? 5.5 : 17.5;
-  const gateScale = isCustomCompound ? 0.95 : 1.2;
+  const gateScale = isCustomCompound ? 0.95 : 0.88;
   const roomExits = exits[id] ?? [];
   const northExit = roomExits.find((e) => e.z <= -4.0);
 
   const southExit = roomExits.find((e) => e.z >= 4.0);
   const eastExit = roomExits.find((e) => e.x >= 4.0);
   const westExit = roomExits.find((e) => e.x <= -4.0);
-  if (northExit) {
-    void DoorFactory.spawn('gate', { x: 0, y: 0, z: -gateZ }).then((h) => {
-
-      const northGate = h.group;
-      northGate.scale.setScalar(gateScale);
-      northGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-      group.add(northGate);
-      if (requirementsMet(northExit.requires)) void h.open();
-    });
-  }
-  if (southExit) {
-    void DoorFactory.spawn('gate', { x: 0, y: 0, z: gateZ }).then((h) => {
-
-      const southGate = h.group;
-      southGate.scale.setScalar(gateScale);
-      southGate.rotation.y = Math.PI;
-      southGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-      group.add(southGate);
-      if (requirementsMet(southExit.requires)) void h.open();
-    });
-  }
-  if (eastExit) {
-    void DoorFactory.spawn('gate', { x: gateX, y: 0, z: 0 }).then((h) => {
-
-      const eastGate = h.group;
-      eastGate.scale.setScalar(gateScale);
-      eastGate.rotation.y = -Math.PI / 2;
-      eastGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-      group.add(eastGate);
-      if (requirementsMet(eastExit.requires)) void h.open();
-    });
-  }
-  if (westExit) {
-    void DoorFactory.spawn('gate', { x: -gateX, y: 0, z: 0 }).then((h) => {
-
-      const westGate = h.group;
-      westGate.scale.setScalar(gateScale);
-      westGate.rotation.y = Math.PI / 2;
-      westGate.traverse((node) => { if (node instanceof THREE.Mesh) node.castShadow = true; });
-      group.add(westGate);
-      if (requirementsMet(westExit.requires)) void h.open();
-    });
-  }
+  if (northExit) spawnExitPortal(group, northExit, 0, -gateZ, 0, gateScale, !isCustomCompound);
+  if (southExit) spawnExitPortal(group, southExit, 0, gateZ, Math.PI, gateScale, !isCustomCompound);
+  if (eastExit) spawnExitPortal(group, eastExit, gateX, 0, -Math.PI / 2, gateScale, !isCustomCompound);
+  if (westExit) spawnExitPortal(group, westExit, -gateX, 0, Math.PI / 2, gateScale, !isCustomCompound);
   if (id === 'OW1') {
     const shell = buildModularFloor(3, 3, 0x89a0aa);
 
@@ -8905,7 +9178,7 @@ function buildGenericScene(id: SceneId): THREE.Group {
       questPickupMeshes.push({ id: 'SHARD_01_GATE', mesh: h.group });
     });
     // Gatekeeper Orin (GLB via NpcFactory, fallback to primitive clone)
-    void NpcFactory.spawn('orin', { x: -2.2, y: 0.6, z: -1.8 }).then((h) => {
+    void NpcFactory.spawn('orin', { x: -2.2, y: 0, z: -1.8 }).then((h) => {
 
       orinMesh = h.group;
       orinMesh.scale.setScalar(1.05);
@@ -10837,6 +11110,7 @@ function buildGenericScene(id: SceneId): THREE.Group {
     if (genericLore) group.add(createLoreOrb(genericLore));
 
   }
+  if (id !== 'S00' && !isCustomCompound) addRoomPerimeterArchitecture(group, id);
   return group;
 
 }
@@ -10856,6 +11130,12 @@ function getEffectiveDoorPos(sceneId: SceneId | string, door: { x: number; z: nu
   const { hw, hh, isExpanded } = getRoomHalfExtents(sceneId);
 
   if (!isExpanded) {
+    // S00 is an authored 36 m courtyard, not a compact 12 m room: the old
+    // ±5 triggers fired in the middle of the plaza, 12 m short of the visible
+    // gate. Anchor them to the gatehouse wall instead.
+    if (sceneId === 'S00' && Math.abs(door.z) >= 4.0) {
+      return { x: door.x, z: door.z < 0 ? -16.5 : 16.5 };
+    }
     return { x: door.x, z: door.z };
   }
   let effX = door.x;
@@ -10878,8 +11158,8 @@ function getTransitionSpawn(
   // Transitioning into S00 (courtyard)
   if (toSceneId === 'S00') {
 
-    if (fromSceneId === 'OW1') return { x: 0, y: 0.6, z: -14.8 };
-    return explicitSpawn ?? { x: 0, y: 0.6, z: 2.0 };
+    if (fromSceneId === 'OW1') return { x: 0, y: PLAYER_CAPSULE_Y, z: -14.8 };
+    return explicitSpawn ?? { x: 0, y: PLAYER_CAPSULE_Y, z: 2.0 };
   }
   // Transitioning into an expanded room
   if (toExpanded) {
@@ -10887,19 +11167,19 @@ function getTransitionSpawn(
     const reverseDoor = (FORTRESS_EXITS[toSceneId] ?? []).find((d) => d.to === fromSceneId);
     if (reverseDoor) {
       if (reverseDoor.z >= 4.0) {
-        return { x: reverseDoor.x, y: 0.6, z: toHh - 3.2 };
+        return { x: reverseDoor.x, y: PLAYER_CAPSULE_Y, z: toHh - 3.2 };
       }
       if (reverseDoor.z <= -4.0) {
-        return { x: reverseDoor.x, y: 0.6, z: -toHh + 3.2 };
+        return { x: reverseDoor.x, y: PLAYER_CAPSULE_Y, z: -toHh + 3.2 };
       }
       if (reverseDoor.x >= 4.0) {
-        return { x: toHw - 3.2, y: 0.6, z: reverseDoor.z };
+        return { x: toHw - 3.2, y: PLAYER_CAPSULE_Y, z: reverseDoor.z };
       }
       if (reverseDoor.x <= -4.0) {
-        return { x: -toHw + 3.2, y: 0.6, z: reverseDoor.z };
+        return { x: -toHw + 3.2, y: PLAYER_CAPSULE_Y, z: reverseDoor.z };
       }
     }
-    return { x: 0, y: 0.6, z: toHh - 3.2 };
+    return { x: 0, y: PLAYER_CAPSULE_Y, z: toHh - 3.2 };
   }
   return explicitSpawn ?? {};
 }
@@ -11253,6 +11533,9 @@ function loadScene(id: SceneId, spawn?: Partial<Spawn>): boolean {
   }
 
   const target: Spawn = { ...sceneSpawn(id), ...(spawn ?? {}) };
+  // Never place the capsule below its 0.77 m rest height: the saved/transition
+  // spawns predate the taller capsule and would bury it in the floor.
+  target.y = Math.max(target.y, PLAYER_CAPSULE_Y);
 
   engine.scene.remove(activeGroup);
 
@@ -11352,7 +11635,11 @@ function updateGuard(g: Guard, dt: number): void {
 
       const tempPos = new THREE.Vector3(g.mesh.position.x, g.mesh.position.y + 1.7, g.mesh.position.z);
 
-      tempPos.project(engine.cameraRig.camera);
+      tempPos.project(engine.activeCamera);
+      // Projecting with the isometric camera while in first person (or vice
+      // versa) puts bars from off-screen/behind guards at bogus HUD spots.
+      const onScreen = tempPos.z > -1 && tempPos.z < 1 && Math.abs(tempPos.x) < 1.05 && Math.abs(tempPos.y) < 1.05;
+      g.hpBarEl.classList.toggle('visible', onScreen);
 
       const sx = (tempPos.x * 0.5 + 0.5) * window.innerWidth;
 
@@ -11384,7 +11671,7 @@ function updateGuard(g: Guard, dt: number): void {
 
       const tempPos = new THREE.Vector3(g.mesh.position.x, g.mesh.position.y + 2.0, g.mesh.position.z);
 
-      tempPos.project(engine.cameraRig.camera);
+      tempPos.project(engine.activeCamera);
 
       const sx = (tempPos.x * 0.5 + 0.5) * window.innerWidth;
 
@@ -13586,7 +13873,7 @@ function checkExits(): void {
           clamped = true;
         }
         if (clamped) {
-          physics.teleportPlayer({ x: playerState.x, y: 0.6, z: playerState.z });
+          physics.teleportPlayer({ x: playerState.x, y: PLAYER_CAPSULE_Y, z: playerState.z });
           playerMesh.position.set(playerState.x, PLAYER_VISUAL_Y, playerState.z);
         }
         if (lockedMessageCooldown <= 0) {
@@ -14431,6 +14718,148 @@ const playerMesh = mainChar.rig.group;
 const WEAPON_CYCLE: WeaponId[] = ['hunter_blade', 'glass_cleaver', 'void_rapier', 'sun_staff'];
 let currentWeaponIdx = 0;
 
+// ---------- First-person Shadowhand viewmodel ----------
+// The third-person rig is culled in first person, which used to leave the
+// player holding nothing. This rig is a camera child so it inherits look and
+// bob, and is drawn after the world (depthTest off) so it never clips walls.
+let fpViewmodel: THREE.Group | null = null;
+let fpViewmodelSwing: THREE.Group | null = null;
+let fpViewmodelTime = 0;
+const FP_VIEWMODEL_POS = new THREE.Vector3(0.30, -0.26, -0.68);
+const FP_VIEWMODEL_ROT = new THREE.Euler(0.27, 0.34, -0.08);
+const fpSwingRot = new THREE.Vector3();
+const fpSwingPos = new THREE.Vector3();
+
+void gltfLoader.loadAsync('assets/models/fp_shadowhand.glb').then((gltf) => {
+  const root = new THREE.Group();
+  root.name = 'FP_Viewmodel';
+  root.position.copy(FP_VIEWMODEL_POS);
+  root.rotation.copy(FP_VIEWMODEL_ROT);
+
+  const swing = new THREE.Group();
+  swing.name = 'FP_ViewmodelSwing';
+  root.add(swing);
+
+  const model = gltf.scene;
+  model.name = 'FP_Shadowhand';
+  // glTF export maps Blender +Y to -Z, so the authored blade ends up pointing
+  // behind the camera. Spin the rig 180° about Y: blade forward, arm toward the
+  // viewer, back of the hand still up.
+  model.rotation.y = Math.PI;
+  model.scale.setScalar(1.05);
+  model.traverse((node) => {
+    if (!(node instanceof THREE.Mesh)) return;
+    node.castShadow = false;
+    node.receiveShadow = false;
+    node.frustumCulled = false;
+    node.renderOrder = 999;
+    const mats = Array.isArray(node.material) ? node.material : [node.material];
+    for (const mat of mats) {
+      const std = mat as THREE.MeshStandardMaterial;
+      std.depthTest = false;
+      std.depthWrite = false;
+      std.envMapIntensity = 0.6;
+    }
+  });
+  swing.add(model);
+
+  // A tiny hero fill just for the viewmodel: the courtyard key comes from
+  // behind the camera, so the glove would otherwise read as a black blob.
+  const heroFill = new THREE.PointLight(0xaec4e8, 0.45, 1.1, 2);
+  heroFill.position.set(0.12, 0.08, 0.18);
+  root.add(heroFill);
+
+  engine.perspectiveCamera.add(root);
+  // Camera children only render when the camera is part of the scene graph.
+  if (!engine.scene.children.includes(engine.perspectiveCamera)) {
+    engine.scene.add(engine.perspectiveCamera);
+  }
+  fpViewmodel = root;
+  fpViewmodelSwing = swing;
+}).catch((err) => {
+  console.warn('[veilkeep] first-person viewmodel failed to load', err);
+});
+
+function updateFpViewmodel(dt: number): void {
+  if (!fpViewmodel || !fpViewmodelSwing) return;
+  // The third-person sword-trail ribbon follows the hidden rig and can fill
+  // the whole screen when a swing happens in first person. Hide it there.
+  const trail = engine.scene.getObjectByName('WeaponTrailRibbon');
+  if (trail) trail.visible = !firstPersonMode;
+  const overlayOpen = isPaused || isInventoryOpen || isQuestLogOpen || isMapOpen || isLoreOpen || !!activeDialogue;
+  fpViewmodel.visible = firstPersonMode && !overlayOpen;
+  if (!fpViewmodel.visible) return;
+
+  fpViewmodelTime += dt;
+  const moving = playerState.keys.w || playerState.keys.a || playerState.keys.s || playerState.keys.d;
+  const stride = playerState.isSprinting ? 13.5 : 9.2;
+  const bobX = moving ? Math.sin(fpViewmodelTime * stride) * 0.010 : Math.sin(fpViewmodelTime * 1.3) * 0.0015;
+  const bobY = moving ? Math.abs(Math.sin(fpViewmodelTime * stride)) * 0.013 : Math.sin(fpViewmodelTime * 1.7) * 0.0022;
+  const breathe = Math.sin(fpViewmodelTime * 1.55) * 0.0035;
+  fpViewmodel.position.set(
+    FP_VIEWMODEL_POS.x + bobX,
+    FP_VIEWMODEL_POS.y - bobY + breathe,
+    FP_VIEWMODEL_POS.z,
+  );
+  fpViewmodel.rotation.set(
+    FP_VIEWMODEL_ROT.x + bobY * 0.9,
+    FP_VIEWMODEL_ROT.y + bobX * 2.2,
+    FP_VIEWMODEL_ROT.z + bobX * 1.4,
+  );
+
+  // Attack / defense poses driven by the same combat state machine as the rig.
+  let rx = 0, ry = 0, rz = 0, px = 0, py = 0, pz = 0;
+  const combat = mainChar?.combat;
+  if (combat) {
+    const state = combat.state;
+    const p = combat.normalizedTime;
+    if (state === 'Light_Attack_1' || state === 'Light_Attack_2') {
+      const k = Math.sin(Math.min(1, p / 0.58) * Math.PI);
+      rz = 0.72 * k;
+      rx = -0.42 * k;
+      ry = -0.22 * k;
+      px = -0.055 * k;
+      pz = 0.05 * k;
+    } else if (state === 'Heavy_Combo_Finisher') {
+      const wind = Math.min(1, p / 0.34);
+      const strike = Math.max(0, Math.min(1, (p - 0.34) / 0.30));
+      const k = p < 0.34 ? -0.55 * wind : -0.55 + 1.25 * Math.sin(strike * Math.PI * 0.5);
+      rz = k;
+      rx = p < 0.34 ? 0.55 * wind : 0.55 - 1.15 * Math.sin(strike * Math.PI * 0.5);
+      px = p < 0.34 ? 0.03 * wind : -0.11 * Math.sin(strike * Math.PI * 0.5);
+      py = p < 0.34 ? 0.02 * wind : -0.03 * Math.sin(strike * Math.PI * 0.5);
+    } else if (state === 'Block_Parry') {
+      const k = Math.sin(Math.min(1, p / 0.3) * Math.PI * 0.5);
+      rx = 0.42 * k;
+      rz = -0.30 * k;
+      px = -0.035 * k;
+      py = 0.03 * k;
+    } else if (state === 'Cast_Illusion' || state === 'Arcane_Cast') {
+      const k = Math.sin(Math.min(1, p / 0.7) * Math.PI);
+      rx = -0.35 * k;
+      ry = 0.35 * k;
+      py = 0.05 * k;
+    } else if (state === 'Dodge_Roll') {
+      const k = Math.sin(Math.min(1, p / 0.6) * Math.PI);
+      py = -0.12 * k;
+      rx = 0.55 * k;
+    } else if (state === 'Hit_Stagger') {
+      const k = Math.sin(Math.min(1, p / 0.4) * Math.PI);
+      rx = 0.30 * k;
+      pz = 0.06 * k;
+    }
+  }
+  const blend = 1 - Math.exp(-24 * dt);
+  fpSwingRot.set(rx, ry, rz);
+  fpSwingPos.set(px, py, pz);
+  fpViewmodelSwing.rotation.x += (fpSwingRot.x - fpViewmodelSwing.rotation.x) * blend;
+  fpViewmodelSwing.rotation.y += (fpSwingRot.y - fpViewmodelSwing.rotation.y) * blend;
+  fpViewmodelSwing.rotation.z += (fpSwingRot.z - fpViewmodelSwing.rotation.z) * blend;
+  fpViewmodelSwing.position.x += (fpSwingPos.x - fpViewmodelSwing.position.x) * blend;
+  fpViewmodelSwing.position.y += (fpSwingPos.y - fpViewmodelSwing.position.y) * blend;
+  fpViewmodelSwing.position.z += (fpSwingPos.z - fpViewmodelSwing.position.z) * blend;
+}
+
 function cycleNextWeapon(): void {
   if (!mainChar) return;
   currentWeaponIdx = (currentWeaponIdx + 1) % WEAPON_CYCLE.length;
@@ -14679,7 +15108,7 @@ window.addEventListener('keydown', (e) => {
 
       playerMesh.position.set(target.x, PLAYER_VISUAL_Y, target.z);
 
-      physics.teleportPlayer({ x: target.x, y: 0.6, z: target.z });
+      physics.teleportPlayer({ x: target.x, y: PLAYER_CAPSULE_Y, z: target.z });
 
       engine.cameraRig.setTarget(target.x, 0, target.z);
 
@@ -15447,6 +15876,16 @@ function getDiagnostics(): {
   get isFirstPerson() { return firstPersonMode; },
   setFirstPerson: (v: boolean) => toggleFirstPerson(v),
 
+  /** Live combat + viewmodel state for playtest instrumentation. */
+  get combat() {
+    const c = mainChar?.combat;
+    return c ? { state: c.state, normalizedTime: c.normalizedTime, busy: c.busy, hitboxActive: c.hitboxActive } : null;
+  },
+  get autoInput() { return { x: autoInput.x, z: autoInput.z }; },
+  get autoPath() { return autoPath.map((p) => ({ x: p.x, z: p.z })); },
+  get fpViewmodel() { return fpViewmodel; },
+  get weaponTrailVisible() { return engine.scene.getObjectByName('WeaponTrailRibbon')?.visible ?? null; },
+
   spawnDamagePopup,
 
   quality,
@@ -15465,7 +15904,7 @@ function getDiagnostics(): {
 
     boundsFor: (id: string) => sceneById.get(id as SceneId)?.bounds ?? null,
 
-    teleport: (x: number, z: number, y = 0.6) => {
+    teleport: (x: number, z: number, y = PLAYER_CAPSULE_Y) => {
 
       const matchDoor = (exits[currentSceneId] ?? []).find((d) => Math.hypot(d.x - x, d.z - z) < 0.6);
 
@@ -15651,7 +16090,7 @@ function getDiagnostics(): {
 
         const pz = captain.mesh.position.z + 1.0;
 
-        physics.teleportPlayer({ x: px, y: 0.6, z: pz });
+        physics.teleportPlayer({ x: px, y: PLAYER_CAPSULE_Y, z: pz });
 
         playerState.x = px;
 
@@ -15854,6 +16293,8 @@ const autoplayHost: AutoplayHost = {
   sceneExists: (id) => sceneById.has(id as SceneId),
   setInput: (x, z) => { autoInput = { x, z }; },
 
+  getInput: () => ({ x: autoInput.x, z: autoInput.z }),
+
   navigate: (x, z, radius, dt) => autoNavigate(x, z, radius, dt),
 
   interact: () => interact(true),
@@ -15881,6 +16322,7 @@ const autoplayHost: AutoplayHost = {
   },
 
   hasDialogue: () => !!activeDialogue,
+  isInputBlocked: () => isPaused || isInventoryOpen || isQuestLogOpen || isMapOpen || isLoreOpen || !!activeDialogue,
 
   advanceDialogue: (dt) => autoDialogueTick(dt),
 

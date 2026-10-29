@@ -54,7 +54,7 @@ Every zone in `zones.json` and `RoomSceneBuilder.ts` is populated with a full ar
   - Switching from Isometric to First-Person initializes `yaw` from `player.rotation.y` and sets `pitch = -0.06 rad`, eliminating camera snapping.
 - **Self-Mesh Culling & Reticle**:
   - The entire third-person player mesh is hidden in first person, preventing internal head/torso clipping. A `#fp-crosshair` reticle (gold dot + pale cross) is shown while first-person is active and hidden during menus, dialogue, pause, inventory, map, and lore overlays.
-  - A dedicated first-person viewmodel rig is **not yet implemented**; this remains a planned polish item.
+  - A dedicated first-person viewmodel rig is implemented (`fp_shadowhand.glb`): Kaelen's curved shadow dagger, gloved right hand and bracer, attached to the perspective camera, with procedural idle sway, movement bob, and light/heavy/parry/cast/dodge/hit-stagger poses driven by `mainChar.combat.state`. It is culled in third person and while menus/dialogue are open. Viewmodel materials render with depth testing disabled so the blade never clips through walls; the third-person sword-trail ribbon is suppressed in first person.
 - **Camera-Relative Movement & Wall Sliding**:
   - `W / S` move along the camera's horizontal forward vector $(\sin(\text{yaw}), 0, \cos(\text{yaw}))$; `A / D` strafe along the perpendicular right vector.
   - Diagonal input is normalized so moving diagonally is not faster than moving straight.
@@ -148,7 +148,7 @@ Every boss encounter features a 3-segment Phase Bar (`Phase I: 100%â€“66%`, `Pha
 
 ---
 
-## 12. Current Implementation Status (Playtest Pass — 2026-10-28)
+## 12. Current Implementation Status (Playtest Pass ï¿½ 2026-10-28)
 
 ### Verified in runtime
 - First-person is the default camera; Z / middle mouse toggles to the isometric camera and back.
