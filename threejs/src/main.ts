@@ -1941,6 +1941,22 @@ const ITEM_LORE_DATABASE: Record<string, { name: string; tier: string; category:
 
   },
 
+  ITEM_VOLATILE_SULFUR_POUCH: {
+
+    name: 'Volatile Sulfur Pouch',
+
+    tier: 'Greyport Origin Tool',
+
+    category: 'Alchemical Reagent',
+
+    stats: 'Synthesises Acid Vials that melt Grade-3 brass locks',
+
+    desc: 'A thumbed leather pouch of Greyport brimstone, saltpetre and glass dust. The Gutter-Alchemist never asks whether a lock wants to open — only whether it wants to burn.',
+
+    icon: '🧪'
+
+  },
+
   ITEM_IRON_NAIL: {
 
     name: 'Iron Nail (Grounding Relic)',
@@ -2381,7 +2397,10 @@ function renderInventorySlots(): void {
 
     const info = ITEM_LORE_DATABASE[id] || {
 
-      name: id.replace(/_/g, ' '),
+      name: id
+        .replace(/^(ITEM|ABILITY)_/, '')
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
 
       tier: 'Curio',
 
@@ -3306,7 +3325,7 @@ const magicalBushes: {
 
   mesh: THREE.Group;
 
-  mat: THREE.MeshStandardMaterial;
+  mats: THREE.MeshStandardMaterial[];
   mixer?: THREE.AnimationMixer;
   idleAction?: THREE.AnimationAction;
   retractAction?: THREE.AnimationAction;
@@ -4015,7 +4034,9 @@ const engine = new GameEngine({
           }
         }
         bush.targetScale.set(0.35 * bush.originalScale.x, 0.12 * bush.originalScale.y, 0.35 * bush.originalScale.z);
-        bush.mat.emissiveIntensity = THREE.MathUtils.lerp(bush.mat.emissiveIntensity, 0.2, 0.1);
+        for (const veilMat of bush.mats) {
+          veilMat.emissiveIntensity = THREE.MathUtils.lerp(veilMat.emissiveIntensity, 0.2, 0.1);
+        }
       } else {
         if (bush.isRetracted) {
           bush.isRetracted = false;
@@ -4027,7 +4048,13 @@ const engine = new GameEngine({
           }
         }
         bush.targetScale.copy(bush.originalScale);
-        bush.mat.emissiveIntensity = THREE.MathUtils.lerp(bush.mat.emissiveIntensity, 2.8, 0.05);
+        for (const veilMat of bush.mats) {
+          veilMat.emissiveIntensity = THREE.MathUtils.lerp(
+            veilMat.emissiveIntensity,
+            (veilMat.userData.baseEmissive as number | undefined) ?? 1,
+            0.05,
+          );
+        }
       }
       bush.mesh.scale.lerp(bush.targetScale, 0.08);
     }
@@ -4624,6 +4651,18 @@ new THREE.TextureLoader().load(ASSETS.CONCEPT.SCENE00_APPROACH_SUNKEN, (tex) => 
 const s00Group = new THREE.Group();
 
 const gltfLoader = new GLTFLoader();
+/**
+ * Emissive ceilings for authored prop materials. The GLBs ship 3.0–3.5, which
+ * tone-maps to flat white and hides the material's colour; these caps keep a
+ * readable fire/lamp glow at the exposure set in Engine.setupLighting.
+ */
+const EMISSIVE_CAP: Record<string, number> = {
+  Boiler_FireGlow: 1.25,
+  Desk_LampGlow: 1.3,
+  Lectern_StarlightOrb: 1.2,
+  Alch_VolatileSulfur: 1.5,
+  Alch_GreenReagent: 1.4,
+};
 let kaelenAnimations: THREE.AnimationClip[] = [];
 let brambleAnimations: THREE.AnimationClip[] = [];
 let guardAnimations: THREE.AnimationClip[] = [];
@@ -4743,6 +4782,15 @@ void gateArchModel;
     if (node instanceof THREE.Mesh) {
       node.castShadow = true;
       node.receiveShadow = true;
+      // Authored GLB emissives (3.0–3.5) sit past the ACES clipping point, so
+      // fireboxes and desk lamps rendered as blank white paper. Cap them where
+      // the hue survives and the prop still reads as a light source.
+      const mats = Array.isArray(node.material) ? node.material : [node.material];
+      for (const mat of mats) {
+        const std = mat as THREE.MeshStandardMaterial | undefined;
+        const cap = std ? EMISSIVE_CAP[std.name] : undefined;
+        if (std && cap !== undefined && std.emissiveIntensity > cap) std.emissiveIntensity = cap;
+      }
     }
   });
 });
@@ -4763,7 +4811,7 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
 
   bushInstance.position.set(x, 0.05, z);
   bushInstance.scale.setScalar(scaleMultiplier);
-  let coreMat: THREE.MeshStandardMaterial | undefined;
+  const veilMats: THREE.MeshStandardMaterial[] = [];
   bushInstance.traverse((node) => {
 
     if (node instanceof THREE.Mesh) {
@@ -4772,7 +4820,15 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
       if (node.material) {
         node.material = (node.material as THREE.Material).clone();
         if (node.material.name === 'VK_Veil_Core' || node.material.name === 'VK_Veil_Amethyst') {
-          coreMat = node.material as THREE.MeshStandardMaterial;
+          const veilMat = node.material as THREE.MeshStandardMaterial;
+          const isCore = veilMat.name === 'VK_Veil_Core';
+          // Authored emissive (2.8–3.6) clipped the blossoms to flat white. Keep a
+          // violet glow that still reads as a lit flower at night.
+          veilMat.color.set(isCore ? 0xb98ad6 : 0x7c3fb0);
+          veilMat.emissive.set(isCore ? 0x9a5ce0 : 0x8b4bc4);
+          veilMat.emissiveIntensity = isCore ? 0.9 : 1.1;
+          veilMat.userData.baseEmissive = veilMat.emissiveIntensity;
+          veilMats.push(veilMat);
         }
       }
     }
@@ -4802,7 +4858,7 @@ function createMagicalBush(x: number, z: number, scaleMultiplier = 1.0): void {
   magicalBushes.push({
 
     mesh: bushInstance,
-    mat: coreMat ?? new THREE.MeshStandardMaterial({ color: 0x4c1d95, emissive: 0x7c3aed }),
+    mats: veilMats,
     mixer,
     idleAction,
     retractAction,
@@ -8492,8 +8548,19 @@ function buildModularFloor(gridX = 3, gridZ = 3, tintColor?: number, roomExits?:
           if (node.material) {
             node.material = (node.material as THREE.Material).clone();
             if (tintColor !== undefined && 'color' in node.material) {
-              (node.material as THREE.MeshStandardMaterial).color.multiply(
-                new THREE.Color(tintColor).convertSRGBToLinear()
+              const mat = node.material as THREE.MeshStandardMaterial;
+              // `new THREE.Color(hex)` already converts sRGB → linear, so multiplying
+              // the material by it darkened every floor to near-black. Keep the
+              // authored stone lightness and borrow only the room's hue/saturation.
+              const tint = new THREE.Color(tintColor);
+              const tintHsl = { h: 0, s: 0, l: 0 };
+              tint.getHSL(tintHsl);
+              const baseHsl = { h: 0, s: 0, l: 0 };
+              mat.color.getHSL(baseHsl);
+              mat.color.setHSL(
+                tintHsl.h,
+                THREE.MathUtils.lerp(baseHsl.s, tintHsl.s, 0.55),
+                Math.min(0.5, baseHsl.l * 1.15),
               );
             }
           }
@@ -8926,550 +8993,18 @@ function buildGenericScene(id: SceneId): THREE.Group {
     boilerGH3.position.set(6, 0, -4);
 
     group.add(boilerGH3);
-    // Captain (GLB via EnemyFactory, fallback to primitive guard)
-    void EnemyFactory.spawn('ENC_GH3_CAPTAIN', 'GH3', { x: 0, y: 1.2, z: -2.2 }).then((h) => {
-
-      captain = wrapAsGuard(h, 'GH3', 0, -2.2, true, 120);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      group.add(h.group);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Captain: registered synchronously so the first tick of a freshly built
+    // room already sees him. A one-microtask delay here let the autoplay mark
+    // GH3 cleared before the captain existed, skipping the key and wall leap.
+    try {
+      const captainHandle = EnemyFactory.spawnSync('ENC_GH3_CAPTAIN', 'GH3', { x: 0, y: 1.2, z: -2.2 });
+      captain = wrapAsGuard(captainHandle, 'GH3', 0, -2.2, true, 120);
+      group.add(captainHandle.group);
       activeGuards.push(captain);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }).catch(() => {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    } catch {
       captain = createGuard('GH3', 0, -2.2, true);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       group.add(captain.mesh);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    });
+    }
 
 
 
@@ -9946,551 +9481,18 @@ function buildGenericScene(id: SceneId): THREE.Group {
 
     group.add(starlightPortalMesh);
 
-    // Vaelor boss (GLB via EnemyFactory, fallback to primitive boss)
 
-    void EnemyFactory.spawn('ENC_SAN1_VAELOR', 'SAN1', { x: 0, y: 1.2, z: -3.2 }).then((h) => {
-
-      vaelorBoss = wrapAsGuard(h, 'SAN1', 0, -3.2, true, 260);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      group.add(h.group);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Vaelor: same synchronous registration contract as the GH3 captain, so
+    // the first tick of a freshly built arena already sees the boss.
+    try {
+      const vaelorHandle = EnemyFactory.spawnSync('ENC_SAN1_VAELOR', 'SAN1', { x: 0, y: 1.2, z: -3.2 });
+      vaelorBoss = wrapAsGuard(vaelorHandle, 'SAN1', 0, -3.2, true, 260);
+      group.add(vaelorHandle.group);
       activeGuards.push(vaelorBoss);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }).catch(() => {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    } catch {
       vaelorBoss = createBossVaelor('SAN1', 0, -3.2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       group.add(vaelorBoss.mesh);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    });
+    }
 
 
 
@@ -15473,7 +14475,7 @@ engine.scene.add(playerMesh);
 firstPersonMode = true;
 engine.activeCamera = engine.perspectiveCamera;
 playerMesh.visible = false;
-const playerLight = new THREE.PointLight(0xfef08a, 1.8, 9);
+const playerLight = new THREE.PointLight(0xffd7a1, 1.5, 9);
 playerLight.position.set(0, 0.6, 0);
 playerMesh.add(playerLight);
 // Controls

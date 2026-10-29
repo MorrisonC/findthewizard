@@ -42,7 +42,7 @@ export class GameEngine {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.1;
+    this.renderer.toneMappingExposure = 1.15;
 
     this.onUpdateCallback = config.onUpdate;
     this.onRenderCallback = config.onRender;
@@ -52,11 +52,13 @@ export class GameEngine {
   }
 
   private setupLighting(): void {
-    // Edward Hopper cinematic lighting: cool navy ambient + warm directional key light
-    const ambientLight = new THREE.AmbientLight(new THREE.Color('#1e293b'), 0.55);
+    // Edward Hopper cinematic lighting: cool navy ambient + warm directional key light.
+    // The key stays warm but only lightly saturated — a lemon-yellow key turned every
+    // stone surface olive-green against the blue night backdrop.
+    const ambientLight = new THREE.AmbientLight(new THREE.Color('#243247'), 0.75);
     this.scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(new THREE.Color('#fef08a'), 1.8);
+    const keyLight = new THREE.DirectionalLight(new THREE.Color('#f3e3c3'), 1.55);
     keyLight.position.set(32, 48, 36);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
@@ -74,7 +76,7 @@ export class GameEngine {
     this.scene.add(keyLight);
 
     // Subtle blue rim light from opposite angle
-    const rimLight = new THREE.DirectionalLight(new THREE.Color('#38bdf8'), 0.6);
+    const rimLight = new THREE.DirectionalLight(new THREE.Color('#4f9dd4'), 0.55);
     rimLight.position.set(-28, 20, -28);
     this.scene.add(rimLight);
   }

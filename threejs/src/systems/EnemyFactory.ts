@@ -334,15 +334,17 @@ export class EnemyFactory {
   }
 
   /**
-   * Async convenience spawn used by the scene builders. The handle is detached
-   * (callers reparent `handle.group`), so this does not need a live scene.
+   * Synchronous spawn for scene builders. Building a room and registering its
+   * enemies must happen in the same tick: systems that infer "room cleared"
+   * from an empty guard list would otherwise see a fully built room with no
+   * enemy in it (GH3's captain used to appear one microtask too late).
    */
-  public static spawn(
+  public static spawnSync(
     encounterId: string,
     sceneId: string,
     position: { x: number; y: number; z: number },
     options: Partial<Omit<EnemySpawnConfig, 'encounterId' | 'sceneId' | 'position'>> = {},
-  ): Promise<EnemyHandle> {
+  ): EnemyHandle {
     const config: EnemySpawnConfig = {
       encounterId,
       sceneId,
@@ -358,6 +360,20 @@ export class EnemyFactory {
       floating: options.floating ?? false,
       hoverHeight: options.hoverHeight,
     };
-    return Promise.resolve(EnemyFactory.spawnEnemy(null, config));
+    return EnemyFactory.spawnEnemy(null, config);
+  }
+
+  /**
+   * Async convenience spawn kept for callers that cannot build synchronously.
+   * The handle is detached (callers reparent `handle.group`), so this does not
+   * need a live scene.
+   */
+  public static spawn(
+    encounterId: string,
+    sceneId: string,
+    position: { x: number; y: number; z: number },
+    options: Partial<Omit<EnemySpawnConfig, 'encounterId' | 'sceneId' | 'position'>> = {},
+  ): Promise<EnemyHandle> {
+    return Promise.resolve(EnemyFactory.spawnSync(encounterId, sceneId, position, options));
   }
 }
